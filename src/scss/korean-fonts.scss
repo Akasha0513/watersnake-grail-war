@@ -1,0 +1,126 @@
+/*
+ * 한글 폰트 오버라이드
+ * 출처: fvtt-archmage-kr (https://github.com/mrkb-fvtt-modules/fvtt-archmage-kr) 의 style.css 참고.
+ *  - 폰트 적용(영문 디스플레이 폰트 → 한글 웹폰트)으로 한글이 칸을 넘는 문제 해결.
+ *  - 번역(ko.json) 등 저작권 있는 콘텐츠는 가져오지 않음. 폰트 스타일만 차용.
+ *  - 내부 CSS 클래스(.archmage-*)는 유지했으므로 그대로 매칭됨.
+ *  - Foundry가 body에 붙이는 시스템 클래스만 .system-archmage → .system-watersnake-grail-war 로 변경.
+ * 웹폰트: projectnoonnu 무료 폰트 (jsDelivr CDN).
+ */
+
+@font-face {
+    font-family: 'GyeongbokgungSumunjangTitle';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_TitleL.woff2') format('woff2');
+    font-weight: 300;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'GyeongbokgungSumunjangTitle';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_TitleM.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'GyeongbokgungSumunjangTitle';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2511-3@1.0/Sumunjang_TitleB.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D2Coding';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'GMarketSans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'GMarketSans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'GMarketSans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Ridibatang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+}
+
+/* 본문 (warnock-pro 대체) */
+.archmage-v2,
+.archmage-v2 input[type=text],
+.archmage-v2 input[type=number],
+.archmage-v2 .resource .resource-max,
+.archmage-v2 .section--abilities .ability-mod,
+.archmage-v2 .section--abilities .ability-lvl,
+.archmage-v2 .section--attributes .unit--defenses .defense-value,
+.archmage-v2 .section--powers .power-summary--trigger .power-trigger,
+.archmage-v2.archmage-dialog .container--bottom .filters button,
+.system-watersnake-grail-war .introjs-tooltip,
+.system-watersnake-grail-war .introjs-tooltip .introjs-button,
+.archmage.sheet,
+#chat .message,#chat-notifications .message,
+.archmage .abilities .ability .ability-score>input,
+.archmage .abilities .ability .ability-mod,.archmage .abilities .ability .ability-lvl,
+.archmage-terrains,
+.archmage-prepopulate button.cancel,.archmage-prepopulate button.submit,
+.compendium .directory-list--archmage .directory-item {
+    font-family:'Ridibatang',"warnock-pro","sans-serif";
+}
+
+/* 제목 (mason-serif 대체) */
+.archmage-v2 h1,
+.archmage-v2 h2,
+.archmage-v2 h3,
+.archmage-v2 h4,
+.archmage-v2 .unit-title,
+.archmage-v2 .rollable--init,
+.archmage-v2 .section--tabs .tab-link,
+.archmage-v2 .section--abilities .ability-name,
+.archmage-v2 .section--attributes .unit--attributes input[type=text],
+.archmage-v2 .section--attributes .unit--attributes input[type=number],
+.archmage-v2 .section--attributes .unit--defenses .unit-subtitle,
+.archmage-v2 .section--powers .power-grid .power-name,
+.archmage-v2 .section--inventory .equipment-grid .equipment-name,
+.archmage-v2 .section--effects .effects-grid .effects-name,
+.archmage-v2 .section--resources input.resource-title-input,
+.archmage-v2.journal-sheet .journal-header .title,
+.archmage-v2 .callout .title,
+#settings-config .archmage-settings .border,
+.nodesto,
+#chat .card-header,#chat-notifications .card-header,
+.archmage.sheet h1,.archmage.sheet h2,.archmage.sheet h3,.archmage.sheet h4,
+.archmage.item-sheet .section--effects .effects-grid .effects-name,
+.archmage .abilities .ability-name,.archmage .abilities .ability-header,
+#context-menu2 h2,
+.class-header h3,
+.class-list .item .class-levels,
+.class-list .item .class-name,
+.compendium .directory-list--archmage h3.entry-group,
+.compendium .directory-list--archmage .directory-item h4.entry-name a {
+    font-family:"GyeongbokgungSumunjangTitle","mason-serif","Nodesto","Signika","Palatino Linotype",serif;
+}
+
+/* 고정폭 (매크로 에디터) */
+.archmage.item-sheet .power-macro-editor textarea {
+    font-family:"D2Coding",monospace;
+}
+
+/* 버튼 (roboto 대체) */
+.archmage-v2 button,
+.archmage.item-sheet .section--effects .effects-filters,
+.archmage.item-sheet .section--effects .effects-filters input[type=text],
+.archmage.item-sheet .section--effects .effects-grid {
+    font-family:"GMarketSans","Roboto",sans-serif;
+}
