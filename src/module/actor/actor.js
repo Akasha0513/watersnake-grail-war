@@ -467,7 +467,7 @@ export class ActorArchmage extends Actor {
 
     // Ability modifiers
     for (let abl of Object.values(data.abilities)) {
-      abl.mod = Math.floor((abl.value - 10) / 2);
+      abl.mod = Math.floor(abl.value / 3); // 홈브루 수정치 = floor(능력치/3): 3~5 E+1, 6~8 D+2, ... 21+ EX+7
       abl.lvl = abl.mod + data.attributes.level.value;
       abl.nonKey = {mod: foundry.utils.duplicate(abl.mod), lvlmod: foundry.utils.duplicate(abl.lvl)};
     }
