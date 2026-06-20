@@ -362,6 +362,32 @@ Hooks.once('init', async function() {
     makeDefault: true
   });
 
+  // registerSheet가 새 타입(master)에 안 먹어서, ready 시점에 character의 시트 등록 항목을
+  // 복제해 master에 직접 주입한다 (동일 서식 보장).
+  Hooks.once('ready', () => {
+    try {
+      const sc = CONFIG.Actor.sheetClasses;
+      if (sc?.master && Object.keys(sc.master).length === 0 && sc?.character) {
+        const base = Object.values(sc.character).find(e => String(e.id).includes('ActorArchmageSheetV2'))
+                  ?? Object.values(sc.character)[0];
+        if (base) {
+          sc.master['watersnake-grail-war.ActorArchmageMasterSheetV2'] = foundry.utils.mergeObject(
+            foundry.utils.deepClone(base),
+            {
+              id: 'watersnake-grail-war.ActorArchmageMasterSheetV2',
+              label: '마스터 시트',
+              cls: ActorArchmageMasterSheetV2,
+              default: true,
+              canBeDefault: true
+            },
+            { inplace: false }
+          );
+          console.log('watersnake-grail-war | master 시트 직접 주입 완료', sc.master);
+        }
+      }
+    } catch (e) { console.error('watersnake-grail-war | master 시트 주입 실패', e); }
+  });
+
   /* -------------------------------------------- */
   CONFIG.Actor.characterFlags = FLAGS.characterFlags;
   CONFIG.Actor.npcFlags = FLAGS.npcFlags;
