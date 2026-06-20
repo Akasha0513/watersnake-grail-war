@@ -29,7 +29,7 @@
           <span class="resource-separator">/</span>
           <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
-        <div class="labeled-input flexrow">
+        <div class="labeled-input flexcol">
           <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
           <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
         </div>
@@ -73,11 +73,13 @@
         <div class="resource flexrow">
           <input type="number" name="system.attributes.level.value" class="resource-current" v-model="actor.system.attributes.level.value">
         </div>
-        <div class="labeled-input flexrow">
+        <div class="labeled-input flexcol">
           <label class="unit-subtitle">경험치</label>
-          <input type="number" name="system.attributes.xp.value" class="temp-hp" v-model="actor.system.attributes.xp.value">
-          <span class="resource-separator">/</span>
-          <div class="resource-max">{{actor.system.attributes.xp.max}}</div>
+          <div class="resource flexrow">
+            <input type="number" name="system.attributes.xp.value" class="resource-current" v-model="actor.system.attributes.xp.value">
+            <span class="resource-separator">/</span>
+            <input type="number" name="system.attributes.xp.max" class="resource-max" v-model="actor.system.attributes.xp.max">
+          </div>
         </div>
       </div>
     </div>
