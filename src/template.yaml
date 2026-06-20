@@ -61,6 +61,7 @@ Actor:
           value: 0
           min: 0
           max: 0
+          automatic: true
         grade:
           type: Number
           label: Spirit Rank
@@ -123,6 +124,7 @@ Actor:
         trueName:
           type: String
           label: True Name
+          value: ''
         commandSeals:
           type: Number
           label: Command Seals

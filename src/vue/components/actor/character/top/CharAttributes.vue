@@ -29,7 +29,7 @@
           <span class="resource-separator">/</span>
           <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
-        <div class="labeled-input flexcol">
+        <div class="labeled-input flexrow">
           <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
           <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
         </div>
@@ -78,7 +78,8 @@
           <div class="resource flexrow">
             <input type="number" name="system.attributes.xp.value" class="resource-current" v-model="actor.system.attributes.xp.value">
             <span class="resource-separator">/</span>
-            <input type="number" name="system.attributes.xp.max" class="resource-max" v-model="actor.system.attributes.xp.max">
+            <div v-if="actor.system.attributes.xp.automatic" class="resource-max">{{actor.system.attributes.xp.max}}</div>
+            <input v-else type="number" name="system.attributes.xp.max" class="resource-max" v-model="actor.system.attributes.xp.max">
           </div>
         </div>
       </div>
