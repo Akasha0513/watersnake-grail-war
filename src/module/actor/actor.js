@@ -763,6 +763,10 @@ export class ActorArchmage extends Actor {
           data.lvldice = CONFIG.HOLYGRAILWAR.numDicePerLevel[v.value];
           break;
 
+        case 'grade':
+          data.grade = v.value;
+          break;
+
         case 'weapon':
           if (actor.type != 'character' && actor.type != 'master') continue;
           // Weapon dice
@@ -1748,7 +1752,7 @@ export class ActorArchmage extends Actor {
     console.warn('ActorArchmage.rollAbilityTest() is deprecated. Use game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {defaultAbility, defaultBackground}) instead.');
     let abl = null;
     let bg = null;
-    let terms = ['@abil', '@lvl', '@bg'];
+    let terms = ['@abil', this.type === 'master' ? '@lvl' : '@grade', '@bg'];
     let flavor = '';
     let abilityName = '';
     let backgroundName = '';
@@ -1785,6 +1789,7 @@ export class ActorArchmage extends Actor {
         lvl: this.system.attributes.level.value +
           ((this.system.incrementals?.skills && !game.settings.get("watersnake-grail-war", "secondEdition")
           || this.system.incrementals?.skillInitiative && game.settings.get("watersnake-grail-war", "secondEdition")) ? 1 : 0),
+        grade: this.system.attributes.grade?.value || 0,
         bg: bg ? bg[1].bonus.value : 0,
         abilityName: abilityName,
         backgroundName: backgroundName,

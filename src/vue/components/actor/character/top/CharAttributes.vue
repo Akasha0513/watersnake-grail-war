@@ -50,7 +50,7 @@
       <div class="unit unit--defenses" :data-tooltip="tooltip('pcDefenses')">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
         <div class="defenses grid grid-2col">
-          <div class="defense defense--pd flexcol" @contextmenu.prevent="cyclePdAbility" :data-tooltip="'신방 능력치: ' + pdAbilityLabel + ' (우클릭으로 전환)'">
+          <div class="defense defense--pd flexcol" @contextmenu.prevent="cyclePdAbility">
             <span class="defense-value">{{actor.system.attributes.pd.value}}</span>
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.pd.key')}}</h3>
           </div>
