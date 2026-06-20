@@ -1752,7 +1752,7 @@ export class ActorArchmage extends Actor {
     console.warn('ActorArchmage.rollAbilityTest() is deprecated. Use game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {defaultAbility, defaultBackground}) instead.');
     let abl = null;
     let bg = null;
-    let terms = ['@abil', this.type === 'master' ? '@lvl' : '@grade', '@bg'];
+    let terms = this.type === 'master' ? ['@abil', '@bg'] : ['@abil', '@grade', '@bg'];
     let flavor = '';
     let abilityName = '';
     let backgroundName = '';

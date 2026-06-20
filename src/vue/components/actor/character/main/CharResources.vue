@@ -70,10 +70,8 @@
       </h2>
       <Progress name="rerollAc" :current="actor.system.resources.spendable.rerolls.AC.current" :max="actor.system.resources.spendable.rerolls.AC.max"/>
       <div class="resource flexrow">
-        <!-- <input type="number" name="system.resources.spendable.rerolls.AC.current" class="resource-current" v-model="rerolls.AC.current"> -->
         <div class="resource-current">{{actor.system.resources.spendable.rerolls.AC.current}}</div>
         <span class="resource-separator">/</span>
-        <!-- <input type="number" name="system.resources.spendable.rerolls.AC.max" class="resource-max" v-model="rerolls.AC.max"> -->
         <div class="resource-current">{{actor.system.resources.spendable.rerolls.AC.max}}</div>
       </div>
       <h2 class="unit-title">
@@ -81,11 +79,16 @@
       </h2>
       <Progress name="rerollSave" :current="actor.system.resources.spendable.rerolls.save.current" :max="actor.system.resources.spendable.rerolls.save.max"/>
       <div class="resource flexrow">
-        <!-- <input type="number" name="system.resources.spendable.rerolls.save.current" class="resource-current" v-model="rerolls.save.current"> -->
         <div class="resource-current">{{actor.system.resources.spendable.rerolls.save.current}}</div>
         <span class="resource-separator">/</span>
-        <!-- <input type="number" name="system.resources.spendable.rerolls.save.max" class="resource-max" v-model="rerolls.save.max"> -->
         <div class="resource-current">{{actor.system.resources.spendable.rerolls.save.max}}</div>
+      </div>
+    </section>
+    <!-- 령주 (마스터) -->
+    <section v-if="actor.type === 'master'" class="unit unit--command-seals">
+      <h2 class="unit-title">령주</h2>
+      <div class="resource flexrow command-seals">
+        <a v-for="n in 3" :key="n" class="command-seal" @click="toggleSeal(n)">{{ n <= commandSeals ? '●' : '○' }}</a>
       </div>
     </section>
     <div class="resource-divider" v-if="(resourceCount > 1 && customResourceCount > 0) || customResourceCount > 1"></div>
@@ -175,6 +178,9 @@ export default {
     customResourceCount() {
       let arr = Object.keys(this.customResources);
       return arr && arr.length ? arr.length : 0;
+    },
+    commandSeals() {
+      return Number(this.actor.system.details?.commandSeals?.value) || 0;
     }
   },
   methods: {
@@ -189,6 +195,11 @@ export default {
         this.rhythm = this.actor.system.resources.perCombat?.rhythm?.current;
         this.bravado = this.actor.system.resources.perCombat?.bravado?.current;
       }
+    },
+    toggleSeal(n) {
+      const cur = this.commandSeals;
+      const next = (n <= cur) ? n - 1 : n;
+      this.actor.update({ 'system.details.commandSeals.value': next });
     }
   },
   watch: {

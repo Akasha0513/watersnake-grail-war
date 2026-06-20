@@ -505,8 +505,8 @@ export class DiceArchmage {
       terms.push(`@${abilityKey}.mod`)
     }
 
-    // 서번트는 영령의 급(@grade), 마스터는 레벨(@lvl)을 더함
-    terms.push(actor.type === 'master' ? "@lvl" : "@grade")
+    // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
+    if (actor.type !== 'master') terms.push("@grade")
 
     // Next: the background bonus
     const background = actor.system.backgrounds[backgroundKey]

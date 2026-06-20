@@ -1248,54 +1248,6 @@ ARCHMAGE.baselineMonsterStats2e = {
 }
 
 FLAGS.characterFlags = {
-  "overridePowerLevel": {
-    name: "ARCHMAGE.CHARACTERFLAGS.overridePowerLevelName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.overridePowerLevelHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "strongRecovery": {
-    name: "ARCHMAGE.CHARACTERFLAGS.strongRecoveryName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.strongRecoveryHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "initiativeAdv": {
-    name: "ARCHMAGE.CHARACTERFLAGS.initiativeAdvName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.initiativeAdvHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "grimDetermination": {
-    name: "ARCHMAGE.CHARACTERFLAGS.grimDeterminationName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.grimDeterminationHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "implacable": {
-    name: "ARCHMAGE.CHARACTERFLAGS.implacableName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.implacableHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "dexToCha": {
-    name: "ARCHMAGE.CHARACTERFLAGS.dexToChaName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.dexToChaHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "dexToInt": {
-    name: "ARCHMAGE.CHARACTERFLAGS.dexToIntName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.dexToIntHint",
-    section: "Feats",
-    type: Boolean
-  },
-  "averageRecoveries": {
-    name: "ARCHMAGE.CHARACTERFLAGS.averageRecoveriesName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.averageRecoveriesHint",
-    section: "Dice",
-    type: Boolean
-  },
   "portraitRound": {
     name: "ARCHMAGE.CHARACTERFLAGS.portraitRoundName",
     hint: "ARCHMAGE.CHARACTERFLAGS.portraitRoundHint",
@@ -1314,12 +1266,6 @@ FLAGS.characterFlags = {
     section: "Sheet",
     type: Boolean
   },
-  "hideEmptyPowerGroups": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideEmptyPowerGroupsName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideEmptyPowerGroupsHint",
-    section: "Sheet",
-    type: Boolean
-  },
   "showTriggersTab": {
     name: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabName",
     hint: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabHint",
@@ -1329,18 +1275,6 @@ FLAGS.characterFlags = {
   "hideImportPowers": {
     name: "ARCHMAGE.CHARACTERFLAGS.hideImportPowersName",
     hint: "ARCHMAGE.CHARACTERFLAGS.hideImportPowersHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "hideIncrementals": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideIncrementalsName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideIncrementalsHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "hideOneUniqueThing": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideOneUniqueThingName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideOneUniqueThingHint",
     section: "Sheet",
     type: Boolean
   },

@@ -47,7 +47,7 @@
         </div>
       </div>
       <!-- Defenses -->
-      <div class="unit unit--defenses" :data-tooltip="tooltip('pcDefenses')">
+      <div class="unit unit--defenses">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
         <div class="defenses grid grid-2col">
           <div class="defense defense--pd flexcol" @contextmenu.prevent="cyclePdAbility">
@@ -56,7 +56,7 @@
           </div>
           <div class="defense defense--md flexcol">
             <span class="defense-value">{{actor.system.attributes.md.value}}</span>
-            <h3 class="unit-subtitle" :title="concat(localize('ARCHMAGE.md.label'), ' (', localize('ARCHMAGE.md.stats'), ')')">{{localize('ARCHMAGE.md.key')}}</h3>
+            <h3 class="unit-subtitle">{{localize('ARCHMAGE.md.key')}}</h3>
           </div>
         </div>
         <div class="resource flexcol">
