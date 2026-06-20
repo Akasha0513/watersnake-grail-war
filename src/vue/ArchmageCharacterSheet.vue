@@ -22,9 +22,10 @@
           <CharInitiative :actor="actor"/>
           <CharAbilities :actor="actor"/>
           <CharBackgrounds :actor="actor"/>
-          <CharIconRelationships :actor="actor"/>
-          <CharOut :actor="actor" :owner="context.owner"/>
-          <CharIncrementals :actor="actor"/>
+          <!-- 성배전쟁: 13th Age 잔재 숨김 -->
+          <!-- <CharIconRelationships :actor="actor"/> -->
+          <!-- <CharOut :actor="actor" :owner="context.owner"/> -->
+          <!-- <CharIncrementals :actor="actor"/> -->
         </section>
       </Tab>
       <!-- /Left sidebar -->

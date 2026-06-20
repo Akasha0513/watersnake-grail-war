@@ -38,47 +38,35 @@
           <a class="rollable rollable--disengage disengage-value" data-roll-type="disengage" data-roll-opt="disengage">{{disengage.value}}+&nbsp;{{localize('ARCHMAGE.SAVE.disengage')}}</a>
         </div>
       </div>
-      <!-- Recoveries -->
-      <div class="unit unit--has-max unit--recoveries" :data-tooltip="tooltip('pcRecoveries')">
-        <h2 class="unit-title">{{localize('ARCHMAGE.recoveries')}}</h2>
-        <Progress name="recoveries" :current="actor.system.attributes.recoveries.value" :max="actor.system.attributes.recoveries.max"/>
+      <!-- MP -->
+      <div class="unit unit--has-max unit--mp">
+        <h2 class="unit-title">MP</h2>
+        <Progress name="mp" :current="actor.system.attributes.mp.value" :max="actor.system.attributes.mp.max"/>
         <div class="resource flexrow">
-          <input type="number" name="system.attributes.recoveries.value" class="resource-current" v-model="actor.system.attributes.recoveries.value">
+          <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
           <span class="resource-separator">/</span>
-          <div v-if="actor.system.attributes.recoveries.automatic" class="resource-max">{{actor.system.attributes.recoveries.max}}</div>
-          <input v-else type="number" name="system.attributes.recoveries.max" class="resource-max" v-model="actor.system.attributes.recoveries.max">
-        </div>
-        <div class="roll">
-          <a class="rollable rollable--recover" data-roll-type="recovery">{{actor.system.attributes.recoveries.formula}} ({{actor.system.attributes.recoveries.avg}})</a>
+          <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
       </div>
-      <!-- Saving Throws -->
-      <div class="unit unit--saves flexcol" :data-tooltip="tooltip('pcSaves')">
-        <h2 class="unit-title">{{localize('ARCHMAGE.saves')}}</h2>
-        <div class="saves flexcol">
-          <a class="rollable rollable--save" data-roll-type="save" data-roll-opt="easy">6+ ({{localize('ARCHMAGE.SAVE.easyShort')}})</a>
-          <a class="rollable rollable--save" data-roll-type="save" data-roll-opt="normal">11+ ({{localize('ARCHMAGE.SAVE.normalShort')}})</a>
-          <a class="rollable rollable--save" data-roll-type="save" data-roll-opt="hard">16+ ({{localize('ARCHMAGE.SAVE.hardShort')}})</a>
+      <!-- SP -->
+      <div class="unit unit--has-max unit--sp">
+        <h2 class="unit-title">SP</h2>
+        <Progress name="sp" :current="actor.system.attributes.sp.value" :max="actor.system.attributes.sp.max"/>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
+          <span class="resource-separator">/</span>
+          <input type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
       </div>
-      <!-- Init / Death Saves -->
-      <div class="unit unit--death">
-        <div class="dividers flexcol">
-          <div class="death-saves" :data-tooltip="tooltip('pcDeathSaves')">
-            <a class="rollable rollable--save" data-roll-type="save" data-roll-opt="death">{{localize('ARCHMAGE.SAVE.death')}}</a>
-            <div class="death-save-attempts attempts flexrow">
-              <input type="checkbox" v-for="(step, i) in deathSaves" :key="i" v-model="actor.system.attributes.saves.deathFails.steps[i]" :data-opt="i+1"/>
-            </div>
-          </div>
-          <div class="last-gasp-saves" :data-tooltip="tooltip('pcLastGaspSaves')">
-            <a class="rollable rollable--save" data-roll-type="save" data-roll-opt="lastGasp">{{localize('ARCHMAGE.SAVE.lastGasp')}}</a>
-            <div class="lastgasp-save-attempts attempts flexrow">
-              <input type="checkbox" v-model="actor.system.attributes.saves.lastGaspFails.steps[0]" data-opt="1"/>
-              <input type="checkbox" v-model="actor.system.attributes.saves.lastGaspFails.steps[1]" data-opt="2"/>
-              <input type="checkbox" v-model="actor.system.attributes.saves.lastGaspFails.steps[2]" data-opt="3"/>
-              <input type="checkbox" v-model="actor.system.attributes.saves.lastGaspFails.steps[3]" data-opt="4"/>
-            </div>
-          </div>
+      <!-- 영령의 급 / 보구 -->
+      <div class="unit unit--grade flexcol">
+        <h2 class="unit-title">영령의 급</h2>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.grade.value" class="resource-current" v-model="actor.system.attributes.grade.value">
+        </div>
+        <div class="labeled-input flexrow">
+          <label class="unit-subtitle">보구</label>
+          <input type="number" name="system.attributes.np.value" class="temp-hp" v-model="actor.system.attributes.np.value">
         </div>
       </div>
     </div>
