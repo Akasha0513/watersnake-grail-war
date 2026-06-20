@@ -1,16 +1,17 @@
 <template>
   <section class="section section--abilities flexcol">
     <div class="list-item-header grid grid-4col">
-      <h2 class="unit-title grid-span-2">{{localize('ARCHMAGE.abilities')}}</h2>
-      <div class="ability-mod-label grid-start-3">{{localize('ARCHMAGE.mod')}}</div>
-      <div class="ability-lvl-label grid-start-4">랭크</div>
+      <div class="ability-lvl-label grid-start-1">랭크</div>
+      <div class="ability-score-label grid-start-2">숫자</div>
+      <h2 class="unit-title grid-start-3">{{localize('ARCHMAGE.abilities')}}</h2>
+      <div class="ability-mod-label grid-start-4">수정치</div>
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="(item, index) in actor.system.abilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
+        <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item)}}</div>
         <input type="number" v-bind:name="concat('system.abilities.', index, '.value')" class="ability-score" v-model="item.value"/>
         <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}</a>
         <div class="ability-mod" :style="concat('color:', modColor(item))" :title="modTitle(item, actor)">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
-        <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item)}}</div>
       </li>
     </ul>
   </section>
