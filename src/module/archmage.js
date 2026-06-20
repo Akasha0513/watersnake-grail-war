@@ -355,37 +355,14 @@ Hooks.once('init', async function() {
     makeDefault: true
   });
 
-  // 마스터: 전용 서브클래스로 단일 타입 등록 (새 타입은 multi-type 배열 등록이 안 먹음)
-  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageMasterSheetV2, {
-    label: 'ARCHMAGE.sheetMaster',
-    types: ["master"],
-    makeDefault: true
-  });
-
-  // registerSheet가 새 타입(master)에 안 먹어서, ready 시점에 character의 시트 등록 항목을
-  // 복제해 master에 직접 주입한다 (동일 서식 보장).
-  Hooks.once('ready', () => {
-    try {
-      const sc = CONFIG.Actor.sheetClasses;
-      if (sc?.master && Object.keys(sc.master).length === 0 && sc?.character) {
-        const base = Object.values(sc.character).find(e => String(e.id).includes('ActorArchmageSheetV2'))
-                  ?? Object.values(sc.character)[0];
-        if (base) {
-          sc.master['watersnake-grail-war.ActorArchmageMasterSheetV2'] = foundry.utils.mergeObject(
-            foundry.utils.deepClone(base),
-            {
-              id: 'watersnake-grail-war.ActorArchmageMasterSheetV2',
-              label: '마스터 시트',
-              cls: ActorArchmageMasterSheetV2,
-              default: true,
-              canBeDefault: true
-            },
-            { inplace: false }
-          );
-          console.log('watersnake-grail-war | master 시트 직접 주입 완료', sc.master);
-        }
-      }
-    } catch (e) { console.error('watersnake-grail-war | master 시트 주입 실패', e); }
+  // 마스터 시트: v13 정식 API(DocumentSheetConfig)로 등록.
+  // 새로 추가한 타입은 init 시점엔 등록에서 누락되므로, 타입이 완전히 로드된 setup 훅에서 등록한다.
+  Hooks.once('setup', () => {
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "watersnake-grail-war", ActorArchmageMasterSheetV2, {
+      label: 'ARCHMAGE.sheetMaster',
+      types: ["master"],
+      makeDefault: true
+    });
   });
 
   /* -------------------------------------------- */
