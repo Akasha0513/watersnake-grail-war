@@ -380,6 +380,11 @@ export class ActorArchmage extends Actor {
    * @return {undefined}
    */
   _prepareCharacterData(data, model, flags) {
+    // 경험치 최대치: 레벨(8 미만)=레벨, 레벨 8 이상=레벨×2 (마스터용)
+    if (data.attributes.xp) {
+      const _lvl = Number(data.attributes.level?.value) || 0;
+      data.attributes.xp.max = _lvl < 8 ? _lvl : _lvl * 2;
+    }
 
     // Find known classes if not already detected - fixes older characters
     if (!data.details.detectedClasses && data.details.class?.value) {

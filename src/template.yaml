@@ -55,6 +55,12 @@ Actor:
           value: 1
           min: 0
           max: 10
+        xp:
+          type: Number
+          label: Experience
+          value: 0
+          min: 0
+          max: 0
         grade:
           type: Number
           label: Spirit Rank

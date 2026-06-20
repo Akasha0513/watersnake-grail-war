@@ -47,9 +47,13 @@
           <span class="resource-separator">/</span>
           <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
+        <div class="labeled-input flexrow">
+          <label class="unit-subtitle">임시 MP</label>
+          <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
+        </div>
       </div>
-      <!-- SP -->
-      <div class="unit unit--has-max unit--sp">
+      <!-- SP(서번트) / 경험치(마스터) -->
+      <div v-if="actor.type !== 'master'" class="unit unit--has-max unit--sp">
         <h2 class="unit-title">SP</h2>
         <Progress name="sp" :current="actor.system.attributes.sp.value" :max="actor.system.attributes.sp.max"/>
         <div class="resource flexrow">
@@ -58,14 +62,33 @@
           <input type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
       </div>
-      <!-- 영령의 급 / 보구 -->
-      <div class="unit unit--grade flexcol">
+      <div v-else class="unit unit--has-max unit--xp">
+        <h2 class="unit-title">경험치</h2>
+        <Progress name="xp" :current="actor.system.attributes.xp.value" :max="actor.system.attributes.xp.max"/>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.xp.value" class="resource-current" v-model="actor.system.attributes.xp.value">
+          <span class="resource-separator">/</span>
+          <div class="resource-max">{{actor.system.attributes.xp.max}}</div>
+        </div>
+      </div>
+      <!-- 영령의 급+보구(서번트) / 레벨+예장(마스터) -->
+      <div v-if="actor.type !== 'master'" class="unit unit--grade flexcol">
         <h2 class="unit-title">영령의 급</h2>
         <div class="resource flexrow">
           <input type="number" name="system.attributes.grade.value" class="resource-current" v-model="actor.system.attributes.grade.value">
         </div>
         <div class="labeled-input flexrow">
           <label class="unit-subtitle">보구</label>
+          <input type="number" name="system.attributes.np.value" class="temp-hp" v-model="actor.system.attributes.np.value">
+        </div>
+      </div>
+      <div v-else class="unit unit--grade flexcol">
+        <h2 class="unit-title">레벨</h2>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.level.value" class="resource-current" v-model="actor.system.attributes.level.value">
+        </div>
+        <div class="labeled-input flexrow">
+          <label class="unit-subtitle">예장</label>
           <input type="number" name="system.attributes.np.value" class="temp-hp" v-model="actor.system.attributes.np.value">
         </div>
       </div>
