@@ -75,7 +75,8 @@
     }
   }
 
-  .unit--hp {
+  .unit--hp,
+  .unit--mp {
     .labeled-input {
       align-items: center;
       margin-top: $padding-md;

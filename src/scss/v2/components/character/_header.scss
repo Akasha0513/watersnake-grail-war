@@ -1,5 +1,5 @@
 .character-header {
-  grid-template-columns: auto 22% 32% 8%;
+  grid-template-columns: repeat(4, 1fr);
 
   input[type="text"],
   input[type="number"] {

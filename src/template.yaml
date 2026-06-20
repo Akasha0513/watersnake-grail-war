@@ -133,6 +133,10 @@ Actor:
         magicSystem:
           type: String
           label: Magic/Martial System
+        contractor:
+          type: String
+          label: Contractor
+          value: ''
       resources:
         perCombat: {}
         spendable:

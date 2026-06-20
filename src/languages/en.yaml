@@ -1,5 +1,5 @@
 ARCHMAGE:
-  abilities: Abilities
+  abilities: 능력치
   abilityName: Ability Name
   abilityScore: Ability Score
   act: Act.
@@ -17,7 +17,7 @@ ARCHMAGE:
   arcane: Arcane
   avatarAlt: Character profile image
   background: Background
-  backgrounds: Backgrounds
+  backgrounds: 배경
   baseAC: Base AC
   baseHP: Base HP
   baseMD: Base MD
