@@ -93,7 +93,7 @@ Actor:
           temp: 0
           automatic: true
           formula: strdex
-        disengage: 11
+        disengage: 6
         disengageBonus: 0
         saves:
           bonus: 0
@@ -147,6 +147,10 @@ Actor:
         contractor:
           type: String
           label: Contractor
+          value: ''
+        element:
+          type: String
+          label: Element
           value: ''
       resources:
         perCombat: {}

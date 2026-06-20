@@ -374,7 +374,7 @@ export class DiceArchmage {
         abilities: Object.entries(actor.system.abilities).map(
           ([key, ability]) => ({
             key: key,
-            label: ability.label,
+            label: game.i18n.localize(`ARCHMAGE.${key}.label`),
             bonus: formatBonus(ability.mod),
             checked: key === defaultAbility
           })

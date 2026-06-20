@@ -23,7 +23,7 @@
       <!-- MP -->
       <div class="unit unit--has-max unit--mp">
         <h2 class="unit-title">MP</h2>
-        <Progress name="mp" :current="actor.system.attributes.mp.value" :max="actor.system.attributes.mp.max"/>
+        <Progress name="mp" :current="actor.system.attributes.mp.value" :temp="actor.system.attributes.mp.temp" :max="actor.system.attributes.mp.max"/>
         <div class="resource flexrow">
           <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
           <span class="resource-separator">/</span>
@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="resource flexcol">
-          <a class="rollable rollable--disengage disengage-value" data-roll-type="disengage" data-roll-opt="disengage">{{disengage.value}}+&nbsp;{{localize('ARCHMAGE.SAVE.disengage')}}</a>
+          <a class="rollable rollable--disengage disengage-value" data-roll-type="disengage" data-roll-opt="disengage">6+&nbsp;{{localize('ARCHMAGE.SAVE.disengage')}}</a>
         </div>
       </div>
       <!-- 영령의 급(서번트) / 레벨+경험치(마스터) -->
@@ -68,6 +68,12 @@
         <h2 class="unit-title">영령의 급</h2>
         <div class="resource flexrow">
           <input type="number" name="system.attributes.grade.value" class="resource-current" v-model="actor.system.attributes.grade.value">
+        </div>
+        <div class="labeled-input flexcol">
+          <label class="unit-subtitle">속성</label>
+          <div class="resource flexrow">
+            <input type="text" name="system.details.element.value" class="resource-current" v-model="actor.system.details.element.value">
+          </div>
         </div>
       </div>
       <div v-else class="unit unit--grade flexcol">
@@ -108,7 +114,7 @@ export default {
       avatarWidth: 105,
       avatarHeight: 105,
       disengage: {
-        value: 11,
+        value: 6,
         bonus: 0
       },
     }
@@ -177,7 +183,7 @@ export default {
     },
     updateResourceProps() {
       this.disengage = {
-        value: this.actor.system.attributes.disengage,
+        value: 6,
         bonus: this.actor.system.attributes.disengageBonus
       };
     },

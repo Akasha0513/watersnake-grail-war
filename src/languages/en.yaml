@@ -55,7 +55,7 @@ ARCHMAGE:
   daily: Daily
   daily-desperate: Daily/Desperate
   defense: Defense
-  defenses: Defenses
+  defenses: 방어
   damage: Damage
   description: Description
   details: Details
@@ -86,7 +86,7 @@ ARCHMAGE:
   helpCompact: '<p><a href="javascript:void(0)" click="preventDefault" role="button" tabindex="-1" class="archmage-rolls-reference">Inline rolls</a> allowed here.</p>'
   helpDetailed: '<p class="hint">Use <a href="javascript:void(0)" click="preventDefault" role="button" tabindex="-1" class="archmage-rolls-reference">inline rolls</a> such as <strong>[[d20+@str.mod+@std+@atk.a.bonus]] vs AC</strong> to insert dice rolls wherever you need them. Any roll formula will work!</p>'
   hit: Hit
-  hitPoints: Hit Points
+  hitPoints: HP
   hpAdjustment: Hit Points Adjustment
   icon: Icon
   iconic: Zenith
@@ -205,7 +205,7 @@ ARCHMAGE:
   talent: Talent
   talents: Talents
   terrains: Terrains
-  tempHp: Temp HP
+  tempHp: 임시 HP
   tool: Tool
   trait: Trait
   traits: Traits
@@ -963,7 +963,7 @@ ARCHMAGE:
     random: random
   SAVE:
     death: Death Save
-    disengage: Disengage
+    disengage: 물러서기
     easy: Easy Save
     easyShort: Easy
     failure: Failed

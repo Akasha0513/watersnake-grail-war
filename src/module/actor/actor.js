@@ -973,7 +973,7 @@ export class ActorArchmage extends Actor {
   }
 
   async rollDisengage() {
-    const target = 11;
+    const target = 6;
 
     let terms = ['d20'];
     // Add bonuses, if any

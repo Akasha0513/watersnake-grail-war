@@ -88,14 +88,6 @@
         <div class="resource-current">{{actor.system.resources.spendable.rerolls.save.max}}</div>
       </div>
     </section>
-    <!-- Rests -->
-    <section v-if="actor.type === 'character'" class="unit unit--rest">
-      <h2 class="unit-title">{{localize('ARCHMAGE.CHAT.Rests')}}</h2>
-      <div class="resource flexcol">
-        <button type="button" class="rest rest--quick" data-rest-type="quick" :data-tooltip="tooltip('pcRestQuick')"><i class="fas fa-campground"></i> {{localize('ARCHMAGE.CHAT.QuickRest')}}</button>
-        <button type="button" class="rest rest--full" data-rest-type="full" :data-tooltip="tooltip('pcRestFull')"><i class="fas fa-bed"></i> {{localize('ARCHMAGE.CHAT.FullHeal')}}</button>
-      </div>
-    </section>
     <div class="resource-divider" v-if="(resourceCount > 1 && customResourceCount > 0) || customResourceCount > 1"></div>
     <!-- Custom Resouces -->
     <section v-for="(resource, index) in customResources" :key="index" class="unit unit--custom">

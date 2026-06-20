@@ -1,10 +1,7 @@
 <template>
   <section class="section section--abilities flexcol">
     <div class="list-item-header grid grid-4col">
-      <div class="ability-lvl-label grid-start-1">랭크</div>
-      <div class="ability-score-label grid-start-2">수치</div>
       <h2 class="unit-title grid-start-3">{{localize('ARCHMAGE.abilities')}}</h2>
-      <div class="ability-mod-label grid-start-4">수정치</div>
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
