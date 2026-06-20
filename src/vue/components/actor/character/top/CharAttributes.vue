@@ -23,11 +23,7 @@
       <!-- Defenses -->
       <div class="unit unit--defenses" :data-tooltip="tooltip('pcDefenses')">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
-        <div class="defenses grid grid-3col">
-          <div class="defense defense--ac flexcol">
-            <span class="defense-value">{{actor.system.attributes.ac.value}}</span>
-            <h3 class="unit-subtitle" :title="concat(localize('ARCHMAGE.ac.label'), ' (', localize('ARCHMAGE.ac.stats'), ')')">{{localize('ARCHMAGE.ac.key')}}</h3>
-          </div>
+        <div class="defenses grid grid-2col">
           <div class="defense defense--pd flexcol">
             <span class="defense-value">{{actor.system.attributes.pd.value}}</span>
             <h3 class="unit-subtitle" :title="concat(localize('ARCHMAGE.pd.label'), ' (', localize('ARCHMAGE.pd.stats'), ')')">{{localize('ARCHMAGE.pd.key')}}</h3>
