@@ -3,6 +3,7 @@ import { ActorArchmage } from './actor/actor.js';
 import { ActorArchmageNpcSheetV2 } from './actor/actor-npc-sheet-v2.js';
 import { ActorTabFocusSheet } from './actor/actor-tab-focus-sheet.js';
 import { ActorArchmageSheetV2 } from './actor/actor-sheet-v2.js';
+import { ActorArchmageMasterSheetV2 } from './actor/actor-master-sheet-v2.js';
 import { ItemArchmage } from './item/item.js';
 import { ItemArchmageSheet } from './item/item-sheet.js';
 import { ArchmagePowerSheetV2 } from './item/power-sheet-v2.js';
@@ -350,7 +351,14 @@ Hooks.once('init', async function() {
   // V2 actor sheet (See issue #118).
   foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageSheetV2, {
     label: 'ARCHMAGE.sheetCharacter',
-    types: ["character", "master"],
+    types: ["character"],
+    makeDefault: true
+  });
+
+  // 마스터: 전용 서브클래스로 단일 타입 등록 (새 타입은 multi-type 배열 등록이 안 먹음)
+  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageMasterSheetV2, {
+    label: 'ARCHMAGE.sheetMaster',
+    types: ["master"],
     makeDefault: true
   });
 
