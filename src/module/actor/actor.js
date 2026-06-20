@@ -121,7 +121,7 @@ export class ActorArchmage extends Actor {
     data.tierMult = CONFIG.HOLYGRAILWAR.tierMultPerLevel[data.attributes.level.value];
 
     // Prepare Character data
-    if (actorData.type === 'character') {
+    if (actorData.type === 'character' || actorData.type === 'master') {
       this._prepareCharacterData(data, model, flags);
     }
     else if (actorData.type === 'npc') {
@@ -334,7 +334,7 @@ export class ActorArchmage extends Actor {
     const data = actorData.system;
 
     // Initiative
-    if (actorData.type === 'character') {
+    if (actorData.type === 'character' || actorData.type === 'master') {
       let incrInit = 0;
       let statInit = data.abilities?.dex?.nonKey?.mod || 0;
       if (game.settings.get("watersnake-grail-war", "secondEdition")) {
@@ -733,7 +733,7 @@ export class ActorArchmage extends Actor {
           break;
 
         case 'weapon':
-          if (actor.type != 'character') continue;
+          if (actor.type != 'character' && actor.type != 'master') continue;
           // Weapon dice
           for (let wpn of ["melee", "ranged", "jab", "punch", "kick"]) {
             data.attributes.weapon[wpn].value = `${CONFIG.HOLYGRAILWAR.numDicePerLevel[data.attributes.level.value]}${data.attributes.weapon[wpn].dice}`;
@@ -796,7 +796,7 @@ export class ActorArchmage extends Actor {
           break;
 
         case 'saves':
-          if (this.type === "character") data.skulls = v.deathFails.value || 0;
+          if (this.type === "character" || this.type === "master") data.skulls = v.deathFails.value || 0;
           if (!(k in data)) data[k] = v;
           break;
 
@@ -819,7 +819,7 @@ export class ActorArchmage extends Actor {
     data.abil = data.abilities;
 
     // Process resource shorthands and custom resource names
-    if (this.type === "character"){
+    if (this.type === "character" || this.type === "master"){
       data.rsc = {
         cps: data.resources.perCombat.commandPoints.current,
         focus: data.resources.perCombat.focus.current,

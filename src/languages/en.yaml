@@ -1268,8 +1268,9 @@ ARCHMAGE:
         <strong>SRD Monster Compendiums</strong> have been updated to include inline rolls for <em>most</em> use cases. There have been a few outliers that slipped through the cracks, but virtually every monster in the SRD compendium was updated to have inline rolls added for their targeting lines and their damage. This only applies to monsters in the compendium.
 TYPES:
   Actor:
-    character: Character
-    npc: Monster/NPC
+    character: 서번트
+    master: 마스터
+    npc: NPC
   Item:
     action: Action
     loot: Loot

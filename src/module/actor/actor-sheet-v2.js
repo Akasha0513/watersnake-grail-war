@@ -47,7 +47,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   get template() {
-    const type = this.actor.type;
+    const type = this.actor.type === 'master' ? 'character' : this.actor.type;
     return `systems/watersnake-grail-war/templates/actors/actor-${type}-sheet-vue.html`;
   }
 

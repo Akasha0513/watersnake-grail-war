@@ -350,7 +350,7 @@ Hooks.once('init', async function() {
   // V2 actor sheet (See issue #118).
   foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageSheetV2, {
     label: 'ARCHMAGE.sheetCharacter',
-    types: ["character"],
+    types: ["character", "master"],
     makeDefault: true
   });
 
