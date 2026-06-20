@@ -28,12 +28,15 @@ Actor:
           value: 10
           base: 10
           min: 0
+          automatic: true
+          defenseAbility: auto
         md:
           type: Number
           label: Mental Defense
           value: 10
           base: 10
           min: 0
+          automatic: true
         hp:
           type: Number
           label: Hit Points
@@ -80,6 +83,7 @@ Actor:
           min: 0
           max: 10
           temp: 0
+          automatic: true
         sp:
           type: Number
           label: Special Points
@@ -87,6 +91,8 @@ Actor:
           min: 0
           max: 0
           temp: 0
+          automatic: true
+          formula: strdex
         disengage: 11
         disengageBonus: 0
         saves:
@@ -121,6 +127,11 @@ Actor:
         servantClass:
           type: String
           label: Servant Class
+          value: ''
+        defenseType:
+          type: String
+          label: Defense Class
+          value: auto
         trueName:
           type: String
           label: True Name

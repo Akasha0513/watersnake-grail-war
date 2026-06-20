@@ -40,6 +40,47 @@
           <strong class="unit-subtitle">경험치 자동 계산</strong>
           <input type="checkbox" name="system.attributes.xp.automatic" v-model="actor.system.attributes.xp.automatic"/>
         </div>
+        <!-- 성배전쟁: 클래스 / 방어 / 자원 자동계산 -->
+        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--servant-class flexrow">
+          <strong class="unit-subtitle">서번트 클래스</strong>
+          <select name="system.details.servantClass.value" v-model="actor.system.details.servantClass.value">
+            <option v-for="(opt, i) in servantClasses" :key="i" :value="opt.value">{{opt.label}}</option>
+          </select>
+        </div>
+        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--defense-type flexrow">
+          <strong class="unit-subtitle">방어 분류</strong>
+          <select name="system.details.defenseType.value" v-model="actor.system.details.defenseType.value">
+            <option v-for="(opt, i) in defenseTypes" :key="i" :value="opt.value">{{opt.label}}</option>
+          </select>
+        </div>
+        <div class="sub-unit sub-unit--pd-ability flexrow">
+          <strong class="unit-subtitle">신방 능력치</strong>
+          <select name="system.attributes.pd.defenseAbility" v-model="actor.system.attributes.pd.defenseAbility">
+            <option v-for="(opt, i) in defenseAbilities" :key="i" :value="opt.value">{{opt.label}}</option>
+          </select>
+        </div>
+        <div class="sub-unit sub-unit--calculate-pd flexrow">
+          <strong class="unit-subtitle">신방 자동 계산</strong>
+          <input type="checkbox" name="system.attributes.pd.automatic" v-model="actor.system.attributes.pd.automatic"/>
+        </div>
+        <div class="sub-unit sub-unit--calculate-md flexrow">
+          <strong class="unit-subtitle">정방 자동 계산</strong>
+          <input type="checkbox" name="system.attributes.md.automatic" v-model="actor.system.attributes.md.automatic"/>
+        </div>
+        <div class="sub-unit sub-unit--calculate-mp flexrow">
+          <strong class="unit-subtitle">MP 자동 계산</strong>
+          <input type="checkbox" name="system.attributes.mp.automatic" v-model="actor.system.attributes.mp.automatic"/>
+        </div>
+        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--calculate-sp flexrow">
+          <strong class="unit-subtitle">SP 자동 계산</strong>
+          <input type="checkbox" name="system.attributes.sp.automatic" v-model="actor.system.attributes.sp.automatic"/>
+        </div>
+        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--sp-formula flexrow">
+          <strong class="unit-subtitle">SP 공식</strong>
+          <select name="system.attributes.sp.formula" v-model="actor.system.attributes.sp.formula">
+            <option v-for="(opt, i) in spFormulas" :key="i" :value="opt.value">{{opt.label}}</option>
+          </select>
+        </div>
         <div class="sub-unit sub-unit--initiative-adjustment flexrow">
           <strong class="unit-subtitle">{{localize('ARCHMAGE.hpAdjustment')}}</strong>
           <input type="number" name="system.attributes.hp.extra" v-model="actor.system.attributes.hp.extra" :disabled="overrides.includes('system.attributes.hp.extra')" placeholder="0"/>
@@ -225,6 +266,34 @@ export default {
         { value: 'int', label: game.i18n.localize("ARCHMAGE.int.key")},
         { value: 'wis', label: game.i18n.localize("ARCHMAGE.wis.key")},
         { value: 'cha', label: game.i18n.localize("ARCHMAGE.cha.key")},
+      ],
+      servantClasses: [
+        { value: '', label: '— 선택 —' },
+        { value: 'saber', label: '세이버 (삼기사)' },
+        { value: 'lancer', label: '랜서 (삼기사)' },
+        { value: 'archer', label: '아처 (삼기사)' },
+        { value: 'rider', label: '라이더 (사술사)' },
+        { value: 'caster', label: '캐스터 (사술사)' },
+        { value: 'assassin', label: '어새신 (사술사)' },
+        { value: 'berserker', label: '버서커 (사술사)' },
+        { value: 'extra', label: '엑스트라' },
+      ],
+      defenseTypes: [
+        { value: 'auto', label: '자동 (클래스 따름)' },
+        { value: 'three', label: '삼기사 (14/10)' },
+        { value: 'sorcery', label: '사술사 (12/12)' },
+      ],
+      defenseAbilities: [
+        { value: 'auto', label: '자동 (큰 값)' },
+        { value: 'con', label: '내구' },
+        { value: 'dex', label: '민첩' },
+      ],
+      spFormulas: [
+        { value: 'strdex', label: '(근력+민첩)÷2' },
+        { value: 'con', label: '내구' },
+        { value: 'magdex', label: '마술: (마력+민첩)÷2' },
+        { value: 'strmag', label: '마술: (근력+마력)÷2' },
+        { value: 'mag', label: '마술: 마력' },
       ]
     }
   },

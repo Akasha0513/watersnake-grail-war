@@ -27,7 +27,8 @@
         <div class="resource flexrow">
           <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
           <span class="resource-separator">/</span>
-          <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
+          <div v-if="actor.system.attributes.mp.automatic" class="resource-max">{{actor.system.attributes.mp.max}}</div>
+          <input v-else type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
         <div class="labeled-input flexrow">
           <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
@@ -41,16 +42,17 @@
         <div class="resource flexrow">
           <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
           <span class="resource-separator">/</span>
-          <input type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
+          <div v-if="actor.type !== 'master' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
+          <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
       </div>
       <!-- Defenses -->
       <div class="unit unit--defenses" :data-tooltip="tooltip('pcDefenses')">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
         <div class="defenses grid grid-2col">
-          <div class="defense defense--pd flexcol">
+          <div class="defense defense--pd flexcol" @contextmenu.prevent="cyclePdAbility" :data-tooltip="'신방 능력치: ' + pdAbilityLabel + ' (우클릭으로 전환)'">
             <span class="defense-value">{{actor.system.attributes.pd.value}}</span>
-            <h3 class="unit-subtitle" :title="concat(localize('ARCHMAGE.pd.label'), ' (', localize('ARCHMAGE.pd.stats'), ')')">{{localize('ARCHMAGE.pd.key')}}</h3>
+            <h3 class="unit-subtitle">{{localize('ARCHMAGE.pd.key')}}</h3>
           </div>
           <div class="defense defense--md flexcol">
             <span class="defense-value">{{actor.system.attributes.md.value}}</span>
@@ -118,6 +120,10 @@ export default {
     secondEdition() {
       return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     },
+    pdAbilityLabel() {
+      const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
+      return { auto: '자동(내구·민첩 중 큰 값)', con: '내구', dex: '민첩' }[cur];
+    },
     deathSaves() {
       const deathFails = this.actor.system.attributes.saves.deathFails;
       const max = parseInt(deathFails.max) || 4;
@@ -174,6 +180,12 @@ export default {
         value: this.actor.system.attributes.disengage,
         bonus: this.actor.system.attributes.disengageBonus
       };
+    },
+    cyclePdAbility() {
+      const order = ['auto', 'con', 'dex'];
+      const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
+      const next = order[(order.indexOf(cur) + 1) % order.length];
+      this.actor.update({ 'system.attributes.pd.defenseAbility': next });
     }
   },
   watch: {

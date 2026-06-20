@@ -585,37 +585,43 @@ export class ActorArchmage extends Actor {
     data.abilities.wis.bonus = wisBonus;
     data.abilities.cha.bonus = chaBonus;
 
-    // Defenses (second element of sorted triple equal median)
-    // Wizards can use In in place of Dex with a talent, and paladin can use Cha with a feature
-    let dexACBonus = data.abilities.dex.nonKey.lvlmod;
-    let dexPDBonus = data.abilities.dex.nonKey.lvlmod;
-    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
-      if (this.getFlag("watersnake-grail-war", "dexToInt")) {
-        dexACBonus = Math.max(dexACBonus, data.abilities.int.nonKey.lvlmod);
-        dexPDBonus = Math.max(dexPDBonus, data.abilities.int.nonKey.lvlmod);
-      }
-      if (this.getFlag("watersnake-grail-war", "dexToCha")) dexACBonus = Math.max(dexACBonus, data.abilities.cha.nonKey.lvlmod);
-    }
-    data.attributes.ac.value = Number(data.attributes.ac.base) + Number([dexACBonus,
-      data.abilities.con.nonKey.lvlmod, data.abilities.wis.nonKey.lvlmod].sort((a, b) => a - b)[1]) + Number(acBonus);
-    data.attributes.pd.value = Number(data.attributes.pd.base) + Number([dexPDBonus,
-      data.abilities.con.nonKey.lvlmod, data.abilities.str.nonKey.lvlmod].sort((a, b) => a - b)[1]) + Number(pdBonus);
-    data.attributes.md.value = Number(data.attributes.md.base) + Number([data.abilities.int.nonKey.lvlmod,
-      data.abilities.cha.nonKey.lvlmod, data.abilities.wis.nonKey.lvlmod].sort((a, b) => a - b)[1]) + Number(mdBonus);
+    // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
+    const isMaster = this.type === 'master';
+    const sv = (a) => Number(data.abilities[a]?.value) || 0;   // 능력치 수치
+    const sm = (a) => Math.floor(sv(a) / 3);                   // 수정치 = floor(수치/3)
+    const grade = Number(data.attributes.grade?.value) || 0;   // 영령의 급
 
-    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
-      if (data.incrementals?.pd) data.attributes.pd.value += 1;
-      if (data.incrementals?.md) data.attributes.md.value += 1;
-    }
+    // 클래스 분류: 삼기사(three) / 사술사(sorcery)
+    const threeKnights = ['saber', 'lancer', 'archer'];
+    const sorceryClasses = ['rider', 'caster', 'assassin', 'berserker'];
+    const classKey = data.details.servantClass?.value || '';
+    const defOverride = data.details.defenseType?.value || 'auto';
+    let defCategory;
+    if (defOverride === 'three') defCategory = 'three';
+    else if (defOverride === 'sorcery') defCategory = 'sorcery';
+    else if (threeKnights.includes(classKey)) defCategory = 'three';
+    else if (sorceryClasses.includes(classKey)) defCategory = 'sorcery';
+    else defCategory = 'sorcery'; // 엑스트라 등 미지정 시 기본값 (방어분류 override로 조정)
 
-    // Barbarians get a bonus based on 'skulls' as of 2e beta
-    if (this.getFlag("watersnake-grail-war", "grimDetermination")
-      && game.settings.get("watersnake-grail-war", "secondEdition")) {
-      data.grimDeterminationBonus = Math.min(data.attributes.saves.deathFails.value, 2);
-      data.attributes.ac.value += data.grimDeterminationBonus;
-      data.attributes.pd.value += data.grimDeterminationBonus;
-      data.attributes.md.value += data.grimDeterminationBonus;
+    // 신방 능력치: 자동(내구·민첩 중 큰 값) 또는 선택
+    const pdAblPref = data.attributes.pd.defenseAbility || 'auto';
+    let pdAblMod;
+    if (pdAblPref === 'con') pdAblMod = sm('con');
+    else if (pdAblPref === 'dex') pdAblMod = sm('dex');
+    else pdAblMod = Math.max(sm('con'), sm('dex'));
+
+    // 신방 (자동 시): 서번트 = (삼기사14/사술사12) + 급 + (내구·민첩 수정치) / 마스터 = 10 + (내구·민첩 수정치)
+    if (data.attributes.pd.automatic ?? true) {
+      const pdBase = isMaster ? 10 : ((defCategory === 'three' ? 14 : 12) + grade);
+      data.attributes.pd.value = pdBase + pdAblMod + Number(pdBonus);
     }
+    // 정방 (자동 시): 서번트 = (삼기사10/사술사12) + 통찰 수정치 / 마스터 = 8 + 통찰 수정치
+    if (data.attributes.md.automatic ?? true) {
+      const mdBase = isMaster ? 8 : (defCategory === 'three' ? 10 : 12);
+      data.attributes.md.value = mdBase + sm('wis') + Number(mdBonus);
+    }
+    // AC는 성배전쟁에서 미사용 (호환용으로 base 유지)
+    data.attributes.ac.value = Number(data.attributes.ac.base) + Number(acBonus);
 
     // Damage Modifiers
     data.tier = 1;
@@ -630,14 +636,34 @@ export class ActorArchmage extends Actor {
       data.abilities[prop].nonKey.dmg = data.tierMult * data.abilities[prop].nonKey.mod;
     }
 
-    // HPs
+    // HP (성배전쟁): 서번트 = 근력 + 내구×3 / 마스터 = (근력 + 내구×3) ÷ 2
     if (data.attributes.hp.automatic) {
-      let hpLevelModifier = [1, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 28];
-      let level = data.attributes.level.value;
-      if (data.incrementals?.hp) level++;
+      let hpBaseVal = sv('str') + sv('con') * 3;
+      if (isMaster) hpBaseVal = Math.floor(hpBaseVal / 2);
+      data.attributes.hp.max = hpBaseVal + Number(hpBonus) + Number(data.attributes.hp.extra);
+    }
 
-      data.attributes.hp.max = Math.floor((data.attributes.hp.base + Math.max(data.abilities.con.nonKey.mod, 0))
-        * hpLevelModifier[level] + hpBonus + data.attributes.hp.extra);
+    // MP (성배전쟁): 마력<12 = 12+마력(서)/6+마력(마) / 마력≥12 = 마력×2(서)/마력×1.5(마)
+    if (data.attributes.mp.automatic ?? true) {
+      const mag = sv('int');
+      let mpMax;
+      if (mag < 12) mpMax = isMaster ? 6 + mag : 12 + mag;
+      else mpMax = isMaster ? Math.floor(mag * 1.5) : mag * 2;
+      data.attributes.mp.max = mpMax;
+    }
+
+    // SP (성배전쟁): 서번트 전용 자동. 마스터는 수동(기본 0).
+    if (!isMaster && (data.attributes.sp.automatic ?? true)) {
+      const spStr = sv('str'), spDex = sv('dex'), spCon = sv('con'), spMag = sv('int');
+      let spVal;
+      switch (data.attributes.sp.formula) {
+        case 'con': spVal = spCon; break;            // 내구 (=(내구+내구)÷2)
+        case 'magdex': spVal = (spMag + spDex) / 2; break; // 마술: 마력+민첩 ÷2
+        case 'strmag': spVal = (spStr + spMag) / 2; break; // 마술: 근력+마력 ÷2
+        case 'mag': spVal = spMag; break;            // 마술: 마력 (내구 대체)
+        default: spVal = (spStr + spDex) / 2;        // strdex: 근력+민첩 ÷2
+      }
+      data.attributes.sp.max = Math.floor(spVal);
     }
 
     // Recoveries

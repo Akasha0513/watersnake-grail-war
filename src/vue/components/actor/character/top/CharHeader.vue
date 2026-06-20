@@ -17,9 +17,9 @@
       <input v-if="actor.type === 'master'" type="text" name="system.details.race.value" class="input-secondary" v-model="actor.system.details.race.value">
       <input v-else type="text" name="system.details.class.value" class="input-secondary" v-model="actor.system.details.class.value">
     </div>
-    <!-- 계약자 이름(서번트) / 계약자 클래스(마스터) -->
+    <!-- 계약자 (공통) -->
     <div class="unit unit--abs-label unit--level">
-      <label for="system.details.contractor.value">{{actor.type === 'master' ? '계약자 클래스' : '계약자 이름'}}</label>
+      <label for="system.details.contractor.value">계약자</label>
       <input type="text" name="system.details.contractor.value" class="input-secondary" v-model="actor.system.details.contractor.value">
     </div>
   </header>
