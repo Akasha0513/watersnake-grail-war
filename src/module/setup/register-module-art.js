@@ -13,7 +13,7 @@ async function registerModuleArt() {
   // First, clear out the existing map entries and get the active module list.
   game.holygrailwar.system.moduleArt.map.clear();
   const activeModules = [
-    ['archmage', game.system],
+    ['watersnake-grail-war', game.system],
     ...[...game.modules.entries()].filter(([_key, m]) => m.active)
   ];
 

@@ -212,7 +212,7 @@ export default function VueRenderingMixin(BaseApplication) {
       /* -------------------------------------------- */
 
       _parsePastedContent(event) {
-        if (!this.isShift && game.settings.get('archmage', 'allowPasteParsing')) {
+        if (!this.isShift && game.settings.get('watersnake-grail-war', 'allowPasteParsing')) {
           const target = event.target;
           const prosemirror = target.closest('prose-mirror');
 

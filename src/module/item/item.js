@@ -55,7 +55,7 @@ export class ItemArchmage extends Item {
     let itemToRender = this.clone(tempOverrides, {"save": false, "keepId": true});
 
     // Override level if the actor has the related flag
-    if (this.itemActor?.getFlag("archmage", "overridePowerLevel") && this.type == 'power') {
+    if (this.itemActor?.getFlag("watersnake-grail-war", "overridePowerLevel") && this.type == 'power') {
       itemToRender.system.powerLevel.value = Math.max(this.itemActor.system.attributes.level.value, itemToRender.system.powerLevel.value);
     }
 
@@ -143,7 +143,7 @@ export class ItemArchmage extends Item {
 
     // Handle flags for rerolls.
     chatData.flags = chatData.flags ?? {};
-    chatData.flags.archmage = {
+    chatData.flags['watersnake-grail-war'] = {
       // Add flags for IDs and targets.
       actor: this.itemActor?.uuid ?? false,
       item: itemToRender.uuid,
@@ -276,7 +276,7 @@ export class ItemArchmage extends Item {
     let overrides = {};
     if (this.type != 'power') return { overrides, consumeUsage: true };
     let baseLvl = this.system.powerLevel?.value ?? 0;
-    if (this.itemActor?.getFlag("archmage", "overridePowerLevel")) {
+    if (this.itemActor?.getFlag("watersnake-grail-war", "overridePowerLevel")) {
       baseLvl = Math.max(this.itemActor.system.attributes.level.value, baseLvl);
     }
 
@@ -584,7 +584,7 @@ export class ItemArchmage extends Item {
   if (["power", "action"].includes(itemToRender.type)) {
       let atk = ArchmageRolls.addAttackMod(itemToRender);
       itemToRender.system.attack.value = atk.attackLine;
-      if (game.settings.get("archmage", "multiTargetAttackRolls")){
+      if (game.settings.get("watersnake-grail-war", "multiTargetAttackRolls")){
         numTargets = await ArchmageRolls.rollItemTargets(itemToRender);
         let adj = ArchmageRolls.rollItemAdjustAttacks(itemToRender, atk.attackLine, numTargets, atk.numManualAttacks);
         itemToRender.system.attack.value = adj.line;
@@ -612,7 +612,7 @@ export class ItemArchmage extends Item {
       }
       if (!table) {
         // If not present in world, load system's from compendium
-        let pack = await game.packs.get("archmage.system-rolltables").getDocuments();
+        let pack = await game.packs.get("watersnake-grail-war.system-rolltables").getDocuments();
         table = pack.find(t => t.name === this.system.rollTable.value);
       }
       if (table) {
@@ -832,7 +832,7 @@ export class ItemArchmage extends Item {
   }
 
   async _handleFighterMomentum(itemToRender) {
-    if (!game.settings.get("archmage", "secondEdition")
+    if (!game.settings.get("watersnake-grail-war", "secondEdition")
       || itemToRender.type != "power"
       || itemToRender.system.powerSource.value != "class"
       || !this.itemActor?.system?.details?.detectedClasses?.includes("fighter")
@@ -885,7 +885,7 @@ export class ItemArchmage extends Item {
 
   async _handleBreathSpell(itemToRender){
     // This is only relevant for 1e
-    if (game.settings.get("archmage", "secondEdition")) return;
+    if (game.settings.get("watersnake-grail-war", "secondEdition")) return;
 
     if (itemToRender.type != "power") return;
     if (!itemToRender.system.breathWeapon.value) return;

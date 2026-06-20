@@ -18,7 +18,7 @@ export class ActorTabFocusSheet extends ActorArchmageSheetV2 {
   /** @override */
   static get defaultOptions () {
     const options = super.defaultOptions
-    const compactMode = game.settings.get('archmage', 'compactMode')
+    const compactMode = game.settings.get('watersnake-grail-war', 'compactMode')
     foundry.utils.mergeObject(options, {
       classes: options.classes
         .concat(['archmage-v2', 'sheet', 'actor', 'tab-focus-sheet', 'tab'])

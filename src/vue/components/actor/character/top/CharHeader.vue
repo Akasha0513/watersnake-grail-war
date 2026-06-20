@@ -42,7 +42,7 @@ export default {
   },
   computed: {
     secondEdition() {
-      return game.settings.get('archmage', 'secondEdition') === true;
+      return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     }
   },
   methods: { /* See created. */},

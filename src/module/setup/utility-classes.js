@@ -73,7 +73,7 @@ export class ArchmageUtility {
     }
     var hide = chatData?.whisper?.length ? chatData.whisper : null;
     if (hide && game.user.isGM &&
-        game.settings.get("archmage", "showPrivateGMAttackRolls") &&
+        game.settings.get("watersnake-grail-war", "showPrivateGMAttackRolls") &&
         game.settings.get("core", "rollMode") === "gmroll") {
       hide = null;
     } else if (hide && game.user.isGM && game.settings.get("dice-so-nice", "showGhostDice")) {
@@ -122,12 +122,12 @@ export class ArchmageUtility {
       }
 
       // Get the manual offset for this combat..
-      let edOffset = combat.getFlag('archmage', 'edOffset') ?? 0;
+      let edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
       if (edOffset) {
         result = result + edOffset;
 
         // If the escalation die isn't unlimited, set a min/max.
-        if (!game.settings.get('archmage', 'unboundEscDie')) {
+        if (!game.settings.get('watersnake-grail-war', 'unboundEscDie')) {
           if (result > 6) {
             result = 6;
           }
@@ -169,10 +169,10 @@ export class ArchmageUtility {
       if (round < 0) round = 0;
 
       // Retrieve the escalation die offset for this combat.
-      let edOffset = combat.getFlag('archmage', 'edOffset') ?? 0;
+      let edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
 
       // By default, limit how far the escalation die can be adjusted.
-      if (!game.settings.get('archmage', 'unboundEscDie')) {
+      if (!game.settings.get('watersnake-grail-war', 'unboundEscDie')) {
         if (isIncrease) {
           if (round + edOffset < 7) edOffset++;
         }
@@ -187,12 +187,12 @@ export class ArchmageUtility {
       }
 
       // Update the escalation die offset flag.
-      await combat.setFlag('archmage', 'edOffset', edOffset);
+      await combat.setFlag('watersnake-grail-war', 'edOffset', edOffset);
     }
   }
 
   static async updateCompendiums() {
-    let pack = game.packs.get('archmage.monsters-core');
+    let pack = game.packs.get('watersnake-grail-war.monsters-core');
     let monsters = pack ? await pack.getContent() : null;
 
     if (monsters) {
@@ -460,11 +460,11 @@ export class ArchmageUtility {
    *   As above, but the given format data is inserted for each separate key.
    */
   static tooltip(...keys) {
-    if (!game.settings.get("archmage", "sheetTooltips")) {
+    if (!game.settings.get("watersnake-grail-war", "sheetTooltips")) {
       return undefined;
     }
 
-    const isSecondEdition = game.settings.get('archmage', 'secondEdition');
+    const isSecondEdition = game.settings.get('watersnake-grail-war', 'secondEdition');
     const keyPrefix = "ARCHMAGE.TOOLTIP.";
     const secondEditionSuffix = "V2";
 
@@ -637,68 +637,68 @@ export class MacroUtils {
    */
   static setDuration(data, duration, options={}) {
     // Assign by level to avoid weird issues with str path accessor
-    if (!data.flags?.archmage?.duration) data.flags = {archmage: {duration: "Unknown"}};
+    if (!data.flags?.['watersnake-grail-war']?.duration) data.flags = {archmage: {duration: "Unknown"}};
     switch(duration) {
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.StartOfNextTurn:
       case "StartOfNextTurn":
-        data.flags.archmage.duration = "StartOfNextTurn";
+        data.flags['watersnake-grail-war'].duration = "StartOfNextTurn";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EndOfNextTurn:
       case "EndOfNextTurn":
-        data.flags.archmage.duration = "EndOfNextTurn";
+        data.flags['watersnake-grail-war'].duration = "EndOfNextTurn";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.StartOfNextSourceTurn:
       case "StartOfNextSourceTurn":
-        data.flags.archmage.duration = "StartOfNextSourceTurn";
+        data.flags['watersnake-grail-war'].duration = "StartOfNextSourceTurn";
         data.origin = options.sourceTurnUuid;
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EndOfNextSourceTurn:
       case "EndOfNextSourceTurn":
-        data.flags.archmage.duration = "EndOfNextSourceTurn";
+        data.flags['watersnake-grail-war'].duration = "EndOfNextSourceTurn";
         data.origin = options.sourceTurnUuid;
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EasySaveEnds:
       case "EasySaveEnds":
-        data.flags.archmage.duration = "EasySaveEnds";
+        data.flags['watersnake-grail-war'].duration = "EasySaveEnds";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.NormalSaveEnds:
       case "NormalSaveEnds":
-        data.flags.archmage.duration = "NormalSaveEnds";
+        data.flags['watersnake-grail-war'].duration = "NormalSaveEnds";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.HardSaveEnds:
       case "HardSaveEnds":
-        data.flags.archmage.duration = "HardSaveEnds";
+        data.flags['watersnake-grail-war'].duration = "HardSaveEnds";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EndOfCombat:
       case "EndOfCombat":
-        data.flags.archmage.duration = "EndOfCombat";
+        data.flags['watersnake-grail-war'].duration = "EndOfCombat";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.Infinite:
       case "Infinite":
-        data.flags.archmage.duration = "Infinite";
+        data.flags['watersnake-grail-war'].duration = "Infinite";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.Unknown:
       case "Unknown":
-        data.flags.archmage.duration = "Unknown";
+        data.flags['watersnake-grail-war'].duration = "Unknown";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.StartOfEachTurn:
       case "StartOfEachTurn":
-        data.flags.archmage.duration = "StartOfEachTurn";
+        data.flags['watersnake-grail-war'].duration = "StartOfEachTurn";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EndOfArc:
       case "EndOfArc":
-        data.flags.archmage.duration = "EndOfArc";
+        data.flags['watersnake-grail-war'].duration = "EndOfArc";
         break;
       case CONFIG.HOLYGRAILWAR.effectDurationTypes.EndOfRound:
       case "EndOfRound":
-        data.flags.archmage.duration = "EndOfRound";
-        data.flags.archmage.endRound = options.round;
+        data.flags['watersnake-grail-war'].duration = "EndOfRound";
+        data.flags['watersnake-grail-war'].endRound = options.round;
         break;
       default:
         console.warn("Unknown duration ", duration);
     }
     // Set Foundry core duration to make the thing appear on tokens
-    if (data.flags.archmage.duration != "Infinite") {
+    if (data.flags['watersnake-grail-war'].duration != "Infinite") {
         data['duration'] = {
           rounds: 999,
           turns: 999

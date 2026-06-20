@@ -1,6 +1,6 @@
 id: watersnake-grail-war
 title: "성배전쟁 ORPG (Watersnake Grail War)"
-version: "0.1.0"
+version: "0.1.1"
 authors:
   - name: akasha0513
   - name: "원작 룰: watersnake"
@@ -32,8 +32,8 @@ styles:
   - css/lib/introjs.css
 
 flags:
-  archmage:
-    archmage-art: 'systems/watersnake-grail-war/map-archmage.json'
+  watersnake-grail-war:
+    watersnake-grail-war-art: 'systems/watersnake-grail-war/map-archmage.json'
   hotReload:
     extensions:
       - css

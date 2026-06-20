@@ -114,7 +114,7 @@ export default class ArchmageRolls {
     // selected targets or number listed on the power. If no targets are
     // selected, just use the number listed on the power.
     let targetsCount = numTargets.targets;
-    if (game.settings.get("archmage", "hideExtraRolls")){
+    if (game.settings.get("watersnake-grail-war", "hideExtraRolls")){
       let selectedTargets = [...game.user.targets];
       if (selectedTargets.length > 0) targetsCount = Math.min(numTargets.targets, selectedTargets.length);
     }

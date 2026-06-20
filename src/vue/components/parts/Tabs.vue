@@ -1,6 +1,6 @@
 <template>
   <section :class="`section section--tabs section--tabs-${group} flexshrink`">
-    <!-- <input type="hidden" :name="concat('flags.archmage.sheetDisplay.tabs.', group, '.value')" v-model="currentTab"/> -->
+    <!-- <input type="hidden" :name="concat('flags.watersnake-grail-war.sheetDisplay.tabs.', group, '.value')" v-model="currentTab"/> -->
     <button v-if="hamburger" :class="`sheet-tabs-toggle sheet-tabs-toggle--${group}`" @click="toggleMenu">
       <i class="fas fa-bars"></i><span class="visually-hidden"> Toggle Navigation</span>
     </button>
@@ -57,7 +57,7 @@ export default {
       // Update the flag.
       if (typeof this.actor !== 'undefined' && !this.actor.pack) {
         getActor(this.actor).then(actor => {
-          actor.setFlag('archmage', `sheetDisplay.tabs.${this.group}.value`, this.currentTab);
+          actor.setFlag('watersnake-grail-war', `sheetDisplay.tabs.${this.group}.value`, this.currentTab);
         });
       }
       // Close the mobile menu if open. We also need a click listener in the actor sheet class

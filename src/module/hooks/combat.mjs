@@ -16,7 +16,7 @@ export async function combatTurn(combat, context, options) {
     await executeLifecycleMacro(startCombatant, "startOfTurn");
 
     // Exit early if the feature is disabled.
-    if (!game.settings.get('archmage', 'enableOngoingEffectsMessages')) return;
+    if (!game.settings.get('watersnake-grail-war', 'enableOngoingEffectsMessages')) return;
 
     // If the direction is negative, ignore the turn
     if (options.direction < 0) return;
@@ -34,7 +34,7 @@ export async function handleTurnEffects(prefix, combat, combatant, context, opti
     if (!combatant?.actor) return;
 
     const saveEndsEffects = ["EasySaveEnds", "NormalSaveEnds", "HardSaveEnds"];
-    const hasImplacable = combatant?.actor?.flags.archmage?.implacable ?? false;
+    const hasImplacable = combatant?.actor?.flags['watersnake-grail-war']?.implacable ?? false;
     const currentCombatantEffectData = {
         selfEnded: [],
         savesEnds: [],
@@ -48,21 +48,21 @@ export async function handleTurnEffects(prefix, combat, combatant, context, opti
     for (const effect of combatant.actor.effects) {
         if (!effect.active) continue;
         // Handle ongoing.
-        const isOngoing = effect.flags.archmage?.ongoingDamage ? true: false;
+        const isOngoing = effect.flags['watersnake-grail-war']?.ongoingDamage ? true: false;
         effect.isOngoing = isOngoing;
-        const isCrit = isOngoing && effect.flags.archmage?.ongoingDamageCrit === true;
+        const isCrit = isOngoing && effect.flags['watersnake-grail-war']?.ongoingDamageCrit === true;
         effect.isCrit = isCrit;
-        effect.ongoingDamage = isOngoing ? Number(effect.flags.archmage?.ongoingDamage) : 0;
+        effect.ongoingDamage = isOngoing ? Number(effect.flags['watersnake-grail-war']?.ongoingDamage) : 0;
         effect.ongoingTooltip = game.i18n.format('ARCHMAGE.CHAT.ongoingDamageTooltip', {
             damage: effect.ongoingDamage,
-            type: effect.flags.archmage?.ongoingDamageType ?? '',
+            type: effect.flags['watersnake-grail-war']?.ongoingDamageType ?? '',
         });
         if (isCrit) {
             effect.ongoingDamage = effect.ongoingDamage * 2;
         }
         // Handle durations.
         if (effect.name === game.i18n.localize("ARCHMAGE.EFFECT.StatusDead")) isDead = true;
-        const duration = effect.flags.archmage?.duration || "Unknown";
+        const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
         if (duration === `${prefix}OfNextTurn`) {
             // Ensure it's the *next* turn
             if (combat.round  > effect.duration.startRound
@@ -86,19 +86,19 @@ export async function handleTurnEffects(prefix, combat, combatant, context, opti
         effectsToDelete = [];
         if (otherCombatant?.actor?.effects) {
             for (const effect of otherCombatant.actor.effects) {
-                const isOngoing = effect.flags.archmage?.ongoingDamage ? true: false;;
+                const isOngoing = effect.flags['watersnake-grail-war']?.ongoingDamage ? true: false;;
                 effect.isOngoing = isOngoing;
-                const isCrit = isOngoing && effect.flags.archmage?.ongoingDamageCrit === true;
+                const isCrit = isOngoing && effect.flags['watersnake-grail-war']?.ongoingDamageCrit === true;
                 effect.isCrit = isCrit;
-                effect.ongoingDamage = isOngoing ? Number(effect.flags.archmage?.ongoingDamage) : 0;
+                effect.ongoingDamage = isOngoing ? Number(effect.flags['watersnake-grail-war']?.ongoingDamage) : 0;
                 effect.ongoingTooltip = game.i18n.format('ARCHMAGE.CHAT.ongoingDamageTooltip', {
                     damage: effect.ongoingDamage,
-                    type: effect.flags.archmage?.ongoingDamageType ?? '',
+                    type: effect.flags['watersnake-grail-war']?.ongoingDamageType ?? '',
                 });
                 if (isCrit) {
                     effect.ongoingDamage = effect.ongoingDamage * 2;
                 }
-                const duration = effect.flags.archmage?.duration || "Unknown";
+                const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
                 if (duration === `${prefix}OfNextSourceTurn` && effect.origin === combatant.actor.uuid) {
                     // Ensure it's the *next* turn
                     if (combat.round  > effect.duration.startRound
@@ -135,8 +135,8 @@ export async function handleRoundEffects(combat, context, options) {
         if (!combatant?.actor?.effects) continue;
         effectsToDelete = [];
         for (const effect of combatant.actor.effects) {
-            const duration = effect.flags.archmage?.duration || "Unknown";
-            if (duration === 'EndOfRound' && effect.flags.archmage?.endRound < context.round) {
+            const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
+            if (duration === 'EndOfRound' && effect.flags['watersnake-grail-war']?.endRound < context.round) {
                 effect.otherName = combatant.actor.name;
                 currentCombatantEffectData.otherEnded.push(effect);
                 effectsToDelete.push(effect.id);
@@ -158,7 +158,7 @@ export async function preDeleteCombat(combat, context, options) {
 
 
     // Exit early if the feature is disabled.
-    if (!game.settings.get('archmage', 'enableOngoingEffectsMessages')) return;
+    if (!game.settings.get('watersnake-grail-war', 'enableOngoingEffectsMessages')) return;
 
     const saveEndsEffects = ["EasySaveEnds", "NormalSaveEnds", "HardSaveEnds"];
 
@@ -178,19 +178,19 @@ export async function preDeleteCombat(combat, context, options) {
 
             for (const effect of combatant.actor.effects) {
                 if (!effect.active) continue;
-                const isOngoing = effect.flags.archmage?.ongoingDamage ? true: false;
+                const isOngoing = effect.flags['watersnake-grail-war']?.ongoingDamage ? true: false;
                 effect.isOngoing = isOngoing;
-                const isCrit = isOngoing && effect.flags.archmage?.ongoingDamageCrit === true;
+                const isCrit = isOngoing && effect.flags['watersnake-grail-war']?.ongoingDamageCrit === true;
                 effect.isCrit = isCrit;
-                effect.ongoingDamage = isOngoing ? Number(effect.flags.archmage.ongoingDamage) : 0;
+                effect.ongoingDamage = isOngoing ? Number(effect.flags['watersnake-grail-war'].ongoingDamage) : 0;
                 effect.ongoingTooltip = game.i18n.format('ARCHMAGE.CHAT.ongoingDamageTooltip', {
                     damage: effect.ongoingDamage,
-                    type: effect.flags.archmage?.ongoingDamageType ?? '',
+                    type: effect.flags['watersnake-grail-war']?.ongoingDamageType ?? '',
                 });
                 if (isCrit) {
                     effect.ongoingDamage = effect.ongoingDamage * 2;
                 }
-                const duration = effect.flags.archmage?.duration || "Unknown";
+                const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
                 // If duration is longer than battle skip
                 if (["Infinite", "EndOfArc"].includes(duration)) continue;
                 // If it's a save-ends effect store it as such
@@ -215,7 +215,7 @@ export async function preDeleteCombat(combat, context, options) {
             // Probably random monster, just delete silently
             for (const effect of combatant.actor.effects) {
                 // If duration is "Infinite", skip
-                if (effect.flags.archmage?.duration === "Infinite") continue;
+                if (effect.flags['watersnake-grail-war']?.duration === "Infinite") continue;
                 // Everything else should end with the battle
                 else effectsToDelete.push(effect.id);
             }
@@ -341,7 +341,7 @@ async function _add2eFighterMomentum(combatant) {
     if (!combatant?.actor) return;
 
     // Only woks in 2e and for fighters
-    if (!(game.settings.get("archmage", "secondEdition") && combatant.actor?.system?.details?.detectedClasses?.includes("fighter"))) return;
+    if (!(game.settings.get("watersnake-grail-war", "secondEdition") && combatant.actor?.system?.details?.detectedClasses?.includes("fighter"))) return;
 
     // Update actor's resource
     let updateData = {}

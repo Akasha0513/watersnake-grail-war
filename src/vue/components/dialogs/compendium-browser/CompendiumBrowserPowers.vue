@@ -285,7 +285,7 @@ export default {
       return Array.from(locations).sort();
     },
     nightmode() {
-      return game.settings.get("archmage", "nightmode") ? 'nightmode' : '';
+      return game.settings.get("watersnake-grail-war", "nightmode") ? 'nightmode' : '';
     },
     entries() {
       // Build our results array. Exit early if the length is 0.

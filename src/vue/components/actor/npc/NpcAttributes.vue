@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     headerCollapsed() {
-      return this.actor.flags?.archmage?.sheetDisplay?.header?.collapsed ?? false;
+      return this.actor.flags?.['watersnake-grail-war']?.sheetDisplay?.header?.collapsed ?? false;
     }
   },
   methods: {},

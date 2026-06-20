@@ -1,5 +1,5 @@
 <template>
-  <section class="section section--out flexcol" v-if="!actor.flags.archmage?.hideOneUniqueThing">
+  <section class="section section--out flexcol" v-if="!actor.flags['watersnake-grail-war']?.hideOneUniqueThing">
     <h2 class="unit-title">{{localize('ARCHMAGE.oneUniqueThing')}}</h2>
     <div class="out">
       <Suspense>

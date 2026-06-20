@@ -49,7 +49,7 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
     const context = super.getData(options);
 
     // Edition
-    context.secondEdition = game.settings.get("archmage", "secondEdition");
+    context.secondEdition = game.settings.get("watersnake-grail-war", "secondEdition");
 
     // Sequencer support
     context.sequencerEnabled = game.modules.get("sequencer")?.active;
@@ -87,11 +87,11 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
     context.effects = this.item.effects.toObject();
     context.effects.sort((a, b) => (a.sort || 0) - (b.sort || 0));
     for (let [index, effect] of context.effects.entries()) {
-      context.effects[index].duration = effect.flags?.archmage?.duration
-        ? game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[effect.flags.archmage.duration])
+      context.effects[index].duration = effect.flags?.['watersnake-grail-war']?.duration
+        ? game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[effect.flags['watersnake-grail-war'].duration])
         : false;
-      context.effects[index].ongoingDamage = effect.flags?.archmage?.ongoingDamage
-        ? `${effect.flags.archmage.ongoingDamage} ongoing ${effect.flags.archmage.ongoingDamageType} damage`
+      context.effects[index].ongoingDamage = effect.flags?.['watersnake-grail-war']?.ongoingDamage
+        ? `${effect.flags['watersnake-grail-war'].ongoingDamage} ongoing ${effect.flags['watersnake-grail-war'].ongoingDamageType} damage`
         : false;
       context.effects[index].bonuses = getChanges(effect);
       context.effects[index].img = effect?.img ?? effect?.icon;
@@ -230,7 +230,7 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
           lineNumbers: true,
           inputStyle: "contenteditable",
           autofocus: false,
-          theme: game.settings.get("archmage", "nightmode") ? 'monokai' : 'default',
+          theme: game.settings.get("watersnake-grail-war", "nightmode") ? 'monokai' : 'default',
           readOnly: textarea.hasAttribute('readonly')
         }).on('change', (instance) => instance.save());
       }

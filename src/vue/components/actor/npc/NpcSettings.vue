@@ -5,7 +5,7 @@
       <!-- Flag Settings -->
       <div class="unit unit--flags">
         <div v-for="(flag, f) in flags" :key="f" :data-key="f" class="settings-flags">
-          <label :for="concat('flags.archmage.', f)" class="unit-subtitle flexrow"><input type="checkbox" :name="concat('flags.archmage.', f, )" v-model="flag.value"> {{flag.name}}</label>
+          <label :for="concat('flags.watersnake-grail-war.', f)" class="unit-subtitle flexrow"><input type="checkbox" :name="concat('flags.watersnake-grail-war.', f, )" v-model="flag.value"> {{flag.name}}</label>
           <p class="notes">{{flag.hint}}</p>
         </div>
 
@@ -48,7 +48,7 @@ export default {
   computed: {
     flags() {
       let flags = CONFIG.Actor.npcFlags;
-      let charFlags = this.actor.flags && this.actor.flags.archmage ? this.actor.flags.archmage : {};
+      let charFlags = this.actor.flags && this.actor.flags['watersnake-grail-war'] ? this.actor.flags['watersnake-grail-war'] : {};
       for (let [k, v] of Object.entries(flags)) {
         v.value = charFlags && charFlags[k] ? charFlags[k] : null;
         flags[k] = v;
@@ -59,7 +59,7 @@ export default {
       let resources = {};
       if (this.actor.system?.resources?.spendable) {
         for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-          if ( v.secondEdition && !game.settings.get('archmage', 'secondEdition') ) continue;
+          if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
           if (k.includes('custom')) resources[k] = v;
         }
       }

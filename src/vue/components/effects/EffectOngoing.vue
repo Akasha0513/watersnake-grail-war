@@ -29,10 +29,10 @@ const props = defineProps(['effect', 'context']);
 const { effect } = props;
 const foundryEffect = inject('itemDocument')
 
-const flags = reactive(effect.flags.archmage || {});
+const flags = reactive(effect.flags['watersnake-grail-war'] || {});
 watch(() => flags, (newValue) => {
-	foundryEffect.setFlag('archmage', 'ongoingDamage', newValue.ongoingDamage);
-	foundryEffect.setFlag('archmage', 'ongoingDamageType', newValue.ongoingDamageType);
-	foundryEffect.setFlag('archmage', 'ongoingDamageCrit', newValue.ongoingDamageCrit);
+	foundryEffect.setFlag('watersnake-grail-war', 'ongoingDamage', newValue.ongoingDamage);
+	foundryEffect.setFlag('watersnake-grail-war', 'ongoingDamageType', newValue.ongoingDamageType);
+	foundryEffect.setFlag('watersnake-grail-war', 'ongoingDamageCrit', newValue.ongoingDamageCrit);
 }, { deep: true })
 </script>

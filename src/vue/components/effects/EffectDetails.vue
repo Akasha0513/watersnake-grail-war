@@ -44,8 +44,8 @@ const foundryEffect = inject('itemDocument')
 const viewModel = reactive({
 	origin: effect.origin,
 	disabled: effect.disabled,
-	stacksAlways: effect.flags.archmage?.stacksAlways ?? false,
-	duration: effect.flags.archmage?.duration ?? null,
+	stacksAlways: effect.flags['watersnake-grail-war']?.stacksAlways ?? false,
+	duration: effect.flags['watersnake-grail-war']?.duration ?? null,
 });
 watch(viewModel, (newValue) => {
 	foundryEffect.update({
@@ -53,7 +53,7 @@ watch(viewModel, (newValue) => {
 		disabled: newValue.disabled,
 	})
 
-	foundryEffect.setFlag('archmage', 'stacksAlways', newValue.stacksAlways);
-	foundryEffect.setFlag('archmage', 'duration', newValue.duration);
+	foundryEffect.setFlag('watersnake-grail-war', 'stacksAlways', newValue.stacksAlways);
+	foundryEffect.setFlag('watersnake-grail-war', 'duration', newValue.duration);
 }, { deep: true });
 </script>

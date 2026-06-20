@@ -103,7 +103,7 @@ export default class preCreateChatMessageHandler {
     }
 
     static maybeMentionVulnerability($content, hitEvaluationResults, actor) {
-        if (!game.settings.get("archmage", "showVulnsInChat")) return
+        if (!game.settings.get("watersnake-grail-war", "showVulnsInChat")) return
         if (hitEvaluationResults?.vulnerabilities === undefined) return
         if (hitEvaluationResults?.vulnerabilities?.length <= 0) return
 
@@ -258,7 +258,7 @@ export default class preCreateChatMessageHandler {
                     }
                     // Append target defenses to text
                     if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':') && hitEvaluationResults.defenses.length > 0
-                        && game.settings.get("archmage", "showDefensesInChat")) {
+                        && game.settings.get("watersnake-grail-war", "showDefensesInChat")) {
                         $row_self.append("<span class='dc-target'> (" + hitEvaluationResults.defenses.join(", ") + ") </span>")
                     }
                 }
@@ -283,7 +283,7 @@ export default class preCreateChatMessageHandler {
                         }
                     } else {
                         $row_self.addClass("trigger-inactive");
-                        if (game.settings.get("archmage", "hideInsteadOfOpaque")) {
+                        if (game.settings.get("watersnake-grail-war", "hideInsteadOfOpaque")) {
                             $row_self.addClass("hide");
                         }
                     }

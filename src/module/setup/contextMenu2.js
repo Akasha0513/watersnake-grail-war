@@ -114,10 +114,10 @@ export class ContextMenu2 {
       html.append(ol);
 
       // Determine if user-selected targets are allowed.
-      const allowTargeting = game.settings.get('archmage', 'allowTargetDamageApplication');
-      let targetType = game.settings.get('archmage', 'userTargetDamageApplicationType');
+      const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
+      let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
       if (!allowTargeting && targetType !== 'selected') {
-        game.settings.set('archmage', 'userTargetDamageApplicationType', 'selected');
+        game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', 'selected');
         targetType = 'selected';
       }
 

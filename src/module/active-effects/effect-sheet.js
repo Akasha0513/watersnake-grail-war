@@ -47,11 +47,11 @@ export class EffectArchmageSheet extends foundry.applications.sheets.ActiveEffec
     context.isNpc = this.object.parent.type === "npc";
 
     // Get data from flag
-    context.duration = context.effect.flags.archmage?.duration || "Unknown";
-    context.ongoingDamage = context.effect.flags.archmage?.ongoingDamage || 0;
-    context.ongoingDamageType = context.effect.flags.archmage?.ongoingDamageType || "";
-    context.ongoingDamageCrit = context.effect.flags.archmage?.ongoingDamageCrit || false;
-    context.stacksAlways = context.effect.flags.archmage?.stacksAlways || false;
+    context.duration = context.effect.flags['watersnake-grail-war']?.duration || "Unknown";
+    context.ongoingDamage = context.effect.flags['watersnake-grail-war']?.ongoingDamage || 0;
+    context.ongoingDamageType = context.effect.flags['watersnake-grail-war']?.ongoingDamageType || "";
+    context.ongoingDamageCrit = context.effect.flags['watersnake-grail-war']?.ongoingDamageCrit || false;
+    context.stacksAlways = context.effect.flags['watersnake-grail-war']?.stacksAlways || false;
 
     return context;
   }
@@ -89,7 +89,7 @@ export class EffectArchmageSheet extends foundry.applications.sheets.ActiveEffec
     ae.origin = formData.origin;
 
     // Duration and ongoing damage goes on a flag
-    ae.flags.archmage = {
+    ae.flags['watersnake-grail-war'] = {
       duration: formData.duration,
       ongoingDamage: formData.ongoingDamage,
       ongoingDamageType: formData.ongoingDamageType,

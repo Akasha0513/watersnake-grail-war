@@ -1,5 +1,5 @@
 <template>
-  <section class="section section--incrementals flexcol" v-if="!actor.flags.archmage?.hideIncrementals">
+  <section class="section section--incrementals flexcol" v-if="!actor.flags['watersnake-grail-war']?.hideIncrementals">
     <h2 class="unit-title">{{localize('ARCHMAGE.incrementalAdvances')}}</h2>
     <ul class="list list--incrementals incrementals">
       <li v-for="(item, index) in getOrderedIncrementals(actor)" :key="index" class="list-item list-item--incrementals incremental" :data-key="index">
@@ -30,7 +30,7 @@ export default {
   methods: {
     getIncrementalTitle(incremental) {
       if (incremental == 'abilityScoreBonus') {
-        if (game.settings.get('archmage', 'secondEdition')) {
+        if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
           incremental = `${incremental}2e`;
         }
       }
@@ -38,7 +38,7 @@ export default {
     },
     getOrderedIncrementals(actor) {
       let incrementalKeys = ['abilityScoreBonus', 'skills', 'extraMagicItem', 'feat', 'talent', 'hp', 'iconRelationshipPoint', 'powerSpell1', 'powerSpell2', 'powerSpell3', 'powerSpell4'];
-      if (game.settings.get("archmage", "secondEdition")) {
+      if (game.settings.get("watersnake-grail-war", "secondEdition")) {
         incrementalKeys = ['abilityScoreBonus', 'classFeature', 'feat', 'hp', 'extraMagicItem', 'md', 'pd', 'powerSpell1', 'skillInitiative', 'talent', 'abilMultiplier'];
       }
       let newIncrementalArray = {};

@@ -118,7 +118,7 @@ export default {
   },
   computed: {
     secondEdition() {
-      return game.settings.get('archmage', 'secondEdition') === true;
+      return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     },
     deathSaves() {
       const deathFails = this.actor.system.attributes.saves.deathFails;
@@ -156,7 +156,7 @@ export default {
       this.avatarWidth = ratioClass != 'square' ? width : squareSize;
       this.avatarHeight = ratioClass != 'square' ? height : squareSize;
       let classes = ['avatar', `avatar--${ratioClass}`];
-      let flags = this.actor.flags && this.actor.flags.archmage ? this.actor.flags.archmage : {};
+      let flags = this.actor.flags && this.actor.flags['watersnake-grail-war'] ? this.actor.flags['watersnake-grail-war'] : {};
       if (flags.portraitRound) classes.push('avatar--round');
       if (flags.portraitFrame) classes.push('avatar--frame');
       this.avatarClass = classes.join(' ');
@@ -187,7 +187,7 @@ export default {
         });
       }
     },
-    'actor.flags.archmage': {
+    'actor.flags['watersnake-grail-war']': {
       deep: true,
       handler() {
         this.getAvatarDimensions();

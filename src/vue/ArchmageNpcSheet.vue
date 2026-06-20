@@ -152,10 +152,10 @@ export default {
   },
   computed: {
     nightmode() {
-      return game.settings.get("archmage", "nightmode") ? 'nightmode' : '';
+      return game.settings.get("watersnake-grail-war", "nightmode") ? 'nightmode' : '';
     },
     flags() {
-      let flags = this.actor.flags ? this.actor.flags.archmage : {};
+      let flags = this.actor.flags ? this.actor.flags['watersnake-grail-war'] : {};
       let baseFlags = {
         'sheetDisplay': {
           'actions': {

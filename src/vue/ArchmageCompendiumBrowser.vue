@@ -84,7 +84,7 @@ export default {
   methods: {},
   computed: {
     nightmode() {
-      return game.settings.get("archmage", "nightmode") ? 'nightmode' : '';
+      return game.settings.get("watersnake-grail-war", "nightmode") ? 'nightmode' : '';
     },
     flags() {
       let flags = {};

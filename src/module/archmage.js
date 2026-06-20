@@ -100,7 +100,7 @@ Hooks.once('init', async function() {
   // Preload template partials.
   preloadHandlebarsTemplates();
 
-  game.settings.register("archmage", "secondEdition", {
+  game.settings.register("watersnake-grail-war", "secondEdition", {
     name: "ARCHMAGE.SETTINGS.secondEditionName",
     hint: "ARCHMAGE.SETTINGS.secondEditionHint",
     scope: "world",
@@ -110,7 +110,7 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register("archmage", "alternateIconRollingMethod", {
+  game.settings.register("watersnake-grail-war", "alternateIconRollingMethod", {
     name: "ARCHMAGE.SETTINGS.alternateIconRollingMethodName",
     hint: "ARCHMAGE.SETTINGS.alternateIconRollingMethodHint",
     scope: "world",
@@ -120,7 +120,7 @@ Hooks.once('init', async function() {
     requiresReload: false
   });
 
-  game.settings.register("archmage", "resetIconsOnRest", {
+  game.settings.register("watersnake-grail-war", "resetIconsOnRest", {
     name: "ARCHMAGE.SETTINGS.resetIconsOnRestName",
     hint: "ARCHMAGE.SETTINGS.resetIconsOnRestHint",
     scope: "world",
@@ -204,28 +204,28 @@ Hooks.once('init', async function() {
 
   // Replace sheets.
   foundry.documents.collections.Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
-  foundry.documents.collections.Items.registerSheet("archmage", ItemArchmageSheet, {
+  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ItemArchmageSheet, {
     label: 'ARCHMAGE.sheetItem',
     makeDefault: true,
   });
   // AppV2 + Vue based sheets. These will eventually become the default.
-  foundry.documents.collections.Items.registerSheet("archmage", ArchmagePowerSheetV2, {
+  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmagePowerSheetV2, {
     label: 'ARCHMAGE.sheetItemV2',
     types: ["power"],
     makeDefault: true,
   });
-  foundry.documents.collections.Items.registerSheet("archmage", ArchmageEquipmentSheetV2, {
+  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmageEquipmentSheetV2, {
     label: 'ARCHMAGE.sheetItemV2',
     types: ["equipment"],
     makeDefault: true,
   });
-  foundry.documents.collections.Items.registerSheet("archmage", ArchmageActionSheetV2, {
+  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmageActionSheetV2, {
     label: 'ARCHMAGE.sheetItemV2',
     types: ["action", "trait", "nastierSpecial"],
     makeDefault: true,
   })
 
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, "archmage", ArchmageActiveEffectSheetV2, {
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, "watersnake-grail-war", ArchmageActiveEffectSheetV2, {
     label: 'ARCHMAGE.sheetActiveEffect',
     makeDefault: true
   });
@@ -237,7 +237,7 @@ Hooks.once('init', async function() {
   // Override 2e conditions journals before copying them to CONFIG
   // We do it here because we want to keep a copy of *all* conditions in ARCHMAGE.statusEffects
   // in order to be able to e.g. recognize both hindered and hampered
-  if (game.settings.get("archmage", "secondEdition")) {
+  if (game.settings.get("watersnake-grail-war", "secondEdition")) {
 
     // Remove AE from and update vulnerable
     let id = ARCHMAGE.statusEffects.findIndex(e => e.id == "vulnerable");
@@ -263,7 +263,7 @@ Hooks.once('init', async function() {
     if (extended) CONFIG.statusEffects = ARCHMAGE.statusEffects.concat(ARCHMAGE.extendedStatusEffects)
     else CONFIG.statusEffects = foundry.utils.duplicate(ARCHMAGE.statusEffects);
   }
-  game.settings.register('archmage', 'extendedStatusEffects', {
+  game.settings.register('watersnake-grail-war', 'extendedStatusEffects', {
     name: "ARCHMAGE.SETTINGS.extendedStatusEffectsName",
     hint: "ARCHMAGE.SETTINGS.extendedStatusEffectsHint",
     scope: 'world',
@@ -273,10 +273,10 @@ Hooks.once('init', async function() {
     requiresReload: true,
     onChange: enable => _setArchmageStatusEffects(enable)
   });
-  _setArchmageStatusEffects(game.settings.get('archmage', 'extendedStatusEffects'));
+  _setArchmageStatusEffects(game.settings.get('watersnake-grail-war', 'extendedStatusEffects'));
 
   // Update 2e constants
-  if (game.settings.get("archmage", "secondEdition")) {
+  if (game.settings.get("watersnake-grail-war", "secondEdition")) {
     // Update dice number at higher level
     CONFIG.HOLYGRAILWAR.numDicePerLevel = CONFIG.HOLYGRAILWAR.numDicePerLevel2e;
 
@@ -341,14 +341,14 @@ Hooks.once('init', async function() {
 
   foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
 
-  foundry.documents.collections.Actors.registerSheet("archmage", ActorArchmageNpcSheetV2, {
+  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageNpcSheetV2, {
     label: 'ARCHMAGE.sheetNPC',
     types: ["npc"],
     makeDefault: true
   });
 
   // V2 actor sheet (See issue #118).
-  foundry.documents.collections.Actors.registerSheet("archmage", ActorArchmageSheetV2, {
+  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageSheetV2, {
     label: 'ARCHMAGE.sheetCharacter',
     types: ["character"],
     makeDefault: true
@@ -368,7 +368,7 @@ Hooks.once('init', async function() {
     CONFIG.Combat.initiative.decimals = 0;
     if (ui.combat && ui.combat._rendered) ui.combat.render();
   }
-  game.settings.register('archmage', 'initiativeDexTiebreaker', {
+  game.settings.register('watersnake-grail-war', 'initiativeDexTiebreaker', {
     name: "ARCHMAGE.SETTINGS.initiativeDexTiebreakerName",
     hint: "ARCHMAGE.SETTINGS.initiativeDexTiebreakerHint",
     scope: 'world',
@@ -377,9 +377,9 @@ Hooks.once('init', async function() {
     type: Boolean,
     onChange: enable => _setArchmageInitiative(enable)
   });
-  _setArchmageInitiative(game.settings.get('archmage', 'initiativeDexTiebreaker'));
+  _setArchmageInitiative(game.settings.get('watersnake-grail-war', 'initiativeDexTiebreaker'));
 
-  game.settings.register("archmage", "initiativeStaticNpc", {
+  game.settings.register("watersnake-grail-war", "initiativeStaticNpc", {
     name: "ARCHMAGE.SETTINGS.initiativeStaticNpcName",
     hint: "ARCHMAGE.SETTINGS.initiativeStaticNpcHint",
     scope: "world",
@@ -388,7 +388,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "automateHPConditions", {
+  game.settings.register("watersnake-grail-war", "automateHPConditions", {
     name: "ARCHMAGE.SETTINGS.automateHPConditionsName",
     hint: "ARCHMAGE.SETTINGS.automateHPConditionsHint",
     scope: "world",
@@ -397,7 +397,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "staggeredOverlay", {
+  game.settings.register("watersnake-grail-war", "staggeredOverlay", {
     name: "ARCHMAGE.SETTINGS.staggeredOverlayName",
     hint: "ARCHMAGE.SETTINGS.staggeredOverlayHint",
     scope: "world",
@@ -406,7 +406,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "multiTargetAttackRolls", {
+  game.settings.register("watersnake-grail-war", "multiTargetAttackRolls", {
     name: "ARCHMAGE.SETTINGS.multiTargetAttackRollsName",
     hint: "ARCHMAGE.SETTINGS.multiTargetAttackRollsHint",
     scope: "world",
@@ -415,7 +415,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "hideExtraRolls", {
+  game.settings.register("watersnake-grail-war", "hideExtraRolls", {
     name: "ARCHMAGE.SETTINGS.hideExtraRollsName",
     hint: "ARCHMAGE.SETTINGS.hideExtraRollsHint",
     scope: "world",
@@ -424,7 +424,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "showDefensesInChat", {
+  game.settings.register("watersnake-grail-war", "showDefensesInChat", {
     name: "ARCHMAGE.SETTINGS.showDefensesInChatName",
     hint: "ARCHMAGE.SETTINGS.showDefensesInChatHint",
     scope: "world",
@@ -433,7 +433,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "showVulnsInChat", {
+  game.settings.register("watersnake-grail-war", "showVulnsInChat", {
     name: "ARCHMAGE.SETTINGS.showVulnsInChatName",
     hint: "ARCHMAGE.SETTINGS.showVulnsInChatHint",
     scope: "world",
@@ -442,7 +442,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "hideInsteadOfOpaque", {
+  game.settings.register("watersnake-grail-war", "hideInsteadOfOpaque", {
     name: "ARCHMAGE.SETTINGS.hideInsteadOfOpaqueName",
     hint: "ARCHMAGE.SETTINGS.hideInsteadOfOpaqueHint",
     scope: "world",
@@ -451,7 +451,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("archmage", "enableOngoingEffectsMessages", {
+  game.settings.register("watersnake-grail-war", "enableOngoingEffectsMessages", {
     name: "ARCHMAGE.SETTINGS.enableOngoingEffectsMessagesName",
     hint: "ARCHMAGE.SETTINGS.enableOngoingEffectsMessagesHint",
     scope: "world",
@@ -460,7 +460,7 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register('archmage', 'roundUpDamageApplication', {
+  game.settings.register('watersnake-grail-war', 'roundUpDamageApplication', {
     name: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationName",
     hint: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationHint",
     scope: 'world',
@@ -469,7 +469,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'allowTargetDamageApplication', {
+  game.settings.register('watersnake-grail-war', 'allowTargetDamageApplication', {
     name: 'ARCHMAGE.SETTINGS.allowTargetDamageApplicationName',
     hint: 'ARCHMAGE.SETTINGS.allowTargetDamageApplicationHint',
     scope: 'world',
@@ -479,14 +479,14 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register('archmage', 'userTargetDamageApplicationType', {
+  game.settings.register('watersnake-grail-war', 'userTargetDamageApplicationType', {
     scope: 'client',
     config: false,
     default: 'selected',
     type: String,
   });
 
-  game.settings.register('archmage', 'allowRerolls', {
+  game.settings.register('watersnake-grail-war', 'allowRerolls', {
     name: 'ARCHMAGE.SETTINGS.allowRerollsName',
     hint: 'ARCHMAGE.SETTINGS.allowRerollsHint',
     scope: 'world',
@@ -496,7 +496,7 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register('archmage', 'rechargeOncePerDay', {
+  game.settings.register('watersnake-grail-war', 'rechargeOncePerDay', {
     name: "ARCHMAGE.SETTINGS.rechargeOncePerDayName",
     hint: "ARCHMAGE.SETTINGS.rechargeOncePerDayHint",
     scope: 'world',
@@ -505,7 +505,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'optionalBaseCritRange', {
+  game.settings.register('watersnake-grail-war', 'optionalBaseCritRange', {
     name: "ARCHMAGE.SETTINGS.optionalBaseCritRangeName",
     hint: "ARCHMAGE.SETTINGS.optionalBaseCritRangeHint",
     scope: 'world',
@@ -514,7 +514,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'unboundEscDie', {
+  game.settings.register('watersnake-grail-war', 'unboundEscDie', {
     name: "ARCHMAGE.SETTINGS.UnboundEscDieName",
     hint: "ARCHMAGE.SETTINGS.UnboundEscDieHint",
     scope: 'world',
@@ -523,7 +523,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'automateBaseStatsFromClass', {
+  game.settings.register('watersnake-grail-war', 'automateBaseStatsFromClass', {
     name: "ARCHMAGE.SETTINGS.automateBaseStatsFromClassName",
     hint: "ARCHMAGE.SETTINGS.automateBaseStatsFromClassHint",
     scope: 'client',
@@ -532,14 +532,14 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'lastTourVersion', {
+  game.settings.register('watersnake-grail-war', 'lastTourVersion', {
     scope: 'client',
     config: false,
     default: "1.6.0",
     type: String,
   });
 
-  game.settings.register('archmage', 'tourVisibility', {
+  game.settings.register('watersnake-grail-war', 'tourVisibility', {
     name: "ARCHMAGE.SETTINGS.tourVisibilityName",
     hint: "ARCHMAGE.SETTINGS.tourVisibilityHint",
     scope: 'world',
@@ -553,7 +553,7 @@ Hooks.once('init', async function() {
     }
   });
 
-  game.settings.register('archmage', 'sheetTooltips', {
+  game.settings.register('watersnake-grail-war', 'sheetTooltips', {
     name: "ARCHMAGE.SETTINGS.sheetTooltipsName",
     hint: "ARCHMAGE.SETTINGS.sheetTooltipsHint",
     scope: 'client',
@@ -562,7 +562,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'showPrivateGMAttackRolls', {
+  game.settings.register('watersnake-grail-war', 'showPrivateGMAttackRolls', {
     name: "ARCHMAGE.SETTINGS.showPrivateGMAttackRollsName",
     hint: "ARCHMAGE.SETTINGS.showPrivateGMAttackRollsHint",
     scope: 'world',
@@ -571,7 +571,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'nightmode', {
+  game.settings.register('watersnake-grail-war', 'nightmode', {
     name: "ARCHMAGE.SETTINGS.nightmodeName",
     hint: "ARCHMAGE.SETTINGS.nightmodeHint",
     scope: 'client',
@@ -580,7 +580,7 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('archmage', 'compactMode', {
+  game.settings.register('watersnake-grail-war', 'compactMode', {
     name: "ARCHMAGE.SETTINGS.compactModeName",
     hint: "ARCHMAGE.SETTINGS.compactModeHint",
     scope: 'client',
@@ -590,7 +590,7 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register('archmage', 'allowPasteParsing', {
+  game.settings.register('watersnake-grail-war', 'allowPasteParsing', {
     name: "ARCHMAGE.SETTINGS.allowPasteParsingName",
     hint: "ARCHMAGE.SETTINGS.allowPasteParsingHint",
     scope: 'client',
@@ -600,7 +600,7 @@ Hooks.once('init', async function() {
     requiresReload: false,
   });
 
-  game.settings.register('archmage', 'showNaturalRolls', {
+  game.settings.register('watersnake-grail-war', 'showNaturalRolls', {
     name: "ARCHMAGE.SETTINGS.showNaturalRollsName",
     hint: "ARCHMAGE.SETTINGS.showNaturalRollsHint",
     scope: 'client',
@@ -613,7 +613,7 @@ Hooks.once('init', async function() {
       $('#chat-notifications').toggleClass('show-natural-rolls', newValue);}
   });
 
-  game.settings.register('archmage', 'colorBlindMode', {
+  game.settings.register('watersnake-grail-war', 'colorBlindMode', {
     name: "ARCHMAGE.SETTINGS.ColorblindName",
     hint: "ARCHMAGE.SETTINGS.ColorblindHint",
     scope: 'client',
@@ -627,14 +627,14 @@ Hooks.once('init', async function() {
       // custom: "ARCHMAGE.SETTINGS.Custom",
     },
     onChange: () => {
-      $('body').removeClass(['default', 'colorBlindRG', 'colorBlindBY', 'custom']).addClass(game.settings.get('archmage', 'colorBlindMode'));
+      $('body').removeClass(['default', 'colorBlindRG', 'colorBlindBY', 'custom']).addClass(game.settings.get('watersnake-grail-war', 'colorBlindMode'));
     }
   });
   //Adding the colorblind mode class at startup
-  $('body').addClass(game.settings.get('archmage', 'colorBlindMode'));
+  $('body').addClass(game.settings.get('watersnake-grail-war', 'colorBlindMode'));
 
   // Track whether we overrode DsN's default inline roll parsing
-  game.settings.register("archmage", "DsNInlineOverride", {
+  game.settings.register("watersnake-grail-war", "DsNInlineOverride", {
     name: "DsN Override",
     scope: "world",
     config: false,
@@ -719,7 +719,7 @@ Hooks.on('setup', (data, options, id) => {
       filteredKeys.push(`${k}.label`);
     });
     const AIP = {
-      packageName: 'archmage',
+      packageName: 'watersnake-grail-war',
       sheetClasses: [
         {
           name: "ItemArchmageSheet",
@@ -791,7 +791,7 @@ async function addEscalationDie() {
     switch (a.dataset.type) {
       case "condition":
         const journalId = CONFIG.HOLYGRAILWAR.statusEffects.find(x => x.id === id)?.journal;
-        doc = journalId ? await game.packs.get("archmage.conditions").getDocument(journalId) : false;
+        doc = journalId ? await game.packs.get("watersnake-grail-war.conditions").getDocument(journalId) : false;
         break;
       case "effect":
         console.warn("Effects not currently supported");
@@ -802,8 +802,8 @@ async function addEscalationDie() {
     return doc.sheet.render(true);
   });
 
-  $('#chat').toggleClass('show-natural-rolls', game.settings.get('archmage', 'showNaturalRolls'));
-  $('#chat-notifications').toggleClass('show-natural-rolls', game.settings.get('archmage', 'showNaturalRolls'));
+  $('#chat').toggleClass('show-natural-rolls', game.settings.get('watersnake-grail-war', 'showNaturalRolls'));
+  $('#chat-notifications').toggleClass('show-natural-rolls', game.settings.get('watersnake-grail-war', 'showNaturalRolls'));
 }
 
 /* -------------------------------------------- */
@@ -865,7 +865,7 @@ Hooks.once('ready', async () => {
   CONFIG.HOLYGRAILWAR.ActorTabFocusSheet = ActorTabFocusSheet
 
   // Add a constant for whether or not we're on 2e.
-  CONFIG.HOLYGRAILWAR.is2e = game.settings.get('archmage', 'secondEdition');
+  CONFIG.HOLYGRAILWAR.is2e = game.settings.get('watersnake-grail-war', 'secondEdition');
 
   // Add effect link drag data
   document.addEventListener("dragstart", event => {
@@ -961,7 +961,7 @@ function renderSceneTerrains() {
 
   let scene = game.scenes.viewed;
   if ( !scene) return;
-  let flag = scene.getFlag('archmage', 'terrains');
+  let flag = scene.getFlag('watersnake-grail-war', 'terrains');
   if ( !flag) return;
   let terrains = flag.filter(x => x !== 'none');
   if ( !terrains || (terrains.length === 0) ) return;
@@ -1137,10 +1137,10 @@ Hooks.on('renderSceneConfig', (app, html, data) => {
           label: game.i18n.localize(t.name)
       };
   });
-  const currentTerrains = data.document.getFlag('archmage', 'terrains') || [];
+  const currentTerrains = data.document.getFlag('watersnake-grail-war', 'terrains') || [];
 
   // Create multiple select dom element
-  const htmlSelect = $(`<select style="height:125px;" multiple="multiple" name="flags.archmage.terrains" data-dtype="String"></select>`);
+  const htmlSelect = $(`<select style="height:125px;" multiple="multiple" name="flags.watersnake-grail-war.terrains" data-dtype="String"></select>`);
   terrainOptions.forEach(o => {
       const attrs = ["value='"+o.value+"'", currentTerrains.includes(o.value) ? "selected=" : ""];
       const option = $(`<option ${attrs.join(" ")}>${o.label}</option>`);
@@ -1202,7 +1202,7 @@ Hooks.on("renderSettings", async (app, html) => {
 
 
   // This is intentionally in renderSettings, as it is one of the last bits of HTML to get rendered, which is required for the Tour to hook in
-  let tourVisibility = game.settings.get('archmage', 'tourVisibility');
+  let tourVisibility = game.settings.get('watersnake-grail-war', 'tourVisibility');
   let showTours = tourVisibility !== 'off' ? true : false;
 
   if (tourVisibility == 'gm' && !game.user.isGM) {
@@ -1222,9 +1222,9 @@ Hooks.on('diceSoNiceReady', (dice3d) => {
 
   // Disable DsN's automatic parsing of inline rolls - let users enable it
   if (foundry.utils.isNewerVersion(game.modules.get('dice-so-nice')?.version, "4.1.1")
-    && !game.settings.get("archmage", "DsNInlineOverride")) {
+    && !game.settings.get("watersnake-grail-war", "DsNInlineOverride")) {
     game.settings.set("dice-so-nice", "animateInlineRoll", false);
-    game.settings.set("archmage", "DsNInlineOverride", true);
+    game.settings.set("watersnake-grail-war", "DsNInlineOverride", true);
   }
 
   dice3d.addTexture("archmagered", {
@@ -1371,7 +1371,7 @@ async function _applyAE(actor, data) {
       }
     }
     let effectData = foundry.utils.duplicate(effect);
-    const ends = effectData.flags?.archmage?.duration ?? "Unknown";
+    const ends = effectData.flags?.['watersnake-grail-war']?.duration ?? "Unknown";
     return await _applyAEDurationDialog(actor, effectData, ends, sourceDocument?.uuid, data.type);
   }
   else if ( data.type == "ongoing-damage" ) {
@@ -1425,7 +1425,7 @@ async function _applyAEDurationDialog(actor, effectData, duration, source, type 
   let dialogData = {
     effectName: effectData.name,
     sourceName: sourceActor?.name ?? "",
-    ongoing: effectData?.flags?.archmage?.ongoingDamage ?? false,
+    ongoing: effectData?.flags?.['watersnake-grail-war']?.ongoingDamage ?? false,
     defaultDuration: duration != 'Unknown' ? duration : "",
     durations: durations
   };
@@ -1452,10 +1452,10 @@ async function _applyAEDurationDialog(actor, effectData, duration, source, type 
               options = {round: game.combat?.round || 1};
             }
             if (ongoing.half) {
-              effectData.flags.archmage.ongoingDamage = Math.floor(Number(effectData.flags.archmage.ongoingDamage) / 2);
+              effectData.flags['watersnake-grail-war'].ongoingDamage = Math.floor(Number(effectData.flags['watersnake-grail-war'].ongoingDamage) / 2);
             }
             if (ongoing.crit) {
-              effectData.flags.archmage.ongoingDamageCrit = true;
+              effectData.flags['watersnake-grail-war'].ongoingDamageCrit = true;
             }
             game.holygrailwar.MacroUtils.setDuration(effectData, duration, options);
             return actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
@@ -1515,10 +1515,10 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     }
 
     // Determine if applying damage to targets is allowed.
-    const allowTargeting = game.settings.get('archmage', 'allowTargetDamageApplication');
-    let targetType = game.settings.get('archmage', 'userTargetDamageApplicationType');
+    const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
+    let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
     if (!allowTargeting && targetType !== 'selected') {
-      game.settings.set('archmage', 'userTargetDamageApplicationType', 'selected');
+      game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', 'selected');
       targetType = 'selected';
     }
 
@@ -1548,7 +1548,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
             }
             // Toggle the active button and update the user setting.
             button.classList.add('active');
-            game.settings.set('archmage', 'userTargetDamageApplicationType', button.dataset.target);
+            game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', button.dataset.target);
           }
         }
       });
@@ -1590,7 +1590,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
             }
             // Toggle the active button and update the user setting.
             button.classList.add('active');
-            // game.settings.set('archmage', 'userTargetDamageApplicationType', button.dataset.target);
+            // game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', button.dataset.target);
           }
         }
       });
@@ -1634,7 +1634,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     }
 
     // Add the reroll action regardless of whether or not this is an attack.
-    const allowRerolls = game.settings.get('archmage', 'allowRerolls') ?? false;
+    const allowRerolls = game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false;
     const messageAuthor = options.message?.author ?? options.message?.user;
     if (game.user.isGM || (allowRerolls && messageAuthor === game.user.id)) {
       menuItems.push({
@@ -1712,11 +1712,11 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         // Healing always starts from 0 HP
         const base = value >= 0 ? actor.system.attributes.hp.value : Math.max(actor.system.attributes.hp.value, 0);
         await actor.update({ "system.attributes.hp.value": base - value });
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('archmage', `effectApplied.${effectId}`, true);
+        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectApplied.${effectId}`, true);
         else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectApplied.${effectId}`});
         // Unset crit flag on ongoing damage if needed.
-        if (effect?.flags?.archmage?.ongoingDamageCrit === true) {
-          await effect.update({'flags.archmage.ongoingDamageCrit': false});
+        if (effect?.flags?.['watersnake-grail-war']?.ongoingDamageCrit === true) {
+          await effect.update({'flags.watersnake-grail-war.ongoingDamageCrit': false});
         }
         break;
       case "save":
@@ -1727,18 +1727,18 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
           "HardSaveEnds": "hard",
         }
         await actor.rollSave(durationToDifficulty[duration] ?? "normal");
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('archmage', `effectSaved.${effectId}`, true);
+        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectSaved.${effectId}`, true);
         else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectSaved.${effectId}`});
         break;
       case "d20":
         new Roll("d20").toMessage()
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('archmage', `effectRolled.${effectId}`, true);
+        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectRolled.${effectId}`, true);
         else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectRolled.${effectId}`});
         break;
       case "remove":
         await actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
         if (chatMessage.isAuthor || game.user.isGM) {
-          await chatMessage.setFlag('archmage', `effectRemoved.${effectId}`, true);
+          await chatMessage.setFlag('watersnake-grail-war', `effectRemoved.${effectId}`, true);
           // Replace grayed-out with disabled
           event.currentTarget.classList.remove("grayed-out");
           event.currentTarget.classList.add("disabled");
@@ -1757,8 +1757,8 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
 
   // Gray out and disable the effect buttons if the effect has already been applied, saved, or removed
   html.find(".effect-control").each((i, el) => {
-    if (!chatMessage?.flags?.archmage) return;
-    const flags = chatMessage.flags.archmage;
+    if (!chatMessage?.flags?.['watersnake-grail-war']) return;
+    const flags = chatMessage.flags['watersnake-grail-war'];
     const parent = el.closest('.effect');
     const effectId = parent.dataset.effectId;
 
@@ -1785,7 +1785,7 @@ function _handleCondButtonMsg(msg) {
       msg.disable.classList.add("disabled");
       msg.disable.setAttribute('disabled', true);
     } else {
-      chatMessage.setFlag('archmage', msg.flg, true);
+      chatMessage.setFlag('watersnake-grail-war', msg.flg, true);
     }
   }
 }
@@ -2184,8 +2184,8 @@ async function createArchmageMacro(data, slot) {
     img: img,
     command: command,
     flags: {
-      "archmage.itemMacro": true,
-      "archmage.itemUuid": data.uuid
+      "watersnake-grail-war.itemMacro": true,
+      "watersnake-grail-war.itemUuid": data.uuid
     }
   });
   // Assign it to the hotbar.

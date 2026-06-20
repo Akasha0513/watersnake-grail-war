@@ -23,8 +23,8 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /** @override */
   static get defaultOptions() {
     const options = super.defaultOptions;
-    const compactMode = game.settings.get('archmage', 'compactMode');
-    const nightMode = game.settings.get("archmage", "nightmode");
+    const compactMode = game.settings.get('watersnake-grail-war', 'compactMode');
+    const nightMode = game.settings.get("watersnake-grail-war", "nightmode");
     foundry.utils.mergeObject(options, {
       classes: options.classes.concat(['archmage-v2', 'actor', 'character-sheet']).filter(c => c !== 'archmage'),
       width: compactMode ? 826 : 960,
@@ -700,7 +700,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     const actorData = this.actor.system;
 
     const is2e = CONFIG.HOLYGRAILWAR.is2e;
-    const is2eAlt = game.settings.get("archmage", "alternateIconRollingMethod");
+    const is2eAlt = game.settings.get("watersnake-grail-war", "alternateIconRollingMethod");
 
     // Gather the rolling inputs
     const inputs = iconIndexes.map(iconIndex => {
@@ -927,7 +927,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       else if (value < 5) {
         value = 5;
       }
-      if (game.settings.get('archmage', 'alternateIconRollingMethod') && value === 5) {
+      if (game.settings.get('watersnake-grail-war', 'alternateIconRollingMethod') && value === 5) {
         // Skip 5's, dice are either used or not
         value = 6;
       }

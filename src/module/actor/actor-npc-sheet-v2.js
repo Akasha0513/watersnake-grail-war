@@ -17,7 +17,7 @@ export class ActorArchmageNpcSheetV2 extends ActorArchmageSheetV2 {
   /** @override */
   static get defaultOptions() {
     const options = super.defaultOptions;
-    const compactMode = game.settings.get('archmage', 'compactMode');
+    const compactMode = game.settings.get('watersnake-grail-war', 'compactMode');
     foundry.utils.mergeObject(options, {
       classes: options.classes.concat(['archmage-v2', 'actor', 'npc-sheet']).filter(c => c !== 'archmage'),
       width: compactMode ? 550 : 640,

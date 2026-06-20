@@ -20,7 +20,7 @@
           draggable="true"
           data-type="condition"
           :data-id="effect.name"
-          :data-ends="effect.flags.archmage?.duration"
+          :data-ends="effect.flags['watersnake-grail-war']?.duration"
           >
           <div class="effects-summary grid effects-grid effects">
             <div class="effects-icon">
@@ -35,10 +35,10 @@
                 <span class="bonus-mode"><i :class="concat('fas fa-', bonus.mode)"></i> </span>
                 <span class="bonus-value">{{numberFormat(bonus.value, 0, false)}}</span>
               </div>
-              <div class="bonus" v-if="effect.flags.archmage?.ongoingDamage">
+              <div class="bonus" v-if="effect.flags['watersnake-grail-war']?.ongoingDamage">
                 <span class="bonus-label"><i class="fas fa-flask-round-poison"></i> {{getOngoingDamage(effect)}}</span>
               </div>
-              <div class="bonus" v-if="effect.flags.archmage?.duration">
+              <div class="bonus" v-if="effect.flags['watersnake-grail-war']?.duration">
                 <span class="bonus-label"><i class="fas fa-timer"></i> {{getDuration(effect)}}</span>
               </div>
             </div>
@@ -111,11 +111,11 @@ export default {
     }
 
     function getDuration(effect) {
-      return game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[effect.flags.archmage.duration]);
+      return game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[effect.flags['watersnake-grail-war'].duration]);
     }
 
     function getOngoingDamage(effect) {
-      return `${effect.flags.archmage.ongoingDamage} ongoing ${effect.flags.archmage.ongoingDamageType} damage`;
+      return `${effect.flags['watersnake-grail-war'].ongoingDamage} ongoing ${effect.flags['watersnake-grail-war'].ongoingDamageType} damage`;
     }
 
     // Return our custom data, methods, and any imported methods.

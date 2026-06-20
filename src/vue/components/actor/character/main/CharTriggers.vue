@@ -1,7 +1,7 @@
 <template>
 	<section class="section section--powers flexcol">
 		<header class="power-filters flexrow" style="margin-bottom: 1em;">
-			<input type="hidden" v-model="useCustomGroups" name="flags.archmage.sheetDisplay.triggers.customGroups.value">
+			<input type="hidden" v-model="useCustomGroups" name="flags.watersnake-grail-war.sheetDisplay.triggers.customGroups.value">
 			<label :class="$style.label">
 				<input type="checkbox" v-model="useCustomGroups">
 				Custom Groups

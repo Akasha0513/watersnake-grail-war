@@ -31,7 +31,7 @@ export class ArchmageCompendiumBrowserApplication extends Application {
 
   /** @override */
   static get defaultOptions() {
-    const nightMode = game.settings.get("archmage", "nightmode");
+    const nightMode = game.settings.get("watersnake-grail-war", "nightmode");
     const options = {...super.defaultOptions,
       classes: [
         'form',

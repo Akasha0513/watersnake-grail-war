@@ -15,7 +15,7 @@ export default class HitEvaluation {
         let hasMissed = undefined;
 
         let defense = HitEvaluation._getTargetDefense(row_text);
-        const baseCritrange = game.settings.get("archmage", "optionalBaseCritRange") ? 18 : 20;
+        const baseCritrange = game.settings.get("watersnake-grail-war", "optionalBaseCritRange") ? 18 : 20;
         let critRangeMin = baseCritrange - attacker?.system?.attributes.critMod.atk.value - critMod;
 
         let $rolls = $row_self.find('.inline-result');
@@ -73,7 +73,7 @@ export default class HitEvaluation {
                     }
                     // Barbarian crit.
                     else if (attacker?.system?.details.detectedClasses?.includes("barbarian")
-                      && !game.settings.get("archmage", "secondEdition")
+                      && !game.settings.get("watersnake-grail-war", "secondEdition")
                       && roll_data.formula.match(/^2d20kh/g) && part.results[0].result > 10
                       && part.results[1].result > 10) {
                       $roll_self.addClass('dc-crit');

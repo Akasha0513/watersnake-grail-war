@@ -32,7 +32,7 @@ export default {
       return CONFIG.HOLYGRAILWAR;
     },
     diceFormulaMode() {
-      return this.equipment?.actor?.flags?.archmage?.diceFormulaMode ?? 'short';
+      return this.equipment?.actor?.flags?.['watersnake-grail-war']?.diceFormulaMode ?? 'short';
     },
   },
   methods: {},

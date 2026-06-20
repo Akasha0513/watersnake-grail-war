@@ -18,7 +18,7 @@
   onMounted(() => {
     if (game.modules.get('_CodeMirror')?.active && typeof CodeMirror !== undefined) {
       // @todo make this more reactive.
-      let nightmode = game.settings.get('archmage', 'nightmode');
+      let nightmode = game.settings.get('watersnake-grail-war', 'nightmode');
       if (!nightmode) {
         nightmode = document.body.classList.contains('theme-dark');
       }

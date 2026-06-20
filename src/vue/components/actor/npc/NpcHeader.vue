@@ -158,7 +158,7 @@
         this.avatarWidth = ratioClass != 'square' ? width : squareSize;
         this.avatarHeight = ratioClass != 'square' ? height : squareSize;
         let classes = ['avatar', `avatar--${ratioClass}`];
-        let flags = this.actor.flags && this.actor.flags.archmage ? this.actor.flags.archmage : {};
+        let flags = this.actor.flags && this.actor.flags['watersnake-grail-war'] ? this.actor.flags['watersnake-grail-war'] : {};
         if (flags.portraitRound) classes.push('avatar--round');
         if (flags.portraitFrame) classes.push('avatar--frame');
         this.avatarClass = classes.join(' ');
@@ -179,7 +179,7 @@
         // Set a flag.
         if (!this.actor.pack) {
           getActor(this.actor).then(actor => {
-            actor.setFlag('archmage', `sheetDisplay.header.collapsed`, this.headerCollapsed);
+            actor.setFlag('watersnake-grail-war', `sheetDisplay.header.collapsed`, this.headerCollapsed);
           });
         }
       },
@@ -200,7 +200,7 @@
           });
         }
       },
-      'actor.flags.archmage': {
+      'actor.flags['watersnake-grail-war']': {
         deep: true,
         handler() {
           this.getAvatarDimensions();

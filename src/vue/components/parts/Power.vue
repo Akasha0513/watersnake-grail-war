@@ -77,10 +77,10 @@ export default {
       return CONFIG.HOLYGRAILWAR;
     },
     diceFormulaMode() {
-      return this.actor?.flags?.archmage?.diceFormulaMode ?? 'short';
+      return this.actor?.flags?.['watersnake-grail-war']?.diceFormulaMode ?? 'short';
     },
     powerDetailFields() {
-      const spellFields = game.settings.get("archmage", "secondEdition")
+      const spellFields = game.settings.get("watersnake-grail-war", "secondEdition")
         ? [
           'spellLevel2',
           'spellLevel3',
@@ -190,7 +190,7 @@ export default {
     canCastSpell(field) {
       if (!field.includes('spellLevel')) return true;
 
-      const overridePowerLevel = this.actor?.flags?.archmage.overridePowerLevel ?? false;
+      const overridePowerLevel = this.actor?.flags?.['watersnake-grail-war'].overridePowerLevel ?? false;
       const actorLevel = Number(this.actor?.system?.attributes?.level?.value ?? 1);
       const powerLevel = Number(this.power.system.powerLevel.value ?? 1);
       const fieldLevel = Number(field.match(/\d+/g)?.[0] ?? 0);

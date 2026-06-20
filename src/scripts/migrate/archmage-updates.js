@@ -13,7 +13,7 @@ class ArchmageUpdateHandler {
   // system/module to make it more clear which version the update is for.
   init() {
     // @deprecated: Remove this in a future version.
-    game.settings.register('archmage', 'schemaVersion', {
+    game.settings.register('watersnake-grail-war', 'schemaVersion', {
       name: 'Current schema version for system updates.',
       hint: 'This schema version is separate from the system version and can be used to run sequential updates.',
       scope: 'world',
@@ -23,7 +23,7 @@ class ArchmageUpdateHandler {
     });
 
     // Added in version 1.19.0
-    game.settings.register('archmage', 'systemMigrationVersion', {
+    game.settings.register('watersnake-grail-war', 'systemMigrationVersion', {
       name: 'Current version of the system prior to migration.',
       hint: 'This version is updated to the current system version upon loading a world.',
       scope: 'world',
@@ -44,7 +44,7 @@ class ArchmageUpdateHandler {
     if (game.user.isGM) {
       console.log('Running updates');
       // Retrieve the schema version.
-      this.schema = game.settings.get('archmage', 'schemaVersion');
+      this.schema = game.settings.get('watersnake-grail-war', 'schemaVersion');
       var runUpdates = true;
       var currentUpdate;
 
@@ -66,7 +66,7 @@ class ArchmageUpdateHandler {
           if (result !== false) {
             // eslint-disable-next-line no-console
             console.log(`Completed archmage update ${currentUpdate}`);
-            // game.settings.set('archmage', 'schemaVersion', this.schema);
+            // game.settings.set('watersnake-grail-war', 'schemaVersion', this.schema);
           }
           // Otherwise, note the failure and break from the loop.
           else {
@@ -206,8 +206,8 @@ class ArchmageUpdateHandler {
   __migratePCImprovedInitFlag(actor, updateData={}) {
     if (!actor || actor.type != "character") return updateData;
     const actorData = actor.system;
-    const bonus = actor.getFlag("archmage", "improvedIniative") ? 4 : 0;
-    actor.unsetFlag("archmage", "improvedIniative");
+    const bonus = actor.getFlag("watersnake-grail-war", "improvedIniative") ? 4 : 0;
+    actor.unsetFlag("watersnake-grail-war", "improvedIniative");
     return foundry.utils.mergeObject(updateData, {'system.attributes.init.value': Number(actorData.attributes.init.value) + bonus});
   }
 
@@ -399,11 +399,11 @@ class ArchmageUpdateHandler {
    */
 
   __migratePCToughnessFlag(actor, updateData={}) {
-    if (!actor || actor.type != "character" || !actor.getFlag("archmage", "toughness")) return updateData;
+    if (!actor || actor.type != "character" || !actor.getFlag("watersnake-grail-war", "toughness")) return updateData;
     let mul = 1;
     const actorData = actor.system;
     const level = actorData.attributes.level.value;
-    if (game.settings.get("archmage", "secondEdition")) {
+    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
       if (level >= 5) mul = 2;
       if (level >= 8) mul = 4;
     } else {
@@ -411,7 +411,7 @@ class ArchmageUpdateHandler {
       else if (level >= 8) mul = 2;
     }
     const bonus = Math.floor(actorData.attributes.hp.base * mul);
-    actor.unsetFlag("archmage", "toughness");
+    actor.unsetFlag("watersnake-grail-war", "toughness");
     return foundry.utils.mergeObject(updateData, {'system.attributes.hp.extra': bonus});
   }
 
@@ -524,7 +524,7 @@ class ArchmageUpdateHandler {
     await this.migrateCompendiums();
 
     // 5. Update the migration version setting.
-    game.settings.set('archmage', 'systemMigrationVersion', game.system.version);
+    game.settings.set('watersnake-grail-war', 'systemMigrationVersion', game.system.version);
     // @todo Determine why this fires too early.
     setTimeout(() => {
       console.log(`13th Age System: UPDATING SYSTEM MIGRATION VERSION TO ${game.system.version}`);
@@ -745,7 +745,7 @@ class ArchmageUpdateHandler {
    *   otherwise.
    */
   versionBelow(version) {
-    const worldVersion = game.settings.get('archmage', 'systemMigrationVersion') ?? '1.17.0';
+    const worldVersion = game.settings.get('watersnake-grail-war', 'systemMigrationVersion') ?? '1.17.0';
     return foundry.utils.isNewerVersion(version, worldVersion);
   }
 }

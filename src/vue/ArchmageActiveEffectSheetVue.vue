@@ -31,11 +31,11 @@
                     <span class="bonus-mode"><i :class="concat('fas fa-', bonus.mode)"></i> </span>
                     <span class="bonus-value">{{ numberFormat(bonus.value, 0, false) }}</span>
                   </div>
-                  <div class="bonus" v-if="effect.flags.archmage?.ongoingDamage">
+                  <div class="bonus" v-if="effect.flags['watersnake-grail-war']?.ongoingDamage">
                     <span class="bonus-label"><i class="fas fa-flask-round-poison"></i>
                       {{ ongoingDamage }}</span>
                   </div>
-                  <div class="bonus" v-if="effect.flags.archmage?.duration">
+                  <div class="bonus" v-if="effect.flags['watersnake-grail-war']?.duration">
                     <span class="bonus-label"><i class="fas fa-timer"></i> {{ duration }}</span>
                   </div>
                 </div>
@@ -133,13 +133,13 @@ const changes = computed(() => {
 });
 
 const duration = computed(() => {
-  const rawDuration = effect.value.flags.archmage.duration
+  const rawDuration = effect.value.flags['watersnake-grail-war'].duration
   return game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[rawDuration])
 });
 
 const ongoingDamage = computed(() => {
-  const dmg = effect.value.flags.archmage.ongoingDamage || 0
-  const type = effect.value.flags.archmage.ongoingDamageType || ''
+  const dmg = effect.value.flags['watersnake-grail-war'].ongoingDamage || 0
+  const type = effect.value.flags['watersnake-grail-war'].ongoingDamageType || ''
   return `${dmg} ongoing ${type} damage`;
 });
 

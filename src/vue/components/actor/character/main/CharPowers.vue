@@ -3,14 +3,14 @@
     <!-- Sorts and filters. -->
     <header class="power-filters flexrow">
       <div class="group-powers">
-        <input type="hidden" name="flags.archmage.sheetDisplay.powers.groupBy.value" v-model="groupBy"/>
+        <input type="hidden" name="flags.watersnake-grail-war.sheetDisplay.powers.groupBy.value" v-model="groupBy"/>
         <label for="power-group">{{localize('ARCHMAGE.groupBy')}}</label>
         <select name="power-group" v-model="groupBy">
           <option v-for="(option, index) in groupOptions" :key="index" :value="option.value">{{localize(concat('ARCHMAGE.GROUPS.', option.value))}}</option>
         </select>
       </div>
       <div class="sort-powers">
-        <input type="hidden" name="flags.archmage.sheetDisplay.powers.sortBy.value" v-model="sortBy"/>
+        <input type="hidden" name="flags.watersnake-grail-war.sheetDisplay.powers.sortBy.value" v-model="sortBy"/>
         <label for="power-sort">{{localize('ARCHMAGE.sort')}}</label>
         <select name="power-sort" v-model="sortBy">
           <option v-for="(option, index) in sortOptions" :key="index" :value="option.value">{{localize(concat('ARCHMAGE.SORTS.', option.value))}}</option>
@@ -322,7 +322,7 @@ export default {
      * - If ALL groups are empty, display the first one anyway
      */
     filterGroupsForDisplay(actor, groups, itemsPerGroup) {
-      if (actor?.flags?.archmage?.hideEmptyPowerGroups !== true) {
+      if (actor?.flags?.['watersnake-grail-war']?.hideEmptyPowerGroups !== true) {
         return groups;
       }
 
@@ -340,7 +340,7 @@ export default {
       return out;
     },
     shouldDisplayImportButton(actor) {
-      if (actor?.flags?.archmage?.hideImportPowers === true && !game.user.isGM) {
+      if (actor?.flags?.['watersnake-grail-war']?.hideImportPowers === true && !game.user.isGM) {
         return false;
       }
       return true;

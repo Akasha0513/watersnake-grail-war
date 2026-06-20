@@ -37,7 +37,7 @@ export class DamageApplicator {
   asDamage(roll, modifier = 1, targetType = 'selected') {
     let toApply = this.getRollValue(roll);
 
-    if (game.settings.get('archmage', 'roundUpDamageApplication')) {
+    if (game.settings.get('watersnake-grail-war', 'roundUpDamageApplication')) {
       toApply = Math.ceil(toApply * modifier);
     }
     else {
@@ -69,7 +69,7 @@ export class DamageApplicator {
   asHealing(roll, modifier = 1, targetType = 'selected') {
     let toApply = this.getRollValue(roll);
 
-    if (game.settings.get('archmage', 'roundUpDamageApplication')) {
+    if (game.settings.get('watersnake-grail-war', 'roundUpDamageApplication')) {
       toApply = Math.ceil(toApply * modifier);
     }
     else {
@@ -100,7 +100,7 @@ export class DamageApplicator {
 
   asTempHealth(roll, modifier = 1, targetType = 'selected') {
     let toApply = this.getRollValue(roll);
-    if (game.settings.get('archmage', 'roundUpDamageApplication')) {
+    if (game.settings.get('watersnake-grail-war', 'roundUpDamageApplication')) {
       toApply = Math.ceil(toApply * modifier);
     }
     else {
@@ -184,14 +184,14 @@ export class DamageApplicator {
           element.classList.remove('dc-reroll');
           // @todo handle actual targets and crit range modifications.
           const targetOptions = {
-            numTargets: message?.flags?.archmage?.numTargets ?? 0,
-            cachedTargets: message?.flags?.archmage?.targets ?? [],
+            numTargets: message?.flags?.['watersnake-grail-war']?.numTargets ?? 0,
+            cachedTargets: message?.flags?.['watersnake-grail-war']?.targets ?? [],
           };
           const $attackRow = $(element.closest('.card-prop'));
           const targets = Targeting.getTargetsFromRowText(rowText, $attackRow, targetOptions.numTargets, targetOptions.cachedTargets);
           let addEdToCritRange = false;
           let addStokeToCritRange = false;
-          if (game.settings.get('archmage', 'secondEdition') && item) {
+          if (game.settings.get('watersnake-grail-war', 'secondEdition') && item) {
             addEdToCritRange = item.system.breathWeapon?.value?.length > 0;
             if (actor.system.details?.type?.value === 'dragon') {
               const breathString = game.i18n.localize('ARCHMAGE.CHAT.breath').toLocaleLowerCase().trim();
@@ -227,7 +227,7 @@ export class DamageApplicator {
               }
               // Append target defenses to text
               if (rowCleanText.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':') && hitEvaluationResults.defenses.length > 0
-                && game.settings.get("archmage", "showDefensesInChat")) {
+                && game.settings.get("watersnake-grail-war", "showDefensesInChat")) {
                 $rowSelf.append("<span class='dc-target'> (" + hitEvaluationResults.defenses.join(", ") + ") </span>")
               }
 
@@ -256,7 +256,7 @@ export class DamageApplicator {
                   }
                 } else {
                   $rowSelf.addClass("trigger-inactive");
-                  if (game.settings.get("archmage", "hideInsteadOfOpaque")) {
+                  if (game.settings.get("watersnake-grail-war", "hideInsteadOfOpaque")) {
                     $rowSelf.addClass("hide");
                   }
                 }

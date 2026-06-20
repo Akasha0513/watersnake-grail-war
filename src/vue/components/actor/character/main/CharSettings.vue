@@ -117,10 +117,10 @@
       <!-- Flag Settings -->
       <div class="unit unit--flags">
         <div v-for="(flag, f) in flags" :key="f" :data-key="f" class="settings-flags">
-          <label :for="concat('flags.archmage.', f)" class="unit-subtitle flexrow">
-            <input v-if="!flag.options" type="checkbox" :name="concat('flags.archmage.', f, )" v-model="flag.value"> {{flag.name}}
+          <label :for="concat('flags.watersnake-grail-war.', f)" class="unit-subtitle flexrow">
+            <input v-if="!flag.options" type="checkbox" :name="concat('flags.watersnake-grail-war.', f, )" v-model="flag.value"> {{flag.name}}
           </label>
-          <select v-if="flag.options" :name="concat('flags.archmage.', f, )" v-model="flag.value">
+          <select v-if="flag.options" :name="concat('flags.watersnake-grail-war.', f, )" v-model="flag.value">
             <option v-for="(option, o) in flag.options" :key="o" :value="o">{{localize(option)}}</option>
           </select>
           <p class="notes">{{flag.hint}}</p>
@@ -227,7 +227,7 @@ export default {
   computed: {
     flags() {
       let flags = CONFIG.Actor.characterFlags;
-      let charFlags = this.actor.flags && this.actor.flags.archmage ? this.actor.flags.archmage : {};
+      let charFlags = this.actor.flags && this.actor.flags['watersnake-grail-war'] ? this.actor.flags['watersnake-grail-war'] : {};
       for (let [k, v] of Object.entries(flags)) {
         v.value = charFlags && charFlags[k] ? charFlags[k] : null;
         flags[k] = v;
@@ -240,7 +240,7 @@ export default {
     resourcesCustom() {
       let resources = {};
       for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-        if ( v.secondEdition && !game.settings.get('archmage', 'secondEdition') ) continue;
+        if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
         if (k.includes('custom')) resources[k] = v;
       }
       return resources;
@@ -248,7 +248,7 @@ export default {
     resourcesPerCombat() {
       let resources = {};
       for (let [k,v] of Object.entries(this.actor.system.resources.perCombat)) {
-        if ( v.secondEdition && !game.settings.get('archmage', 'secondEdition') ) continue;
+        if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
         resources[k] = v;
       }
       return resources;
@@ -256,7 +256,7 @@ export default {
     resourcesSpendable() {
       let resources = {};
       for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-        if ( v.secondEdition && !game.settings.get('archmage', 'secondEdition') ) continue;
+        if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
         if (!k.includes('custom')) resources[k] = v;
       }
       return resources;

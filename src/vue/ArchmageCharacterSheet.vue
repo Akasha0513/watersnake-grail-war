@@ -153,7 +153,7 @@ export default {
             componentClass: markRaw(CharTriggers),
             icon: 'fa-caret-right',
             hideLabel: true,
-            hidden: !this.actor.flags?.archmage?.showTriggersTab
+            hidden: !this.actor.flags?.['watersnake-grail-war']?.showTriggersTab
           },
           inventory: {
             key: 'inventory',
@@ -173,7 +173,7 @@ export default {
             active: false,
             icon: 'fa-cogs',
             hideLabel: true,
-            hidden: (this.actor.flags?.archmage?.hideSettingsTab === true && !game.user.isGM),
+            hidden: (this.actor.flags?.['watersnake-grail-war']?.hideSettingsTab === true && !game.user.isGM),
             componentClass: markRaw(CharSettings)
           }
         },
@@ -199,7 +199,7 @@ export default {
   },
   methods: {
     shouldDisplaySettingsTab(actor) {
-      if (actor?.flags?.archmage?.hideSettingsTab === true && !game.user.isGM) {
+      if (actor?.flags?.['watersnake-grail-war']?.hideSettingsTab === true && !game.user.isGM) {
         return false;
       }
       return true;
@@ -207,10 +207,10 @@ export default {
   },
   computed: {
     nightmode() {
-      return game.settings.get("archmage", "nightmode") ? 'nightmode' : '';
+      return game.settings.get("watersnake-grail-war", "nightmode") ? 'nightmode' : '';
     },
     flags() {
-      let flags = this.actor.flags ? this.actor.flags.archmage : {};
+      let flags = this.actor.flags ? this.actor.flags['watersnake-grail-war'] : {};
       let baseFlags = {
         'sheetDisplay': {
           'powers': {

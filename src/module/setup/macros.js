@@ -53,7 +53,7 @@ export class ArchmageMacros {
 
     // Reduce the penalty if we have the (1e) champion feat
     if (game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'champion')[0].isActive.value
-      && !game.settings.get('archmage', 'secondEdition')) {
+      && !game.settings.get('watersnake-grail-war', 'secondEdition')) {
       penalty = -2;
     }
 
@@ -269,7 +269,7 @@ export class ArchmageMacros {
     let effects = [];
     let bonus = 2;
 
-    const is2e = game.settings.get("archmage", "secondEdition");
+    const is2e = game.settings.get("watersnake-grail-war", "secondEdition");
     const shieldEquipped = actor.system.attributes?.weapon?.melee?.shield ?? false;
     const feats = {
       adventurer: game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'adventurer')[0].isActive.value,

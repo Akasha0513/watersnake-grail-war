@@ -48,7 +48,7 @@ export default {
       }
     },
     parsePastedContent(event) {
-      if (!this.isShift && !this.disablePasteParsing && game.settings.get('archmage', 'allowPasteParsing')) {
+      if (!this.isShift && !this.disablePasteParsing && game.settings.get('watersnake-grail-war', 'allowPasteParsing')) {
         event.preventDefault();
         const options = {
           field: event.target.name,

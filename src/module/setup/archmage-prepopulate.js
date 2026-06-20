@@ -36,7 +36,7 @@ export class ArchmagePrepopulate {
   async getCompendiums(classes = [], race = '') {
     let validRaces = Object.values(CONFIG.HOLYGRAILWAR.raceList);
     let racePacks = await game.packs.filter(p => p.metadata.name == 'races');
-    if (game.settings.get('archmage', 'secondEdition')) {
+    if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
       let racePacks2e = await game.packs.filter(p => p.metadata.name == 'kin-powers-2e');
       if (racePacks2e.length > 0) racePacks = racePacks2e;
     }
@@ -44,7 +44,7 @@ export class ArchmagePrepopulate {
     let classPacks = {};
     for (const cls of classes) {
       classPacks[cls] = await game.packs.filter(p => cls === this.cleanClassName(p.metadata.name, true) && !p.metadata.name.includes("2e"));
-      if (game.settings.get('archmage', 'secondEdition')) {
+      if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
         // Check if we have a 2e version
         let classPack2e = await game.packs.filter(p => cls === this.cleanClassName(p.metadata.name, true) && p.metadata.name.includes("2e"));
         if (classPack2e.length > 0) classPacks[cls] = classPack2e;
@@ -97,7 +97,7 @@ export class ArchmagePrepopulate {
     }
     // Add animal companion to druid and ranger
     let animalCompanionClasses = ["ranger", "druid"];
-    if (game.settings.get('archmage', 'secondEdition')) animalCompanionClasses = ["druid"];
+    if (game.settings.get('watersnake-grail-war', 'secondEdition')) animalCompanionClasses = ["druid"];
     for (let key of animalCompanionClasses) {
       if (classes.includes(key)) {
         let pack = await game.packs.find(p => p.metadata.label == "Animal Companion").getDocuments();
@@ -119,7 +119,7 @@ export class ArchmagePrepopulate {
     // Load general feats
     let key = "General Feats";
     let pack = await game.packs.find(p => p.metadata.label == key).getDocuments();
-    if (game.settings.get('archmage', 'secondEdition')) {
+    if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
       key = "Universal Feats";
       let pack2e = game.packs.find(p => p.metadata.name == "universal-feats-2e");
       if (pack2e) pack = await pack2e.getDocuments();
@@ -139,7 +139,7 @@ export class ArchmagePrepopulate {
   async getJournals() {
     let packs = await game.packs.filter(p => CONFIG.HOLYGRAILWAR.classPacks.includes(p.metadata.name) && p.documentName == 'JournalEntry' && !p.metadata.name.includes("2e"));
     let packs2e = [];
-    if (game.settings.get('archmage', 'secondEdition')) {
+    if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
       packs2e = await game.packs.filter(p => CONFIG.HOLYGRAILWAR.classPacks.includes(p.metadata.name) && p.documentName == 'JournalEntry' && p.metadata.name.includes("2e"));
     }
     // Load 2e stuff later so it overrides 1e stuff if present

@@ -108,7 +108,7 @@
           let delta = this.newLevel - this.actor.system.attributes.level.value;
           if (delta !== 0) {
             actor.autoLevelActor(delta).then(newActor => {
-              newActor.setFlag('archmage', 'sheetDisplay.tabs.primary.value', 'actions').then(() => {
+              newActor.setFlag('watersnake-grail-war', 'sheetDisplay.tabs.primary.value', 'actions').then(() => {
                 newActor.sheet.render(true);
               });
             });

@@ -207,7 +207,7 @@ export class ActorArchmage extends Actor {
       // Penalties do not stack (use the worst) unless flagged to
       if (change.numeric < 0) {
         // If it's meant to stack save it and handle it later
-        if (change.effect.flags.archmage?.stacksAlways) {
+        if (change.effect.flags['watersnake-grail-war']?.stacksAlways) {
           if (!stackingPenalties[change.key]) stackingPenalties[change.key] = [];
           stackingPenalties[change.key].push(change);
         }
@@ -223,7 +223,7 @@ export class ActorArchmage extends Actor {
       // Bonuses stack if the name is different or if flagged to
       else {
         // If it's meant to stack save it and handle it later
-        if (change.effect.flags.archmage?.stacksAlways) {
+        if (change.effect.flags['watersnake-grail-war']?.stacksAlways) {
           if (!stackingBonuses[change.key]) stackingBonuses[change.key] = [];
           stackingBonuses[change.key].push(change);
         }
@@ -337,11 +337,11 @@ export class ActorArchmage extends Actor {
     if (actorData.type === 'character') {
       let incrInit = 0;
       let statInit = data.abilities?.dex?.nonKey?.mod || 0;
-      if (game.settings.get("archmage", "secondEdition")) {
+      if (game.settings.get("watersnake-grail-war", "secondEdition")) {
         // In 2e the skills incremental also increases initiative
         if (this.system.incrementals?.skillInitiative) incrInit = 1;
         // In 2e wizards have a talent to use Int instead of Dex
-        if (this.getFlag("archmage", "dexToInt")) statInit = data.abilities?.int?.nonKey?.mod || 0;
+        if (this.getFlag("watersnake-grail-war", "dexToInt")) statInit = data.abilities?.int?.nonKey?.mod || 0;
         // In 2e beta the bonus to disengage also applies to initiative
         incrInit += data.attributes.saves.disengageBonus;
       }
@@ -450,10 +450,10 @@ export class ActorArchmage extends Actor {
 
     // Fix max death saves based on 2e.
     data.attributes.saves.deathFails.max = parseInt(data.attributes.saves.deathFails.maxOverride)
-      || (game.settings.get('archmage', 'secondEdition') ? 5 : 4);
+      || (game.settings.get('watersnake-grail-war', 'secondEdition') ? 5 : 4);
     // Update death save count.
     let deathCount = data.attributes.saves.deathFails.value;
-    data.attributes.saves.deathFails.steps = game.settings.get('archmage', 'secondEdition') ? [false, false, false, false, false] : [false, false, false, false];
+    data.attributes.saves.deathFails.steps = game.settings.get('watersnake-grail-war', 'secondEdition') ? [false, false, false, false, false] : [false, false, false, false];
     for (let i = 0; i < deathCount; i++) {
       data.attributes.saves.deathFails.steps[i] = true;
     }
@@ -584,12 +584,12 @@ export class ActorArchmage extends Actor {
     // Wizards can use In in place of Dex with a talent, and paladin can use Cha with a feature
     let dexACBonus = data.abilities.dex.nonKey.lvlmod;
     let dexPDBonus = data.abilities.dex.nonKey.lvlmod;
-    if (game.settings.get("archmage", "secondEdition")) {
-      if (this.getFlag("archmage", "dexToInt")) {
+    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
+      if (this.getFlag("watersnake-grail-war", "dexToInt")) {
         dexACBonus = Math.max(dexACBonus, data.abilities.int.nonKey.lvlmod);
         dexPDBonus = Math.max(dexPDBonus, data.abilities.int.nonKey.lvlmod);
       }
-      if (this.getFlag("archmage", "dexToCha")) dexACBonus = Math.max(dexACBonus, data.abilities.cha.nonKey.lvlmod);
+      if (this.getFlag("watersnake-grail-war", "dexToCha")) dexACBonus = Math.max(dexACBonus, data.abilities.cha.nonKey.lvlmod);
     }
     data.attributes.ac.value = Number(data.attributes.ac.base) + Number([dexACBonus,
       data.abilities.con.nonKey.lvlmod, data.abilities.wis.nonKey.lvlmod].sort((a, b) => a - b)[1]) + Number(acBonus);
@@ -598,14 +598,14 @@ export class ActorArchmage extends Actor {
     data.attributes.md.value = Number(data.attributes.md.base) + Number([data.abilities.int.nonKey.lvlmod,
       data.abilities.cha.nonKey.lvlmod, data.abilities.wis.nonKey.lvlmod].sort((a, b) => a - b)[1]) + Number(mdBonus);
 
-    if (game.settings.get("archmage", "secondEdition")) {
+    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
       if (data.incrementals?.pd) data.attributes.pd.value += 1;
       if (data.incrementals?.md) data.attributes.md.value += 1;
     }
 
     // Barbarians get a bonus based on 'skulls' as of 2e beta
-    if (this.getFlag("archmage", "grimDetermination")
-      && game.settings.get("archmage", "secondEdition")) {
+    if (this.getFlag("watersnake-grail-war", "grimDetermination")
+      && game.settings.get("watersnake-grail-war", "secondEdition")) {
       data.grimDeterminationBonus = Math.min(data.attributes.saves.deathFails.value, 2);
       data.attributes.ac.value += data.grimDeterminationBonus;
       data.attributes.pd.value += data.grimDeterminationBonus;
@@ -616,7 +616,7 @@ export class ActorArchmage extends Actor {
     data.tier = 1;
     if (data.attributes.level.value >= 5) data.tier = 2;
     if (data.attributes.level.value >= 8) data.tier = 3;
-    if (data.incrementals?.abilMultiplier && game.settings.get("archmage", "secondEdition")) {
+    if (data.incrementals?.abilMultiplier && game.settings.get("watersnake-grail-war", "secondEdition")) {
       data.tierMult = CONFIG.HOLYGRAILWAR.tierMultPerLevel[data.attributes.level.value+1];
     }
 
@@ -638,12 +638,12 @@ export class ActorArchmage extends Actor {
     // Recoveries
     if (data.attributes.recoveries.automatic) {
       data.attributes.recoveries.max = data.attributes.recoveries.base;
-      if (!game.settings.get("archmage", "secondEdition")) data.attributes.recoveries.max += recoveriesBonus;
+      if (!game.settings.get("watersnake-grail-war", "secondEdition")) data.attributes.recoveries.max += recoveriesBonus;
     }
     // Calculate recovery formula and average.
     let recLevel = Number(data.attributes.level?.value);
     // This was a 2e playtest option that didn't make the cut
-    // if (data.incrementals?.recovery && game.settings.get("archmage", "secondEdition")) recLevel += 1;
+    // if (data.incrementals?.recovery && game.settings.get("watersnake-grail-war", "secondEdition")) recLevel += 1;
     let recoveryDice = CONFIG.HOLYGRAILWAR.numDicePerLevel[recLevel];
     let recoveryDie = ["d8", "", "8"]; // Fall back
     let recoveryAvg = 4.5; // Fall back
@@ -661,7 +661,7 @@ export class ActorArchmage extends Actor {
 
     if (flags.archmage?.strongRecovery) {
       // Handle Strong Recovery special case
-      if (game.settings.get("archmage", "secondEdition")) {
+      if (game.settings.get("watersnake-grail-war", "secondEdition")) {
         formulaConst += CONFIG.HOLYGRAILWAR.tierMultPerLevel[data.attributes.level.value] * 3;
       } else {
         formulaDice = ((recoveryDice + data.tier) * (Number(recoveryDie[1]) || 1)).toString() + "d" + recoveryDie[2];
@@ -672,7 +672,7 @@ export class ActorArchmage extends Actor {
       }
     }
 
-    if (game.settings.get("archmage", "secondEdition")) {
+    if (game.settings.get("watersnake-grail-war", "secondEdition")) {
       // Item recovery bonus is applied here, per level
       formulaConst += recoveriesBonus * Number(data.attributes.level?.value);
       // If we are high level, also add static extra as per the beta rules
@@ -763,7 +763,7 @@ export class ActorArchmage extends Actor {
           });
 
           // In 2e add extra at epic tier
-          if (game.settings.get("archmage", "secondEdition")) {
+          if (game.settings.get("watersnake-grail-war", "secondEdition")) {
             data.wpn.epicBonus = Math.max(0, 5 * (actor.system.attributes.level.value - 7));
             if (data.wpn.epicBonus) {
               wpnTypes.forEach(wpn => {
@@ -857,8 +857,8 @@ export class ActorArchmage extends Actor {
     const init = this.system.attributes.init.mod;
     // Init mod includes dex + level + misc bonuses.
     const parts = ["1d20", init];
-    if (this.getFlag("archmage", "initiativeAdv")) parts[0] = "2d20kh";
-    if (game.settings.get("archmage", "initiativeStaticNpc") &&  this.type == 'npc') parts[0] = "10";
+    if (this.getFlag("watersnake-grail-war", "initiativeAdv")) parts[0] = "2d20kh";
+    if (game.settings.get("watersnake-grail-war", "initiativeStaticNpc") &&  this.type == 'npc') parts[0] = "10";
     if (CONFIG.Combat.initiative.tiebreaker) parts.push(init / 100);
     else parts.push((this.type === 'npc' ? 0.01 : 0));
     return parts.filter(p => p !== null).join(" + ");
@@ -1133,7 +1133,7 @@ export class ActorArchmage extends Actor {
    */
   rollRecoveryDialog(event) {
     let rolled = false;
-    let avg = this.getFlag('archmage', 'averageRecoveries');
+    let avg = this.getFlag('watersnake-grail-war', 'averageRecoveries');
     let data = {bonus: "", average: avg, createMessage: true};
 
     if (event?.shiftKey) {
@@ -1144,8 +1144,8 @@ export class ActorArchmage extends Actor {
     // Render modal dialog
     let template = 'systems/watersnake-grail-war/templates/chat/recovery-dialog.html';
     let dialogData = {avg: avg ? "checked" : ""};
-    let epicBonus = game.settings.get("archmage", "secondEdition") ? "+4d8" : "+3d8";
-    let epicMax = game.settings.get("archmage", "secondEdition") ? 0 : 100;
+    let epicBonus = game.settings.get("watersnake-grail-war", "secondEdition") ? "+4d8" : "+3d8";
+    let epicMax = game.settings.get("watersnake-grail-war", "secondEdition") ? 0 : 100;
     let dialogStruct = {
         title: game.i18n.localize("ARCHMAGE.recoveryRoll"),
         buttons: {
@@ -1197,12 +1197,12 @@ export class ActorArchmage extends Actor {
             data.bonus += html.find('[name="bonus"]').val();
             data.apply = html.find('[name="apply"]').is(':checked');
             data.average = html.find('[name="average"]').is(':checked');
-            this.setFlag('archmage', 'averageRecoveries', data.average);
+            this.setFlag('watersnake-grail-war', 'averageRecoveries', data.average);
             this.rollRecovery(data);
           }
         }
       };
-    if (!game.settings.get("archmage", "secondEdition")) {
+    if (!game.settings.get("watersnake-grail-war", "secondEdition")) {
       dialogStruct.buttons.pot4 = {
         label: game.i18n.localize("ARCHMAGE.recoveryIconic"),
         callback: () => {
@@ -1239,7 +1239,7 @@ export class ActorArchmage extends Actor {
       data.label = game.i18n.localize("ARCHMAGE.recovery");
     }
     data.apply = (data.apply !== undefined) ? data.apply : true;
-    data.average = (data.average !== undefined) ? data.average : this.getFlag('archmage', 'averageRecoveries');
+    data.average = (data.average !== undefined) ? data.average : this.getFlag('watersnake-grail-war', 'averageRecoveries');
     data.createMessage = (data.createMessage !== undefined) ? data.createMessage : false;
     let totalRecoveries = this.system.attributes.recoveries.value;
     if (Number(totalRecoveries) <= 0 && !data.free) {
@@ -1349,7 +1349,7 @@ export class ActorArchmage extends Actor {
     // Death saves.
     if (this.system.attributes.saves.deathFails.value > 0
       && this.system.attributes.saves.deathFails.value < this.system.attributes.saves.deathFails.max) {
-      if (game.settings.get('archmage', 'secondEdition')
+      if (game.settings.get('watersnake-grail-war', 'secondEdition')
         && this.system.attributes.saves.deathFails.value >= 1) {
         updateData['system.attributes.saves.deathFails.value'] = 1;
       }
@@ -1405,7 +1405,7 @@ export class ActorArchmage extends Actor {
         // Recharge powers.
         let rechAttempts = maxQuantity - item.system.quantity.value;
         let rechValue = Number(item.system.recharge.value) || 16;
-        if (game.settings.get('archmage', 'rechargeOncePerDay')) {
+        if (game.settings.get('watersnake-grail-war', 'rechargeOncePerDay')) {
           rechAttempts = Math.max(rechAttempts - item.system.rechargeAttempts.value, 0)
         }
         // Per battle powers.
@@ -1540,7 +1540,7 @@ export class ActorArchmage extends Actor {
     updateData["system.attributes.saves.desperateTriggered"] = false;
 
     // Reset icons
-    if (game.settings.get("archmage", "resetIconsOnRest")) {
+    if (game.settings.get("watersnake-grail-war", "resetIconsOnRest")) {
       [1, 2, 3, 4, 5].forEach(i => {
         if (this.system.icons[`i${i}`].isActive.value) {
           updateData[`system.icons.i${i}.results`] = Array(this.system.icons[`i${i}`].bonus.value).fill(0)
@@ -1614,7 +1614,7 @@ export class ActorArchmage extends Actor {
     let effectsToDelete = [];
     for (const effect of this.effects) {
       if (!effect.active) continue;
-      const duration = effect.flags.archmage?.duration || "Unknown";
+      const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
       if (duration === "EndOfArc") {
         effectsToDelete.push(effect.id);
         templateData.items.push({
@@ -1752,8 +1752,8 @@ export class ActorArchmage extends Actor {
       data: {
         abil: abl ? abl.nonKey.mod + abl.bonus : 0,
         lvl: this.system.attributes.level.value +
-          ((this.system.incrementals?.skills && !game.settings.get("archmage", "secondEdition")
-          || this.system.incrementals?.skillInitiative && game.settings.get("archmage", "secondEdition")) ? 1 : 0),
+          ((this.system.incrementals?.skills && !game.settings.get("watersnake-grail-war", "secondEdition")
+          || this.system.incrementals?.skillInitiative && game.settings.get("watersnake-grail-war", "secondEdition")) ? 1 : 0),
         bg: bg ? bg[1].bonus.value : 0,
         abilityName: abilityName,
         backgroundName: backgroundName,
@@ -2041,7 +2041,7 @@ export class ActorArchmage extends Actor {
       data.system.attributes.hp.value = hp.value + deltaActual;
 
       // Handle hp-related conditions
-      if (game.settings.get('archmage', 'automateHPConditions') && !game.modules.get("combat-utility-belt")?.active) {
+      if (game.settings.get('watersnake-grail-war', 'automateHPConditions') && !game.modules.get("combat-utility-belt")?.active) {
         // Staggered
         await this._updateHpCondition(data, "staggered", 0.5, maxHp,
           game.i18n.localize("ARCHMAGE.EFFECT.StatusStaggered"));
@@ -2056,7 +2056,7 @@ export class ActorArchmage extends Actor {
       }
 
       // Handle first skull in 2e.
-      if (game.settings.get('archmage', 'secondEdition')) {
+      if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
         if (this.system.attributes.hp.value > 0 && changes.system.attributes.hp.value <= 0) {
           if (!changes.system.attributes?.saves?.deathFails?.value) {
             data.system.attributes.saves = this.system.attributes.saves;
@@ -2268,7 +2268,7 @@ export class ActorArchmage extends Actor {
 
       let matchedClasses = ArchmageUtility.detectClasses(data.system.details.class.value);
       if (matchedClasses !== null
-        && game.settings.get('archmage', 'automateBaseStatsFromClass')) {
+        && game.settings.get('watersnake-grail-war', 'automateBaseStatsFromClass')) {
         // Remove duplicates and Sort to avoid problems with future matches
         matchedClasses = [...new Set(matchedClasses)].sort();
 
@@ -2408,11 +2408,11 @@ export class ActorArchmage extends Actor {
         // Enable resources based on detected classes
         data.system.resources = {
           perCombat: {
-            momentum: {enabled: (matchedClasses.includes("rogue") && !game.settings.get("archmage", "secondEdition")) ||
-                                (matchedClasses.includes("fighter") && game.settings.get("archmage", "secondEdition"))},
+            momentum: {enabled: (matchedClasses.includes("rogue") && !game.settings.get("watersnake-grail-war", "secondEdition")) ||
+                                (matchedClasses.includes("fighter") && game.settings.get("watersnake-grail-war", "secondEdition"))},
             commandPoints: {enabled: matchedClasses.includes("commander")},
             focus: {enabled: matchedClasses.includes("occultist")},
-            bravado: {enabled: matchedClasses.includes("rogue") && game.settings.get("archmage", "secondEdition")},
+            bravado: {enabled: matchedClasses.includes("rogue") && game.settings.get("watersnake-grail-war", "secondEdition")},
           },
           spendable: {ki: {enabled: matchedClasses.includes("monk")}}
         };
@@ -2425,8 +2425,8 @@ export class ActorArchmage extends Actor {
 
         // Enable the triggers tab for certain classes
         data.flags ||= {}
-        data.flags.archmage ||= {}
-        data.flags.archmage.showTriggersTab = matchedClasses.some(x => ["bard", "commander", "occultist"].includes(x));
+        data.flags['watersnake-grail-war'] ||= {}
+        data.flags['watersnake-grail-war'].showTriggersTab = matchedClasses.some(x => ["bard", "commander", "occultist"].includes(x));
       }
       // Store matched classes for future reference
       data.system.details.detectedClasses = matchedClasses;

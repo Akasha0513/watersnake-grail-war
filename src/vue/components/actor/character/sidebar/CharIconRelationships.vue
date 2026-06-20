@@ -52,7 +52,7 @@ export default {
   data: () => ({
     editArray: [],
     is2e: CONFIG.HOLYGRAILWAR.is2e,
-    alternateIconRollingMethod: game.settings.get('archmage', 'alternateIconRollingMethod')
+    alternateIconRollingMethod: game.settings.get('watersnake-grail-war', 'alternateIconRollingMethod')
   }),
   computed: {
     icons() {

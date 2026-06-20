@@ -1,7 +1,7 @@
 <template>
   <section :class="classes">
     <!-- Currency. -->
-    <section class="equipment-currency flexrow" v-if="!actor.flags?.archmage?.hideCurrency">
+    <section class="equipment-currency flexrow" v-if="!actor.flags?.['watersnake-grail-war']?.hideCurrency">
       <div v-for="(type) in currency" :key="type" :class="concat('unit unit--currency unit--currency-', type)">
         <h2 class="unit-title">{{localize(concat('ARCHMAGE.COINS.', type))}}</h2>
         <input type="number" :name="concat('system.coins.', type, '.value')" class="currency-input" v-model="actor.system.coins[type].value" placeholder="0">
@@ -10,7 +10,7 @@
     <!-- Sorts and filters. -->
     <header class="equipment-filters flexrow">
       <div class="sort-equipment">
-        <input type="hidden" name="flags.archmage.sheetDisplay.inventory.sortBy.value" v-model="sortBy"/>
+        <input type="hidden" name="flags.watersnake-grail-war.sheetDisplay.inventory.sortBy.value" v-model="sortBy"/>
         <label for="equipment-sort">{{localize('ARCHMAGE.sort')}}</label>
         <select name="equipment-sort" v-model="sortBy">
           <option v-for="(option, index) in sortOptions" :key="index" :value="option.value">{{localize(concat('ARCHMAGE.SORTS.', option.value))}}</option>
@@ -216,7 +216,7 @@ export default {
       let bonuses = {};
       for (let [prop, value] of Object.entries(equipment.system.attributes)) {
         if (value.bonus) {
-          if (prop == 'disengage' && game.settings.get("archmage", "secondEdition")) prop = 'disengage&initiative';
+          if (prop == 'disengage' && game.settings.get("watersnake-grail-war", "secondEdition")) prop = 'disengage&initiative';
           bonuses[prop] = value.bonus;
         }
         else if (prop == 'attack') {
