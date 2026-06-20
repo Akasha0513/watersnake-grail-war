@@ -579,35 +579,35 @@ ARCHMAGE:
       '2eɣ': '13th Age 2e GMG (gamma playtest draft)'
 # Ability Scores
   str:
-    key: STR
-    label: Strength
+    key: 근력
+    label: 근력
   dex:
-    key: DEX
-    label: Dexterity
+    key: 민첩
+    label: 민첩
   con:
-    key: CON
-    label: Constitution
+    key: 내구
+    label: 내구
   int:
-    key: INT
-    label: Intelligence
+    key: 마력
+    label: 마력
   wis:
-    key: WIS
-    label: Wisdom
+    key: 통찰
+    label: 통찰
   cha:
-    key: CHA
-    label: Charisma
+    key: 행운
+    label: 행운
   # Defenses
   ac:
-    key: AC
-    label: Armor Class
+    key: 방어
+    label: 방어도
     stats: Con/Dex/Wis
   pd:
-    key: PD
-    label: Physical Defense
+    key: 신방
+    label: 신체방어
     stats: Str/Con/Dex
   md:
-    key: MD
-    label: Mental Defense
+    key: 정방
+    label: 정신방어
     stats: Int/Wis/Cha
   GROUPS:
     actionType: Action
