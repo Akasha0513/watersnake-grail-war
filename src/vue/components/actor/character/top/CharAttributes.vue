@@ -20,6 +20,30 @@
           <input type="number" name="system.attributes.hp.temp" class="temp-hp" v-model="actor.system.attributes.hp.temp">
         </div>
       </div>
+      <!-- MP -->
+      <div class="unit unit--has-max unit--mp">
+        <h2 class="unit-title">MP</h2>
+        <Progress name="mp" :current="actor.system.attributes.mp.value" :max="actor.system.attributes.mp.max"/>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
+          <span class="resource-separator">/</span>
+          <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
+        </div>
+        <div class="labeled-input flexrow">
+          <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
+          <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
+        </div>
+      </div>
+      <!-- SP (서번트·마스터 공통) -->
+      <div class="unit unit--has-max unit--sp">
+        <h2 class="unit-title">SP</h2>
+        <Progress name="sp" :current="actor.system.attributes.sp.value" :max="actor.system.attributes.sp.max"/>
+        <div class="resource flexrow">
+          <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
+          <span class="resource-separator">/</span>
+          <input type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
+        </div>
+      </div>
       <!-- Defenses -->
       <div class="unit unit--defenses" :data-tooltip="tooltip('pcDefenses')">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
@@ -33,53 +57,15 @@
             <h3 class="unit-subtitle" :title="concat(localize('ARCHMAGE.md.label'), ' (', localize('ARCHMAGE.md.stats'), ')')">{{localize('ARCHMAGE.md.key')}}</h3>
           </div>
         </div>
-        <!-- Disengage -->
         <div class="resource flexcol">
           <a class="rollable rollable--disengage disengage-value" data-roll-type="disengage" data-roll-opt="disengage">{{disengage.value}}+&nbsp;{{localize('ARCHMAGE.SAVE.disengage')}}</a>
         </div>
       </div>
-      <!-- MP -->
-      <div class="unit unit--has-max unit--mp">
-        <h2 class="unit-title">MP</h2>
-        <Progress name="mp" :current="actor.system.attributes.mp.value" :max="actor.system.attributes.mp.max"/>
-        <div class="resource flexrow">
-          <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
-          <span class="resource-separator">/</span>
-          <input type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
-        </div>
-        <div class="labeled-input flexrow">
-          <label class="unit-subtitle">임시 MP</label>
-          <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
-        </div>
-      </div>
-      <!-- SP(서번트) / 경험치(마스터) -->
-      <div v-if="actor.type !== 'master'" class="unit unit--has-max unit--sp">
-        <h2 class="unit-title">SP</h2>
-        <Progress name="sp" :current="actor.system.attributes.sp.value" :max="actor.system.attributes.sp.max"/>
-        <div class="resource flexrow">
-          <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
-          <span class="resource-separator">/</span>
-          <input type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
-        </div>
-      </div>
-      <div v-else class="unit unit--has-max unit--xp">
-        <h2 class="unit-title">경험치</h2>
-        <Progress name="xp" :current="actor.system.attributes.xp.value" :max="actor.system.attributes.xp.max"/>
-        <div class="resource flexrow">
-          <input type="number" name="system.attributes.xp.value" class="resource-current" v-model="actor.system.attributes.xp.value">
-          <span class="resource-separator">/</span>
-          <div class="resource-max">{{actor.system.attributes.xp.max}}</div>
-        </div>
-      </div>
-      <!-- 영령의 급+보구(서번트) / 레벨+예장(마스터) -->
+      <!-- 영령의 급(서번트) / 레벨+경험치(마스터) -->
       <div v-if="actor.type !== 'master'" class="unit unit--grade flexcol">
         <h2 class="unit-title">영령의 급</h2>
         <div class="resource flexrow">
           <input type="number" name="system.attributes.grade.value" class="resource-current" v-model="actor.system.attributes.grade.value">
-        </div>
-        <div class="labeled-input flexrow">
-          <label class="unit-subtitle">보구</label>
-          <input type="number" name="system.attributes.np.value" class="temp-hp" v-model="actor.system.attributes.np.value">
         </div>
       </div>
       <div v-else class="unit unit--grade flexcol">
@@ -88,8 +74,10 @@
           <input type="number" name="system.attributes.level.value" class="resource-current" v-model="actor.system.attributes.level.value">
         </div>
         <div class="labeled-input flexrow">
-          <label class="unit-subtitle">예장</label>
-          <input type="number" name="system.attributes.np.value" class="temp-hp" v-model="actor.system.attributes.np.value">
+          <label class="unit-subtitle">경험치</label>
+          <input type="number" name="system.attributes.xp.value" class="temp-hp" v-model="actor.system.attributes.xp.value">
+          <span class="resource-separator">/</span>
+          <div class="resource-max">{{actor.system.attributes.xp.max}}</div>
         </div>
       </div>
     </div>
