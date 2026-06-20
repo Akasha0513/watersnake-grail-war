@@ -1,0 +1,21 @@
+.DS_Store
+._*
+/node_modules
+/foundry
+# 빌드 산출물
+/dist
+
+/packs/dist/*
+/css/*
+/archmage/
+/archmage.zip
+.vscode/*
+.idea
+dist/vue-components.min.js
+foundry.js
+jsconfig.json
+archmage.lock
+src/vue/foundry-shim
+system.json
+template.json
+*.log

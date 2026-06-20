@@ -1,0 +1,569 @@
+_id: pvCCsyJ9PIt1AgMb
+_key: '!actors!pvCCsyJ9PIt1AgMb'
+effects: []
+flags:
+  archmage: {}
+folder: null
+img: systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-copper.webp
+items:
+- _id: p2SIaoQp3athDwIC
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.p2SIaoQp3athDwIC'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: Needle-sharp claws and teeth
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    attack:
+      label: Attack Roll
+      type: ''
+      value: '[[d20 + 13]] vs. AC ([[2]] attacks)'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: ''
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: ''
+      value: '[[50]] damage'
+    hit1:
+      label: Hit
+      type: String
+    hit2:
+      label: Hit
+      type: String
+    hit3:
+      label: Hit
+      type: String
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Miss
+      type: String
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: Sb6colcuVv8RFAsF
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.Sb6colcuVv8RFAsF'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: '[Special trigger] C: Acrid smoke'
+  ownership:
+    default: 0
+  sort: 100000
+  system:
+    attack:
+      label: Attack Roll
+      type: ''
+      value: '[[d20 + 14]] vs. PD (up to [[3]] enemies engaged with the dragon)'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: ''
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: ''
+      value: The target is *hampered* until the end of its next turn
+    hit1:
+      label: Hit
+      type: String
+    hit2:
+      label: Hit
+      type: String
+    hit3:
+      label: Hit
+      type: String
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Miss
+      type: String
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: uXCT3uw8tSnXoOF1
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.uXCT3uw8tSnXoOF1'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: 'C: Acid breath'
+  ownership:
+    default: 0
+  sort: 200000
+  system:
+    attack:
+      label: Attack Roll
+      type: ''
+      value: '[[d20 + 14]] vs. PD ([[1d4]] nearby enemies in a group)'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: ''
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: ''
+      value: '[[25]] acid damage, and [[25]] ongoing acid damage'
+    hit1:
+      label: Hit
+      type: String
+    hit2:
+      label: Hit
+      type: String
+    hit3:
+      label: Hit
+      type: String
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Hit
+      name: Miss
+      type: ''
+      value: '[[10]] ongoing acid damage.'
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: ycIaEXAQzdUXEozw
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.ycIaEXAQzdUXEozw'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: First natural 11+ each turn
+  ownership:
+    default: 0
+  sort: 300000
+  system:
+    description:
+      label: Description
+      type: ''
+      value: The dragon can make an acrid smoke attack as a free action.
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+- _id: Dugw1dRdUd5UHcAP
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.Dugw1dRdUd5UHcAP'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: Out-think
+  ownership:
+    default: 0
+  sort: 400000
+  system:
+    description:
+      label: Description
+      type: ''
+      value: Once per battle as a free action when an enemy rolls a natural even attack
+        against the dragon, the dragon negates the attack (no damage or effects).
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+- _id: mJixQn1cuFY2sF72
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.mJixQn1cuFY2sF72'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: Resist fire 16+
+  ownership:
+    default: 0
+  sort: 500000
+  system:
+    description:
+      label: Description
+      type: ''
+      value: When a fire attack targets this creature, the attacker must roll a natural
+        16+ on the attack roll or it only deals half damage.
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+- _id: jd63ap3IbbffJapT
+  _key: '!actors.items!pvCCsyJ9PIt1AgMb.jd63ap3IbbffJapT'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: Swift mind
+  ownership:
+    default: 0
+  sort: 600000
+  system:
+    description:
+      label: Description
+      type: ''
+      value: "Once per battle as a free action when an attack targets the dragon\u2019\
+        s MD, it can force the attacker to reroll the attack."
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+name: Large Copper Dragon (Metallic)
+ownership:
+  default: 0
+prototypeToken:
+  actorLink: false
+  alpha: 1
+  appendNumber: false
+  bar1:
+    attribute: null
+  bar2:
+    attribute: null
+  detectionModes: []
+  displayBars: 0
+  displayName: 0
+  disposition: -1
+  flags: {}
+  height: 2
+  light:
+    alpha: 1
+    angle: 360
+    animation:
+      intensity: 5
+      reverse: false
+      speed: 5
+      type: null
+    attenuation: 0.5
+    bright: 0
+    color: null
+    coloration: 1
+    contrast: 0
+    darkness:
+      max: 1
+      min: 0
+    dim: 0
+    luminosity: 0.5
+    negative: false
+    priority: 0
+    saturation: 0
+    shadows: 0
+  lockRotation: false
+  movementAction: null
+  name: Large Copper Dragon (Metallic)
+  occludable:
+    radius: 0
+  prependAdjective: false
+  randomImg: false
+  ring:
+    colors:
+      background: null
+      ring: null
+    effects: 1
+    enabled: false
+    subject:
+      scale: 1
+      texture: null
+  rotation: 0
+  sight:
+    angle: 360
+    attenuation: 0.1
+    brightness: 1
+    color: null
+    contrast: 0
+    enabled: false
+    range: 0
+    saturation: 0
+    visionMode: basic
+  texture:
+    alphaThreshold: 0.75
+    anchorX: 0.5
+    anchorY: 0.5
+    fit: contain
+    offsetX: 0
+    offsetY: 0
+    rotation: 0
+    scaleX: 1
+    scaleY: 1
+    src: systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-copper.webp
+    tint: '#ffffff'
+  turnMarker:
+    animation: null
+    disposition: false
+    mode: 1
+    src: null
+  width: 2
+sort: 100001
+system:
+  attributes:
+    ac:
+      base: 10
+      label: Armor Class
+      min: 0
+      type: Number
+      value: 24
+    attackMod:
+      type: Number
+      value: 0
+    critMod:
+      atk:
+        type: Number
+        value: 0
+      def:
+        type: Number
+        value: 0
+    disengage: 11
+    disengageBonus: 0
+    escalation:
+      value: 6
+    hp:
+      automatic: true
+      base: 10
+      extra: 0
+      label: Hit Points
+      max: 290
+      min: 0
+      temp: 0
+      tempmax: 0
+      type: Number
+      value: 290
+    init:
+      label: Initiative Modifier
+      mod: 14
+      type: Number
+      value: 14
+    level:
+      label: Level
+      max: 12
+      min: 0
+      type: Number
+      value: 9
+    md:
+      base: 10
+      label: Mental Defense
+      min: 0
+      type: Number
+      value: 23
+    pd:
+      base: 10
+      label: Physical Defense
+      min: 0
+      type: Number
+      value: 19
+    saves:
+      bonus: 0
+      deathFails:
+        max: 4
+        maxOverride: 0
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+      desperateTriggered: false
+      disengageBonus: 0
+      lastGaspFails:
+        max: 4
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+  details:
+    alignment:
+      label: Alignment
+      type: String
+    biography:
+      label: Biography
+      type: String
+    flavor:
+      value: ''
+    level:
+      label: Level
+      max: 12
+      min: 0
+      type: Number
+      value: 9
+    resistance:
+      label: Resistance
+      type: String
+      value: ''
+    role:
+      label: Role
+      type: String
+      value: spoiler
+    roleB:
+      value: ''
+    size:
+      label: Size
+      type: String
+      value: large
+    sizeB:
+      value: ''
+    strength:
+      value: double
+    type:
+      label: Type
+      type: String
+      value: dragon
+    vulnerability:
+      label: Vulnerability
+      type: String
+      value: ''
+  publicationSource: 13TW
+  resources:
+    perCombat: {}
+    spendable:
+      custom1:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom2:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom3:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom4:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom5:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom6:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom7:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom8:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom9:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      stoke:
+        current: 0
+        enabled: true
+type: npc

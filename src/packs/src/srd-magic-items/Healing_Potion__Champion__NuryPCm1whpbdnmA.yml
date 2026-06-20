@@ -1,0 +1,29 @@
+_id: NuryPCm1whpbdnmA
+_key: '!items!NuryPCm1whpbdnmA'
+effects: []
+flags:
+  core: {}
+folder: 0mcnzVgWo4dqvS1l
+img: systems/watersnake-grail-war/assets/icons/items/potions/major-red.jpg
+name: Healing Potion (Champion)
+ownership:
+  default: 0
+sort: 1000000
+system:
+  description:
+    label: Description
+    type: String
+    value: <p>As a standard action, spend a recovery and regain 2d8 additional hp
+      (max 60).</p>
+  name:
+    label: Name
+    type: String
+  price:
+    label: Price
+    type: Number
+    value: 100
+  quantity:
+    label: Quantity
+    type: Number
+    value: 1
+type: loot

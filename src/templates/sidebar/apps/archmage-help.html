@@ -1,0 +1,195 @@
+<div>
+    <p class="notes">The following stats can all be used in inline or regular dice rolls.</p>
+    <p class="notes">Example attack: <span class="key">[[d20+@str.mod+@std+@atk.m.bonus]] vs. AC</span></p>
+    <p class="notes">Example damage: <span class="key">[[@wpn.m.dice+@str.dmg+@atk.m.bonus]] slashing damage</span></p>
+
+    <h3>Ability Modifiers</h3>
+    <ol class="hotkey-list">
+      <li>
+        <div class="keys">
+          <span class="key">@str.mod</span>
+          <span class="key">@dex.mod</span>
+          <span class="key">@con.mod</span>
+          <span class="key">@int.mod</span>
+          <span class="key">@wis.mod</span>
+          <span class="key">@cha.mod</span>
+        </div>
+      </li>
+    </ol>
+
+    <h3>Damage bonus from ability mod (x1 Adventurer, x2 Champion, x3/x4 Epic 1e/2e)</h3>
+    <ol class="hotkey-list">
+      <li>
+        <div class="keys">
+          <span class="key">@str.dmg</span>
+          <span class="key">@dex.dmg</span>
+          <span class="key">@con.dmg</span>
+          <span class="key">@int.dmg</span>
+          <span class="key">@wis.dmg</span>
+          <span class="key">@cha.dmg</span>
+        </div>
+      </li>
+    </ol>
+
+    <p class="notes">Note: for multiclass characters the above are affected by the Key Modifier. For class powers that's fine, but should you need to access the unaltered modifiers you can use e.g. <span class="key">@str.nonKey.mod</span> or <span class="key">@str.nonKey.dmg</span>.</p>
+
+    <h3>Common Attributes</h3>
+    <ol class="hotkey-list">
+      <li>
+        <h4>Escalation Die</h4>
+        <div class="keys"><span class="key">@ed</span></div>
+      </li>
+      <li>
+        <h4>Level</h4>
+        <div class="keys"><span class="key">@lvl</span></div>
+      </li>
+      <li>
+        <h4>Initiative bonus</h4>
+        <div class="keys"><span class="key">@init</span></div>
+      </li>
+      <li>
+        <h4>Standard Attack Bonuses (Level + Escalation Die)</h4>
+        <div class="keys"><span class="key">@std</span></div>
+      </li>
+      <li>
+        <h4>Tier (1 Adventurer, 2 Champion, 3 Epic)</h4>
+        <div class="keys"><span class="key">@tier</span></div>
+      </li>
+      <li>
+        <h4>Tier multiplier (x1 Adventurer, x2 Champion, x3/x4 Epic 1e/2e)</h4>
+        <div class="keys"><span class="key">@tierMult</span></div>
+      </li>
+      <li>
+        <h4>HP and recoveries</h4>
+        <div class="keys">
+          <span class="key">@hp.value</span>
+          <span class="key">@hp.max</span>
+          <span class="key">@hp.temp</span>
+          <span class="key">@recoveries.value</span>
+          <span class="key">@recoveries.max</span>
+          <span class="key">@recoveries.dice</span>
+          <span class="key">@recoveries.formula</span>
+          <span class="key">@recoveries.avg</span>
+        </div>
+      </li>
+      <li>
+        <h4>Defenses</h4>
+          <div class="keys">
+          <span class="key">@ac.value</span>
+          <span class="key">@pd.value</span>
+          <span class="key">@md.value</span>
+        </div>
+      </li>
+      <li>
+        <h4>Dying and saves</h4>
+        <div class="keys">
+          <span class="key">@skulls</span>
+          <span class="key">@saves.bonus</span>
+          <span class="key">@saves.disengageBonus</span>
+          <span class="key">@saves.deathFails.value</span>
+          <span class="key">@saves.lastGaspFails.value</span>
+        </div>
+      </li>
+    </ol>
+
+    <h3>Item Attack / Damage Bonuses</h3>
+    <ol class="hotkey-list">
+      <li>
+        <h4>Melee, Ranged, Arcane, Divine</h4>
+        <div class="keys">
+          <span class="key">@atk.m.bonus</span>
+          <span class="key">@atk.r.bonus</span>
+          <span class="key">@atk.a.bonus</span>
+          <span class="key">@atk.d.bonus</span>
+        </div>
+      </li>
+    </ol>
+
+    <h3>Resources</h3>
+    <p>Resources (Command Points, Focus, Ki, Momentum) can be accessed via the <span class="key">@rsc</span> shorthand, as shown here below. For ki and custom resources, a max suffix shorthand is also provided.</p>
+    <ol class="hotkey-list">
+      <li>
+        <div class="keys">
+          <span class="key">@rsc.cps</span>
+          <span class="key">@rsc.focus</span>
+          <span class="key">@rsc.ki</span>
+          <span class="key">@rsc.kimax</span>
+          <span class="key">@rsc.momentum</span>
+        </div>
+      </li>
+    </ol>
+    <p>Note: any custom resources that is both enabled and has a label set can be accessed with that label, reduced to lowercase letters only without spaces (e.g. a resource called "Power Points" can be accessed via <span class="key">@rsc.powerpoints</span> and <span class="key">@rsc.powerpointsmax</span>).</p>
+    <p>Resources can also be manipulated by powers via the <span class="key">Resources</span> field, using the following syntax.<br/>
+    For numeric resources (command points, ki, custom resources):</p>
+    <ol class="hotkey-list">
+      <li>
+        <h4>Increase the resource value</h4>
+        <div class="keys"><span class="key">+N resourcename</span></div>
+      </li>
+      <li>
+        <h4>Decrease the resource value (asks confirmation if &lt;=0)</h4>
+        <div class="keys"><span class="key">-N resourcename</span></div>
+      </li>
+      <li>
+        <h4>Override the resource value</h4>
+        <div class="keys"><span class="key">N resourcename</span></div>
+      </li>
+    </ol>
+    <p>For binary/flag resources (momentum, focus, custom resources):</p>
+    <ol class="hotkey-list">
+      <li>
+        <h4>Set the resource</h4>
+        <div class="keys"><span class="key">+resourcename</span></div>
+      </li>
+      <li>
+        <h4>Unset the resource (asks confirmation if already unset)</h4>
+        <div class="keys"><span class="key">-resourcename</span></div>
+      </li>
+      <li>
+        <h4>Test the resource (asks confirmation if unset)</h4>
+        <div class="keys"><span class="key">resourcename</span></div>
+      </li>
+    </ol>
+
+    <h3>Weapons</h3>
+    <p>Weapons are broken down into melee (<span class="key">@wpn.m</span>), ranged (<span class="key">@wpn.r</span>), JAB (<span class="key">@wpn.j</span>), PUNCH (<span class="key">@wpn.p</span>), and KICK (<span class="key">@wpn.k</span>). JAB, PUNCH, and KICK are intended for monks, and will default to the monk damage die (d6, d8, d10, respectively).</p>
+    <ol class="hotkey-list">
+      <li>
+        <h4>Weapon Damage Die (single, example: <code>1d10</code>)</h4>
+        <div class="keys">
+          <span class="key">@wpn.m.die</span>
+          <span class="key">@wpn.r.die</span>
+          <span class="key">@wpn.j.die</span>
+          <span class="key">@wpn.p.die</span>
+          <span class="key">@wpn.k.die</span>
+        </div>
+      </li>
+      <li>
+        <h4>Weapon Damage Dice (per level, example: <code>3d6</code>)</h4>
+        <div class="keys">
+          <span class="key">@wpn.m.dice</span>
+          <span class="key">@wpn.r.dice</span>
+          <span class="key">@wpn.j.dice</span>
+          <span class="key">@wpn.p.dice</span>
+          <span class="key">@wpn.k.dice</span>
+        </div>
+      </li>
+      <li>
+        <h4>Weapon Damage die size (example: <code>8</code>)</h4>
+        <div class="keys">
+          <span class="key">@wpn.m.dieNum</span>
+          <span class="key">@wpn.r.dieNum</span>
+          <span class="key">@wpn.j.dieNum</span>
+          <span class="key">@wpn.p.dieNum</span>
+          <span class="key">@wpn.k.dieNum</span>
+        </div>
+      </li>
+      <li>
+        <h4>Epic damage bonus (+5/10/15 for levels 8-10)</h4>
+        <div class="keys">
+          <span class="key">@wpn.m.epicBonus</span>
+        </div>
+      </li>
+    </ol>
+
+</div>

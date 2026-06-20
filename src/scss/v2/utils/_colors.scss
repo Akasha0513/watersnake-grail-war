@@ -1,0 +1,161 @@
+/**
+ * All SCSS color variables defined in this file should have a matching
+ * CSS variable. It's a bit of extra work, but by using CSS variables, we
+ * override those in theming layers, like the `_colormodes.scss` partial
+ * that's used for changing colors when a color blind mode is enabled.
+ *
+ * It's a bit redundant to have both CSS variables and SCSS variables,
+ * but it's a bit faster to type `$c-feat-blue` rather than `var(--c-feat-blue)`
+ * everywhere throughout our SCSS.
+ */
+:root {
+  // Legacy colors.
+  --c-purple: #5e0080;
+  --c-yellow: #ddb20b;
+  --c-copper: #782e22;
+  --c-blaze: #ff6400;
+  --c-crit: #7bff94;
+  --c-fail: #ff8484;
+  --c-reroll: #ffe741;
+  --c-blue--dark: #124560;
+
+  // Colors.
+  --c-blue: #1776D5;
+  --c-red: #E01616;
+  --c-black: #000000;
+  --c-white: #ffffff;
+
+  // Opacity hex codes: https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
+  --c-black--01: #00000003;
+  --c-black--03: #00000008;
+  --c-black--05: #0000000D;
+  --c-black--15: #00000026;
+  --c-black--25: #00000040;
+  --c-black--45: #00000073;
+  --c-black--50: #00000080;
+  --c-black--75: #000000BF;
+  --c-gray: #666666;
+
+  --c-white--01: #ffffff03;
+  --c-white--03: #ffffff08;
+  --c-white--05: #ffffff0d;
+  --c-white--10: #ffffff1a;
+  --c-white--25: #ffffff40;
+  --c-white--45: #ffffff73;
+  --c-white--50: #ffffff80;
+  --c-white--60: #ffffff99;
+  --c-white--75: #ffffffbf;
+  --c-white--85: #ffffffd9;
+
+  --c-blue--25: #1776d52b;
+  --c-blue--50: #1776D580;
+  --c-blue-light: #35a7e9;
+  --c-blue-dark: #074481;
+  --c-blue-dark--45: #07448173;
+
+  --c-hit: #023602;
+  --c-hit-underline: #0236026e;
+  --c-hit-bg: #6bb16b38;
+  --c-miss: #3c0000;
+  --c-miss-underline: #3c00006e;
+  --c-miss-bg: #e78f8f33;
+
+  --c-progress-full: #41c179;
+  --c-progress-hurt: #f7d601;
+  --c-progress-staggered: #f78c01;
+  --c-progress-dire: #ca0000;
+
+  --c-feat-blue: #68d7f194;
+  --c-feat-transparent: #ffffff00;
+
+  // Gradients.
+  --c-feat: linear-gradient(45deg, var(--c-feat-blue), var(--c-feat-transparent));
+
+  --c-power-grad-max: 160%;
+  --c-power-will: linear-gradient(45deg, #003c15, #5ee25e var(--c-power-grad-max));
+  --c-power-battle: linear-gradient(45deg, #3c0000, #dc0000 var(--c-power-grad-max));
+  --c-power-daily: linear-gradient(45deg, #01003c, #ababab var(--c-power-grad-max));
+  --c-power-recharge: linear-gradient(45deg, #01003c, #71a2ec var(--c-power-grad-max));
+  --c-power-other: linear-gradient(45deg, #25003c, #dc9ff1a6 var(--c-power-grad-max));
+  --c-power-equipment: linear-gradient(45deg, #80361a, #efc44aa6 var(--c-power-grad-max));
+}
+
+// Legacy colors.
+$c-purple: var(--c-purple);
+$c-yellow: var(--c-yellow);
+$c-copper: var(--c-copper);
+$c-blaze: var(--c-blaze);
+$c-crit: var(--c-crit);
+$c-fail: var(--c-fail);
+$c-reroll: var(--c-reroll);
+$c-blue--dark: var(--c-blue--dark);
+$c-black--lightest: var(--c-black--05);
+$c-black--lighter: var(--c-black--15);
+$c-black--light: var(--c-black--25);
+$c-black--med: var(--c-black--50);
+$c-black--dark: var(--c-black--50);
+$c-black--darker: var(--c-black--75);
+
+$c-blue: var(--c-blue);
+$c-red: var(--c-red);
+$c-black: var(--c-black);
+$c-white: var(--c-white);
+
+$c-black--01: var(--c-black--01);
+$c-black--03: var(--c-black--03);
+$c-black--05: var(--c-black--05);
+$c-black--15: var(--c-black--15);
+$c-black--25: var(--c-black--25);
+$c-black--45: var(--c-black--45);
+$c-black--50: var(--c-black--50);
+$c-black--75: var(--c-black--75);
+$c-gray: var(--c-gray);
+
+$c-white--01: var(--c-white--01);
+$c-white--03: var(--c-white--03);
+$c-white--05: var(--c-white--05);
+$c-white--10: var(--c-white--10);
+$c-white--25: var(--c-white--25);
+$c-white--45: var(--c-white--45);
+$c-white--50: var(--c-white--50);
+$c-white--60: var(--c-white--60);
+$c-white--75: var(--c-white--75);
+$c-white--85: var(--c-white--85);
+
+$c-blue--25: var(--c-blue--25);
+$c-blue--50: var(--c-blue--50);
+$c-blue-light: var(--c-blue-light);
+$c-blue-dark: var(--c-blue-dark);
+$c-blue-dark--45: var(--c-blue-dark--45);
+
+$color-text: var(--c-black);
+$color-text-night: var(--c-white);
+
+$c-feat-blue: var(--c-feat-blue);
+$c-feat-transparent: var(--c-feat-transparent);
+
+$c-feat: var(--c-feat);
+
+$c-progress-full: var(--c-progress-full);
+$c-progress-hurt: var(--c-progress-hurt);
+$c-progress-staggered: var(--c-progress-staggered);
+$c-progress-dire: var(--c-progress-dire);
+
+$ct-border: $c-black--25;
+$ct-border-night: $c-white--25;
+
+$c-power-grad-max: 160%;
+
+$c-hit: var(--c-hit);
+$c-hit-underline: var(--c-hit-underline);
+$c-hit-bg: var(--c-hit-bg);
+$c-miss: var(--c-miss);
+$c-miss-underline: var(--c-miss-underline);
+$c-miss-bg: var(--c-miss-bg);
+
+$c-power-will: var(--c-power-will);
+$c-power-battle: var(--c-power-battle);
+$c-power-daily: var(--c-power-daily);
+$c-power-recharge: var(--c-power-recharge);
+$c-power-other: var(--c-power-other);
+$c-power-equipment: var(--c-power-equipment);

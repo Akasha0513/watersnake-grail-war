@@ -1,0 +1,451 @@
+_id: nF7doc2tNyEZ4HTN
+_key: '!actors!nF7doc2tNyEZ4HTN'
+effects: []
+flags:
+  archmage:
+    portraitFrame: false
+    portraitRound: false
+folder: null
+img: systems/watersnake-grail-war/assets/icons/tokens/monsters/plant.webp
+items:
+- _id: aVkFl0x0ULLYrLpb
+  _key: '!actors.items!nF7doc2tNyEZ4HTN.aVkFl0x0ULLYrLpb'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/target.svg
+  name: Slashing fronds
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    attack:
+      label: Attack Roll
+      type: String
+      value: '[[d20 + 10]] vs. AC (2 attacks)'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: String
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: String
+      value: '[[15]] damage'
+    hit1:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit2:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit3:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Miss
+      type: String
+      value: '[[7]] damage'
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: GGnKxvCjHQjMUOzx
+  _key: '!actors.items!nF7doc2tNyEZ4HTN.GGnKxvCjHQjMUOzx'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/target.svg
+  name: '[Special trigger] Stings a bit'
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    attack:
+      label: Attack Roll
+      type: String
+      value: '[[d20 + 10]] vs PD'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: String
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: String
+      value: '[[4]] acid damage plus [[5]] ongoing acid damage (normal save ends)'
+    hit1:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit2:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit3:
+      label: Hit
+      name: ''
+      type: String
+      value: ''
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Miss
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: SoJ31HG9leIIA3Nm
+  _key: '!actors.items!nF7doc2tNyEZ4HTN.SoJ31HG9leIIA3Nm'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/regen.svg
+  name: Bladderwreck!
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    description:
+      label: Description
+      type: String
+      value: <p>The first time the kelpling is staggered during a fight, various bladders
+        and blebs on its component symbionts rupture in self-defense, causing [[4]]
+        acid damage plus [[2]] ongoing acid damage to all nearby enemies (normal save
+        ends). The kelpling can then perform its <em>stings a bit</em> attack as a
+        free action on the creature it is engaged with.</p>
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+- _id: 2QYuqrNsgDvv2gBa
+  _key: '!actors.items!nF7doc2tNyEZ4HTN.2QYuqrNsgDvv2gBa'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/poison.svg
+  name: The sum of its parts
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    description:
+      label: Description
+      type: String
+      value: <p>When the kelpling reaches 0 hp, it doesn&rsquo;t die. Instead, it
+        separates into [[1d3 + 1]] constituent symbionts, known as kelplets.</p>
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: nastierSpecial
+name: Kelpling
+ownership:
+  default: 0
+prototypeToken:
+  actorLink: false
+  alpha: 1
+  appendNumber: false
+  bar1:
+    attribute: attributes.hp
+  bar2:
+    attribute: null
+  detectionModes: []
+  displayBars: 0
+  displayName: 0
+  disposition: -1
+  flags: {}
+  height: 1
+  light:
+    alpha: 0.5
+    angle: 360
+    animation:
+      intensity: 5
+      reverse: false
+      speed: 5
+      type: null
+    attenuation: 0.5
+    bright: 0
+    color: null
+    coloration: 1
+    contrast: 0
+    darkness:
+      max: 1
+      min: 0
+    dim: 0
+    luminosity: 0.5
+    negative: false
+    priority: 0
+    saturation: 0
+    shadows: 0
+  lockRotation: false
+  movementAction: null
+  name: Kelpling
+  occludable:
+    radius: 0
+  prependAdjective: false
+  randomImg: false
+  ring:
+    colors:
+      background: null
+      ring: null
+    effects: 1
+    enabled: false
+    subject:
+      scale: 1
+      texture: null
+  rotation: 0
+  sight:
+    angle: 360
+    attenuation: 0.1
+    brightness: 0
+    color: null
+    contrast: 0
+    enabled: false
+    range: 0
+    saturation: 0
+    visionMode: basic
+  texture:
+    alphaThreshold: 0.75
+    anchorX: 0.5
+    anchorY: 0.5
+    fit: contain
+    offsetX: 0
+    offsetY: 0
+    rotation: 0
+    scaleX: 1
+    scaleY: 1
+    src: systems/watersnake-grail-war/assets/icons/tokens/monsters/plant.webp
+    tint: '#ffffff'
+  turnMarker:
+    animation: null
+    disposition: false
+    mode: 1
+    src: null
+  width: 1
+sort: 0
+system:
+  attributes:
+    ac:
+      base: 10
+      label: Armor Class
+      min: 0
+      type: Number
+      value: 19
+    attackMod:
+      type: Number
+      value: 0
+    critMod:
+      atk:
+        type: Number
+        value: 0
+      def:
+        type: Number
+        value: 0
+    disengage: 11
+    disengageBonus: 0
+    hp:
+      automatic: true
+      base: 7
+      extra: 0
+      label: Hit Points
+      max: 130
+      min: 0
+      temp: 0
+      tempmax: 0
+      type: Number
+      value: 130
+    init:
+      label: Initiative Modifier
+      type: Number
+      value: 10
+    level:
+      label: Level
+      max: 10
+      min: 0
+      type: Number
+      value: 5
+    md:
+      base: 10
+      label: Mental Defense
+      min: 0
+      type: Number
+      value: 16
+    pd:
+      base: 10
+      label: Physical Defense
+      min: 0
+      type: Number
+      value: 18
+    saves:
+      bonus: 0
+      deathFails:
+        max: 4
+        maxOverride: 0
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+      desperateTriggered: false
+      disengageBonus: 0
+      lastGaspFails:
+        max: 4
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+  details:
+    alignment:
+      label: Alignment
+      type: String
+    biography:
+      label: Biography
+      type: String
+    flavor:
+      value: ''
+    resistance:
+      value: ''
+    role:
+      value: wrecker
+    roleB:
+      value: ''
+    size:
+      value: normal
+    sizeB:
+      value: ''
+    strength:
+      value: double
+    type:
+      value: plant
+    vulnerability:
+      value: ''
+  publicationSource: B2
+  resources:
+    perCombat: {}
+    spendable:
+      custom1:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom2:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom3:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom4:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom5:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom6:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom7:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom8:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom9:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      stoke:
+        current: 0
+        enabled: false
+type: npc

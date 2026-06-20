@@ -1,0 +1,18 @@
+_id: k7nFrgoSgocyOMbd
+_key: '!macros!k7nFrgoSgocyOMbd'
+author: nPjNg32wEG3J72a7
+command: "let name = \"\";\nlet sourcePack = \"archmage.system-rolltables\";\n\nconst\
+  \ pc = actor ? actor : game.user.character;\nconst lvl = pc.data.data.attributes.level.value;\n\
+  if (lvl <= 4) name = \"Chaotic Benefit (A)\";\nelse if (lvl <= 7) name = \"Chaotic\
+  \ Benefit (C)\";\nelse name = \"Chaotic Benefit (E)\";\n\nlet table = game.tables.find(t\
+  \ => t.name === name);\nif (!table) {\n    let pack = await game.packs.get(sourcePack).getDocuments();\n\
+  \    table = pack.find(t => t.name === name);\n}\nif (table) table.draw();"
+flags: {}
+folder: null
+img: icons/svg/dice-target.svg
+name: Chaotic Benefit
+ownership:
+  default: 0
+scope: global
+sort: 0
+type: script

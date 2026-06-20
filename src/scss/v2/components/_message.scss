@@ -1,0 +1,22 @@
+.dice-roll {
+  .dice-total {
+    &.dice-total--small {
+      font-size: $font-md;
+    }
+  }
+
+  .dice-formula, .dice-total {
+    padding: 8px 0 2px;
+    line-height: 14px; // 24px parent line height minus padding (8px + 2px)
+  }
+}
+
+.card-content {
+  .disabled {
+    color: $c-gray;
+    pointer-events: none;
+  }
+  .grayed-out {
+    color: $c-gray;
+  }
+}

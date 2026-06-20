@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build (no compendium packs)
+        run: npm run build
+
+      - name: Inject version & manifest URLs into dist/system.json
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          node -e "
+            const fs=require('fs');
+            const p='dist/system.json';
+            const j=JSON.parse(fs.readFileSync(p,'utf8'));
+            j.version='${TAG}';
+            j.manifest='https://github.com/${{ github.repository }}/releases/latest/download/system.json';
+            j.download='https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/system.zip';
+            fs.writeFileSync(p, JSON.stringify(j,null,2));
+            console.log('patched version', j.version);
+          "
+
+      - name: Zip system (files at archive root)
+        run: cd dist && zip -r ../system.zip . && cd ..
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          files: |
+            dist/system.json
+            system.zip

@@ -1,0 +1,102 @@
+_id: cOmM6ov5EfMz8Jda
+_key: '!items!cOmM6ov5EfMz8Jda'
+effects: []
+flags:
+  core: {}
+folder: 4kES6iUsw34OPUMb
+img: icons/svg/item-bag.svg
+name: Procrastination Tome (implement)
+ownership:
+  default: 0
+sort: 900000
+system:
+  attributes:
+    ac:
+      bonus: 0
+    attack:
+      arcane:
+        bonus: 5
+      divine:
+        bonus: 5
+      melee:
+        bonus: 0
+      ranged:
+        bonus: 0
+    cha:
+      bonus: 0
+    con:
+      bonus: 0
+    dex:
+      bonus: 0
+    disengage:
+      bonus: 0
+    hp:
+      bonus: 0
+    int:
+      bonus: 0
+    md:
+      bonus: 0
+    pd:
+      bonus: 0
+    recoveries:
+      bonus: 0
+    rerollAc:
+      bonus: 0
+      current: 0
+    rerollSave:
+      bonus: 0
+      current: 0
+    save:
+      bonus: 0
+      threshold: 0
+    str:
+      bonus: 0
+    wis:
+      bonus: 0
+  chackra: staff
+  description:
+    label: Description
+    type: String
+    value: '<p>This book contains instructions for being a better spellcaster.</p>
+
+      <p>Always: Bonus to spell attacks and damage: +5 (epic). In addition, during
+      the first round of each battle you must spend all your actions either moving
+      or &ldquo;limbering up.&rdquo; This means not using any abilities, you&rsquo;re
+      just jogging and stretching.</p>'
+  embeddedMacro:
+    label: Embedded Macro
+    type: String
+    value: ''
+  icons: ''
+  isActive: true
+  maxQuantity:
+    label: Max Uses
+    type: Number
+    value: null
+  name:
+    label: Name
+    type: String
+  powerUsage:
+    label: Power Usage
+    type: String
+    value: other
+  price:
+    label: Price
+    type: Number
+    value: ''
+  properties: {}
+  publicationSource: B1
+  quantity:
+    label: Uses
+    type: Number
+    value: null
+  recharge:
+    label: Recharge
+    type: Number
+    value: '0'
+  rechargeAttempts:
+    label: Number of Recharges Attempted
+    type: Number
+    value: 0
+  tier: epic
+type: equipment

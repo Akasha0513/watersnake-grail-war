@@ -1,0 +1,76 @@
+id: watersnake-grail-war
+title: "성배전쟁 ORPG (Watersnake Grail War)"
+version: "0.1.0"
+authors:
+  - name: akasha0513
+  - name: "원작 룰: watersnake"
+  - name: "엔진 베이스: asacolips 13th Age (MIT)"
+
+description: "watersnake의 성배전쟁 자작룰(제13시대 기반 d20)을 위한 Foundry VTT 시스템. asacolips 13th Age 시스템(MIT)을 포크해 개조했습니다."
+
+compatibility:
+  minimum: "13"
+  verified: "13.351"
+  maximum: "13"
+
+esmodules:
+  - module/archmage.js
+  # Vue is included in the actor sheet class. To download new copies, go to
+  # https://unpkg.com/browse/vue@3/dist/ and replace `src/scripts/lib/vue.esm-browser.js`
+  # and `src/scripts/lib/vue.esm-browser.prod.js`
+
+scripts:
+  - scripts/lib/parse-md.js
+  - scripts/migrate/archmage-updates.js
+  - scripts/lib/intro.js
+  # - scripts/vue/archmage-methods.js
+
+styles:
+  - css/archmage.css
+  - css/v2/archmage-v2.css
+  - vue/styles.vue.css
+  - css/lib/introjs.css
+
+flags:
+  archmage:
+    archmage-art: 'systems/watersnake-grail-war/map-archmage.json'
+  hotReload:
+    extensions:
+      - css
+      - html
+      - hbs
+      - json
+    paths:
+      - css
+      - vue
+      - templates
+      - languages
+
+languages:
+  - lang: en
+    name: English
+    path: languages/en.json
+
+  - lang: es
+    name: Español
+    path: languages/es.json
+
+socket: true
+url: https://github.com/akasha0513/watersnake-grail-war
+manifest: https://github.com/akasha0513/watersnake-grail-war/releases/latest/download/system.json
+download: https://github.com/akasha0513/watersnake-grail-war/releases/download/v0.1.0/system.zip
+changelog: https://github.com/akasha0513/watersnake-grail-war/releases
+initiative: 1d20 + (@abilities?.dex.mod || 0) + @attributes.init.value + @attributes.level.value
+grid:
+  distance: 1
+  units: 'Units'
+primaryTokenAttribute: attributes.hp
+
+# Manifest+ Props
+media:
+  - type: cover
+    loop: false
+    flags: {}
+  - type: setup
+    url: ""
+    thumbnail: ""

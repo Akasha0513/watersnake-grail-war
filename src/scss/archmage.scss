@@ -1,0 +1,131 @@
+// Utilities
+//
+// Import variables and mixins
+// Should contain NO css output.
+// Only variables / mixins / settings.
+// ========================================
+@import 'global/utils/init';
+@import 'v2/utils/colors';
+
+@font-face {
+  font-family: 'Nodesto';
+  src: url('../assets/fonts/NodestoCapsCondensed.otf');
+}
+
+// Preload assets.
+.archmage-preload {
+  background: url('../assets/ricepaper2_@2X.webp') -9999px -9999px;
+  pointer-events: none;
+}
+
+
+// Nodesto Font
+
+.nodesto {
+  color: $c-gray;
+  font-family: $font-stack-base;
+  font-size: 18px;
+}
+
+@import 'global/archmage-global';
+@import 'global/archmage-prepopulate';
+@import 'global/tables';
+
+
+/* ----------------------------------------- */
+/*  Context Dropdown Menu
+/* ----------------------------------------- */
+.chat-message .message-content {
+  overflow: initial;
+}
+
+#context-menu2 {
+  width: 100%;
+  height: max-content;
+  min-width: 200px;
+  max-width: 360px;
+  position: absolute;
+  left: 0;
+  background: linear-gradient(180deg, #181714 0, #23221d 100%);
+  border: 1px solid #000;
+  box-shadow: 0 0 20px -2px #000;
+  border-radius: 5px;
+  color: #EEE;
+  z-index: 31;
+
+  h2 {
+    color: #EEE;
+    font-family: $font-stack-base;
+    line-height: 44px;
+    padding: 0 5px;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid $c-blue-dark;
+    text-shadow: none;
+  }
+}
+#context-menu2.expand-down {
+  top: calc(100% + 2px);
+}
+#context-menu2.expand-up {
+  bottom: calc(100% + 2px);
+}
+#context-menu2 ol.context-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#context-menu2 li.context-item {
+  padding: 0 5px;
+  line-height: 32px;
+  text-shadow: none;
+}
+#context-menu2 li.context-item:hover {
+  color: #FFF;
+  text-shadow: 0 0 4px red;
+}
+#context-menu2 li.context-item > i {
+  margin-right: 5px;
+}
+.window-app #context-menu2 {
+  z-index: 101;
+}
+
+#context-menu2 {
+  .damage-modifier {
+    font-size: 12px;
+    background: transparent;
+    color: $c-white;
+    border: 1px dashed $c-blue;
+    box-shadow: none;
+    opacity: 0.5;
+    padding: 0;
+
+    &.active,
+    &:hover {
+      border: 1px solid $c-blue;
+      color: $c-white;
+      opacity: 1;
+      box-shadow: inset 0 0 10px 0px $c-blue-dark;
+    }
+
+    &:hover {
+      border: 1px solid $c-blue-light;
+      box-shadow: inset 0 0 8px 2px $c-blue;
+    }
+  }
+
+  .reroll {
+    border-top: 1px solid $c-blue-dark;
+  }
+
+  .modifiers {
+    margin: 6px 0 0;
+    padding-top: 6px;
+  }
+}
+
+.archmage-apply-ae {
+  .form-group {
+    border-bottom: 1px solid $c-black--15;
+  }
+}

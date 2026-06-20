@@ -1,0 +1,290 @@
+_id: lHaJCK8ORvOKxoFv
+_key: '!items!lHaJCK8ORvOKxoFv'
+effects: []
+flags: {}
+folder: null
+img: icons/magic/light/explosion-star-glow-purple.webp
+name: Ki
+ownership:
+  default: 0
+sort: 0
+system:
+  actionType:
+    label: Action
+    type: String
+    value: ''
+  always:
+    label: Always
+    type: String
+    value: ''
+  attack:
+    label: Attack
+    type: String
+    value: ''
+  breathWeapon:
+    label: Breath Weapon
+    type: String
+    value: ''
+  castBroadEffect:
+    label: Cast for Broad Effect
+    type: String
+    value: ''
+  castPower:
+    label: Cast for Power
+    type: String
+    value: ''
+  crit:
+    label: Crit
+    type: String
+    value: ''
+  critMod:
+    label: Attack
+    type: String
+    value: ''
+  description:
+    label: Description
+    type: String
+    value: ''
+  effect:
+    label: Effect
+    type: String
+    value: <p>You gain a number of ki points each day equal to 1 + your Wisdom modifier.
+      You can spend ki to modify the natural result of one of your attack rolls. Ki
+      is a daily resource. When you take a full heal-up, you regain all your ki points.
+      You don&rsquo;t regain ki during a quick rest.</p><p>After rolling an attack,
+      you can spend 1 point of ki as a free action to change your attack&rsquo;s natural
+      result by 1, unless that result is a natural 1. The change can be +1 or -1.
+      Spending ki is a free action, but you can only spend 1 point of ki each turn.</p>
+  embeddedMacro:
+    label: Embedded Macro
+    type: String
+    value: ''
+  feats:
+    '0':
+      description:
+        type: String
+        value: <p>You gain 1 additional point of ki each day.</p>
+      isActive:
+        type: Boolean
+        value: false
+      maxQuantity:
+        type: Number
+        value: null
+      powerUsage:
+        type: String
+        value: ''
+      quantity:
+        type: Number
+        value: null
+      tier:
+        type: String
+        value: adventurer
+    '1':
+      description:
+        type: String
+        value: <p>You can spend as much ki as you like during a turn. You must spend
+          each point of ki on a different attack roll or a different ki power.</p>
+      isActive:
+        type: Boolean
+        value: false
+      maxQuantity:
+        type: Number
+        value: null
+      powerUsage:
+        type: String
+        value: ''
+      quantity:
+        type: Number
+        value: null
+      tier:
+        type: String
+        value: champion
+    '2':
+      description:
+        type: String
+        value: <p>Work with your GM to invent a new ki power related to your one unique
+          thing or some other aspect of your character&rsquo;s story. If the ki power
+          is too good and overshadows your other ki powers, the GM should rule that
+          you can only use it once a day.</p>
+      isActive:
+        type: Boolean
+        value: false
+      maxQuantity:
+        type: Number
+        value: null
+      powerUsage:
+        type: String
+        value: ''
+      quantity:
+        type: Number
+        value: null
+      tier:
+        type: String
+        value: epic
+  finalVerse:
+    label: Final Verse
+    type: String
+    value: ''
+  group:
+    label: Group
+    type: String
+    value: ''
+  hit:
+    label: Hit
+    type: String
+    value: ''
+  hitEven:
+    label: Natural Even Hit
+    type: String
+    value: ''
+  hitOdd:
+    label: Natural Odd Hit
+    type: String
+    value: ''
+  maxQuantity:
+    label: Uses
+    type: Number
+    value: null
+  miss:
+    label: Miss
+    type: String
+    value: ''
+  missEven:
+    label: Even Miss
+    type: String
+    value: ''
+  missOdd:
+    label: Odd Miss
+    type: String
+    value: ''
+  name:
+    label: Name
+    type: String
+  powerLevel:
+    label: Level
+    type: Number
+    value: 1
+  powerOriginName:
+    label: Power Original Name
+    type: String
+    value: Ki
+  powerSource:
+    label: Power Source
+    type: String
+    value: class
+  powerSourceName:
+    label: Power Source
+    type: String
+    value: Monk
+  powerType:
+    label: Power Type
+    type: String
+    value: feature
+  powerUsage:
+    label: Power Usage
+    type: String
+    value: ''
+  quantity:
+    label: Uses
+    type: Number
+    value: null
+  range:
+    label: Range
+    type: String
+    value: ''
+  recharge:
+    label: Recharge
+    type: Number
+    value: 0
+  rechargeAttempts:
+    label: Number of Recharges Attempted
+    type: Number
+    value: 0
+  resources:
+    label: Resources
+    type: String
+    value: ''
+  rollTable:
+    label: Roll Table
+    type: String
+    value: ''
+  sequencer:
+    ray: ''
+    reversed: false
+    self: ''
+    target: ''
+  special:
+    label: Special
+    type: String
+    value: ''
+  spellChain:
+    label: Chain Spell
+    type: String
+    value: ''
+  spellLevel10:
+    hide: true
+    label: 10th Level Spell
+    type: String
+    value: ''
+  spellLevel11:
+    hide: true
+    label: 11th Level Spell
+    type: String
+    value: ''
+  spellLevel2:
+    hide: true
+    label: 2nd Level Spell
+    type: String
+    value: ''
+  spellLevel3:
+    hide: true
+    label: 3rd Level Spell
+    type: String
+    value: ''
+  spellLevel4:
+    hide: true
+    label: 4th Level Spell
+    type: String
+    value: ''
+  spellLevel5:
+    hide: true
+    label: 5th Level Spell
+    type: String
+    value: ''
+  spellLevel6:
+    hide: true
+    label: 6th Level Spell
+    type: String
+    value: ''
+  spellLevel7:
+    hide: true
+    label: 7th Level Spell
+    type: String
+    value: ''
+  spellLevel8:
+    hide: true
+    label: 8th Level Spell
+    type: String
+    value: ''
+  spellLevel9:
+    hide: true
+    label: 9th Level Spell
+    type: String
+    value: ''
+  sustainOn:
+    label: Sustain On
+    type: Number
+    value: ''
+  sustainedEffect:
+    label: Opening and Sustained Effect
+    type: String
+    value: ''
+  target:
+    label: Target
+    type: String
+    value: ''
+  trigger:
+    label: Trigger
+    type: String
+    value: ''
+type: power

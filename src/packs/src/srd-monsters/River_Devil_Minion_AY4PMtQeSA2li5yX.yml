@@ -1,0 +1,367 @@
+_id: AY4PMtQeSA2li5yX
+_key: '!actors!AY4PMtQeSA2li5yX'
+effects: []
+flags:
+  archmage: {}
+folder: null
+img: systems/watersnake-grail-war/assets/icons/tokens/monsters/devil.webp
+items:
+- _id: kay4UyBdDUUyXjUy
+  _key: '!actors.items!AY4PMtQeSA2li5yX.kay4UyBdDUUyXjUy'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: Tentacles and talons
+  ownership:
+    default: 0
+  sort: 0
+  system:
+    attack:
+      label: Attack Roll
+      type: ''
+      value: '[[d20 + 18]] vs. AC'
+    critMod:
+      type: String
+      value: ''
+    description:
+      label: Description
+      type: ''
+      value: ''
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    hit:
+      label: Hit
+      type: ''
+      value: '[[60]] damage'
+    hit1:
+      label: Hit
+      name: Natural even hit
+      type: ''
+      value: The target also takes [[20]] ongoing damage.
+    hit2:
+      label: Hit
+      name: Natural odd hit
+      type: ''
+      value: The target is *vulnerable* (save ends).
+    hit3:
+      label: Hit
+      type: String
+    hit4:
+      label: Hit
+      type: String
+    hit5:
+      label: Hit
+      type: String
+    miss:
+      label: Miss
+      type: String
+    name:
+      label: Name
+      type: String
+    sequencer:
+      ray: ''
+      reversed: false
+      self: ''
+      target: ''
+  type: action
+- _id: UpK8KizE3Q69kUz2
+  _key: '!actors.items!AY4PMtQeSA2li5yX.UpK8KizE3Q69kUz2'
+  effects: []
+  flags: {}
+  folder: null
+  img: icons/svg/mystery-man.svg
+  name: "Devil\u2019s due (Obsession)"
+  ownership:
+    default: 0
+  sort: 100000
+  system:
+    description:
+      label: Description
+      type: ''
+      value: When you choose to add the escalation die to an attack against a river
+        devil minion, you must only attack river devil minions until the end of the
+        battle or until all river devil minion mobs have dropped to 0 hp.
+    embeddedMacro:
+      label: Embedded Macro
+      type: String
+      value: ''
+    group:
+      label: Group
+      type: String
+      value: ''
+    name:
+      label: Name
+      type: String
+  type: trait
+name: River Devil Minion
+ownership:
+  default: 0
+prototypeToken:
+  actorLink: false
+  alpha: 1
+  appendNumber: false
+  bar1:
+    attribute: null
+  bar2:
+    attribute: null
+  detectionModes: []
+  displayBars: 0
+  displayName: 0
+  disposition: -1
+  flags: {}
+  height: 1
+  light:
+    alpha: 1
+    angle: 360
+    animation:
+      intensity: 5
+      reverse: false
+      speed: 5
+      type: null
+    attenuation: 0.5
+    bright: 0
+    color: null
+    coloration: 1
+    contrast: 0
+    darkness:
+      max: 1
+      min: 0
+    dim: 0
+    luminosity: 0.5
+    negative: false
+    priority: 0
+    saturation: 0
+    shadows: 0
+  lockRotation: false
+  movementAction: null
+  name: River Devil Minion
+  occludable:
+    radius: 0
+  prependAdjective: false
+  randomImg: false
+  ring:
+    colors:
+      background: null
+      ring: null
+    effects: 1
+    enabled: false
+    subject:
+      scale: 1
+      texture: null
+  rotation: 0
+  sight:
+    angle: 360
+    attenuation: 0.1
+    brightness: 1
+    color: null
+    contrast: 0
+    enabled: false
+    range: 0
+    saturation: 0
+    visionMode: basic
+  texture:
+    alphaThreshold: 0.75
+    anchorX: 0.5
+    anchorY: 0.5
+    fit: contain
+    offsetX: 0
+    offsetY: 0
+    rotation: 0
+    scaleX: 1
+    scaleY: 1
+    src: systems/watersnake-grail-war/assets/icons/tokens/monsters/devil.webp
+    tint: '#ffffff'
+  turnMarker:
+    animation: null
+    disposition: false
+    mode: 1
+    src: null
+  width: 1
+sort: 100001
+system:
+  attributes:
+    ac:
+      base: 10
+      label: Armor Class
+      min: 0
+      type: Number
+      value: 27
+    attackMod:
+      type: Number
+      value: 0
+    critMod:
+      atk:
+        type: Number
+        value: 0
+      def:
+        type: Number
+        value: 0
+    disengage: 11
+    disengageBonus: 0
+    escalation:
+      value: 6
+    hp:
+      automatic: true
+      base: 10
+      extra: 0
+      label: Hit Points
+      max: 100
+      min: 0
+      temp: 0
+      tempmax: 0
+      type: Number
+      value: 100
+    init:
+      label: Initiative Modifier
+      mod: 24
+      type: Number
+      value: 24
+    level:
+      label: Level
+      max: 12
+      min: 0
+      type: Number
+      value: 13
+    md:
+      base: 10
+      label: Mental Defense
+      min: 0
+      type: Number
+      value: 25
+    pd:
+      base: 10
+      label: Physical Defense
+      min: 0
+      type: Number
+      value: 25
+    saves:
+      bonus: 0
+      deathFails:
+        max: 4
+        maxOverride: 0
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+      desperateTriggered: false
+      disengageBonus: 0
+      lastGaspFails:
+        max: 4
+        steps:
+        - false
+        - false
+        - false
+        - false
+        value: 0
+  details:
+    alignment:
+      label: Alignment
+      type: String
+    biography:
+      label: Biography
+      type: String
+    flavor:
+      value: ''
+    level:
+      label: Level
+      max: 12
+      min: 0
+      type: Number
+      value: 13
+    resistance:
+      label: Resistance
+      type: String
+      value: ''
+    role:
+      label: Role
+      type: String
+      value: mook
+    roleB:
+      value: ''
+    size:
+      label: Size
+      type: String
+      value: normal
+    sizeB:
+      value: ''
+    strength:
+      value: normal
+    type:
+      label: Type
+      type: String
+      value: devil
+    vulnerability:
+      label: Vulnerability
+      type: String
+      value: ''
+  publicationSource: 13TW
+  resources:
+    perCombat: {}
+    spendable:
+      custom1:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom2:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom3:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom4:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom5:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom6:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom7:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom8:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      custom9:
+        current: 0
+        enabled: false
+        label: ''
+        max: 0
+        rest: none
+      stoke:
+        current: 0
+        enabled: false
+type: npc

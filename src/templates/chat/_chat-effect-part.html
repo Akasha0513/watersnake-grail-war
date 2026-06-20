@@ -1,0 +1,13 @@
+{{#if data.activeEffects}}
+<div class="card-effects">
+    <strong class="card-label">Effects:</strong>
+    <div class="card-effects-row">
+        {{#each data.activeEffects as |effect index|}}
+        <a class="content-link effect-link" data-link data-type="ActiveEffect" data-uuid="{{effect.uuid}}" {{#if effect.duration}}data-duration="{{effect.duration}}"{{/if}} data-id="{{effect.id}}" draggable="true">
+            <img class="effects-icon" src="{{effect.img}}"/>
+            {{effect.name}}
+        </a>
+        {{/each}}
+    </div>
+</div>
+{{/if}}

@@ -1,0 +1,100 @@
+_id: 3Sa8quAXxuEOCxe9
+_key: '!items!3Sa8quAXxuEOCxe9'
+effects: []
+flags:
+  core: {}
+folder: gFuuXf8MeSSiobPC
+img: icons/svg/item-bag.svg
+name: Vengeance (Melee weapon)
+ownership:
+  default: 0
+sort: 0
+system:
+  attributes:
+    ac:
+      bonus: 0
+    attack:
+      arcane:
+        bonus: 0
+      divine:
+        bonus: 0
+      melee:
+        bonus: 1
+      ranged:
+        bonus: 0
+    cha:
+      bonus: 0
+    con:
+      bonus: 0
+    dex:
+      bonus: 0
+    disengage:
+      bonus: 0
+    hp:
+      bonus: 0
+    int:
+      bonus: 0
+    md:
+      bonus: 0
+    pd:
+      bonus: 0
+    recoveries:
+      bonus: 0
+    rerollAc:
+      bonus: 0
+      current: 0
+    rerollSave:
+      bonus: 0
+      current: 0
+    save:
+      bonus: 0
+      threshold: 0
+    str:
+      bonus: 0
+    wis:
+      bonus: 0
+  chackra: melee
+  description:
+    label: Description
+    type: String
+    value: '<p>When you hit with this weapon while you are staggered, deal +[[1d6]]
+      damage to that enemy.</p>
+
+      <p>Quirk: Quick to take offense.</p>'
+  embeddedMacro:
+    label: Embedded Macro
+    type: String
+    value: ''
+  icons: ''
+  isActive: true
+  maxQuantity:
+    label: Max Uses
+    type: Number
+    value: null
+  name:
+    label: Name
+    type: String
+  powerUsage:
+    label: Power Usage
+    type: String
+    value: other
+  price:
+    label: Price
+    type: Number
+    value: ''
+  properties: {}
+  publicationSource: 1e
+  quantity:
+    label: Uses
+    type: Number
+    value: null
+  recharge:
+    label: Recharge
+    type: Number
+    value: '0'
+  rechargeAttempts:
+    label: Number of Recharges Attempted
+    type: Number
+    value: 0
+  tier: adventurer
+type: equipment

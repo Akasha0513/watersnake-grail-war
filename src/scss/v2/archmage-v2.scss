@@ -1,0 +1,107 @@
+@import 'init';
+
+// General layout.
+@import 'layout/grid';
+@import 'layout/flex';
+
+// Theme overrides.
+@import 'application/window';
+
+// Archmage custom.
+.archmage-v2 {
+  font-family: $font-stack-base;
+  font-size: $font-xs;
+
+  // Generic.
+  @import 'base/input';
+  @import 'base/typography';
+  // Layout.
+  @import 'layout/grid';
+  @import 'layout/flex';
+  @import 'layout/layout';
+  // Components.
+  @import 'components/rollable';
+  @import 'components/tabs';
+  @import 'components/progress-bar';
+  @import 'components/resource';
+
+  &.compact-mode {
+    .window-content {
+      zoom: 0.86;
+    }
+  }
+
+  // Character and NPC sheets.
+  &.sheet,
+  &.archmage-dialog {
+    // Specific.
+    @import 'components/sheet';
+    @import 'components/character/header';
+    @import 'components/character/abilities';
+    @import 'components/character/attributes';
+    @import 'components/character/backgrounds';
+    @import 'components/character/icons';
+    @import 'components/character/out';
+    @import 'components/character/incrementals';
+    @import 'components/character/resources';
+    @import 'components/character/powers';
+    @import 'components/character/feats';
+    @import 'components/character/inventory';
+    @import 'components/character/effects';
+    @import 'components/character/settings';
+  }
+
+  &.archmage-dialog {
+    @import 'components/compendium-browser/compendium-browser';
+
+    min-width: 960px;
+  }
+
+  // Journals.
+  @import 'components/journals/page';
+  @import 'components/journals/callout';
+  @import 'components/journals/author-callout';
+  @import 'components/journals/icon-background';
+  @import 'components/journals/quote';
+}
+
+.system-archmage {
+  // Chat messages.
+  .message {
+    @import 'components/message';
+  }
+
+  .introjs-overlay {
+    opacity: 0.5 !important;
+  }
+
+  .introjs-tooltip {
+    max-width: 400px;
+    width: 400px;
+    font-size: 16px;
+    font-family: $font-stack-base;
+
+    .introjs-button {
+      font-size: 16px;
+      font-family: $font-stack-base;
+    }
+  }
+
+  // @todo replace this when we make the v2 power sheet.
+  .item-sheet {
+    @import 'components/items/power-sheet';
+  }
+}
+
+#settings-config {
+  @import 'application/settings';
+}
+
+@import 'components/chat/ongoing-effects';
+
+// Global AppV2 styles.
+@import 'components/items/item-sheet-app-v2';
+
+@import 'layout/container-queries';
+@import 'theme/nightmode';
+@import 'theme/colormodes';

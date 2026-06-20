@@ -1,0 +1,30 @@
+<div class="archmage chat-card item-card" data-actor-id="{{actor.id}}" data-item-id="{{item.id}}" {{#if tokenId}}data-token-id="{{tokenId}}"{{/if}} data-actor-uuid="{{actor.uuid}}">
+  <header class="card-header flexrow">
+      {{#if (eq item.img "icons/svg/mystery-man.svg")}}
+      {{else}}
+          <img src="{{item.img}}" title="{{item.name}}" width="36" height="36" />
+      {{/if}}
+      <h3 class="ability-usage ability-usage--{{data.powerUsage.value}}">{{item.name}}</h3>
+  </header>
+
+  <div class="card-content">
+      <div class="card-row">
+          {{#if data.embeddedMacro.value}}
+              <div class="card-row"><em>({{localize "ARCHMAGE.CHAT.embeddedMacro"}})</em></div>
+          {{/if}}
+          {{#if data.description.value}}
+              <div class="card-row-description">
+                  {{{data.description.value}}}
+              </div>
+          {{/if}}
+      </div>
+  </div>
+
+  {{> "systems/watersnake-grail-war/templates/chat/_chat-effect-part.html" data=data actor=actor}}
+
+  <footer class="card-footer">
+      {{#each data.tags}}
+      <span>{{this.value}}</span>
+      {{/each}}
+  </footer>
+</div>

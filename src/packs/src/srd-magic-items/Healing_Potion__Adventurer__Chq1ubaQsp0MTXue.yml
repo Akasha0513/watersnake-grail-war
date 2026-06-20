@@ -1,0 +1,29 @@
+_id: Chq1ubaQsp0MTXue
+_key: '!items!Chq1ubaQsp0MTXue'
+effects: []
+flags:
+  core: {}
+folder: 0mcnzVgWo4dqvS1l
+img: systems/watersnake-grail-war/assets/icons/items/potions/minor-red.jpg
+name: Healing Potion (Adventurer)
+ownership:
+  default: 0
+sort: 900000
+system:
+  description:
+    label: Description
+    type: String
+    value: <p>As a standard action, spend a recovery and regain 1d8 additional hp
+      (max 30).</p>
+  name:
+    label: Name
+    type: String
+  price:
+    label: Price
+    type: Number
+    value: 50
+  quantity:
+    label: Quantity
+    type: Number
+    value: 1
+type: loot

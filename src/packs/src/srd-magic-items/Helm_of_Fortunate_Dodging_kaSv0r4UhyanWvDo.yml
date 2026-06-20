@@ -1,0 +1,101 @@
+_id: kaSv0r4UhyanWvDo
+_key: '!items!kaSv0r4UhyanWvDo'
+effects: []
+flags:
+  core: {}
+folder: 6MQpEp3NjY3Z0S8G
+img: icons/svg/item-bag.svg
+name: Helm of Fortunate Dodging
+ownership:
+  default: 0
+sort: 100000
+system:
+  attributes:
+    ac:
+      bonus: 0
+    attack:
+      arcane:
+        bonus: 0
+      divine:
+        bonus: 0
+      melee:
+        bonus: 0
+      ranged:
+        bonus: 0
+    cha:
+      bonus: 0
+    con:
+      bonus: 0
+    dex:
+      bonus: 0
+    disengage:
+      bonus: 0
+    hp:
+      bonus: 0
+    int:
+      bonus: 0
+    md:
+      bonus: 1
+    pd:
+      bonus: 0
+    recoveries:
+      bonus: 0
+    rerollAc:
+      bonus: 0
+      current: 0
+    rerollSave:
+      bonus: 0
+      current: 0
+    save:
+      bonus: 0
+      threshold: 0
+    str:
+      bonus: 0
+    wis:
+      bonus: 0
+  chackra: cloak
+  description:
+    label: Description
+    type: String
+    value: '<p>(Recharge 11+) When an enemy misses you with an attack against your
+      AC or PD, change that miss into a fumble (no damage or possibly a negative outcome).</p>
+
+      <p>Quirk: Easily moved to dancing by rhythmic music, and taps foot when there
+      is no music.</p>'
+  embeddedMacro:
+    label: Embedded Macro
+    type: String
+    value: ''
+  icons: ''
+  isActive: true
+  maxQuantity:
+    label: Max Uses
+    type: Number
+    value: '1'
+  name:
+    label: Name
+    type: String
+  powerUsage:
+    label: Power Usage
+    type: String
+    value: recharge
+  price:
+    label: Price
+    type: Number
+    value: ''
+  properties: {}
+  publicationSource: 1e
+  quantity:
+    label: Uses
+    type: Number
+    value: '1'
+  recharge:
+    label: Recharge
+    type: Number
+    value: '11'
+  rechargeAttempts:
+    label: Number of Recharges Attempted
+    type: Number
+    value: 0
+  tier: adventurer
+type: equipment

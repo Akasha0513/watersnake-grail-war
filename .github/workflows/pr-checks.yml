@@ -1,0 +1,9 @@
+# 비활성화됨 (watersnake-grail-war 포크에서 사용 안 함)
+name: disabled-pr-checks.yml
+on:
+  workflow_dispatch:
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "disabled"
