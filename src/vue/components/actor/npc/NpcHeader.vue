@@ -200,7 +200,7 @@
           });
         }
       },
-      'actor.flags['watersnake-grail-war']': {
+      'actor.flags.watersnake-grail-war': {
         deep: true,
         handler() {
           this.getAvatarDimensions();
