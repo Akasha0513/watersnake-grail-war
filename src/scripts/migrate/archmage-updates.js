@@ -2,7 +2,8 @@ class ArchmageUpdateHandler {
   // Call hooks in the constructor.
   constructor() {
     Hooks.once('init', this.init.bind(this));
-    Hooks.once('ready', this.executeMigration.bind(this));
+    // 마이그레이션 비활성화(우리 버전 0.1.x가 13th Age 임계값보다 낮아 매번 전체 마이그레이션이 도는 문제 방지)
+    // Hooks.once('ready', this.executeMigration.bind(this));
     // @deprecated: Remove this in a future version.
     // Hooks.once('ready', this.runUpdates.bind(this));
   }
