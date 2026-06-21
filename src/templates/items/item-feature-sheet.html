@@ -25,6 +25,7 @@
                                 <option value="skill" {{#if (eq system.category.value "skill")}}selected{{/if}}>스킬</option>
                                 <option value="variable" {{#if (eq system.category.value "variable")}}selected{{/if}}>가변 기능</option>
                                 <option value="np" {{#if (eq system.category.value "np")}}selected{{/if}}>보구</option>
+                                <option value="etc" {{#if (eq system.category.value "etc")}}selected{{/if}}>기타 기능</option>
                             </select>
                         </li>
                         {{#if (eq system.category.value "np")}}
@@ -33,17 +34,21 @@
                             <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
                         </li>
                         {{/if}}
+                        {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np"))}}
+                        <li>
+                            <label>랭크</label>
+                            <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+ (선택)"/>
+                        </li>
+                        {{/if}}
                         {{#unless (eq system.category.value "system")}}
                         <li>
                             <label>판정 능력치</label>
                             <input type="text" name="system.rollAbility.value" value="{{system.rollAbility.value}}" placeholder="예: str (선택)"/>
                         </li>
-                        {{#unless (eq system.category.value "action")}}
                         <li>
                             <label>다이스</label>
                             <input type="text" name="system.damage.value" value="{{system.damage.value}}" placeholder="예: 1d8 (선택)"/>
                         </li>
-                        {{/unless}}
                         {{/unless}}
                     </ol>
 
