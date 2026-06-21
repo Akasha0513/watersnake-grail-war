@@ -1,14 +1,16 @@
 <div class="archmage chat-card">
   <header class="card-header flexrow">
     <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
-    <h3 class="ability-usage ability-usage--recharge">{{item.name}}{{#if system.ruby.value}} - {{system.ruby.value}}{{/if}}</h3>
+    <h3 class="ability-usage ability-usage--recharge">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}</h3>
   </header>
   <div class="card-content">
-    {{#if system.rank.value}}
-      <div class="card-row"><div class="card-prop"><strong>랭크:</strong> {{system.rank.value}}</div></div>
+    {{#if attackHtml}}
+      <div class="card-row"><div class="card-prop"><strong>판정</strong></div></div>
+      {{{attackHtml}}}
     {{/if}}
-    {{#if system.kind.value}}
-      <div class="card-row"><div class="card-prop"><strong>종류:</strong> {{system.kind.value}}</div></div>
+    {{#if damageHtml}}
+      <div class="card-row"><div class="card-prop"><strong>다이스</strong></div></div>
+      {{{damageHtml}}}
     {{/if}}
     {{#if system.description.value}}
       <div class="card-row">{{{system.description.value}}}</div>

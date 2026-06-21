@@ -23,33 +23,31 @@
                                 <option value="action" {{#if (eq system.category.value "action")}}selected{{/if}}>액션</option>
                                 <option value="equip" {{#if (eq system.category.value "equip")}}selected{{/if}}>예장</option>
                                 <option value="skill" {{#if (eq system.category.value "skill")}}selected{{/if}}>스킬</option>
-                                <option value="classSkill" {{#if (eq system.category.value "classSkill")}}selected{{/if}}>클래스 스킬</option>
                                 <option value="variable" {{#if (eq system.category.value "variable")}}selected{{/if}}>가변 기능</option>
                                 <option value="np" {{#if (eq system.category.value "np")}}selected{{/if}}>보구</option>
                             </select>
                         </li>
+                        {{#if (eq system.category.value "np")}}
                         <li>
                             <label>루비</label>
                             <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
                         </li>
-                        <li>
-                            <label>랭크</label>
-                            <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="E ~ EX"/>
-                        </li>
-                        <li>
-                            <label>종류</label>
-                            <input type="text" name="system.kind.value" value="{{system.kind.value}}"/>
-                        </li>
+                        {{/if}}
+                        {{#unless (eq system.category.value "system")}}
                         <li>
                             <label>판정 능력치</label>
                             <input type="text" name="system.rollAbility.value" value="{{system.rollAbility.value}}" placeholder="예: str (선택)"/>
                         </li>
+                        {{#unless (eq system.category.value "action")}}
                         <li>
-                            <label>피해 다이스</label>
+                            <label>다이스</label>
                             <input type="text" name="system.damage.value" value="{{system.damage.value}}" placeholder="예: 1d8 (선택)"/>
                         </li>
+                        {{/unless}}
+                        {{/unless}}
                     </ol>
 
+                    <label class="feature-effect-label">효과</label>
                     {{editor system.description.value target="system.description.value" button=true}}
                 </div>
 

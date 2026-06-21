@@ -246,6 +246,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.item-delete', (event) => this._deleteItem(event));
     html.on('click', '.item-edit', (event) => this._editItem(event));
     html.on('click', '.feature-chat', (event) => this._postFeature(event));
+    html.on('click', '.feature-roll', (event) => this._rollFeature(event));
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
@@ -470,6 +471,40 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content
+    });
+  }
+
+  /** 체계/기능 아이템 굴림 (판정 + 피해) 채팅 출력 */
+  async _rollFeature(event) {
+    event.preventDefault();
+    const id = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(id);
+    if (!item) return;
+    const sys = item.system;
+    const rollData = this.actor.getRollData();
+    let attackHtml = '';
+    let damageHtml = '';
+    const rolls = [];
+    if (sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]) {
+      const terms = ['1d20', `@${sys.rollAbility.value}.mod`];
+      if (this.actor.type !== 'master') terms.push('@grade');
+      const atk = await new Roll(terms.join(' + '), rollData).roll();
+      attackHtml = await atk.render();
+      rolls.push(atk);
+    }
+    if (sys.damage?.value) {
+      const dmg = await new Roll(sys.damage.value, rollData).roll();
+      damageHtml = await dmg.render();
+      rolls.push(dmg);
+    }
+    const content = await foundry.applications.handlebars.renderTemplate(
+      'systems/watersnake-grail-war/templates/chat/feature-card.html',
+      { actor: this.actor, item: item, system: sys, attackHtml, damageHtml }
+    );
+    await game.holygrailwar.ArchmageUtility.createChatMessage({
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
+      content: content,
+      rolls: rolls
     });
   }
 
