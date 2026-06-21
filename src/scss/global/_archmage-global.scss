@@ -10,6 +10,23 @@
   width: 0;
 }
 
+// 성배전쟁: feature 채팅 카드 버튼 (능력치 판정/피해/기타, 재굴림)
+.chat-card.feature-card,
+.chat-card.feature-roll-card {
+  .card-buttons {
+    margin-top: 4px;
+  }
+  button.feature-action,
+  button.feature-reroll {
+    width: 100%;
+    cursor: pointer;
+    line-height: 1.6;
+  }
+  .feature-card-footer {
+    margin-top: 6px;
+  }
+}
+
 // .flexrow {
 //   display: flex;
 //   flex-direction: row;

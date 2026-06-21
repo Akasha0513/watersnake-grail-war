@@ -14,7 +14,6 @@
             <ruby v-if="item.system.ruby && item.system.ruby.value">{{item.name}}<rt>{{item.system.ruby.value}}</rt></ruby><template v-else>{{item.name}}</template>
           </a>
           <span class="item-controls flexrow flexshrink">
-            <a v-if="hasRoll(item)" class="feature-roll" :data-item-id="item._id" data-tooltip="굴림"><i class="fas fa-dice-d20"></i></a>
             <a class="item-control item-edit" :data-item-id="item._id"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" :data-item-id="item._id"><i class="fas fa-trash"></i></a>
           </span>
@@ -55,9 +54,6 @@ export default {
     featuresByCategory(catKey) {
       const items = this.actor.items || [];
       return items.filter(i => i.type === 'feature' && (i.system.category?.value || '') === catKey);
-    },
-    hasRoll(item) {
-      return !!(item.system.rollAbility?.value || item.system.damage?.value);
     }
   }
 }

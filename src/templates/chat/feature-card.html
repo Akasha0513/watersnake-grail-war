@@ -1,19 +1,36 @@
-<div class="archmage chat-card">
+<div class="archmage chat-card feature-card"
+     data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}">
   <header class="card-header flexrow">
     <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
     <h3 class="ability-usage ability-usage--recharge">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}</h3>
   </header>
   <div class="card-content">
-    {{#if attackHtml}}
-      <div class="card-row"><div class="card-prop"><strong>판정</strong></div></div>
-      {{{attackHtml}}}
-    {{/if}}
-    {{#if damageHtml}}
-      <div class="card-row"><div class="card-prop"><strong>다이스</strong></div></div>
-      {{{damageHtml}}}
+    {{#if system.rank.value}}
+      <div class="card-row"><strong>랭크:</strong> {{system.rank.value}}</div>
     {{/if}}
     {{#if system.description.value}}
       <div class="card-row">{{{system.description.value}}}</div>
     {{/if}}
   </div>
+  {{#if hasTrait}}
+    <div class="card-buttons feature-card-buttons">
+      <button type="button" class="feature-action" data-roll-type="trait">
+        <i class="fas fa-dice-d20"></i> 능력치 판정{{#if traitLabel}} ({{traitLabel}}){{/if}}
+      </button>
+    </div>
+  {{/if}}
+  {{#if hasDamage}}
+    <div class="card-buttons feature-card-buttons">
+      <button type="button" class="feature-action" data-roll-type="damage">
+        <i class="fas fa-burst"></i> 피해 ({{system.damage.value}})
+      </button>
+    </div>
+  {{/if}}
+  {{#if hasMisc}}
+    <div class="card-buttons feature-card-buttons">
+      <button type="button" class="feature-action" data-roll-type="misc">
+        <i class="fas fa-dice"></i> 기타 ({{system.misc.value}})
+      </button>
+    </div>
+  {{/if}}
 </div>

@@ -1496,6 +1496,32 @@ function uuidv4() {
 }
 
 
+// 성배전쟁: feature 카드(능력치 판정/피해/기타) 버튼 굴림 + 재굴림 처리
+Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
+  const html = $(rawhtml);
+  const resolveActor = (card) => {
+    const tokenId = card.dataset.tokenId;
+    return (tokenId && game.actors.tokens[tokenId]) || game.actors.get(card.dataset.actorId);
+  };
+  const handle = async (card, rollType) => {
+    if (!card) return;
+    const actor = resolveActor(card);
+    if (!actor) return;
+    const item = actor.items.get(card.dataset.itemId);
+    if (!item) return;
+    await game.holygrailwar.ArchmageUtility.rollFeature(actor, item, rollType);
+  };
+  html.find('.feature-card .feature-action').on('click', async (ev) => {
+    ev.preventDefault();
+    await handle(ev.currentTarget.closest('.feature-card'), ev.currentTarget.dataset.rollType);
+  });
+  html.find('.feature-roll-card .feature-reroll').on('click', async (ev) => {
+    ev.preventDefault();
+    const card = ev.currentTarget.closest('.feature-roll-card');
+    await handle(card, card?.dataset.rollType);
+  });
+});
+
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   const html = $(rawhtml);
 

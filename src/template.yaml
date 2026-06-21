@@ -975,6 +975,10 @@ Item:
       type: String
       label: Damage
       value: ''
+    misc:
+      type: String
+      label: Misc Dice
+      value: ''
   power:
     templates:
       - standard

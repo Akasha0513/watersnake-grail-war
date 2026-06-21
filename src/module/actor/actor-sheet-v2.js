@@ -246,7 +246,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.item-delete', (event) => this._deleteItem(event));
     html.on('click', '.item-edit', (event) => this._editItem(event));
     html.on('click', '.feature-chat', (event) => this._postFeature(event));
-    html.on('click', '.feature-roll', (event) => this._rollFeature(event));
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
@@ -474,54 +473,29 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     await this.actor.createEmbeddedDocuments('Item', [itemData]);
   }
 
-  /** 체계/기능 아이템을 채팅에 출력 */
+  /** feature 아이템을 채팅에 버튼 카드로 출력 (굴림은 채팅 카드에서 수행) */
   async _postFeature(event) {
     event.preventDefault();
     const id = event.currentTarget.dataset.itemId;
     const item = this.actor.items.get(id);
     if (!item) return;
+    const sys = item.system;
+    const abilityNames = { str: '근력', con: '내구', dex: '민첩', int: '마력', cha: '행운', wis: '통찰' };
+    const tokenId = this.actor.token?.id ?? this.actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-card.html',
-      { actor: this.actor, item: item, system: item.system }
+      {
+        actor: this.actor, item: item, system: sys,
+        actorId: this.actor.id, tokenId: tokenId,
+        hasTrait: !!(sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]),
+        traitLabel: abilityNames[sys.rollAbility?.value] || sys.rollAbility?.value || '',
+        hasDamage: !!sys.damage?.value,
+        hasMisc: !!sys.misc?.value
+      }
     );
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content
-    });
-  }
-
-  /** 체계/기능 아이템 굴림 (판정 + 피해) 채팅 출력 */
-  async _rollFeature(event) {
-    event.preventDefault();
-    const id = event.currentTarget.dataset.itemId;
-    const item = this.actor.items.get(id);
-    if (!item) return;
-    const sys = item.system;
-    const rollData = this.actor.getRollData();
-    let attackHtml = '';
-    let damageHtml = '';
-    const rolls = [];
-    if (sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]) {
-      const terms = ['1d20', `@${sys.rollAbility.value}.mod`];
-      if (this.actor.type !== 'master') terms.push('@grade');
-      terms.push('@ed'); // 고조 주사위 (상한 적용된 값)
-      const atk = await new Roll(terms.join(' + '), rollData).roll();
-      attackHtml = await atk.render();
-      rolls.push(atk);
-    }
-    if (sys.damage?.value) {
-      const dmg = await new Roll(sys.damage.value, rollData).roll();
-      damageHtml = await dmg.render();
-      rolls.push(dmg);
-    }
-    const content = await foundry.applications.handlebars.renderTemplate(
-      'systems/watersnake-grail-war/templates/chat/feature-card.html',
-      { actor: this.actor, item: item, system: sys, attackHtml, damageHtml }
-    );
-    await game.holygrailwar.ArchmageUtility.createChatMessage({
-      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
-      content: content,
-      rolls: rolls
     });
   }
 

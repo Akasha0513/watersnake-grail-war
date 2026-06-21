@@ -1,0 +1,13 @@
+<div class="archmage chat-card feature-roll-card"
+     data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}" data-roll-type="{{rollType}}">
+  <header class="card-header flexrow">
+    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
+    <h3 class="ability-usage ability-usage--recharge">{{#if ruby}}<ruby>{{item.name}}<rt>{{ruby}}</rt></ruby>{{else}}{{item.name}}{{/if}} — {{label}}</h3>
+  </header>
+  <div class="card-content">
+    {{{rollHtml}}}
+  </div>
+  <footer class="card-buttons feature-card-footer">
+    <button type="button" class="feature-reroll"><i class="fas fa-rotate"></i> 재굴림</button>
+  </footer>
+</div>

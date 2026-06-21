@@ -63,6 +63,54 @@ export class ArchmageUtility {
     return msg;
   }
 
+  /**
+   * 성배전쟁: feature 아이템 굴림을 채팅에 출력 (능력치 판정/피해/기타).
+   * 시트의 🎲가 아니라 채팅 카드 버튼/재굴림에서 호출된다.
+   *
+   * @param {object} actor   굴리는 액터
+   * @param {object} item    feature 아이템
+   * @param {string} rollType 'trait' | 'damage' | 'misc'
+   */
+  static async rollFeature(actor, item, rollType) {
+    if (!actor || !item) return;
+    const sys = item.system;
+    const rollData = actor.getRollData();
+    let formula = '';
+    let label = '';
+    if (rollType === 'trait') {
+      if (!(sys.rollAbility?.value && actor.system.abilities?.[sys.rollAbility.value])) return;
+      const terms = ['1d20', `@${sys.rollAbility.value}.mod`];
+      if (actor.type !== 'master') terms.push('@grade');
+      terms.push('@ed'); // 고조 주사위 (상한 적용된 값)
+      formula = terms.join(' + ');
+      label = '판정';
+    }
+    else if (rollType === 'damage') {
+      if (!sys.damage?.value) return;
+      formula = sys.damage.value;
+      label = '피해';
+    }
+    else if (rollType === 'misc') {
+      if (!sys.misc?.value) return;
+      formula = sys.misc.value;
+      label = '기타';
+    }
+    else return;
+
+    const roll = await new Roll(formula, rollData).roll();
+    const rollHtml = await roll.render();
+    const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
+    const content = await foundry.applications.handlebars.renderTemplate(
+      'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
+      { actor, item, rollHtml, label, rollType, actorId: actor.id, tokenId, ruby: sys.ruby?.value }
+    );
+    return ArchmageUtility.createChatMessage({
+      speaker: ArchmageUtility.getSpeaker(actor),
+      content: content,
+      rolls: [roll]
+    });
+  }
+
   static async show3DDiceForRoll(roll, chatData = null,
                                  chatMsgID = null, user = null, sync = true) {
     if (!roll || !game.dice3d) {
@@ -110,12 +158,9 @@ export class ArchmageUtility {
       if (round == null) {
         round = combat.round;
       }
-      // Format it for min/max values.
+      // 자작룰: 고조 주사위에 상한 없음. 하한만 0으로 유지.
       if (round < 1) {
         result = 0;
-      }
-      else if (round > 6) {
-        result = 6;
       }
       else {
         result = round - 1;
@@ -125,16 +170,8 @@ export class ArchmageUtility {
       let edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
       if (edOffset) {
         result = result + edOffset;
-
-        // If the escalation die isn't unlimited, set a min/max.
-        if (!game.settings.get('watersnake-grail-war', 'unboundEscDie')) {
-          if (result > 6) {
-            result = 6;
-          }
-          else if (result < 0) {
-            result = 0;
-          }
-        }
+        // 상한 없음. 음수만 방지.
+        if (result < 0) result = 0;
       }
     }
 
@@ -164,26 +201,18 @@ export class ArchmageUtility {
         round = combat.round;
       }
 
-      // Establish limits on the current round.
-      if (round > 6) round = 6;
+      // 하한만 유지 (음수 라운드 방지).
       if (round < 0) round = 0;
 
       // Retrieve the escalation die offset for this combat.
       let edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
 
-      // By default, limit how far the escalation die can be adjusted.
-      if (!game.settings.get('watersnake-grail-war', 'unboundEscDie')) {
-        if (isIncrease) {
-          if (round + edOffset < 7) edOffset++;
-        }
-        else {
-          if (round + edOffset > 0) edOffset--;
-        }
+      // 자작룰: 고조 상한 없음. 증가는 무제한, 감소는 합계 0까지만.
+      if (isIncrease) {
+        edOffset++;
       }
-      // If it's unbound, unlimited power!
       else {
-        if (isIncrease) edOffset++;
-        else edOffset--;
+        if (round + edOffset > 0) edOffset--;
       }
 
       // Update the escalation die offset flag.
