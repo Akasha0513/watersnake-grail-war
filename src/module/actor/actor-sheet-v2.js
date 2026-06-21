@@ -284,6 +284,65 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.feat-uses-rollable', (event) => this._updateFeatQuantity(event, true));
     html.on('contextmenu', '.feat-uses-rollable', (event) => this._updateFeatQuantity(event, false));
     html.on('click', '.feat-pip', (event) => this._updatePips(event));
+
+    // 성배전쟁: 령주(점), 신방 능력치 전환(우클릭), 배경 추가/삭제
+    html.on('click', '.command-seal', (event) => this._updateCommandSeals(event));
+    html.on('contextmenu', '.defense--pd', (event) => this._cyclePdAbility(event));
+    html.on('click', '.background-add', (event) => this._addBackground(event));
+    html.on('click', '.background-delete', (event) => this._removeBackground(event));
+    html.on('contextmenu', '.list-item--abilities', (event) => this._cycleRerollPlus(event));
+  }
+
+  /** 능력치 +/++ (한 씬 재굴림 횟수): 우클릭으로 0→＋→＋＋ 순환 */
+  async _cycleRerollPlus(event) {
+    event.preventDefault();
+    const key = event.currentTarget.dataset.key;
+    if (!key || !this.actor.system.abilities?.[key]) return;
+    const cur = Number(this.actor.system.abilities[key].rerollPlus) || 0;
+    const next = (cur + 1) % 3;
+    await this.actor.update({ [`system.abilities.${key}.rerollPlus`]: next });
+  }
+
+  /** 령주: 클릭한 점까지 소진/회복 토글 */
+  async _updateCommandSeals(event) {
+    event.preventDefault();
+    const n = Number(event.currentTarget.dataset.seal);
+    const cur = Number(this.actor.system.details?.commandSeals?.value) || 0;
+    const next = (n <= cur) ? n - 1 : n;
+    await this.actor.update({ 'system.details.commandSeals.value': next });
+  }
+
+  /** 신방 능력치: 자동(큰 값) → 내구 → 민첩 순환 (우클릭) */
+  async _cyclePdAbility(event) {
+    event.preventDefault();
+    const order = ['auto', 'con', 'dex'];
+    const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
+    const next = order[(order.indexOf(cur) + 1) % order.length];
+    await this.actor.update({ 'system.attributes.pd.defenseAbility': next });
+  }
+
+  /** 배경 추가: 첫 비활성 슬롯 활성화 (여러 번 클릭으로 여러 개 추가) */
+  async _addBackground(event) {
+    event.preventDefault();
+    for (let [k, v] of Object.entries(this.actor.system.backgrounds)) {
+      if (!v.isActive?.value) {
+        await this.actor.update({ [`system.backgrounds.${k}.isActive.value`]: true });
+        return;
+      }
+    }
+    ui.notifications?.warn('배경 슬롯을 모두 사용했습니다.');
+  }
+
+  /** 배경 삭제: 해당 슬롯 비활성화 + 값 초기화 */
+  async _removeBackground(event) {
+    event.preventDefault();
+    const key = event.currentTarget.dataset.key;
+    if (!key) return;
+    await this.actor.update({
+      [`system.backgrounds.${key}.isActive.value`]: false,
+      [`system.backgrounds.${key}.name.value`]: '',
+      [`system.backgrounds.${key}.bonus.value`]: 0
+    });
   }
 
   /**

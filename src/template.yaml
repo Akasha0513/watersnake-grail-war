@@ -220,36 +220,42 @@ Actor:
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       dex:
         type: Number
         label: Dexterity
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       con:
         type: Number
         label: Constitution
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       int:
         type: Number
         label: Intelligence
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       wis:
         type: Number
         label: Wisdom
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       cha:
         type: Number
         label: Charisma
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
     attributes:
       keyModifier:
         mod1: str
@@ -528,36 +534,42 @@ Actor:
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       dex:
         type: Number
         label: Dexterity
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       con:
         type: Number
         label: Constitution
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       int:
         type: Number
         label: Intelligence
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       wis:
         type: Number
         label: Wisdom
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
       cha:
         type: Number
         label: Charisma
         value: 10
         min: 3
         mod: 0
+        rerollPlus: 0
     attributes:
       keyModifier:
         mod1: str

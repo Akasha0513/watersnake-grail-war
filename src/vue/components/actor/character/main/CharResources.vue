@@ -88,7 +88,7 @@
     <section v-if="actor.type === 'master'" class="unit unit--command-seals">
       <h2 class="unit-title">령주</h2>
       <div class="resource flexrow command-seals">
-        <a v-for="n in 3" :key="n" class="command-seal" @click="toggleSeal(n)">{{ n <= commandSeals ? '●' : '○' }}</a>
+        <a v-for="n in 3" :key="n" class="command-seal" :data-seal="n">{{ n <= commandSeals ? '●' : '○' }}</a>
       </div>
     </section>
     <div class="resource-divider" v-if="(resourceCount > 1 && customResourceCount > 0) || customResourceCount > 1"></div>
@@ -195,11 +195,6 @@ export default {
         this.rhythm = this.actor.system.resources.perCombat?.rhythm?.current;
         this.bravado = this.actor.system.resources.perCombat?.bravado?.current;
       }
-    },
-    toggleSeal(n) {
-      const cur = this.commandSeals;
-      const next = (n <= cur) ? n - 1 : n;
-      this.actor.update({ 'system.details.commandSeals.value': next });
     }
   },
   watch: {

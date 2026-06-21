@@ -50,7 +50,7 @@
       <div class="unit unit--defenses">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
         <div class="defenses grid grid-2col">
-          <div class="defense defense--pd flexcol" @contextmenu.prevent="cyclePdAbility">
+          <div class="defense defense--pd flexcol">
             <span class="defense-value">{{actor.system.attributes.pd.value}}</span>
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.pd.key')}}</h3>
           </div>
@@ -126,10 +126,6 @@ export default {
     secondEdition() {
       return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     },
-    pdAbilityLabel() {
-      const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
-      return { auto: '자동(내구·민첩 중 큰 값)', con: '내구', dex: '민첩' }[cur];
-    },
     deathSaves() {
       const deathFails = this.actor.system.attributes.saves.deathFails;
       const max = parseInt(deathFails.max) || 4;
@@ -186,12 +182,6 @@ export default {
         value: 6,
         bonus: this.actor.system.attributes.disengageBonus
       };
-    },
-    cyclePdAbility() {
-      const order = ['auto', 'con', 'dex'];
-      const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
-      const next = order[(order.indexOf(cur) + 1) % order.length];
-      this.actor.update({ 'system.attributes.pd.defenseAbility': next });
     }
   },
   watch: {

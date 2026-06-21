@@ -8,8 +8,10 @@
         <span class="background-sign">+</span>
         <input type="number" v-bind:name="concat('system.backgrounds.', index, '.bonus.value')" class="background-bonus" v-model="item.bonus.value"/>
         <TextareaGrow :name="`system.backgrounds.${index}.name.value`" :value="item.name.value" classes="background-name" :disable-paste-parsing="true"/>
+        <a class="background-delete" :data-key="index" data-tooltip="배경 삭제"><i class="fas fa-times"></i></a>
       </li>
     </ul>
+    <a class="background-add"><i class="fas fa-plus"></i> 배경 추가</a>
   </section>
 </template>
 
@@ -33,7 +35,7 @@ export default {
     TextareaGrow
   },
   computed: {
-    // 설정 탭에서 활성화한 배경만 표시 (추가/삭제는 설정 탭 토글로)
+    // 활성화된 배경만 표시 (추가/삭제는 시트 리스너가 처리)
     backgrounds() {
       let filteredBackgrounds = {};
       for (let [k,v] of Object.entries(this.actor.system.backgrounds)) {
