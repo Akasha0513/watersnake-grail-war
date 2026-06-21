@@ -290,17 +290,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('contextmenu', '.defense--pd', (event) => this._cyclePdAbility(event));
     html.on('click', '.background-add', (event) => this._addBackground(event));
     html.on('click', '.background-delete', (event) => this._removeBackground(event));
-    html.on('contextmenu', '.list-item--abilities', (event) => this._cycleRerollPlus(event));
-  }
-
-  /** 능력치 +/++ (한 씬 재굴림 횟수): 우클릭으로 0→＋→＋＋ 순환 */
-  async _cycleRerollPlus(event) {
-    event.preventDefault();
-    const key = event.currentTarget.dataset.key;
-    if (!key || !this.actor.system.abilities?.[key]) return;
-    const cur = Number(this.actor.system.abilities[key].rerollPlus) || 0;
-    const next = (cur + 1) % 3;
-    await this.actor.update({ [`system.abilities.${key}.rerollPlus`]: next });
   }
 
   /** 령주: 클릭한 점까지 소진/회복 토글 */
