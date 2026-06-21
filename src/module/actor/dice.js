@@ -486,8 +486,13 @@ export class DiceArchmage {
     situationalBonus,
     abilityKey,
     backgroundKey,
-    rollMode
+    rollMode,
+    useLuck = false,
+    isReroll = false
   }) {
+    // 굴림에 실제로 쓰는 능력치: 행운 재굴림이면 행운(cha)으로 대체
+    const rollAbilityKey = useLuck ? 'cha' : abilityKey;
+
     // Construct the terms for the roll
     // First: the d20
     const terms = []
@@ -500,9 +505,9 @@ export class DiceArchmage {
     }
 
     // Next: the ability modifier
-    const ability = actor.system.abilities[abilityKey]
+    const ability = actor.system.abilities[rollAbilityKey]
     if (ability) {
-      terms.push(`@${abilityKey}.mod`)
+      terms.push(`@${rollAbilityKey}.mod`)
     }
 
     // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
@@ -515,8 +520,8 @@ export class DiceArchmage {
     }
 
     // Next: the item bonus
-    if (ability.bonus) {
-      terms.push(`@${abilityKey}.bonus`)
+    if (ability && ability.bonus) {
+      terms.push(`@${rollAbilityKey}.bonus`)
     }
 
     // Next: the situational bonus
@@ -533,6 +538,21 @@ export class DiceArchmage {
     const roll = new Roll(terms.join(' + '), actor.getRollData())
     await roll.roll()
 
+    // 표시 이름 (한글 라벨)
+    let displayName;
+    if (useLuck) {
+      displayName = `${game.i18n.localize('ARCHMAGE.cha.label')} 재굴림`;
+    } else {
+      displayName = abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : '';
+      if (isReroll && displayName) displayName = `재굴림 · ${displayName}`;
+    }
+
+    // 재굴림 남은 횟수 (원래 능력치 기준 + 행운 풀)
+    const origAbl = actor.system.abilities[abilityKey] || {};
+    const abilityLeft = Math.max(0, (Number(origAbl.rerollPlus) || 0) - (Number(origAbl.rerollUsed) || 0));
+    const chaPlus = Number(actor.system.abilities.cha?.rerollPlus) || 0;
+    const luckLeft = Math.max(0, (1 + chaPlus) - (Number(actor.system.attributes.luckRerollUsed) || 0));
+
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -547,12 +567,21 @@ export class DiceArchmage {
         actor: actor,
         tokenId: actor.token?.id ?? null,
         ability: {
-          name: ability?.label,
+          name: displayName,
           bonus: ability?.mod ?? 0
         },
         background: {
           name: background?.name?.value,
           bonus: background?.bonus?.value ?? 0
+        },
+        reroll: {
+          actorId: actor.id,
+          abilityKey: abilityKey || '',
+          backgroundKey: backgroundKey || '',
+          situational: situationalBonus || 0,
+          abilityLeft: abilityKey ? abilityLeft : 0,
+          luckLeft: luckLeft,
+          showLuck: abilityKey !== 'cha'
         },
         data: chatData
       }

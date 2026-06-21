@@ -1,34 +1,43 @@
 <div class="archmage chat-card grail-roll-card">
   <header class="card-header flexrow">
     <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
-    <h3 class="ability-usage ability-usage--recharge">{{numberFormat ability.bonus decimals=0 sign=true}} {{ability.name}}</h3>
+    <h3 class="ability-usage ability-usage--recharge">{{ability.name}} 판정</h3>
   </header>
   <div class="card-content">
-    {{#if background.name }}
-      <h3>{{background.name}}</h3>
+    {{#if background.name}}
+      <div class="grail-sub">{{background.name}} ({{numberFormat background.bonus decimals=0 sign=true}})</div>
     {{/if}}
-    <div class="dice-roll">
-      <div class="dice-result">
-          <div class="dice-formula">{{data.roll.formula}}</div>
-          <div class="dice-tooltip">
-            <section class="tooltip-part">
-              <div class="dice">
-                  <header class="part-header flexrow">
-                      <span class="part-formula">{{data.roll.formula}}</span>             
-                      <span class="part-total">{{data.roll.total}}</span>
-                  </header>
-                  <ol class="dice-rolls">
-                    {{#each data.roll.terms as |term i|}}
-                      {{#each term.results as |result r|}}
-                      <li class="roll die d{{term.faces}}">{{result.result}}</li>
-                      {{/each}}
-                    {{/each}}
-                  </ol>
-              </div>
-            </section>
-          </div>
-          <h4 class="dice-total">{{data.roll.total}}</h4>
+
+    <div class="grail-section">
+      <div class="grail-section-label">굴림</div>
+      <div class="grail-dice-row">
+        {{#each data.roll.terms as |term i|}}{{#each term.results as |result r|}}<span class="grail-die{{#unless result.active}} is-discarded{{/unless}}">{{result.result}}</span>{{/each}}{{/each}}
       </div>
     </div>
+
+    <div class="grail-section grail-section--result">
+      <div class="grail-section-label">결과</div>
+      <div class="grail-total">{{data.roll.total}}</div>
+      <div class="grail-formula">{{data.roll.formula}}</div>
+    </div>
+
+    {{#if reroll}}
+    <div class="grail-reroll-buttons">
+      {{#if reroll.abilityLeft}}
+      <button type="button" class="grail-reroll-btn" data-reroll="ability"
+        data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
+        data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
+        <i class="fas fa-dice-d20"></i> 재굴림 {{reroll.abilityLeft}}
+      </button>
+      {{/if}}
+      {{#if reroll.showLuck}}{{#if reroll.luckLeft}}
+      <button type="button" class="grail-reroll-btn grail-reroll-btn--luck" data-reroll="luck"
+        data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
+        data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
+        <i class="fas fa-clover"></i> 행운 {{reroll.luckLeft}}
+      </button>
+      {{/if}}{{/if}}
+    </div>
+    {{/if}}
   </div>
 </div>

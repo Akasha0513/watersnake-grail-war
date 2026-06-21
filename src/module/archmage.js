@@ -1499,6 +1499,43 @@ function uuidv4() {
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   const html = $(rawhtml);
 
+  // 성배전쟁: 능력치/행운 재굴림 버튼
+  html.find('.grail-reroll-btn').on('click', async (event) => {
+    event.preventDefault();
+    const btn = event.currentTarget;
+    const actor = game.actors.get(btn.dataset.actorId);
+    if (!actor) return;
+    const abilityKey = btn.dataset.ability || null;
+    const backgroundKey = btn.dataset.background || null;
+    const situational = Number(btn.dataset.situational) || 0;
+    const useLuck = btn.dataset.reroll === 'luck';
+
+    // 남은 횟수 검증 + 카운터 증가
+    if (useLuck) {
+      const chaPlus = Number(actor.system.abilities.cha?.rerollPlus) || 0;
+      const used = Number(actor.system.attributes.luckRerollUsed) || 0;
+      if (used >= 1 + chaPlus) { ui.notifications.warn('행운 재굴림 횟수를 모두 사용했습니다.'); return; }
+      await actor.update({ 'system.attributes.luckRerollUsed': used + 1 });
+    } else {
+      const abl = actor.system.abilities[abilityKey];
+      if (!abl) return;
+      const used = Number(abl.rerollUsed) || 0;
+      if (used >= (Number(abl.rerollPlus) || 0)) { ui.notifications.warn('재굴림 횟수를 모두 사용했습니다.'); return; }
+      await actor.update({ [`system.abilities.${abilityKey}.rerollUsed`]: used + 1 });
+    }
+
+    await DiceArchmage._completeBackgroundRoll({
+      actor,
+      selection: 'normal',
+      situationalBonus: situational,
+      abilityKey,
+      backgroundKey,
+      rollMode: game.settings.get('core', 'rollMode'),
+      useLuck,
+      isReroll: true
+    });
+  });
+
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
