@@ -292,6 +292,22 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('contextmenu', '.defense--pd', (event) => this._cyclePdAbility(event));
     html.on('click', '.background-add', (event) => this._addBackground(event));
     html.on('click', '.background-delete', (event) => this._removeBackground(event));
+    html.on('click', '.background-die', (event) => this._rollBackgroundDie(event));
+  }
+
+  /** 배경: 1d(배경 수치) 난수 굴림 */
+  async _rollBackgroundDie(event) {
+    event.preventDefault();
+    const key = event.currentTarget.dataset.key;
+    const bg = this.actor.system.backgrounds?.[key];
+    if (!bg) return;
+    const val = Number(bg.bonus?.value) || 0;
+    if (val < 1) { ui.notifications?.warn('배경 수치가 1 이상이어야 합니다.'); return; }
+    const roll = await new Roll(`1d${val}`).roll();
+    await roll.toMessage({
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
+      flavor: `${bg.name?.value || '배경'} — 1d${val}`
+    });
   }
 
   /** 령주: 클릭한 점까지 소진/회복 토글 */
@@ -488,6 +504,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     if (sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]) {
       const terms = ['1d20', `@${sys.rollAbility.value}.mod`];
       if (this.actor.type !== 'master') terms.push('@grade');
+      terms.push('@ed'); // 고조 주사위 (상한 적용된 값)
       const atk = await new Roll(terms.join(' + '), rollData).roll();
       attackHtml = await atk.render();
       rolls.push(atk);

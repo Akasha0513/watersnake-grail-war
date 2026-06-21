@@ -21,22 +21,23 @@
 		</fieldset>
 
 		<fieldset class="flexcol" style="flex-grow: 2;">
-			<legend>Background</legend>
-
-			<label class="flexrow" style="align-items: center; gap: 0.5rem;">
-				<input style="flex-grow: 0;" type="radio" name="background" value="" checked>
-				<span>{{localize 'ARCHMAGE.noneOption'}}</span>
-			</label>
+			<legend>배경 (여러 개 합산)</legend>
 
 			{{#each backgrounds as |background|}}
-			<label class="flexrow" style="align-items: center; gap: 0.5rem;">
-				<input style="flex-grow: 0;" type="radio" name="background" value="{{background.key}}" {{#if
-					background.checked}}checked{{/if}}>
-				<span>
-					{{background.bonus}}
-					{{background.label}}
-				</span>
-			</label>
+			<div class="flexrow" style="align-items: center; gap: 0.5rem;">
+				<label class="flexrow" style="align-items: center; gap: 0.5rem; flex-grow: 1;">
+					<input style="flex-grow: 0;" type="checkbox" name="bg-{{background.key}}" value="{{background.key}}" {{#if
+						background.checked}}checked{{/if}}>
+					<span>
+						{{background.bonus}}
+						{{background.label}}
+					</span>
+				</label>
+				<label class="flexrow" style="align-items: center; gap: 0.25rem; flex-grow: 0;">
+					<input style="flex-grow: 0;" type="checkbox" name="bgrand-{{background.key}}">
+					<span>난수</span>
+				</label>
+			</div>
 			{{/each}}
 		</fieldset>
 	</div>

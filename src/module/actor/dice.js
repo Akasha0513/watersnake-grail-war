@@ -392,12 +392,22 @@ export class DiceArchmage {
       }
     )
 
-    const extractFormData = form => ({
-      situationalBonus: form.bonus.value,
-      abilityKey: form.ability.value,
-      backgroundKey: form.background.value,
-      rollMode: form.rollMode.value
-    })
+    const extractFormData = form => {
+      const backgrounds = [];
+      for (const el of form.elements) {
+        if (el.name && el.name.startsWith('bg-') && el.checked) {
+          const key = el.value;
+          const randEl = form.elements[`bgrand-${key}`];
+          backgrounds.push({ key, random: !!(randEl && randEl.checked) });
+        }
+      }
+      return {
+        situationalBonus: form.bonus.value,
+        abilityKey: form.ability.value,
+        backgrounds: backgrounds,
+        rollMode: form.rollMode.value
+      };
+    }
 
     return new foundry.applications.api.DialogV2({
       window: {
@@ -485,7 +495,7 @@ export class DiceArchmage {
     selection,
     situationalBonus,
     abilityKey,
-    backgroundKey,
+    backgrounds = [],
     rollMode
   }) {
     // Construct the terms for the roll
@@ -508,11 +518,22 @@ export class DiceArchmage {
     // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
     if (actor.type !== 'master') terms.push("@grade")
 
-    // Next: the background bonus
-    const background = actor.system.backgrounds[backgroundKey]
-    if (background) {
-      terms.push(`@backgrounds.${backgroundKey}.bonus.value`)
+    // Next: the background bonuses (여러 개 합산, 난수 선택 가능)
+    const bgLabels = [];
+    for (const bg of (backgrounds || [])) {
+      const b = actor.system.backgrounds?.[bg.key];
+      if (!b) continue;
+      const val = Number(b.bonus?.value) || 0;
+      if (val < 1) continue;
+      if (bg.random) {
+        terms.push(`1d${val}`);
+        bgLabels.push(`${b.name?.value || '배경'}(1d${val})`);
+      } else {
+        terms.push(`${val}`);
+        bgLabels.push(`${b.name?.value || '배경'} +${val}`);
+      }
     }
+    const backgroundLabel = bgLabels.join(', ');
 
     // Next: the item bonus
     if (ability && ability.bonus) {
@@ -551,8 +572,7 @@ export class DiceArchmage {
           bonus: ability?.mod ?? 0
         },
         background: {
-          name: background?.name?.value,
-          bonus: background?.bonus?.value ?? 0
+          name: backgroundLabel
         },
         data: chatData
       }

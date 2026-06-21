@@ -8,6 +8,7 @@
         <span class="background-sign">+</span>
         <input type="number" v-bind:name="concat('system.backgrounds.', index, '.bonus.value')" class="background-bonus" v-model="item.bonus.value"/>
         <TextareaGrow :name="`system.backgrounds.${index}.name.value`" :value="item.name.value" classes="background-name" :disable-paste-parsing="true"/>
+        <a class="background-die" :data-key="index" data-tooltip="1d(배경 수치) 굴림"><i class="fas fa-dice-d6"></i></a>
         <a class="background-delete" :data-key="index" data-tooltip="배경 삭제"><i class="fas fa-times"></i></a>
       </li>
     </ul>

@@ -345,7 +345,9 @@ export class ActorArchmage extends Actor {
         // In 2e beta the bonus to disengage also applies to initiative
         incrInit += data.attributes.saves.disengageBonus;
       }
-      data.attributes.init.mod = statInit + data.attributes.init.value + data.attributes.level.value + incrInit;
+      // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트만, 마스터 0)
+      let gradeInit = (actorData.type !== 'master') ? (Number(data.attributes.grade?.value) || 0) : 0;
+      data.attributes.init.mod = statInit + data.attributes.init.value + gradeInit + incrInit;
     }
     else if (actorData.type === 'npc') {
       data.attributes.init.mod = data.attributes.init.value;
@@ -750,9 +752,13 @@ export class ActorArchmage extends Actor {
     delete data.init;
     for (let [k, v] of Object.entries(newData)) {
       switch (k) {
-        case 'escalation':
-          data.ed = v.value;
+        case 'escalation': {
+          // 고조 주사위 상한: 서번트 ≤ 영령의 급 / 마스터 = 고조÷3(내림)
+          const edRaw = Number(v.value) || 0;
+          if (actor.type === 'master') data.ed = Math.floor(edRaw / 3);
+          else data.ed = Math.min(edRaw, Number(data.attributes?.grade?.value) || 0);
           break;
+        }
 
         case 'init':
           data.init = v.mod;
