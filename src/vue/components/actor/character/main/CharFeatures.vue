@@ -28,25 +28,26 @@
 import { localize } from '@/methods/Helpers';
 export default {
   name: 'CharFeatures',
-  props: ['actor'],
+  props: ['actor', 'group'],
   setup() {
     return { localize };
   },
   data() {
     return {
       categories: [
-        { key: 'system', label: '체계', types: ['master'] },
-        { key: 'action', label: '액션', types: ['master'] },
-        { key: 'equip', label: '예장', types: ['master'] },
-        { key: 'skill', label: '스킬', types: ['character'] },
-        { key: 'variable', label: '가변 기능', types: ['character'] },
-        { key: 'np', label: '보구', types: ['character'] }
+        { key: 'system', label: '체계', types: ['master'], group: 'powers' },
+        { key: 'action', label: '액션', types: ['master'], group: 'powers' },
+        { key: 'equip', label: '예장', types: ['master'], group: 'inventory' },
+        { key: 'skill', label: '스킬', types: ['character'], group: 'powers' },
+        { key: 'variable', label: '가변 기능', types: ['character'], group: 'powers' },
+        { key: 'np', label: '보구', types: ['character'], group: 'inventory' }
       ]
     };
   },
   computed: {
     visibleCategories() {
-      return this.categories.filter(c => c.types.includes(this.actor.type));
+      const grp = this.group || 'powers';
+      return this.categories.filter(c => c.types.includes(this.actor.type) && c.group === grp);
     }
   },
   methods: {

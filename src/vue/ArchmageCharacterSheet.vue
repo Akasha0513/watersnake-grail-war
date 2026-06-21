@@ -56,6 +56,7 @@
             </Tab>
             <!-- Inventory tab -->
             <Tab group="primary" :tab="tabs.primary.inventory">
+              <CharFeatures :actor="actor" group="inventory"/>
               <CharInventory :actor="actor" :tab="tabs.primary.inventory" :flags="flags"/>
             </Tab>
             <!-- Effects tab -->
