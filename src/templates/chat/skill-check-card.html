@@ -23,20 +23,11 @@
 
     {{#if reroll}}
     <div class="grail-reroll-buttons">
-      {{#if reroll.abilityLeft}}
-      <button type="button" class="grail-reroll-btn" data-reroll="ability"
+      <button type="button" class="grail-reroll-btn" data-reroll="luck"
         data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
         data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
-        <i class="fas fa-dice-d20"></i> 재굴림 {{reroll.abilityLeft}}
+        <i class="fas fa-dice-d20"></i> 재굴림
       </button>
-      {{/if}}
-      {{#if reroll.showLuck}}{{#if reroll.luckLeft}}
-      <button type="button" class="grail-reroll-btn grail-reroll-btn--luck" data-reroll="luck"
-        data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
-        data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
-        <i class="fas fa-clover"></i> 행운 {{reroll.luckLeft}}
-      </button>
-      {{/if}}{{/if}}
     </div>
     {{/if}}
   </div>

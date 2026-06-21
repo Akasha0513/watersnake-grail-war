@@ -547,12 +547,6 @@ export class DiceArchmage {
       if (isReroll && displayName) displayName = `재굴림 · ${displayName}`;
     }
 
-    // 재굴림 남은 횟수 (원래 능력치 기준 + 행운 풀)
-    const origAbl = actor.system.abilities[abilityKey] || {};
-    const abilityLeft = Math.max(0, (Number(origAbl.rerollPlus) || 0) - (Number(origAbl.rerollUsed) || 0));
-    const chaPlus = Number(actor.system.abilities.cha?.rerollPlus) || 0;
-    const luckLeft = Math.max(0, (1 + chaPlus) - (Number(actor.system.attributes.luckRerollUsed) || 0));
-
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -578,10 +572,7 @@ export class DiceArchmage {
           actorId: actor.id,
           abilityKey: abilityKey || '',
           backgroundKey: backgroundKey || '',
-          situational: situationalBonus || 0,
-          abilityLeft: abilityKey ? abilityLeft : 0,
-          luckLeft: luckLeft,
-          showLuck: abilityKey !== 'cha'
+          situational: situationalBonus || 0
         },
         data: chatData
       }

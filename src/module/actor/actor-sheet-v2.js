@@ -290,18 +290,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('contextmenu', '.defense--pd', (event) => this._cyclePdAbility(event));
     html.on('click', '.background-add', (event) => this._addBackground(event));
     html.on('click', '.background-delete', (event) => this._removeBackground(event));
-    html.on('click', '.grail-reroll-reset', (event) => this._resetRerolls(event));
-  }
-
-  /** 재굴림 횟수 수동 리셋: 모든 능력치 rerollUsed + 행운 재굴림 카운터 0으로 */
-  async _resetRerolls(event) {
-    event.preventDefault();
-    const update = { 'system.attributes.luckRerollUsed': 0 };
-    for (let key of Object.keys(this.actor.system.abilities)) {
-      update[`system.abilities.${key}.rerollUsed`] = 0;
-    }
-    await this.actor.update(update);
-    ui.notifications?.info('재굴림 횟수를 리셋했습니다.');
   }
 
   /** 령주: 클릭한 점까지 소진/회복 토글 */

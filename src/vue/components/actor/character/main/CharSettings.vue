@@ -63,7 +63,6 @@
               <option :value="2">＋＋</option>
             </select>
           </div>
-          <button type="button" class="grail-reroll-reset">재굴림 횟수 리셋</button>
         </div>
         <div class="sub-unit sub-unit--hp-adjustment flexrow">
           <strong class="unit-subtitle">HP 보정</strong>
