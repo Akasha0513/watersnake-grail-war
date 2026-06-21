@@ -658,10 +658,10 @@ export class ActorArchmage extends Actor {
       let spVal;
       switch (data.attributes.sp.formula) {
         case 'con': spVal = spCon; break;            // 내구 (=(내구+내구)÷2)
-        case 'magdex': spVal = (spMag + spDex) / 2; break; // 마술: 마력+민첩 ÷2
-        case 'strmag': spVal = (spStr + spMag) / 2; break; // 마술: 근력+마력 ÷2
-        case 'mag': spVal = spMag; break;            // 마술: 마력 (내구 대체)
-        default: spVal = (spStr + spDex) / 2;        // strdex: 근력+민첩 ÷2
+        case 'magdex': spVal = (spMag + spDex) / 2; break; // 마술: (마력+민첩)÷2
+        case 'strmag': spVal = (spStr + spMag) / 2; break; // 마술: (근력+마력)÷2
+        case 'magcon': spVal = (spMag + spCon) / 2; break; // 마술: (마력+내구)÷2 (내구 한쪽 대체)
+        default: spVal = (spStr + spDex) / 2;        // strdex: (근력+민첩)÷2
       }
       data.attributes.sp.max = Math.floor(spVal);
     }

@@ -189,7 +189,7 @@ export default {
         { value: 'con', label: '내구' },
         { value: 'magdex', label: '마술: (마력+민첩)÷2' },
         { value: 'strmag', label: '마술: (근력+마력)÷2' },
-        { value: 'mag', label: '마술: 마력' },
+        { value: 'magcon', label: '마술: (마력+내구)÷2' },
       ]
     }
   },
