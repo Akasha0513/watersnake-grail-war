@@ -36,6 +36,61 @@
   white-space: nowrap;
 }
 
+// 성배전쟁: feature 편집시트 — 왼쪽 식별 컬럼 + 오른쪽 탭(설명/속성/이펙트)
+.archmage.feature-sheet {
+  .feature-content {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+  }
+  .feature-sidebar {
+    flex: 0 0 40%;
+    overflow: auto;
+    padding-right: 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .feature-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .feature-main .sheet-tabs-content {
+    flex: 1;
+    height: auto;
+    overflow: auto;
+  }
+  .feature-fields {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+
+      label {
+        flex: 0 0 78px;
+        line-height: 26px;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        flex: 1;
+      }
+    }
+  }
+  .feature-empty-note {
+    opacity: 0.6;
+    font-style: italic;
+  }
+}
+
 // .flexrow {
 //   display: flex;
 //   flex-direction: row;

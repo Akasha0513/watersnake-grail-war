@@ -1,4 +1,4 @@
-<form class="archmage item-sheet action-sheet {{cssClass}}" autocomplete="off">
+<form class="archmage item-sheet action-sheet feature-sheet {{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
         <h1>
@@ -6,45 +6,59 @@
         </h1>
     </header>
 
-    <article class="sheet-content">
-        <section class="sheet-body">
+    <article class="sheet-content feature-content">
+        {{!-- 왼쪽: 식별 정보 --}}
+        <aside class="feature-sidebar">
+            <ol class="feature-fields">
+                <li>
+                    <label>분류</label>
+                    <select name="system.category.value">
+                        <option value="system" {{#if (eq system.category.value "system")}}selected{{/if}}>체계</option>
+                        <option value="action" {{#if (eq system.category.value "action")}}selected{{/if}}>액션</option>
+                        <option value="equip" {{#if (eq system.category.value "equip")}}selected{{/if}}>예장</option>
+                        <option value="skill" {{#if (eq system.category.value "skill")}}selected{{/if}}>스킬</option>
+                        <option value="variable" {{#if (eq system.category.value "variable")}}selected{{/if}}>가변 기능</option>
+                        <option value="np" {{#if (eq system.category.value "np")}}selected{{/if}}>보구</option>
+                        <option value="etc" {{#if (eq system.category.value "etc")}}selected{{/if}}>기타 기능</option>
+                    </select>
+                </li>
+                {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np"))}}
+                <li>
+                    <label>랭크</label>
+                    <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+"/>
+                </li>
+                {{/if}}
+                {{#if (eq system.category.value "np")}}
+                <li>
+                    <label>루비</label>
+                    <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
+                </li>
+                <li>
+                    <label>종류</label>
+                    <input type="text" name="system.kind.value" value="{{system.kind.value}}" placeholder="예: 대인보구"/>
+                </li>
+                {{/if}}
+            </ol>
+        </aside>
+
+        {{!-- 오른쪽: 탭 (설명 / 속성 / 이펙트) --}}
+        <section class="sheet-body feature-main">
             <nav class="sheet-tabs tabs" data-group="primary">
-                <a class="item" data-tab="details">{{localize 'ARCHMAGE.details'}}</a>
-                <a class="item" data-tab="effects">{{localize 'ARCHMAGE.effects'}}</a>
+                <a class="item" data-tab="details">설명</a>
+                <a class="item" data-tab="properties">속성</a>
+                <a class="item" data-tab="effects">이펙트</a>
             </nav>
 
             <div class="sheet-tabs-content">
+                {{!-- 설명 --}}
                 <div class="tab" data-group="primary" data-tab="details">
-                    <ol class="item-details">
-                        <li>
-                            <label>분류</label>
-                            <select name="system.category.value">
-                                <option value="system" {{#if (eq system.category.value "system")}}selected{{/if}}>체계</option>
-                                <option value="action" {{#if (eq system.category.value "action")}}selected{{/if}}>액션</option>
-                                <option value="equip" {{#if (eq system.category.value "equip")}}selected{{/if}}>예장</option>
-                                <option value="skill" {{#if (eq system.category.value "skill")}}selected{{/if}}>스킬</option>
-                                <option value="variable" {{#if (eq system.category.value "variable")}}selected{{/if}}>가변 기능</option>
-                                <option value="np" {{#if (eq system.category.value "np")}}selected{{/if}}>보구</option>
-                                <option value="etc" {{#if (eq system.category.value "etc")}}selected{{/if}}>기타 기능</option>
-                            </select>
-                        </li>
-                        {{#if (eq system.category.value "np")}}
-                        <li>
-                            <label>루비</label>
-                            <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
-                        </li>
-                        <li>
-                            <label>종류</label>
-                            <input type="text" name="system.kind.value" value="{{system.kind.value}}" placeholder="예: 대인보구 (선택)"/>
-                        </li>
-                        {{/if}}
-                        {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np"))}}
-                        <li>
-                            <label>랭크</label>
-                            <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+ (선택)"/>
-                        </li>
-                        {{/if}}
-                        {{#unless (eq system.category.value "system")}}
+                    {{editor system.description.value target="system.description.value" button=true}}
+                </div>
+
+                {{!-- 속성: 굴림 필드 --}}
+                <div class="tab" data-group="primary" data-tab="properties">
+                    {{#unless (eq system.category.value "system")}}
+                    <ol class="feature-fields">
                         <li>
                             <label>판정 능력치</label>
                             <input type="text" name="system.rollAbility.value" value="{{system.rollAbility.value}}" placeholder="예: str (선택)"/>
@@ -57,14 +71,13 @@
                             <label>기타 다이스</label>
                             <input type="text" name="system.misc.value" value="{{system.misc.value}}" placeholder="예: 2d6 (선택)"/>
                         </li>
-                        {{/unless}}
                     </ol>
-
-                    <label class="feature-effect-label">효과</label>
-                    {{editor system.description.value target="system.description.value" button=true}}
+                    {{else}}
+                    <p class="feature-empty-note">체계는 굴림 필드가 없습니다.</p>
+                    {{/unless}}
                 </div>
 
-                {{!-- Effects --}}
+                {{!-- 이펙트 --}}
                 <div class="tab" data-group="primary" data-tab="effects">
                     {{> "systems/watersnake-grail-war/templates/items/_item-effect-part.html" effects=effects}}
                 </div>
