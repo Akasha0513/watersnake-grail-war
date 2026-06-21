@@ -33,6 +33,10 @@
                             <label>루비</label>
                             <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
                         </li>
+                        <li>
+                            <label>종류</label>
+                            <input type="text" name="system.kind.value" value="{{system.kind.value}}" placeholder="예: 대인보구 (선택)"/>
+                        </li>
                         {{/if}}
                         {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np"))}}
                         <li>

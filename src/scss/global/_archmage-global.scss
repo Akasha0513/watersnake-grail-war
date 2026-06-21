@@ -27,6 +27,15 @@
   }
 }
 
+// 성배전쟁: feature 목록의 랭크/종류 표기
+.feature-rank,
+.feature-kind {
+  font-size: 0.85em;
+  opacity: 0.75;
+  margin: 0 2px;
+  white-space: nowrap;
+}
+
 // .flexrow {
 //   display: flex;
 //   flex-direction: row;

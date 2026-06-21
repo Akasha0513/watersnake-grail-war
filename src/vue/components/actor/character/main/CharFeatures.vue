@@ -13,6 +13,10 @@
           <a class="feature-name feature-chat" :data-item-id="item._id">
             <ruby v-if="item.system.ruby && item.system.ruby.value">{{item.name}}<rt>{{item.system.ruby.value}}</rt></ruby><template v-else>{{item.name}}</template>
           </a>
+          <span class="feature-meta flexrow flexshrink">
+            <span v-if="item.system.rank && item.system.rank.value" class="feature-rank">{{item.system.rank.value}}</span>
+            <span v-if="item.system.kind && item.system.kind.value" class="feature-kind">{{item.system.kind.value}}</span>
+          </span>
           <span class="item-controls flexrow flexshrink">
             <a class="item-control item-edit" :data-item-id="item._id"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" :data-item-id="item._id"><i class="fas fa-trash"></i></a>

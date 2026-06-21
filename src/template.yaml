@@ -967,10 +967,6 @@ Item:
       type: String
       label: Roll Ability
       value: ''
-    defenseTarget:
-      type: String
-      label: Defense Target
-      value: ''
     damage:
       type: String
       label: Damage
