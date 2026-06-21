@@ -159,11 +159,12 @@ export class ArchmageUtility {
         round = combat.round;
       }
       // 자작룰: 고조 주사위에 상한 없음. 하한만 0으로 유지.
+      // 1라운드(=3턴=Foundry 라운드 3) 경과마다 고조 1 상승.
       if (round < 1) {
         result = 0;
       }
       else {
-        result = round - 1;
+        result = Math.floor((round - 1) / 3);
       }
 
       // Get the manual offset for this combat..
@@ -203,6 +204,8 @@ export class ArchmageUtility {
 
       // 하한만 유지 (음수 라운드 방지).
       if (round < 0) round = 0;
+      // getEscalation과 동일 주기: 3라운드마다 고조 1.
+      const base = Math.max(0, Math.floor((round - 1) / 3));
 
       // Retrieve the escalation die offset for this combat.
       let edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
@@ -212,7 +215,7 @@ export class ArchmageUtility {
         edOffset++;
       }
       else {
-        if (round + edOffset > 0) edOffset--;
+        if (base + edOffset > 0) edOffset--;
       }
 
       // Update the escalation die offset flag.

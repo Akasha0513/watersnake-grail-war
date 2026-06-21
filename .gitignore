@@ -19,3 +19,5 @@ src/vue/foundry-shim
 system.json
 template.json
 *.log
+# vite 빌드 임시 파일
+vite.config.*.timestamp-*.mjs
