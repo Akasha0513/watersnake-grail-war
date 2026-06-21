@@ -10,11 +10,9 @@
       <ul class="list list--features flexcol">
         <li v-for="item in featuresByCategory(cat.key)" :key="item._id"
             class="list-item feature-item flexrow" :data-item-id="item._id">
-          <span class="feature-name">
-            <span v-if="item.system.ruby && item.system.ruby.value" class="feature-ruby">{{item.system.ruby.value}}</span>
-            {{item.name}}
-            <span v-if="item.system.rank && item.system.rank.value" class="feature-rank">[{{item.system.rank.value}}]</span>
-          </span>
+          <a class="feature-name feature-chat" :data-item-id="item._id">
+            {{item.name}}<span v-if="item.system.ruby && item.system.ruby.value"> - {{item.system.ruby.value}}</span><span v-if="item.system.rank && item.system.rank.value" class="feature-rank"> [{{item.system.rank.value}}]</span>
+          </a>
           <span class="item-controls flexrow flexshrink">
             <a class="item-control item-edit" :data-item-id="item._id"><i class="fas fa-edit"></i></a>
             <a class="item-control item-delete" :data-item-id="item._id"><i class="fas fa-trash"></i></a>

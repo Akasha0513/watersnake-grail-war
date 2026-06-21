@@ -245,6 +245,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.item-create', (event) => this._createItem(event));
     html.on('click', '.item-delete', (event) => this._deleteItem(event));
     html.on('click', '.item-edit', (event) => this._editItem(event));
+    html.on('click', '.feature-chat', (event) => this._postFeature(event));
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
@@ -454,6 +455,22 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       system: data
     };
     await this.actor.createEmbeddedDocuments('Item', [itemData]);
+  }
+
+  /** 체계/기능 아이템을 채팅에 출력 */
+  async _postFeature(event) {
+    event.preventDefault();
+    const id = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(id);
+    if (!item) return;
+    const content = await foundry.applications.handlebars.renderTemplate(
+      'systems/watersnake-grail-war/templates/chat/feature-card.html',
+      { actor: this.actor, item: item, system: item.system }
+    );
+    await game.holygrailwar.ArchmageUtility.createChatMessage({
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
+      content: content
+    });
   }
 
   /**
