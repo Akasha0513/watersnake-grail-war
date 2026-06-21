@@ -48,7 +48,6 @@
             <!-- Powers tab -->
             <Tab group="primary" :tab="tabs.primary.powers">
               <CharFeatures :actor="actor"/>
-              <CharPowers :actor="actor" :context="context" :tab="tabs.primary.powers" :flags="flags"/>
             </Tab>
             <!-- Triggers tab -->
             <Tab group="primary" :tab="tabs.primary.triggers">
@@ -57,7 +56,6 @@
             <!-- Inventory tab -->
             <Tab group="primary" :tab="tabs.primary.inventory">
               <CharFeatures :actor="actor" group="inventory"/>
-              <CharInventory :actor="actor" :tab="tabs.primary.inventory" :flags="flags"/>
             </Tab>
             <!-- Effects tab -->
             <Tab group="primary" :tab="tabs.primary.effects">
