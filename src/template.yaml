@@ -153,6 +153,10 @@ Actor:
           type: String
           label: Element
           value: ''
+        gradeName:
+          type: String
+          label: Grade Name
+          value: ''
       resources:
         perCombat: {}
         spendable:

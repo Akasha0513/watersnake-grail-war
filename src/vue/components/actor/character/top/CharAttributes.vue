@@ -67,12 +67,13 @@
       <div v-if="actor.type !== 'master'" class="unit unit--grade flexcol">
         <h2 class="unit-title">영령의 급</h2>
         <div class="resource flexrow">
-          <input type="number" name="system.attributes.grade.value" class="resource-current" v-model="actor.system.attributes.grade.value">
+          <input type="text" name="system.details.gradeName.value" class="resource-current grade-name" style="flex: 2; text-align: center;" v-model="actor.system.details.gradeName.value" placeholder="대영웅">
+          <input type="number" name="system.attributes.grade.value" class="resource-current grade-num" style="flex: 1; max-width: 3.2em; text-align: center;" v-model="actor.system.attributes.grade.value">
         </div>
-        <div class="labeled-input flexcol">
+        <div class="labeled-input flexcol" style="align-items: center;">
           <label class="unit-subtitle">속성</label>
           <div class="resource flexrow">
-            <input type="text" name="system.details.element.value" class="resource-current" v-model="actor.system.details.element.value">
+            <input type="text" name="system.details.element.value" class="resource-current" style="text-align: center;" v-model="actor.system.details.element.value">
           </div>
         </div>
       </div>
