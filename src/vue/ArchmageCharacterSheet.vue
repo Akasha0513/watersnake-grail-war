@@ -47,6 +47,7 @@
             </Tab>
             <!-- Powers tab -->
             <Tab group="primary" :tab="tabs.primary.powers">
+              <CharFeatures :actor="actor"/>
               <CharPowers :actor="actor" :context="context" :tab="tabs.primary.powers" :flags="flags"/>
             </Tab>
             <!-- Triggers tab -->
@@ -83,6 +84,7 @@
 import { markRaw } from 'vue';
 import { concat, localize } from '@/methods/Helpers';
 import CharDetails from '@/components/actor/character/main/CharDetails.vue';
+import CharFeatures from '@/components/actor/character/main/CharFeatures.vue';
 import {
   Tabs,
   Tab,
@@ -119,6 +121,7 @@ export default {
     CharIncrementals,
     CharResources,
     CharDetails,
+    CharFeatures,
     CharPowers,
     CharTriggers,
     CharInventory,

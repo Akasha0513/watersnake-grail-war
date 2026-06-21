@@ -1499,29 +1499,6 @@ function uuidv4() {
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   const html = $(rawhtml);
 
-  // 성배전쟁: 능력치/행운 재굴림 버튼
-  html.find('.grail-reroll-btn').on('click', async (event) => {
-    event.preventDefault();
-    const btn = event.currentTarget;
-    const actor = game.actors.get(btn.dataset.actorId);
-    if (!actor) return;
-    const abilityKey = btn.dataset.ability || null;
-    const backgroundKey = btn.dataset.background || null;
-    const situational = Number(btn.dataset.situational) || 0;
-
-    // 행운 재굴림 (횟수 제약 없음)
-    await DiceArchmage._completeBackgroundRoll({
-      actor,
-      selection: 'normal',
-      situationalBonus: situational,
-      abilityKey,
-      backgroundKey,
-      rollMode: game.settings.get('core', 'rollMode'),
-      useLuck: true,
-      isReroll: true
-    });
-  });
-
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
@@ -1530,6 +1507,9 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     // Add a way to uniquely identify this roll
     $(this)[0].dataset.uuid = uuid;
     $(this).off("contextmenu");
+
+    // 성배전쟁: 전체 주사위 카드(판정/세이브 등)엔 'Apply Changes' 우클릭 메뉴 미부착 (인라인 롤만 유지)
+    if ($(this).hasClass('dice-roll--archmage')) return;
 
     const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
     const triggerCastPower = game.i18n.localize("ARCHMAGE.CHAT.castPower") + ":";

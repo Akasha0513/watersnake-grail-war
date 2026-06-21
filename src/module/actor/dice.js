@@ -486,13 +486,8 @@ export class DiceArchmage {
     situationalBonus,
     abilityKey,
     backgroundKey,
-    rollMode,
-    useLuck = false,
-    isReroll = false
+    rollMode
   }) {
-    // 굴림에 실제로 쓰는 능력치: 행운 재굴림이면 행운(cha)으로 대체
-    const rollAbilityKey = useLuck ? 'cha' : abilityKey;
-
     // Construct the terms for the roll
     // First: the d20
     const terms = []
@@ -505,9 +500,9 @@ export class DiceArchmage {
     }
 
     // Next: the ability modifier
-    const ability = actor.system.abilities[rollAbilityKey]
+    const ability = actor.system.abilities[abilityKey]
     if (ability) {
-      terms.push(`@${rollAbilityKey}.mod`)
+      terms.push(`@${abilityKey}.mod`)
     }
 
     // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
@@ -521,7 +516,7 @@ export class DiceArchmage {
 
     // Next: the item bonus
     if (ability && ability.bonus) {
-      terms.push(`@${rollAbilityKey}.bonus`)
+      terms.push(`@${abilityKey}.bonus`)
     }
 
     // Next: the situational bonus
@@ -538,35 +533,6 @@ export class DiceArchmage {
     const roll = new Roll(terms.join(' + '), actor.getRollData())
     await roll.roll()
 
-    // 표시 이름 (한글 라벨)
-    let displayName;
-    if (useLuck) {
-      displayName = `${game.i18n.localize('ARCHMAGE.cha.label')} 재굴림`;
-    } else {
-      displayName = abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : '';
-      if (isReroll && displayName) displayName = `재굴림 · ${displayName}`;
-    }
-    let flavorText = displayName;
-    if (background?.name?.value) flavorText += ` · ${background.name.value}`;
-
-    // SWADE 스타일 카드: 주사위 칩 + 수정치 칩
-    const formulaParts = [];
-    let dieSum = 0;
-    for (const term of roll.terms) {
-      if (term?.results && Array.isArray(term.results)) {
-        for (const r of term.results) {
-          if (r.active === false) continue;
-          dieSum += Number(r.result) || 0;
-          let cls = '';
-          if (term.faces === 20 && r.result === 20) cls = 'exploded';
-          else if (term.faces === 20 && r.result === 1) cls = 'min';
-          formulaParts.push({ die: true, result: r.result, class: cls });
-        }
-      }
-    }
-    const modTotal = Number(roll.total) - dieSum;
-    if (modTotal) formulaParts.push({ die: false, result: modTotal > 0 ? `+${modTotal}` : `${modTotal}` });
-
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -580,13 +546,13 @@ export class DiceArchmage {
       {
         actor: actor,
         tokenId: actor.token?.id ?? null,
-        flavor: flavorText,
-        formulaParts: formulaParts,
-        reroll: {
-          actorId: actor.id,
-          abilityKey: abilityKey || '',
-          backgroundKey: backgroundKey || '',
-          situational: situationalBonus || 0
+        ability: {
+          name: abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : null,
+          bonus: ability?.mod ?? 0
+        },
+        background: {
+          name: background?.name?.value,
+          bonus: background?.bonus?.value ?? 0
         },
         data: chatData
       }

@@ -889,6 +889,7 @@ Item:
     - tool
     - loot
     - equipment
+    - feature
   templates:
     standard:
       name:
@@ -939,6 +940,37 @@ Item:
         self: ''
         target: ''
         reversed: false
+  feature:
+    templates:
+      - standard
+    category:
+      type: String
+      label: Category
+      value: ''
+    ruby:
+      type: String
+      label: Ruby
+      value: ''
+    rank:
+      type: String
+      label: Rank
+      value: ''
+    kind:
+      type: String
+      label: Kind
+      value: ''
+    rollAbility:
+      type: String
+      label: Roll Ability
+      value: ''
+    defenseTarget:
+      type: String
+      label: Defense Target
+      value: ''
+    damage:
+      type: String
+      label: Damage
+      value: ''
   power:
     templates:
       - standard

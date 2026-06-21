@@ -1,35 +1,34 @@
-<section class="swade-roll-message">
-  <div class="swade-roll">
-    <div class="dice-roll trait-roll">
-      {{#if flavor}}<div class="dice-flavor">{{flavor}}</div>{{/if}}
+<div class="archmage chat-card">
+  <header class="card-header flexrow">
+    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
+    <h3 class="ability-usage ability-usage--recharge">{{numberFormat ability.bonus decimals=0 sign=true}} {{ability.name}}</h3>
+  </header>
+  <div class="card-content">
+    {{#if background.name }}
+      <h3>{{background.name}}</h3>
+    {{/if}}
+    <div class="dice-roll">
       <div class="dice-result">
-        <div class="dice-formula">
-          <ol class="formula-list">
-            {{#each formulaParts}}
-              {{#if die}}
-                <li class="die"><span class="{{class}}">{{result}}</span></li>
-              {{else}}
-                <li>{{result}}</li>
-              {{/if}}
-            {{/each}}
-          </ol>
-        </div>
-        <div class="dice-flavor">결과</div>
-        <div class="dice-total">
-          <ol class="result-list">
-            <li class="die"><span class="label">{{data.roll.total}}</span></li>
-          </ol>
-        </div>
+          <div class="dice-formula">{{data.roll.formula}}</div>
+          <div class="dice-tooltip">
+            <section class="tooltip-part">
+              <div class="dice">
+                  <header class="part-header flexrow">
+                      <span class="part-formula">{{data.roll.formula}}</span>
+                      <span class="part-total">{{data.roll.total}}</span>
+                  </header>
+                  <ol class="dice-rolls">
+                    {{#each data.roll.terms as |term i|}}
+                      {{#each term.results as |result r|}}
+                      <li class="roll die d{{term.faces}}">{{result.result}}</li>
+                      {{/each}}
+                    {{/each}}
+                  </ol>
+              </div>
+            </section>
+          </div>
+          <h4 class="dice-total">{{data.roll.total}}</h4>
       </div>
     </div>
   </div>
-  {{#if reroll}}
-  <footer class="roll-interaction">
-    <button type="button" class="free-reroll grail-reroll-btn" data-reroll="luck"
-      data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
-      data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
-      <i class="fa-solid fa-dice"></i> 재굴림
-    </button>
-  </footer>
-  {{/if}}
-</section>
+</div>
