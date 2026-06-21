@@ -2131,131 +2131,79 @@ a.effect-link,
   }
 }
 
-/* 성배전쟁 굴림 카드 (전역 — 채팅 로그에 적용) */
-.archmage.chat-card.grail-roll-card {
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  border-radius: 8px;
-  overflow: hidden;
-
-  .card-header {
+/* 성배전쟁 굴림 카드 — SWADE 스타일 이식 (전역, 채팅 로그 적용) */
+.swade-roll-message {
+  .roll-interaction {
+    margin-top: 6px;
     display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    padding: 6px 8px;
-
-    img {
-      flex: 0 0 auto;
-      width: 34px;
-      height: 34px;
-      border: none;
-      border-radius: 6px;
-      object-fit: cover;
-    }
-
-    h3.ability-usage {
-      flex: 1;
-      margin: 0;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 5px;
-      background: #7a2230;
-      background-image: none;
-      color: #fff;
-      font-weight: bold;
-      text-shadow: none;
-    }
+    flex-direction: row;
   }
 
-  .card-content {
-    padding: 8px 12px 12px;
+  .roll-interaction button {
+    width: auto;
+    flex-grow: 1;
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0 1px;
+    background: var(--button-background-color, #ddd6c9);
+    border: 1px solid var(--button-border-color, #b9a99a);
+    border-radius: 3px;
+    cursor: pointer;
   }
 
-  .grail-sub {
+  .roll-interaction button:hover,
+  .roll-interaction button:focus {
+    background: var(--button-hover-background-color, #cfc6b4);
+    color: var(--button-hover-text-color, inherit);
+    border-color: var(--button-hover-border-color, #a89784);
+  }
+}
+
+.swade-roll {
+  .dice-roll {
+    flex-direction: column;
+  }
+
+  .dice-flavor {
+    text-align: center;
+    color: #7a7066;
     font-size: 12px;
-    color: #7a2230;
-    font-weight: 600;
-    padding: 0 0 6px;
+    line-height: 1.4;
   }
 
-  .grail-section {
-    padding: 4px 0;
-
-    .grail-section-label {
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #9a8f86;
-      margin-bottom: 3px;
-    }
-  }
-
-  .grail-dice-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 6px;
-    padding: 6px 8px;
-    min-height: 28px;
-  }
-
-  .grail-die {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 28px;
-    height: 28px;
-    padding: 0 5px;
-    background: #fff;
-    border: 1px solid #c9bcae;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 15px;
-
-    &.is-discarded {
-      opacity: 0.35;
-      text-decoration: line-through;
-    }
-  }
-
-  .grail-section--result {
+  .dice-result {
     text-align: center;
   }
 
-  .grail-total {
-    font-size: 30px;
+  .result-list,
+  .formula-list {
+    padding: 0;
+    margin: 4px 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  .result-list li,
+  .formula-list li {
+    height: 28px;
+    min-width: 28px;
+    margin: 2px;
+    padding: 0 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
-    line-height: 1.1;
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid #c9bcae;
+    border-radius: 5px;
   }
 
-  .grail-formula {
-    font-size: 11px;
-    color: #9a8f86;
+  .result-list li {
+    min-width: 40px;
+    height: 40px;
+    font-size: 22px;
   }
 
-  .grail-reroll-buttons {
-    display: flex;
-    gap: 6px;
-    margin-top: 10px;
-
-    button {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 6px 8px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1;
-      border: 1px solid #b9a99a;
-      border-radius: 6px;
-      background: #efe9e0;
-      cursor: pointer;
-
-      &:hover { background: #e3d8c8; }
-    }
-  }
+  .die .exploded { color: rgb(0, 120, 0); }
+  .die .min { color: rgb(200, 0, 0); }
 }

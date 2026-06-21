@@ -546,6 +546,26 @@ export class DiceArchmage {
       displayName = abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : '';
       if (isReroll && displayName) displayName = `재굴림 · ${displayName}`;
     }
+    let flavorText = displayName;
+    if (background?.name?.value) flavorText += ` · ${background.name.value}`;
+
+    // SWADE 스타일 카드: 주사위 칩 + 수정치 칩
+    const formulaParts = [];
+    let dieSum = 0;
+    for (const term of roll.terms) {
+      if (term?.results && Array.isArray(term.results)) {
+        for (const r of term.results) {
+          if (r.active === false) continue;
+          dieSum += Number(r.result) || 0;
+          let cls = '';
+          if (term.faces === 20 && r.result === 20) cls = 'exploded';
+          else if (term.faces === 20 && r.result === 1) cls = 'min';
+          formulaParts.push({ die: true, result: r.result, class: cls });
+        }
+      }
+    }
+    const modTotal = Number(roll.total) - dieSum;
+    if (modTotal) formulaParts.push({ die: false, result: modTotal > 0 ? `+${modTotal}` : `${modTotal}` });
 
     // Render the chat content template
     const chatData = {
@@ -560,14 +580,8 @@ export class DiceArchmage {
       {
         actor: actor,
         tokenId: actor.token?.id ?? null,
-        ability: {
-          name: displayName,
-          bonus: ability?.mod ?? 0
-        },
-        background: {
-          name: background?.name?.value,
-          bonus: background?.bonus?.value ?? 0
-        },
+        flavor: flavorText,
+        formulaParts: formulaParts,
         reroll: {
           actorId: actor.id,
           abilityKey: abilityKey || '',

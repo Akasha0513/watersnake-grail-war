@@ -1,34 +1,35 @@
-<div class="archmage chat-card grail-roll-card">
-  <header class="card-header flexrow">
-    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
-    <h3 class="ability-usage ability-usage--recharge">{{ability.name}} 판정</h3>
-  </header>
-  <div class="card-content">
-    {{#if background.name}}
-      <div class="grail-sub">{{background.name}} ({{numberFormat background.bonus decimals=0 sign=true}})</div>
-    {{/if}}
-
-    <div class="grail-section">
-      <div class="grail-section-label">굴림</div>
-      <div class="grail-dice-row">
-        {{#each data.roll.terms as |term i|}}{{#each term.results as |result r|}}<span class="grail-die{{#unless result.active}} is-discarded{{/unless}}">{{result.result}}</span>{{/each}}{{/each}}
+<section class="swade-roll-message">
+  <div class="swade-roll">
+    <div class="dice-roll trait-roll">
+      {{#if flavor}}<div class="dice-flavor">{{flavor}}</div>{{/if}}
+      <div class="dice-result">
+        <div class="dice-formula">
+          <ol class="formula-list">
+            {{#each formulaParts}}
+              {{#if die}}
+                <li class="die"><span class="{{class}}">{{result}}</span></li>
+              {{else}}
+                <li>{{result}}</li>
+              {{/if}}
+            {{/each}}
+          </ol>
+        </div>
+        <div class="dice-flavor">결과</div>
+        <div class="dice-total">
+          <ol class="result-list">
+            <li class="die"><span class="label">{{data.roll.total}}</span></li>
+          </ol>
+        </div>
       </div>
     </div>
-
-    <div class="grail-section grail-section--result">
-      <div class="grail-section-label">결과</div>
-      <div class="grail-total">{{data.roll.total}}</div>
-      <div class="grail-formula">{{data.roll.formula}}</div>
-    </div>
-
-    {{#if reroll}}
-    <div class="grail-reroll-buttons">
-      <button type="button" class="grail-reroll-btn" data-reroll="luck"
-        data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
-        data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
-        <i class="fas fa-dice-d20"></i> 재굴림
-      </button>
-    </div>
-    {{/if}}
   </div>
-</div>
+  {{#if reroll}}
+  <footer class="roll-interaction">
+    <button type="button" class="free-reroll grail-reroll-btn" data-reroll="luck"
+      data-actor-id="{{reroll.actorId}}" data-ability="{{reroll.abilityKey}}"
+      data-background="{{reroll.backgroundKey}}" data-situational="{{reroll.situational}}">
+      <i class="fa-solid fa-dice"></i> 재굴림
+    </button>
+  </footer>
+  {{/if}}
+</section>

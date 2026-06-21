@@ -1,6 +1,5 @@
-<div class="archmage chat-card grail-roll-card">
-  <header class="card-header flexrow">
-    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
+<div class="archmage chat-card">
+  <header class="card-header">
     <h3 class="ability-usage ability-usage--recharge">{{saveType}}</h3>
   </header>
   <div class="card-content">
@@ -11,7 +10,7 @@
             <section class="tooltip-part">
               <div class="dice">
                   <header class="part-header flexrow">
-                      <span class="part-formula">{{data.roll.formula}}</span>             
+                      <span class="part-formula">{{data.roll.formula}}</span>
                       <span class="part-total">{{data.roll.total}}</span>
                   </header>
                   <ol class="dice-rolls">
@@ -28,10 +27,11 @@
     <div class="card-row" style="padding-top: 5px;">
       <div class="card-prop">
         {{#if success}}
-        <span class="grail-result is-success">{{localize 'ARCHMAGE.SAVE.success'}}</span>
+        <span style="color: green;"><b>{{localize 'ARCHMAGE.SAVE.success'}}</b></span>
         {{else}}
-        <span class="grail-result is-failure">{{localize 'ARCHMAGE.SAVE.failure'}}</span>
+        <span style="color: red;"><b>{{localize 'ARCHMAGE.SAVE.failure'}}</b></span>
         {{/if}}
+
       </div>
     </div>
   </div>
