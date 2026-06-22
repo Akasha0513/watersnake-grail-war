@@ -10,41 +10,20 @@
       <ul class="list list--features flexcol">
         <li v-for="item in featuresByCategory(cat.key)" :key="item._id"
             class="list-item feature-item flexcol" :data-item-id="item._id">
-
-          <!-- 파워 계열: 왼쪽 아이콘 → 채팅 / 이름 클릭 → 설명 펼침·접힘 -->
-          <template v-if="isPowers">
-            <div class="feature-header flexrow">
-              <a class="feature-chat feature-chat-icon" :data-item-id="item._id" title="채팅에 전송"><i class="far fa-comment-alt"></i></a>
-              <a class="feature-name feature-expand" @click="toggle(item._id)">
-                <ruby v-if="item.system.ruby && item.system.ruby.value">{{item.name}}<rt>{{item.system.ruby.value}}</rt></ruby><template v-else>{{item.name}}</template>
-                <span v-if="item.system.rank && item.system.rank.value" class="feature-rank">{{item.system.rank.value}}</span>
-              </a>
-              <span class="feature-meta flexrow flexshrink">
-                <span v-if="item.system.kind && item.system.kind.value" class="feature-kind">{{item.system.kind.value}}</span>
-              </span>
-              <span class="item-controls flexrow flexshrink">
-                <a class="item-control item-edit" :data-item-id="item._id"><i class="fas fa-edit"></i></a>
-                <a class="item-control item-delete" :data-item-id="item._id"><i class="fas fa-trash"></i></a>
-              </span>
-            </div>
-            <div v-if="expanded[item._id] && item.system.description && item.system.description.value"
-                 class="feature-summary" v-html="item.system.description.value"></div>
-          </template>
-
-          <!-- 보구·예장(인벤토리): 클릭 → 채팅 (현행 유지) -->
-          <div v-else class="feature-header flexrow">
-            <a class="feature-name feature-chat" :data-item-id="item._id">
+          <div class="feature-header flexrow">
+            <a class="feature-chat feature-chat-icon" :data-item-id="item._id" title="채팅에 전송"><i class="far fa-comment-alt"></i></a>
+            <a class="feature-name feature-expand" @click="toggle(item._id)">
               <ruby v-if="item.system.ruby && item.system.ruby.value">{{item.name}}<rt>{{item.system.ruby.value}}</rt></ruby><template v-else>{{item.name}}</template>
-            </a>
-            <span class="feature-meta flexrow flexshrink">
               <span v-if="item.system.rank && item.system.rank.value" class="feature-rank">{{item.system.rank.value}}</span>
-              <span v-if="item.system.kind && item.system.kind.value" class="feature-kind">{{item.system.kind.value}}</span>
-            </span>
+            </a>
+            <span v-if="item.system.kind && item.system.kind.value" class="feature-kind-mid">{{item.system.kind.value}}</span>
             <span class="item-controls flexrow flexshrink">
               <a class="item-control item-edit" :data-item-id="item._id"><i class="fas fa-edit"></i></a>
               <a class="item-control item-delete" :data-item-id="item._id"><i class="fas fa-trash"></i></a>
             </span>
           </div>
+          <div v-if="expanded[item._id] && item.system.description && item.system.description.value"
+               class="feature-summary" v-html="item.system.description.value"></div>
         </li>
       </ul>
     </section>
@@ -74,9 +53,6 @@ export default {
     };
   },
   computed: {
-    isPowers() {
-      return (this.group || 'powers') === 'powers';
-    },
     visibleCategories() {
       const grp = this.group || 'powers';
       return this.categories.filter(c => c.types.includes(this.actor.type) && c.group === grp);

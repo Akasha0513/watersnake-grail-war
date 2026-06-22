@@ -118,3 +118,8 @@
 .archmage.item-sheet .section--effects .effects-grid {
   font-family: 'GMarketSans', 'Roboto', sans-serif;
 }
+
+/* 능력치 굴림 카드 헤더(예: "근력 +2")는 장식 제목 폰트가 어색해 본문 폰트로 */
+.chat-card.ability-card .card-header .item-name {
+  font-family: 'Ridibatang', 'warnock-pro', serif !important;
+}

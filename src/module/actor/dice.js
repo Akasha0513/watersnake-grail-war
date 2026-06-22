@@ -101,6 +101,9 @@ export class DiceArchmage {
         speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor)
       };
 
+      // Foundry 기본 굴림 렌더링 (주사위 아이콘 + 접이식 툴팁)
+      const rollHTML = await roll.render();
+
       // Prepare template data.
       const templateData = {
         actor: actor,
@@ -113,6 +116,7 @@ export class DiceArchmage {
           name: data.backgroundName ?? null,
           bonus: data.bg ?? 0
         },
+        rollHTML: rollHTML,
         data: chatData
       };
 
@@ -574,6 +578,7 @@ export class DiceArchmage {
         background: {
           name: backgroundLabel
         },
+        rollHTML: await roll.render(),
         data: chatData
       }
     )

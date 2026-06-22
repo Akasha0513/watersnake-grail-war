@@ -6,28 +6,6 @@
     {{#if background.name}}
       <div class="container"><strong>{{background.name}}</strong></div>
     {{/if}}
-    <div class="dice-roll">
-      <div class="dice-result">
-        <div class="dice-formula">{{data.roll.formula}}</div>
-        <div class="dice-tooltip">
-          <section class="tooltip-part">
-            <div class="dice">
-              <header class="part-header flexrow">
-                <span class="part-formula">{{data.roll.formula}}</span>
-                <span class="part-total">{{data.roll.total}}</span>
-              </header>
-              <ol class="dice-rolls">
-                {{#each data.roll.terms as |term i|}}
-                  {{#each term.results as |result r|}}
-                  <li class="roll die d{{term.faces}}">{{result.result}}</li>
-                  {{/each}}
-                {{/each}}
-              </ol>
-            </div>
-          </section>
-        </div>
-        <h4 class="dice-total">{{data.roll.total}}</h4>
-      </div>
-    </div>
+    {{{rollHTML}}}
   </div>
 </div>
