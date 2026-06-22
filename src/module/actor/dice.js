@@ -575,7 +575,12 @@ export class DiceArchmage {
         ability: {
           name: abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : null,
           bonus: ability?.mod ?? 0,
-          rank: ((m) => m >= 7 ? 'EX' : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-')(Number(ability?.mod) || 0)
+          rank: (() => {
+            const m = Number(ability?.mod) || 0;
+            const base = m >= 7 ? 'EX' : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-';
+            const rp = Number(ability?.rerollPlus) || 0;  // 시트에서 정한 ＋/－ 표기
+            return base + (rp > 0 ? '＋'.repeat(rp) : rp < 0 ? '－'.repeat(-rp) : '');
+          })()
         },
         background: {
           name: backgroundLabel
