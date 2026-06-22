@@ -1,6 +1,6 @@
 id: watersnake-grail-war
 title: "성배전쟁 ORPG"
-version: "0.1.53"
+version: "0.1.54"
 authors:
   - name: akasha0513
   - name: "원작 룰: watersnake"
@@ -76,7 +76,7 @@ url: https://github.com/akasha0513/watersnake-grail-war
 manifest: https://github.com/akasha0513/watersnake-grail-war/releases/latest/download/system.json
 download: https://github.com/akasha0513/watersnake-grail-war/releases/download/v0.1.0/system.zip
 changelog: https://github.com/akasha0513/watersnake-grail-war/releases
-initiative: 1d20 + (@abilities?.dex.mod || 0) + @attributes.init.value + @attributes.level.value
+initiative: 1d20 + @attributes.init.mod
 grid:
   distance: 1
   units: 'Units'
