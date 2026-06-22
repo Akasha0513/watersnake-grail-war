@@ -5,9 +5,9 @@
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
-        <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item.value)}}</div>
+        <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item.value)}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
         <input type="number" v-bind:name="concat('system.abilities.', index, '.value')" class="ability-score" v-model="item.value"/>
-        <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></a>
+        <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}</a>
         <div class="ability-mod" :style="concat('color:', modColor(item))" :title="modTitle(item, actor)">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
       </li>
       <!-- 보구(서번트) / 예장(마스터) -->

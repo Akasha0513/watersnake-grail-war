@@ -40,10 +40,10 @@ export default {
       categories: [
         { key: 'system', label: '체계', types: ['master'], group: 'powers' },
         { key: 'action', label: '액션', types: ['master'], group: 'powers' },
-        { key: 'equip', label: '예장', types: ['master'], group: 'inventory' },
+        { key: 'equip', label: '예장', types: ['master', 'character'], group: 'inventory' },
         { key: 'skill', label: '스킬', types: ['character'], group: 'powers' },
         { key: 'variable', label: '가변 기능', types: ['character'], group: 'powers' },
-        { key: 'np', label: '보구', types: ['character'], group: 'inventory' },
+        { key: 'np', label: '보구', types: ['master', 'character'], group: 'inventory' },
         { key: 'etc', label: '기타 기능', types: ['master', 'character'], group: 'powers' }
       ]
     };

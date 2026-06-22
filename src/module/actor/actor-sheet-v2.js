@@ -321,7 +321,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // 령주 변동 시 채팅 메시지 (소멸/회복)
     const delta = next - cur;
     if (delta !== 0) {
-      const verb = delta < 0 ? '소멸합니다' : '회복됩니다';
+      const verb = delta < 0 ? `${Math.abs(delta)}획 소모됩니다` : `${Math.abs(delta)}획 회복됩니다`;
       const content = `<div class="archmage chat-card command-seal-card">${this.actor.name} 의 령주가 ${verb}.</div>`;
       await game.holygrailwar.ArchmageUtility.createChatMessage({
         speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
@@ -337,7 +337,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     if (next === cur) return;
     await this.actor.update({ 'system.details.commandSeals.value': next });
 
-    const verb = (next < cur) ? '소멸합니다' : '회복됩니다';
+    const verb = (next < cur) ? `${Math.abs(next - cur)}획 소모됩니다` : `${Math.abs(next - cur)}획 회복됩니다`;
     const content = `<div class="archmage chat-card command-seal-card">${this.actor.name} 의 령주가 ${verb}.</div>`;
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),

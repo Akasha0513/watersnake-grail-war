@@ -129,3 +129,6 @@
     border-bottom: 1px solid $c-black--15;
   }
 }
+
+// 한국어 폰트 (마지막에 import해 적용 순서 보장)
+@import 'global/korean-fonts';
