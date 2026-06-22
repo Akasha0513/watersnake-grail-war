@@ -1,18 +1,16 @@
-<div class="archmage chat-card feature-card"
+<div class="archmage chat-card feature-card swade-card"
      data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}">
   <header class="card-header flexrow">
-    <h3 class="item-name">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
+    <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
+    <h3 class="item-name">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}</h3>
   </header>
   <div class="card-content">
-    {{#if system.description.value}}
-      <div class="container">{{{system.description.value}}}</div>
-    {{else}}
-      <div class="container no-desc">설명 없음</div>
-    {{/if}}
+    <div class="container">
+      {{#if system.description.value}}{{{system.description.value}}}{{else}}<p class="no-desc">설명 없음</p>{{/if}}
+    </div>
   </div>
-  {{#if system.kind.value}}
-    <footer class="card-footer">
-      <span class="chip" title="종류"><i class="fas fa-tag"></i> {{system.kind.value}}</span>
-    </footer>
-  {{/if}}
+  <footer class="card-footer">
+    {{#if system.rank.value}}<span>랭크: {{system.rank.value}}</span>{{/if}}
+    {{#if system.kind.value}}<span>종류: {{system.kind.value}}</span>{{/if}}
+  </footer>
 </div>
