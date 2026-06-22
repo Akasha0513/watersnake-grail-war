@@ -181,6 +181,22 @@ export class ArchmageUtility {
   }
 
   /**
+   * 자작룰 라운드를 반환. (1라운드 = 3턴 = Foundry 3라운드)
+   * 예: Foundry 1~3라운드 → 1, 4~6라운드 → 2. 전투 전이면 0.
+   *
+   * @param {object} combat
+   *   (Optional) 대상 전투. 없으면 현재 전투.
+   * @return {number}
+   */
+  static getGameRound(combat = null) {
+    if (!combat) combat = game.combat;
+    if (!combat) return 0;
+    let round = combat.current?.round ?? combat.round ?? 0;
+    if (round < 1) return 0;
+    return Math.floor((round - 1) / 3) + 1;
+  }
+
+  /**
    * Set the Escalation Die offset for this combat.
    *
    * @param {object} combat
@@ -810,7 +826,7 @@ export class MacroUtils {
 export class ArchmageReference extends Application {
   static get defaultOptions() {
     const options = super.defaultOptions;
-    options.title = "Archmage Inline Rolls Reference"
+    options.title = "능력치 및 인라인 굴림 참조"
     options.id = "archmage-help";
     options.template = "systems/watersnake-grail-war/templates/sidebar/apps/archmage-help.html";
     options.width = 820;

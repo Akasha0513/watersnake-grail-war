@@ -1,9 +1,9 @@
 <div>
-    <p class="notes">The following stats can all be used in inline or regular dice rolls.</p>
-    <p class="notes">Example attack: <span class="key">[[d20+@str.mod+@std+@atk.m.bonus]] vs. AC</span></p>
-    <p class="notes">Example damage: <span class="key">[[@wpn.m.dice+@str.dmg+@atk.m.bonus]] slashing damage</span></p>
+    <p class="notes">다음 스탯들은 인라인 굴림 또는 일반 주사위 굴림에서 모두 사용할 수 있습니다.</p>
+    <p class="notes">공격 예시: <span class="key">[[d20+@str.mod+@std+@atk.m.bonus]] vs. AC</span></p>
+    <p class="notes">피해 예시: <span class="key">[[@wpn.m.dice+@str.dmg+@atk.m.bonus]] 베기 피해</span></p>
 
-    <h3>Ability Modifiers</h3>
+    <h3>능력치 수정치</h3>
     <ol class="hotkey-list">
       <li>
         <div class="keys">
@@ -17,7 +17,7 @@
       </li>
     </ol>
 
-    <h3>Damage bonus from ability mod (x1 Adventurer, x2 Champion, x3/x4 Epic 1e/2e)</h3>
+    <h3>능력치 수정치 피해 보너스 (×1 어드벤처러, ×2 챔피언, ×3/×4 에픽 1e/2e)</h3>
     <ol class="hotkey-list">
       <li>
         <div class="keys">
@@ -31,36 +31,36 @@
       </li>
     </ol>
 
-    <p class="notes">Note: for multiclass characters the above are affected by the Key Modifier. For class powers that's fine, but should you need to access the unaltered modifiers you can use e.g. <span class="key">@str.nonKey.mod</span> or <span class="key">@str.nonKey.dmg</span>.</p>
+    <p class="notes">참고: 멀티클래스 캐릭터의 경우 위 값들은 키 수정치(Key Modifier)의 영향을 받습니다. 클래스 능력에는 문제없지만, 변경되지 않은 원래 수정치에 접근해야 할 경우 예를 들어 <span class="key">@str.nonKey.mod</span> 또는 <span class="key">@str.nonKey.dmg</span> 를 사용할 수 있습니다.</p>
 
-    <h3>Common Attributes</h3>
+    <h3>공통 속성</h3>
     <ol class="hotkey-list">
       <li>
-        <h4>Escalation Die</h4>
+        <h4>고조 주사위</h4>
         <div class="keys"><span class="key">@ed</span></div>
       </li>
       <li>
-        <h4>Level</h4>
+        <h4>레벨</h4>
         <div class="keys"><span class="key">@lvl</span></div>
       </li>
       <li>
-        <h4>Initiative bonus</h4>
+        <h4>이니셔티브 보너스</h4>
         <div class="keys"><span class="key">@init</span></div>
       </li>
       <li>
-        <h4>Standard Attack Bonuses (Level + Escalation Die)</h4>
+        <h4>기본 공격 보너스 (레벨 + 고조 주사위)</h4>
         <div class="keys"><span class="key">@std</span></div>
       </li>
       <li>
-        <h4>Tier (1 Adventurer, 2 Champion, 3 Epic)</h4>
+        <h4>티어 (1 어드벤처러, 2 챔피언, 3 에픽)</h4>
         <div class="keys"><span class="key">@tier</span></div>
       </li>
       <li>
-        <h4>Tier multiplier (x1 Adventurer, x2 Champion, x3/x4 Epic 1e/2e)</h4>
+        <h4>티어 배수 (×1 어드벤처러, ×2 챔피언, ×3/×4 에픽 1e/2e)</h4>
         <div class="keys"><span class="key">@tierMult</span></div>
       </li>
       <li>
-        <h4>HP and recoveries</h4>
+        <h4>HP 및 회복</h4>
         <div class="keys">
           <span class="key">@hp.value</span>
           <span class="key">@hp.max</span>
@@ -73,7 +73,7 @@
         </div>
       </li>
       <li>
-        <h4>Defenses</h4>
+        <h4>방어</h4>
           <div class="keys">
           <span class="key">@ac.value</span>
           <span class="key">@pd.value</span>
@@ -81,7 +81,7 @@
         </div>
       </li>
       <li>
-        <h4>Dying and saves</h4>
+        <h4>빈사 및 내성</h4>
         <div class="keys">
           <span class="key">@skulls</span>
           <span class="key">@saves.bonus</span>
@@ -92,10 +92,10 @@
       </li>
     </ol>
 
-    <h3>Item Attack / Damage Bonuses</h3>
+    <h3>아이템 공격 / 피해 보너스</h3>
     <ol class="hotkey-list">
       <li>
-        <h4>Melee, Ranged, Arcane, Divine</h4>
+        <h4>근접, 사격, 비전, 신성</h4>
         <div class="keys">
           <span class="key">@atk.m.bonus</span>
           <span class="key">@atk.r.bonus</span>
@@ -105,8 +105,8 @@
       </li>
     </ol>
 
-    <h3>Resources</h3>
-    <p>Resources (Command Points, Focus, Ki, Momentum) can be accessed via the <span class="key">@rsc</span> shorthand, as shown here below. For ki and custom resources, a max suffix shorthand is also provided.</p>
+    <h3>자원</h3>
+    <p>자원(지휘 포인트, 집중, 기, 모멘텀)은 아래와 같이 <span class="key">@rsc</span> 약어로 접근할 수 있습니다. 기와 커스텀 자원의 경우 최대치 접미사 약어도 제공됩니다.</p>
     <ol class="hotkey-list">
       <li>
         <div class="keys">
@@ -118,44 +118,44 @@
         </div>
       </li>
     </ol>
-    <p>Note: any custom resources that is both enabled and has a label set can be accessed with that label, reduced to lowercase letters only without spaces (e.g. a resource called "Power Points" can be accessed via <span class="key">@rsc.powerpoints</span> and <span class="key">@rsc.powerpointsmax</span>).</p>
-    <p>Resources can also be manipulated by powers via the <span class="key">Resources</span> field, using the following syntax.<br/>
-    For numeric resources (command points, ki, custom resources):</p>
+    <p>참고: 활성화되어 있고 라벨이 설정된 커스텀 자원은 해당 라벨을 소문자 영문만 남기고 공백을 제거한 형태로 접근할 수 있습니다 (예: "Power Points"라는 자원은 <span class="key">@rsc.powerpoints</span> 및 <span class="key">@rsc.powerpointsmax</span> 로 접근).</p>
+    <p>자원은 <span class="key">Resources</span> 필드를 통해 능력(파워)으로도 조작할 수 있으며, 다음 문법을 사용합니다.<br/>
+    숫자형 자원(지휘 포인트, 기, 커스텀 자원)의 경우:</p>
     <ol class="hotkey-list">
       <li>
-        <h4>Increase the resource value</h4>
+        <h4>자원 값 증가</h4>
         <div class="keys"><span class="key">+N resourcename</span></div>
       </li>
       <li>
-        <h4>Decrease the resource value (asks confirmation if &lt;=0)</h4>
+        <h4>자원 값 감소 (0 이하면 확인을 요청)</h4>
         <div class="keys"><span class="key">-N resourcename</span></div>
       </li>
       <li>
-        <h4>Override the resource value</h4>
+        <h4>자원 값 덮어쓰기</h4>
         <div class="keys"><span class="key">N resourcename</span></div>
       </li>
     </ol>
-    <p>For binary/flag resources (momentum, focus, custom resources):</p>
+    <p>이진/플래그형 자원(모멘텀, 집중, 커스텀 자원)의 경우:</p>
     <ol class="hotkey-list">
       <li>
-        <h4>Set the resource</h4>
+        <h4>자원 설정</h4>
         <div class="keys"><span class="key">+resourcename</span></div>
       </li>
       <li>
-        <h4>Unset the resource (asks confirmation if already unset)</h4>
+        <h4>자원 해제 (이미 해제된 경우 확인을 요청)</h4>
         <div class="keys"><span class="key">-resourcename</span></div>
       </li>
       <li>
-        <h4>Test the resource (asks confirmation if unset)</h4>
+        <h4>자원 확인 (해제된 경우 확인을 요청)</h4>
         <div class="keys"><span class="key">resourcename</span></div>
       </li>
     </ol>
 
-    <h3>Weapons</h3>
-    <p>Weapons are broken down into melee (<span class="key">@wpn.m</span>), ranged (<span class="key">@wpn.r</span>), JAB (<span class="key">@wpn.j</span>), PUNCH (<span class="key">@wpn.p</span>), and KICK (<span class="key">@wpn.k</span>). JAB, PUNCH, and KICK are intended for monks, and will default to the monk damage die (d6, d8, d10, respectively).</p>
+    <h3>무기</h3>
+    <p>무기는 근접(<span class="key">@wpn.m</span>), 사격(<span class="key">@wpn.r</span>), JAB(<span class="key">@wpn.j</span>), PUNCH(<span class="key">@wpn.p</span>), KICK(<span class="key">@wpn.k</span>)으로 구분됩니다. JAB, PUNCH, KICK은 몽크용으로, 각각 몽크 피해 주사위(d6, d8, d10)를 기본값으로 사용합니다.</p>
     <ol class="hotkey-list">
       <li>
-        <h4>Weapon Damage Die (single, example: <code>1d10</code>)</h4>
+        <h4>무기 피해 주사위 (단일, 예: <code>1d10</code>)</h4>
         <div class="keys">
           <span class="key">@wpn.m.die</span>
           <span class="key">@wpn.r.die</span>
@@ -165,7 +165,7 @@
         </div>
       </li>
       <li>
-        <h4>Weapon Damage Dice (per level, example: <code>3d6</code>)</h4>
+        <h4>무기 피해 주사위 (레벨당, 예: <code>3d6</code>)</h4>
         <div class="keys">
           <span class="key">@wpn.m.dice</span>
           <span class="key">@wpn.r.dice</span>
@@ -175,7 +175,7 @@
         </div>
       </li>
       <li>
-        <h4>Weapon Damage die size (example: <code>8</code>)</h4>
+        <h4>무기 피해 주사위 크기 (예: <code>8</code>)</h4>
         <div class="keys">
           <span class="key">@wpn.m.dieNum</span>
           <span class="key">@wpn.r.dieNum</span>
@@ -185,7 +185,7 @@
         </div>
       </li>
       <li>
-        <h4>Epic damage bonus (+5/10/15 for levels 8-10)</h4>
+        <h4>에픽 피해 보너스 (레벨 8-10에서 +5/10/15)</h4>
         <div class="keys">
           <span class="key">@wpn.m.epicBonus</span>
         </div>

@@ -4,7 +4,9 @@
     <section v-if="actor.type === 'master'" class="unit unit--command-seals">
       <h2 class="unit-title">령주</h2>
       <div class="resource flexrow command-seals">
+        <a class="command-seal-step command-seal-minus" title="령주 −1"><i class="fas fa-minus"></i></a>
         <a v-for="n in 3" :key="n" class="command-seal" :data-seal="n">{{ n <= commandSeals ? '●' : '○' }}</a>
+        <a class="command-seal-step command-seal-plus" title="령주 +1"><i class="fas fa-plus"></i></a>
       </div>
     </section>
     <div class="resource-divider" v-if="(resourceCount > 1 && customResourceCount > 0) || customResourceCount > 1"></div>

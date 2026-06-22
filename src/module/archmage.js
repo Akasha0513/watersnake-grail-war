@@ -767,6 +767,7 @@ Hooks.on('setup', (data, options, id) => {
 async function addEscalationDie() {
   const render = () => {
     const escalation = ArchmageUtility.getEscalation();
+    const gameRound = ArchmageUtility.getGameRound();
     const hide = game.combats.contents.length < 1 ? ' hide' : '';
     const hideIfNotGM = !game.user.isGM ? ' hide' : '';
     const subtitle = game.i18n.localize("ARCHMAGE.escalationDieLabel");
@@ -774,6 +775,7 @@ async function addEscalationDie() {
       "systems/watersnake-grail-war/templates/sidebar/ed-display.html",
       {
         escalation,
+        gameRound,
         hide,
         hideIfNotGM,
         subtitle,
@@ -1182,7 +1184,7 @@ Hooks.on("updateScene", (scene, data, options, userId) => {
 
 Hooks.on("renderSettings", async (app, html) => {
   html = $(html);
-  let button = $(`<button id="archmage-reference-btn" class="archmage-rolls-reference" type="button" data-action="archmage-help"><i class="fas fa-dice-d20"></i> Attributes and Inline Rolls Reference</button>`);
+  let button = $(`<button id="archmage-reference-btn" class="archmage-rolls-reference" type="button" data-action="archmage-help"><i class="fas fa-dice-d20"></i> 능력치 및 인라인 굴림 참조</button>`);
   html.find('button[data-app="controls"]').after(button);
 
   // Event trigger has been moved to the ready hook using the archmage-rolls-reference class.
@@ -2015,10 +2017,12 @@ Hooks.on('renderCombatTracker', async (_combatTracker, _html, {combat}) => {
   }
 
   const escalation = ArchmageUtility.getEscalation(combat);
+  const gameRound = ArchmageUtility.getGameRound(combat);
   const $escalationDiv = $('.archmage-escalation-display');
   $escalationDiv.attr('data-value', escalation);
   $escalationDiv.toggleClass('hide', combat === null);
   $escalationDiv.find('.ed-number h1').text(escalation);
+  $escalationDiv.find('.ed-round').text(`${gameRound} 라운드`);
 
   // Update open sheets.
   for (let app of Object.values(ui.windows)) {

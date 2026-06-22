@@ -1754,6 +1754,15 @@ option[selected] {
       flex-grow: 0;
     }
 
+    .ed-round {
+      flex-grow: 0;
+      margin-top: 2px;
+      padding-top: 2px;
+      border-top: 1px solid var(--border-color);
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
   }
 
   .ed-control {
@@ -1767,6 +1776,29 @@ option[selected] {
     }
     &.ed-plus {
       right: 2px;
+    }
+  }
+}
+
+// 령주 ±버튼
+.command-seals {
+  align-items: center;
+  gap: 4px;
+
+  .command-seal-step {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-size: 10px;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
     }
   }
 }

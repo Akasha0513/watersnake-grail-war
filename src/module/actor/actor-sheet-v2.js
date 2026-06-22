@@ -286,9 +286,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('contextmenu', '.feat-uses-rollable', (event) => this._updateFeatQuantity(event, false));
     html.on('click', '.feat-pip', (event) => this._updatePips(event));
 
-    // 성배전쟁: 령주(점), 신방 능력치 전환(우클릭), 배경 추가/삭제
+    // 성배전쟁: 령주(점/±버튼), 배경 추가/삭제
     html.on('click', '.command-seal', (event) => this._updateCommandSeals(event));
-    html.on('contextmenu', '.defense--pd', (event) => this._cyclePdAbility(event));
+    html.on('click', '.command-seal-minus', () => this._stepCommandSeals(-1));
+    html.on('click', '.command-seal-plus', () => this._stepCommandSeals(1));
     html.on('click', '.background-add', (event) => this._addBackground(event));
     html.on('click', '.background-delete', (event) => this._removeBackground(event));
     html.on('click', '.background-die', (event) => this._rollBackgroundDie(event));
@@ -329,13 +330,19 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     }
   }
 
-  /** 신방 능력치: 자동(큰 값) → 내구 → 민첩 순환 (우클릭) */
-  async _cyclePdAbility(event) {
-    event.preventDefault();
-    const order = ['auto', 'end', 'agi'];
-    const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
-    const next = order[(order.indexOf(cur) + 1) % order.length];
-    await this.actor.update({ 'system.attributes.pd.defenseAbility': next });
+  /** 령주 ±버튼: 1씩 증감 (0~3 범위), 소멸/회복 채팅 메시지 */
+  async _stepCommandSeals(delta) {
+    const cur = Number(this.actor.system.details?.commandSeals?.value) || 0;
+    const next = Math.max(0, Math.min(3, cur + delta));
+    if (next === cur) return;
+    await this.actor.update({ 'system.details.commandSeals.value': next });
+
+    const verb = (next < cur) ? '소멸합니다' : '회복됩니다';
+    const content = `<div class="archmage chat-card command-seal-card">${this.actor.name} 의 령주가 ${verb}.</div>`;
+    await game.holygrailwar.ArchmageUtility.createChatMessage({
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
+      content: content
+    });
   }
 
   /** 배경 추가: 첫 비활성 슬롯 활성화 (여러 번 클릭으로 여러 개 추가) */
@@ -704,46 +711,33 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
    */
   async _onInitRoll() {
     let combat = game.combat;
-    // Check to see if this actor is already in the combat.
+    // 전투(인카운터)가 없으면 굴릴 수 없음.
     if (!combat) {
       ui.notifications.error(game.i18n.localize("ARCHMAGE.UI.errNoInitiativeOutsideCombat"));
       return;
     }
-    const combatant = combat.combatants.find(c => c?.actor?._id == this.actor.id);
-    if (combatant && combatant?.initiative !== null) {
-      return;
-    }
 
-    // Prompt the user for an optional bonus
-    let bonus = 0;
-    try {
-      bonus = await foundry.applications.api.DialogV2.prompt({
-        window: { title: "ARCHMAGE.initAdjustment" },
-        content: `
-          <label for="bonus">${game.i18n.localize("ARCHMAGE.initBonus")}</label>
-          <input name="bonus" type="number" step="1" default="0" placeholder="0" autofocus>`,
-        ok: {
-          label: "COMBAT.InitiativeRoll",
-          callback: (event, button, dialog) => button.form.elements.bonus.valueAsNumber
-        }
-      });
-    } catch(error) {
-      // dialog canceled
-      console.error(error);
-      return;
-    }
+    const formula = this.actor.getInitiativeFormula();
+    const combatant = combat.combatants.find(c => c?.actor?.id == this.actor.id);
 
-    let formula = this.actor.getInitiativeFormula();
-    if (bonus) formula += ` + ${bonus ?? 0}`;
-
-    // Create the combatant if needed.
+    // 전투에 아직 없으면 추가하고 바로 굴림.
     if (!combatant) {
-      await this.actor.rollInitiative({createCombatants: true, initiativeOptions: { formula }});
+      await this.actor.rollInitiative({createCombatants: true, rerollInitiative: true, initiativeOptions: { formula }});
+      return;
     }
-    // Otherwise, determine if the existing combatant should roll init.
-    else if (!combatant.initiative && combatant.initiative !== 0) {
-      await combat.rollInitiative([combatant.id], { formula });
+
+    // 이미 이니셔티브 값이 굴려져 있으면 재굴림 여부를 확인.
+    const alreadyRolled = combatant.initiative !== null && combatant.initiative !== undefined;
+    if (alreadyRolled) {
+      const reroll = await foundry.applications.api.DialogV2.confirm({
+        window: { title: game.i18n.localize("ARCHMAGE.initiative") },
+        content: `<p>${this.actor.name} 의 이니셔티브가 이미 굴려져 있습니다. 재굴림할까요?</p>`,
+        rejectClose: false
+      });
+      if (!reroll) return;
     }
+
+    await combat.rollInitiative([combatant.id], { formula });
   }
 
   /**
