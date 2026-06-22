@@ -15,25 +15,4 @@
       <div class="card-row">{{{system.description.value}}}</div>
     {{/if}}
   </div>
-  {{#if hasTrait}}
-    <div class="card-buttons feature-card-buttons">
-      <button type="button" class="feature-action" data-roll-type="trait">
-        <i class="fas fa-dice-d20"></i> 능력치 판정{{#if traitLabel}} ({{traitLabel}}){{/if}}
-      </button>
-    </div>
-  {{/if}}
-  {{#if hasDamage}}
-    <div class="card-buttons feature-card-buttons">
-      <button type="button" class="feature-action" data-roll-type="damage">
-        <i class="fas fa-burst"></i> 피해 ({{system.damage.value}})
-      </button>
-    </div>
-  {{/if}}
-  {{#if hasMisc}}
-    <div class="card-buttons feature-card-buttons">
-      <button type="button" class="feature-action" data-roll-type="misc">
-        <i class="fas fa-dice"></i> 기타 ({{system.misc.value}})
-      </button>
-    </div>
-  {{/if}}
 </div>
