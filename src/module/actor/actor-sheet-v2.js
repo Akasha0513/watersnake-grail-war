@@ -718,11 +718,30 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     }
 
     const formula = this.actor.getInitiativeFormula();
-    const combatant = combat.combatants.find(c => c?.actor?.id == this.actor.id);
 
-    // 전투에 아직 없으면 추가하고 바로 굴림.
+    // 이 액터의 토큰들 (토큰 액터면 자신, 아니면 씬의 활성 토큰들).
+    const myTokens = this.isToken ? [this.token] : this.getActiveTokens(false, true);
+    const tokenIds = myTokens.map(t => t.id);
+    const findCombatant = () => combat.combatants.find(c =>
+      c.actorId === this.id || (c.tokenId && tokenIds.includes(c.tokenId))
+    );
+
+    let combatant = findCombatant();
+
+    // 전투에 아직 없으면 추가.
     if (!combatant) {
-      await this.actor.rollInitiative({createCombatants: true, rerollInitiative: true, initiativeOptions: { formula }});
+      if (!myTokens.length) {
+        ui.notifications.warn("씬에 이 액터의 토큰이 없어 전투에 추가할 수 없습니다.");
+        return;
+      }
+      const toCreate = myTokens
+        .filter(t => !t.inCombat)
+        .map(t => ({ tokenId: t.id, actorId: this.id, hidden: !!t.hidden }));
+      const created = toCreate.length ? await combat.createEmbeddedDocuments("Combatant", toCreate) : [];
+      combatant = created[0] ?? findCombatant();
+    }
+    if (!combatant) {
+      ui.notifications.warn("전투원을 찾을 수 없습니다.");
       return;
     }
 
@@ -737,6 +756,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       if (!reroll) return;
     }
 
+    // 커스텀 rollInitiative 오버라이드를 우회해 직접 굴림 (추가만 되고 안 굴려지던 문제 해결).
     await combat.rollInitiative([combatant.id], { formula });
   }
 
