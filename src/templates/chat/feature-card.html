@@ -1,13 +1,9 @@
 <div class="archmage chat-card feature-card"
      data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}">
   <header class="card-header flexrow">
-    <img src="{{actor.img}}" title="{{actor.name}}" width="36" height="36"/>
-    <h3 class="ability-usage ability-usage--recharge">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}</h3>
+    <h3 class="ability-usage ability-usage--recharge">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
   </header>
   <div class="card-content">
-    {{#if system.rank.value}}
-      <div class="card-row"><strong>랭크:</strong> {{system.rank.value}}</div>
-    {{/if}}
     {{#if system.kind.value}}
       <div class="card-row"><strong>종류:</strong> {{system.kind.value}}</div>
     {{/if}}
