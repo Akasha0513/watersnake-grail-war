@@ -336,12 +336,12 @@ export class ActorArchmage extends Actor {
     // Initiative
     if (actorData.type === 'character' || actorData.type === 'master') {
       let incrInit = 0;
-      let statInit = data.abilities?.dex?.nonKey?.mod || 0;
+      let statInit = data.abilities?.agi?.nonKey?.mod || 0;
       if (game.settings.get("watersnake-grail-war", "secondEdition")) {
         // In 2e the skills incremental also increases initiative
         if (this.system.incrementals?.skillInitiative) incrInit = 1;
         // In 2e wizards have a talent to use Int instead of Dex
-        if (this.getFlag("watersnake-grail-war", "dexToInt")) statInit = data.abilities?.int?.nonKey?.mod || 0;
+        if (this.getFlag("watersnake-grail-war", "dexToInt")) statInit = data.abilities?.mgi?.nonKey?.mod || 0;
         // In 2e beta the bonus to disengage also applies to initiative
         incrInit += data.attributes.saves.disengageBonus;
       }
@@ -546,11 +546,11 @@ export class ActorArchmage extends Actor {
           }
 
           strBonus += getBonusOr0(item.system.attributes.str);
-          dexBonus += getBonusOr0(item.system.attributes.dex);
-          conBonus += getBonusOr0(item.system.attributes.con);
-          intBonus += getBonusOr0(item.system.attributes.int);
-          wisBonus += getBonusOr0(item.system.attributes.wis);
-          chaBonus += getBonusOr0(item.system.attributes.cha);
+          dexBonus += getBonusOr0(item.system.attributes.agi);
+          conBonus += getBonusOr0(item.system.attributes.end);
+          intBonus += getBonusOr0(item.system.attributes.mgi);
+          wisBonus += getBonusOr0(item.system.attributes.ins);
+          chaBonus += getBonusOr0(item.system.attributes.lck);
 
           if (!item.system.attributes.save.threshold
             || data.attributes.hp.value <= item.system.attributes.save.threshold) {
@@ -581,11 +581,11 @@ export class ActorArchmage extends Actor {
 
     // Ability score bonuses from items
     data.abilities.str.bonus = strBonus;
-    data.abilities.dex.bonus = dexBonus;
-    data.abilities.con.bonus = conBonus;
-    data.abilities.int.bonus = intBonus;
-    data.abilities.wis.bonus = wisBonus;
-    data.abilities.cha.bonus = chaBonus;
+    data.abilities.agi.bonus = dexBonus;
+    data.abilities.end.bonus = conBonus;
+    data.abilities.mgi.bonus = intBonus;
+    data.abilities.ins.bonus = wisBonus;
+    data.abilities.lck.bonus = chaBonus;
 
     // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
     const isMaster = this.type === 'master';
@@ -608,9 +608,9 @@ export class ActorArchmage extends Actor {
     // 신방 능력치: 자동(내구·민첩 중 큰 값) 또는 선택
     const pdAblPref = data.attributes.pd.defenseAbility || 'auto';
     let pdAblMod;
-    if (pdAblPref === 'con') pdAblMod = sm('con');
-    else if (pdAblPref === 'dex') pdAblMod = sm('dex');
-    else pdAblMod = Math.max(sm('con'), sm('dex'));
+    if (pdAblPref === 'end') pdAblMod = sm('end');
+    else if (pdAblPref === 'agi') pdAblMod = sm('agi');
+    else pdAblMod = Math.max(sm('end'), sm('agi'));
 
     // 신방 (자동 시): 서번트 = (삼기사14/사술사12) + 급 + (내구·민첩 수정치) / 마스터 = 10 + (내구·민첩 수정치)
     if (data.attributes.pd.automatic ?? true) {
@@ -620,7 +620,7 @@ export class ActorArchmage extends Actor {
     // 정방 (자동 시): 서번트 = (삼기사10/사술사12) + 통찰 수정치 / 마스터 = 8 + 통찰 수정치
     if (data.attributes.md.automatic ?? true) {
       const mdBase = isMaster ? 8 : (defCategory === 'three' ? 10 : 12);
-      data.attributes.md.value = mdBase + sm('wis') + Number(mdBonus);
+      data.attributes.md.value = mdBase + sm('ins') + Number(mdBonus);
     }
     // AC는 성배전쟁에서 미사용 (호환용으로 base 유지)
     data.attributes.ac.value = Number(data.attributes.ac.base) + Number(acBonus);
@@ -640,14 +640,14 @@ export class ActorArchmage extends Actor {
 
     // HP (성배전쟁): 서번트 = 근력 + 내구×3 / 마스터 = (근력 + 내구×3) ÷ 2
     if (data.attributes.hp.automatic) {
-      let hpBaseVal = sv('str') + sv('con') * 3;
+      let hpBaseVal = sv('str') + sv('end') * 3;
       if (isMaster) hpBaseVal = Math.floor(hpBaseVal / 2);
       data.attributes.hp.max = hpBaseVal + Number(hpBonus) + Number(data.attributes.hp.extra);
     }
 
     // MP (성배전쟁): 마력<12 = 12+마력(서)/6+마력(마) / 마력≥12 = 마력×2(서)/마력×1.5(마)
     if (data.attributes.mp.automatic ?? true) {
-      const mag = sv('int');
+      const mag = sv('mgi');
       let mpMax;
       if (mag < 12) mpMax = isMaster ? 6 + mag : 12 + mag;
       else mpMax = isMaster ? Math.floor(mag * 1.5) : mag * 2;
@@ -656,7 +656,7 @@ export class ActorArchmage extends Actor {
 
     // SP (성배전쟁): 서번트 전용 자동. 마스터는 수동(기본 0).
     if (!isMaster && (data.attributes.sp.automatic ?? true)) {
-      const spStr = sv('str'), spDex = sv('dex'), spCon = sv('con'), spMag = sv('int');
+      const spStr = sv('str'), spDex = sv('agi'), spCon = sv('end'), spMag = sv('mgi');
       let spVal;
       switch (data.attributes.sp.formula) {
         case 'con': spVal = spCon; break;            // 내구 (=(내구+내구)÷2)
@@ -689,7 +689,7 @@ export class ActorArchmage extends Actor {
       }
     }
     let formulaDice = (recoveryDice * (Number(recoveryDie[1]) || 1)).toString() + "d" + recoveryDie[2];
-    let formulaConst = data.abilities.con.nonKey.dmg;
+    let formulaConst = data.abilities.end.nonKey.dmg;
     recoveryAvg = Math.round(recoveryDice * recoveryAvg);
 
     if (flags.archmage?.strongRecovery) {

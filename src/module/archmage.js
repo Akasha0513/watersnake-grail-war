@@ -693,11 +693,11 @@ Hooks.on('setup', (data, options, id) => {
     // Autocomplete Inline Rolls
     const aipKeys = [
       'str',
-      'dex',
-      'con',
-      'int',
-      'wis',
-      'cha',
+      'agi',
+      'end',
+      'mgi',
+      'ins',
+      'lck',
       'ac',
       'pd',
       'md',
@@ -2128,11 +2128,11 @@ Hooks.on('dcCalcWhitelist', (whitelist, actor) => {
     },
     abilities: [
       'str',
-      'dex',
-      'con',
-      'int',
-      'wis',
-      'cha'
+      'agi',
+      'end',
+      'mgi',
+      'ins',
+      'lck'
     ],
     attributes: [
       'init',

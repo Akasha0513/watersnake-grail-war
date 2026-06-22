@@ -227,7 +227,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      dex:
+      agi:
         type: Number
         label: Dexterity
         value: 10
@@ -235,7 +235,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      con:
+      end:
         type: Number
         label: Constitution
         value: 10
@@ -243,7 +243,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      int:
+      mgi:
         type: Number
         label: Intelligence
         value: 10
@@ -251,7 +251,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      wis:
+      ins:
         type: Number
         label: Wisdom
         value: 10
@@ -259,7 +259,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      cha:
+      lck:
         type: Number
         label: Charisma
         value: 10
@@ -547,7 +547,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      dex:
+      agi:
         type: Number
         label: Dexterity
         value: 10
@@ -555,7 +555,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      con:
+      end:
         type: Number
         label: Constitution
         value: 10
@@ -563,7 +563,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      int:
+      mgi:
         type: Number
         label: Intelligence
         value: 10
@@ -571,7 +571,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      wis:
+      ins:
         type: Number
         label: Wisdom
         value: 10
@@ -579,7 +579,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
-      cha:
+      lck:
         type: Number
         label: Charisma
         value: 10
@@ -1256,15 +1256,15 @@ Item:
         current: 0
       str:
         bonus: 0
-      dex:
+      agi:
         bonus: 0
-      con:
+      end:
         bonus: 0
-      int:
+      mgi:
         bonus: 0
-      wis:
+      ins:
         bonus: 0
-      cha:
+      lck:
         bonus: 0
     icons: ''
     tier: 'adventurer'

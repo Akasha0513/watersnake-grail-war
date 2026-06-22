@@ -321,7 +321,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /** 신방 능력치: 자동(큰 값) → 내구 → 민첩 순환 (우클릭) */
   async _cyclePdAbility(event) {
     event.preventDefault();
-    const order = ['auto', 'con', 'dex'];
+    const order = ['auto', 'end', 'agi'];
     const cur = this.actor.system.attributes.pd.defenseAbility || 'auto';
     const next = order[(order.indexOf(cur) + 1) % order.length];
     await this.actor.update({ 'system.attributes.pd.defenseAbility': next });
@@ -480,7 +480,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     const item = this.actor.items.get(id);
     if (!item) return;
     const sys = item.system;
-    const abilityNames = { str: '근력', con: '내구', dex: '민첩', int: '마력', cha: '행운', wis: '통찰' };
+    const abilityNames = { str: '근력', end: '내구', agi: '민첩', mgi: '마력', lck: '행운', ins: '통찰' };
     const tokenId = this.actor.token?.id ?? this.actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-card.html',

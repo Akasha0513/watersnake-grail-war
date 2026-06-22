@@ -40,7 +40,7 @@ export default {
   computed: {
     // 능력치 표시 순서: 근력·내구·민첩·마력·행운·통찰
     orderedAbilities() {
-      const order = ['str', 'con', 'dex', 'int', 'cha', 'wis'];
+      const order = ['str', 'end', 'agi', 'mgi', 'lck', 'ins'];
       const ab = this.actor.system.abilities || {};
       const out = [];
       for (const k of order) if (ab[k]) out.push([k, ab[k]]);

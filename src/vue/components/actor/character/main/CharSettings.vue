@@ -192,8 +192,8 @@ export default {
       ],
       defenseAbilities: [
         { value: 'auto', label: '자동 (큰 값)' },
-        { value: 'con', label: '내구' },
-        { value: 'dex', label: '민첩' },
+        { value: 'end', label: '내구' },
+        { value: 'agi', label: '민첩' },
       ],
       spFormulas: [
         { value: 'strdex', label: '(근력+민첩)÷2' },
@@ -204,11 +204,11 @@ export default {
       ],
       rerollAbilities: [
         { value: 'str', label: '근력' },
-        { value: 'con', label: '내구' },
-        { value: 'dex', label: '민첩' },
-        { value: 'int', label: '마력' },
-        { value: 'cha', label: '행운' },
-        { value: 'wis', label: '통찰' },
+        { value: 'end', label: '내구' },
+        { value: 'agi', label: '민첩' },
+        { value: 'mgi', label: '마력' },
+        { value: 'lck', label: '행운' },
+        { value: 'ins', label: '통찰' },
       ]
     }
   },

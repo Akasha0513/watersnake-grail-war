@@ -73,9 +73,9 @@ export class ActorHelpersV2 {
     }
 
     // Use array.sort()[1] to grab the middle of the three ability mods.
-    data.attributes.ac.value = data.attributes.ac.base + [data.abilities.dex.mod, data.abilities.con.mod, data.abilities.wis.mod].sort()[1] + data.attributes.level.value + acBonus;
-    data.attributes.pd.value = data.attributes.pd.base + [data.abilities.dex.mod, data.abilities.con.mod, data.abilities.str.mod].sort()[1] + data.attributes.level.value + pdBonus;
-    data.attributes.md.value = data.attributes.md.base + [data.abilities.int.mod, data.abilities.cha.mod, data.abilities.wis.mod].sort()[1] + data.attributes.level.value + mdBonus;
+    data.attributes.ac.value = data.attributes.ac.base + [data.abilities.agi.mod, data.abilities.end.mod, data.abilities.ins.mod].sort()[1] + data.attributes.level.value + acBonus;
+    data.attributes.pd.value = data.attributes.pd.base + [data.abilities.agi.mod, data.abilities.end.mod, data.abilities.str.mod].sort()[1] + data.attributes.level.value + pdBonus;
+    data.attributes.md.value = data.attributes.md.base + [data.abilities.mgi.mod, data.abilities.lck.mod, data.abilities.ins.mod].sort()[1] + data.attributes.level.value + mdBonus;
   }
 
   static _getBonusOr0(type) {

@@ -131,35 +131,35 @@
     <div class="form-group">
       <label> {{ game.i18n.localize('ARCHMAGE.ITEM.dexBonus') }} </label>
       <div class="field">
-        <input type="number" name="system.attributes.dex.bonus" v-model="item.system.attributes.dex.bonus" />
+        <input type="number" name="system.attributes.agi.bonus" v-model="item.system.attributes.agi.bonus" />
       </div>
     </div>
 
     <div class="form-group">
       <label> {{ game.i18n.localize('ARCHMAGE.ITEM.conBonus') }} </label>
       <div class="field">
-        <input type="number" name="system.attributes.con.bonus" v-model="item.system.attributes.con.bonus" />
+        <input type="number" name="system.attributes.end.bonus" v-model="item.system.attributes.end.bonus" />
       </div>
     </div>
 
     <div class="form-group">
       <label> {{ game.i18n.localize('ARCHMAGE.ITEM.intBonus') }} </label>
       <div class="field">
-        <input type="number" name="system.attributes.int.bonus" v-model="item.system.attributes.int.bonus" />
+        <input type="number" name="system.attributes.mgi.bonus" v-model="item.system.attributes.mgi.bonus" />
       </div>
     </div>
 
     <div class="form-group">
       <label> {{ game.i18n.localize('ARCHMAGE.ITEM.wisBonus') }} </label>
       <div class="field">
-        <input type="number" name="system.attributes.wis.bonus" v-model="item.system.attributes.wis.bonus" />
+        <input type="number" name="system.attributes.ins.bonus" v-model="item.system.attributes.ins.bonus" />
       </div>
     </div>
 
     <div class="form-group">
       <label> {{ game.i18n.localize('ARCHMAGE.ITEM.chaBonus') }} </label>
       <div class="field">
-        <input type="number" name="system.attributes.cha.bonus" v-model="item.system.attributes.cha.bonus" />
+        <input type="number" name="system.attributes.lck.bonus" v-model="item.system.attributes.lck.bonus" />
       </div>
     </div>
   </fieldset>

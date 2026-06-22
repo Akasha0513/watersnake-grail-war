@@ -582,19 +582,19 @@ ARCHMAGE:
   str:
     key: 근력
     label: 근력
-  dex:
+  agi:
     key: 민첩
     label: 민첩
-  con:
+  end:
     key: 내구
     label: 내구
-  int:
+  mgi:
     key: 마력
     label: 마력
-  wis:
+  ins:
     key: 통찰
     label: 통찰
-  cha:
+  lck:
     key: 행운
     label: 행운
   # Defenses

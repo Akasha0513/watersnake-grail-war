@@ -73,16 +73,16 @@ export async function wrapRolls(text, replacements = [], diceFormulaMode = 'shor
     ['@tier', 'TIER'],
     ['@str.mod', 'STR'],
     ['@str.dmg', 'STR×TIER'],
-    ['@con.mod', 'CON'],
-    ['@con.dmg', 'CON×TIER'],
-    ['@dex.mod', 'DEX'],
-    ['@dex.dmg', 'DEX×TIER'],
-    ['@int.mod', 'INT'],
-    ['@int.dmg', 'INT×TIER'],
-    ['@wis.mod', 'WIS'],
-    ['@wis.dmg', 'WIS×TIER'],
-    ['@cha.mod', 'CHA'],
-    ['@cha.dmg', 'CHA×TIER'],
+    ['@end.mod', 'END'],
+    ['@end.dmg', 'END×TIER'],
+    ['@agi.mod', 'AGI'],
+    ['@agi.dmg', 'AGI×TIER'],
+    ['@mgi.mod', 'MGI'],
+    ['@mgi.dmg', 'MGI×TIER'],
+    ['@ins.mod', 'INS'],
+    ['@ins.dmg', 'INS×TIER'],
+    ['@lck.mod', 'LCK'],
+    ['@lck.dmg', 'LCK×TIER'],
     ['@atk.mod', 'ATK'],
     ['@wpn.m.dice', 'WPN'],
     ['@wpn.r.dice', 'WPN'],
@@ -118,7 +118,7 @@ export async function wrapRolls(text, replacements = [], diceFormulaMode = 'shor
     };
   }
   // Handle replacements for the 'long' syntax, which is the original inline
-  // roll. Ex: [[@wpn.m.dice+@dex+@lvl]]
+  // roll. Ex: [[@wpn.m.dice+@agi+@lvl]]
   else if (diceFormulaMode == 'long') {
     // Run a regex over all inline rolls.
     clean = clean.toString().replaceAll(/(\[\[)([^\[]*)(\]\])/g, (match, p1, p2, p3) => {
