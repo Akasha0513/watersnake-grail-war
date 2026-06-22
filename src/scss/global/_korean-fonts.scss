@@ -123,3 +123,9 @@
 .chat-card.ability-card .card-header .item-name {
   font-family: 'Ridibatang', 'warnock-pro', serif !important;
 }
+
+/* 랭크 문자(A/B/A+/EX 등)는 장식 제목 폰트에서 라틴이 어색하게 나와 본문 폰트로 통일 */
+.feature-rank,
+.chat-card .card-header .feature-rank {
+  font-family: 'Ridibatang', 'warnock-pro', serif !important;
+}

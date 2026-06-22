@@ -1848,6 +1848,11 @@ option[selected] {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  // 수정/삭제 컨트롤은 항상 오른쪽 끝 (종류 칸 유무와 무관)
+  .item-controls {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
   .feature-summary {
     margin: 1px 0 6px 24px;
     padding: 4px 8px;

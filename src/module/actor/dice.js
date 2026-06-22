@@ -110,7 +110,8 @@ export class DiceArchmage {
         tokenId: token ? `${token.id}` : null,
         ability: {
           name: data.abilityName ?? null,
-          bonus: data.abil ?? 0
+          bonus: data.abil ?? 0,
+          rank: ((m) => m >= 7 ? 'EX' : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-')(Number(data.abil) || 0)
         },
         background: {
           name: data.backgroundName ?? null,
@@ -573,7 +574,8 @@ export class DiceArchmage {
         tokenId: actor.token?.id ?? null,
         ability: {
           name: abilityKey ? game.i18n.localize(`ARCHMAGE.${abilityKey}.label`) : null,
-          bonus: ability?.mod ?? 0
+          bonus: ability?.mod ?? 0,
+          rank: ((m) => m >= 7 ? 'EX' : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-')(Number(ability?.mod) || 0)
         },
         background: {
           name: backgroundLabel
