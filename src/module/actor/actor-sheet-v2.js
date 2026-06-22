@@ -710,54 +710,64 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
    * Roll initiative for the actor.
    */
   async _onInitRoll() {
-    let combat = game.combat;
-    // 전투(인카운터)가 없으면 굴릴 수 없음.
-    if (!combat) {
-      ui.notifications.error(game.i18n.localize("ARCHMAGE.UI.errNoInitiativeOutsideCombat"));
-      return;
-    }
-
-    const formula = this.actor.getInitiativeFormula();
-
-    // 이 액터의 토큰들 (토큰 액터면 자신, 아니면 씬의 활성 토큰들).
-    const myTokens = this.isToken ? [this.token] : this.getActiveTokens(false, true);
-    const tokenIds = myTokens.map(t => t.id);
-    const findCombatant = () => combat.combatants.find(c =>
-      c.actorId === this.id || (c.tokenId && tokenIds.includes(c.tokenId))
-    );
-
-    let combatant = findCombatant();
-
-    // 전투에 아직 없으면 추가.
-    if (!combatant) {
-      if (!myTokens.length) {
-        ui.notifications.warn("씬에 이 액터의 토큰이 없어 전투에 추가할 수 없습니다.");
+    try {
+      const combat = game.combat;
+      // 전투(인카운터)가 없으면 굴릴 수 없음.
+      if (!combat) {
+        ui.notifications.error(game.i18n.localize("ARCHMAGE.UI.errNoInitiativeOutsideCombat"));
         return;
       }
-      const toCreate = myTokens
-        .filter(t => !t.inCombat)
-        .map(t => ({ tokenId: t.id, actorId: this.id, hidden: !!t.hidden }));
-      const created = toCreate.length ? await combat.createEmbeddedDocuments("Combatant", toCreate) : [];
-      combatant = created[0] ?? findCombatant();
-    }
-    if (!combatant) {
-      ui.notifications.warn("전투원을 찾을 수 없습니다.");
-      return;
-    }
 
-    // 이미 이니셔티브 값이 굴려져 있으면 재굴림 여부를 확인.
-    const alreadyRolled = combatant.initiative !== null && combatant.initiative !== undefined;
-    if (alreadyRolled) {
-      const reroll = await foundry.applications.api.DialogV2.confirm({
-        window: { title: game.i18n.localize("ARCHMAGE.initiative") },
-        content: `<p>${this.actor.name} 의 이니셔티브가 이미 굴려져 있습니다. 재굴림할까요?</p>`,
-        rejectClose: false
-      });
-      if (!reroll) return;
-    }
+      // ⚠️ 여기서 this는 '시트'다. 액터 메서드는 반드시 this.actor 로 호출.
+      const actor = this.actor;
+      const formula = actor.getInitiativeFormula();
 
-    // 커스텀 rollInitiative 오버라이드를 우회해 직접 굴림 (추가만 되고 안 굴려지던 문제 해결).
-    await combat.rollInitiative([combatant.id], { formula });
+      // 토큰 확보: 선택된 토큰 > 씬의 활성 토큰 > (토큰 액터면) 자신.
+      let tokenDoc = null;
+      if (actor.isToken) {
+        tokenDoc = actor.token;
+      } else {
+        const controlled = canvas.tokens?.controlled?.find(t => t.actor?.id === actor.id);
+        const placeable = controlled ?? actor.getActiveTokens()[0];
+        tokenDoc = placeable?.document ?? null;
+      }
+
+      let combatant = combat.combatants.find(c =>
+        c.actorId === actor.id || (tokenDoc && c.tokenId === tokenDoc.id)
+      );
+
+      // 전투에 아직 없으면 추가.
+      if (!combatant) {
+        if (!tokenDoc) {
+          ui.notifications.warn("이 캐릭터의 토큰을 씬에 두거나 선택한 뒤 다시 시도하세요.");
+          return;
+        }
+        const data = { tokenId: tokenDoc.id, actorId: actor.id, hidden: !!tokenDoc.hidden };
+        if (tokenDoc.parent?.id) data.sceneId = tokenDoc.parent.id;
+        const created = await combat.createEmbeddedDocuments("Combatant", [data]);
+        combatant = created?.[0] ?? combat.combatants.find(c => c.tokenId === tokenDoc.id);
+      }
+      if (!combatant) {
+        ui.notifications.warn("전투원을 만들지 못했습니다.");
+        return;
+      }
+
+      // 이미 이니셔티브 값이 굴려져 있으면 재굴림 여부를 확인.
+      if (combatant.initiative !== null && combatant.initiative !== undefined) {
+        const reroll = await foundry.applications.api.DialogV2.confirm({
+          window: { title: game.i18n.localize("ARCHMAGE.initiative") },
+          content: `<p>${actor.name} 의 이니셔티브가 이미 굴려져 있습니다. 재굴림할까요?</p>`,
+          rejectClose: false
+        });
+        if (!reroll) return;
+      }
+
+      // 직접 굴림.
+      await combat.rollInitiative([combatant.id], { formula });
+    } catch (err) {
+      console.error("성배전쟁 이니셔티브 오류:", err);
+      ui.notifications.error("이니셔티브 오류: " + (err?.message ?? err));
+    }
   }
 
   /**
