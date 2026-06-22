@@ -1,14 +1,18 @@
 <div class="archmage chat-card feature-card"
      data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}">
   <header class="card-header flexrow">
-    <h3 class="ability-usage ability-usage--recharge">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
+    <h3 class="item-name">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
   </header>
   <div class="card-content">
-    {{#if system.kind.value}}
-      <div class="card-row"><strong>종류:</strong> {{system.kind.value}}</div>
-    {{/if}}
     {{#if system.description.value}}
-      <div class="card-row">{{{system.description.value}}}</div>
+      <div class="container">{{{system.description.value}}}</div>
+    {{else}}
+      <div class="container no-desc">설명 없음</div>
     {{/if}}
   </div>
+  {{#if system.kind.value}}
+    <footer class="card-footer">
+      <span class="chip" title="종류"><i class="fas fa-tag"></i> {{system.kind.value}}</span>
+    </footer>
+  {{/if}}
 </div>
