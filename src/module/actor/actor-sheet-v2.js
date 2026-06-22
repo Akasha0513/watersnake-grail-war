@@ -309,13 +309,24 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     });
   }
 
-  /** 령주: 클릭한 점까지 소진/회복 토글 */
+  /** 령주: 클릭한 점까지 소진/회복 토글 + 채팅 메시지 */
   async _updateCommandSeals(event) {
     event.preventDefault();
     const n = Number(event.currentTarget.dataset.seal);
     const cur = Number(this.actor.system.details?.commandSeals?.value) || 0;
     const next = (n <= cur) ? n - 1 : n;
     await this.actor.update({ 'system.details.commandSeals.value': next });
+
+    // 령주 변동 시 채팅 메시지 (소멸/회복)
+    const delta = next - cur;
+    if (delta !== 0) {
+      const verb = delta < 0 ? '소멸합니다' : '회복됩니다';
+      const content = `<div class="archmage chat-card command-seal-card">${this.actor.name} 의 령주가 ${verb}.</div>`;
+      await game.holygrailwar.ArchmageUtility.createChatMessage({
+        speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
+        content: content
+      });
+    }
   }
 
   /** 신방 능력치: 자동(큰 값) → 내구 → 민첩 순환 (우클릭) */
