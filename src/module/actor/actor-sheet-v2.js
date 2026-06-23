@@ -677,8 +677,8 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       title: '능력치 설정',
       content,
       buttons: {
-        save: { label: game.i18n.localize('ARCHMAGE.CHAT.Save') || '저장', callback: () => { saved = true; } },
-        cancel: { label: game.i18n.localize('ARCHMAGE.CHAT.Cancel') || '취소', callback: () => {} }
+        save: { label: '저장', callback: () => { saved = true; } },
+        cancel: { label: '취소', callback: () => {} }
       },
       default: 'save',
       close: html => {
@@ -730,8 +730,8 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       title: '배경 설정',
       content,
       buttons: {
-        save: { label: game.i18n.localize('ARCHMAGE.CHAT.Save') || '저장', callback: () => { saved = true; } },
-        cancel: { label: game.i18n.localize('ARCHMAGE.CHAT.Cancel') || '취소', callback: () => {} }
+        save: { label: '저장', callback: () => { saved = true; } },
+        cancel: { label: '취소', callback: () => {} }
       },
       default: 'save',
       close: html => {
