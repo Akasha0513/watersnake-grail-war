@@ -8,7 +8,7 @@
             <a class="effect-control" data-action="create" :title="localize('ARCHMAGE.EFFECT.AE.new')"><i class="fas fa-plus"></i></a>
           </div>
         </div>
-        <div class="effects-status-apply flexrow">
+        <div class="effects-status-apply">
           <select class="effect-status-select">
             <option v-for="(status, statusKey) in statusOptions" :key="statusKey" :value="status.id">{{status.name}}</option>
           </select>
@@ -181,29 +181,28 @@ export default {
 </script>
 
 <style>
-/* 36종 상태이상 부여 팔레트(드롭다운 + 부여 버튼) */
+/* 36종 상태이상 부여 팔레트(드롭다운 + 부여 버튼).
+   grid로 컬럼을 고정(1fr=select / auto=버튼) → select가 버튼을 밀어내지 못함(잘림 방지). */
 .effects-status-apply {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px;
+  align-items: center;
+  margin-top: 4px;
   width: 100%;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 4px;
-  flex-wrap: nowrap;
 }
 .effects-status-apply .effect-status-select {
-  /* 가용 폭만 차지하고 콘텐츠 길이로 옆으로 늘어나지 않게 강제 */
-  flex: 1 1 0;
-  width: 0;
+  width: 100%;        /* 자기 grid 셀(minmax 0,1fr) 안에서만 채움 */
   min-width: 0;
-  max-width: 100%;
+  box-sizing: border-box;
 }
 .effects-status-apply .effect-status-button {
-  /* .effect-control의 36px 고정폭을 무효화(아이콘+텍스트가 들어가게) */
-  flex: 0 0 auto;
-  width: auto;
+  /* .effect-control의 36px 고정폭을 확실히 무효화(아이콘+"부여"가 들어가게) */
+  width: auto !important;
+  flex: none;
   white-space: nowrap;
-  padding: 0 6px;
+  padding: 0 8px;
 }
 
 /*

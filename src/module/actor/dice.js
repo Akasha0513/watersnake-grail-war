@@ -369,92 +369,27 @@ export class DiceArchmage {
     actor,
     { defaultBackground = null, defaultAbility = null, fixedBonus = null, title = null }
   ) {
-    const formatBonus = bonus => {
-      return bonus >= 0 ? `+${bonus}` : `${bonus}`
-    }
+    const formatBonus = bonus => (bonus >= 0 ? `+${bonus}` : `${bonus}`)
+    const abilities = Object.entries(actor.system.abilities).map(([key, ability]) => ({
+      key,
+      label: game.i18n.localize(`ARCHMAGE.${key}.label`),
+      bonus: formatBonus(ability.mod)
+    }))
+    const backgrounds = Object.entries(actor.system.backgrounds)
+      .filter(([_, bg]) => bg.bonus.value || bg.name.value)
+      .map(([key, bg]) => ({ key, label: bg.name.value, bonus: formatBonus(bg.bonus.value) }))
 
-    const content = await foundry.applications.handlebars.renderTemplate(
-      'systems/watersnake-grail-war/templates/dialog/background-check-dialog.html',
-      {
-        abilities: Object.entries(actor.system.abilities).map(
-          ([key, ability]) => ({
-            key: key,
-            label: game.i18n.localize(`ARCHMAGE.${key}.label`),
-            bonus: formatBonus(ability.mod),
-            checked: key === defaultAbility
-          })
-        ),
-        backgrounds: Object.entries(actor.system.backgrounds)
-          .filter(([_, bg]) => bg.bonus.value || bg.name.value)
-          .map(([key, background]) => ({
-            key: key,
-            label: background.name.value,
-            bonus: formatBonus(background.bonus.value),
-            checked: background.name.value === defaultBackground
-          })),
-        rollModes: CONFIG.Dice.rollModes,
-        defaultRollMode: game.settings.get('core', 'rollMode')
-      }
-    )
-
-    const extractFormData = form => {
-      const backgrounds = [];
-      for (const el of form.elements) {
-        if (el.name && el.name.startsWith('bg-') && el.checked) {
-          const key = el.value;
-          const randEl = form.elements[`bgrand-${key}`];
-          backgrounds.push({ key, random: !!(randEl && randEl.checked) });
-        }
-      }
-      return {
-        situationalBonus: form.bonus.value,
-        abilityKey: form.ability.value,
-        backgrounds: backgrounds,
-        rollMode: form.rollMode.value,
-        critExpand: Number(form.critExpand?.value) || 0
-      };
-    }
-
-    return new foundry.applications.api.DialogV2({
-      window: {
-        title: title ?? game.i18n.localize('ARCHMAGE.checkBackground'),
-        resizeable: true
-      },
-      content: content,
-      buttons: [
-        // 불리 n = (n+1)d20 중 가장 낮은 1개(kl) / 유리 n = (n+1)d20 중 가장 높은 1개(kh)
-        {
-          action: 'dis2',
-          label: '불리 2',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'dis2', ...extractFormData(button.form) })
-        },
-        {
-          action: 'dis1',
-          label: '불리 1',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'dis1', ...extractFormData(button.form) })
-        },
-        {
-          action: 'normal',
-          label: '굴림',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, fixedBonus, selection: 0, ...extractFormData(button.form) })
-        },
-        {
-          action: 'adv1',
-          label: '유리 1',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'adv1', ...extractFormData(button.form) })
-        },
-        {
-          action: 'adv2',
-          label: '유리 2',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'adv2', ...extractFormData(button.form) })
-        }
-      ]
-    }).render({ force: true })
+    // 통합 RollDialog(Phase 2)로 위임. 실제 굴림·카드는 _completeBackgroundRoll 재사용.
+    const { GrailRollDialog } = await import('./grail-roll-dialog.js')
+    return GrailRollDialog.asPromise({
+      actor,
+      abilities,
+      backgrounds,
+      defaultAbility,
+      fixedBonus,
+      abilitySelect: true,
+      title: title ?? game.i18n.localize('ARCHMAGE.checkBackground')
+    })
   }
 
   static async _completeBackgroundRoll ({
@@ -465,7 +400,8 @@ export class DiceArchmage {
     backgrounds = [],
     rollMode,
     fixedBonus = null,
-    critExpand = 0
+    critExpand = 0,
+    extraMods = []
   }) {
     // 수정치 배열로 조립 (통합 RollDialog 모델 §3). base = d20(유리/불리 단계), 나머지는 modifier.
     let base
@@ -503,6 +439,12 @@ export class DiceArchmage {
     const backgroundLabel = bgLabels.join(', ')
     // 아이템 능력치 보너스
     if (ability && ability.bonus) mods.push({ label: '아이템', value: `@${abilityKey}.bonus`, source: 'item' })
+    // 추가 수정치(통합 대화상자의 커스텀/프리셋/자동주입)
+    for (const m of (extraMods || [])) {
+      if (m && m.active !== false && m.value !== undefined && String(m.value) !== '') {
+        mods.push({ label: m.label || '보정', value: String(m.value), source: m.source || 'custom' })
+      }
+    }
     // 상황 보정
     if (situationalBonus) mods.push({ label: '상황 보정', value: String(situationalBonus), source: 'situational' })
 
