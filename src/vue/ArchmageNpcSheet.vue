@@ -28,17 +28,17 @@
           <Tab group="primary" :tab="tabs.primary.details" classes="flexcol">
             <CharDetails :actor="actor" :owner="owner" :flags="flags"/>
           </Tab>
-          <!-- Actions tab -->
+          <!-- Powers tab (체계/액션/기타 기능) -->
           <Tab group="primary" :tab="tabs.primary.actions">
-            <NpcActions :actor="actor" :flags="flags"/>
+            <CharFeatures :actor="actor"/>
+          </Tab>
+          <!-- Inventory tab (예장/보구) -->
+          <Tab group="primary" :tab="tabs.primary.inventory">
+            <CharFeatures :actor="actor" group="inventory"/>
           </Tab>
           <!-- Effects tab -->
           <Tab group="primary" :tab="tabs.primary.effects">
             <CharEffects :actor="actor" :flags="flags" :key="context._renderKey"/>
-          </Tab>
-          <!-- Modify Level tab -->
-          <Tab group="primary" :tab="tabs.primary.modifyLevel">
-            <NpcModifyLevel :actor="actor" />
           </Tab>
           <!-- Settings tab -->
           <Tab group="primary" :tab="tabs.primary.settings">
@@ -63,6 +63,7 @@ import { concat, localize } from '@/methods/Helpers';
 import CharDetails from '@/components/actor/character/main/CharDetails.vue';
 import CharEffects from '@/components/actor/character/main/CharEffects.vue';
 import CharResources from '@/components/actor/character/main/CharResources.vue';
+import CharFeatures from '@/components/actor/character/main/CharFeatures.vue';
 import NpcHeader from '@/components/actor/npc/NpcHeader.vue';
 import NpcActions from '@/components/actor/npc/NpcActions.vue';
 import NpcAttributes from '@/components/actor/npc/NpcAttributes.vue';
@@ -85,6 +86,7 @@ export default {
     CharDetails,
     CharEffects,
     CharResources,
+    CharFeatures,
   },
   setup() {
     return {
@@ -104,18 +106,18 @@ export default {
           },
           actions: {
             key: 'actions',
-            label: localize('ARCHMAGE.actions'),
+            label: localize('ARCHMAGE.powers'),
             active: true
+          },
+          inventory: {
+            key: 'inventory',
+            label: localize('ARCHMAGE.inventory'),
+            active: false
           },
           effects: {
             key: 'effects',
             label: localize('ARCHMAGE.effects'),
             active: false
-          },
-          modifyLevel: {
-            key: 'modifyLevel',
-            label: localize('ARCHMAGE.modifyLevel'),
-            active: false,
           },
           settings: {
             key: 'settings',

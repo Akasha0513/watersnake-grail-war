@@ -10,6 +10,11 @@
         </div>
 
         <hr>
+        <!-- 이니셔티브 보정 -->
+        <label class="flexrow">
+          <span>이니셔티브 보정</span>
+          <input type="number" name="system.attributes.init.value" v-model="actor.system.attributes.init.value">
+        </label>
         <!-- Publication source -->
         <label for="publication-source" class="flexrow">
           <span>{{localize('ARCHMAGE.CHARACTERSETTINGS.publicationSource')}}</span>
