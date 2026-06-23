@@ -36,11 +36,7 @@
       <!-- Defenses -->
       <div class="unit unit--defenses">
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
-        <div class="defenses grid grid-3col">
-          <div class="defense defense--ac flexcol">
-            <Input type="number" name="system.attributes.ac.value" class="defense-value" :actor="actor"/>
-            <h3 class="unit-subtitle">{{localize('ARCHMAGE.ac.key')}}</h3>
-          </div>
+        <div class="defenses grid grid-2col">
           <div class="defense defense--pd flexcol">
             <Input type="number" name="system.attributes.pd.value" class="defense-value" :actor="actor"/>
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.pd.key')}}</h3>
