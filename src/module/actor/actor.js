@@ -436,7 +436,7 @@ export class ActorArchmage extends Actor {
     if (!data.resources.perCombat.bravado) data.resources.perCombat.bravado = model.resources.perCombat.bravado;
     if (!data.resources.spendable) data.resources.spendable = model.resources.spendable;
     if (!data.resources.spendable.ki) data.resources.spendable.ki = model.resources.spendable.ki;
-    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
       if (!(data.resources.spendable["custom"+idx])) data.resources.spendable["custom"+idx] = model.resources.spendable["custom"+idx];
       if (!data.resources.spendable["custom"+idx].rest) data.resources.spendable["custom"+idx].rest = model.resources.spendable["custom"+idx].rest;
     }
@@ -1412,7 +1412,7 @@ export class ActorArchmage extends Actor {
         updateData[`system.resources.perCombat.${k}.current`] = 0;
     }
     // Custom resources
-    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
       let resourcePathName = "custom"+idx;
       let resourceName = this.system.resources.spendable[resourcePathName].label;
       let curr = this.system.resources.spendable[resourcePathName].current;
@@ -1556,7 +1556,7 @@ export class ActorArchmage extends Actor {
         updateData[`system.resources.perCombat.${k}.current`] = 0;
     }
     // Custom Resources
-    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
       let resourcePathName = "custom"+idx;
       let resourceName = this.system.resources.spendable[resourcePathName].label;
       let curr = this.system.resources.spendable[resourcePathName].current;
@@ -2135,7 +2135,7 @@ export class ActorArchmage extends Actor {
 
     // Remove commas from custom resource names
     if (changes.system.resources?.spendable) {
-      for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+      for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
         if (changes.system.resources.spendable["custom"+idx]) {
           let label = data.system.resources.spendable["custom"+idx].label;
           if (label) data.system.resources.spendable["custom"+idx].label = label.replace(",", "");

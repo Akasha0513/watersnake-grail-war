@@ -215,6 +215,12 @@ Actor:
             max: 0
             enabled: false
             rest: "none"
+          custom10:
+            label: ""
+            current: 0
+            max: 0
+            enabled: false
+            rest: "none"
   character:
     templates:
       - standard
@@ -398,6 +404,26 @@ Actor:
           type: Boolean
           value: false
       bg8:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg9:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg10:
         name:
           type: String
           value: ''
@@ -724,6 +750,26 @@ Actor:
           type: Boolean
           value: false
       bg8:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg9:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg10:
         name:
           type: String
           value: ''
