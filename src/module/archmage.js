@@ -1517,6 +1517,11 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
     ev.preventDefault();
     await handle(ev.currentTarget.closest('.feature-card'), ev.currentTarget.dataset.rollType);
   });
+  // 이름 클릭 → 설명 접기/펼치기 (SWADE식)
+  html.find('.feature-card .feature-card-toggle').on('click', (ev) => {
+    ev.preventDefault();
+    $(ev.currentTarget).closest('.feature-card').find('.feature-card-desc').slideToggle(120);
+  });
   html.find('.feature-roll-card .feature-reroll').on('click', async (ev) => {
     ev.preventDefault();
     const card = ev.currentTarget.closest('.feature-roll-card');

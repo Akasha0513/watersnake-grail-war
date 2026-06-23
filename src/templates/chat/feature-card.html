@@ -2,18 +2,29 @@
      data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}">
   <header class="card-header flexrow">
     <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
-    <h3 class="item-name">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
+    <h3 class="item-name feature-card-toggle" title="클릭: 설명 접기/펼치기">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
   </header>
-  <div class="card-content">
+  <div class="card-content feature-card-desc">
     <div class="container">
       {{#if system.description.value}}{{{system.description.value}}}{{else}}<p class="no-desc">설명 없음</p>{{/if}}
     </div>
   </div>
-  {{#if (or hasTrait hasMisc hasDamage)}}
-  <div class="card-buttons feature-card-buttons">
-    {{#if hasTrait}}<button type="button" class="feature-action" data-roll-type="trait"><i class="fas fa-dice-d20"></i> 능력치 판정{{#if traitLabel}} ({{traitLabel}}){{/if}}</button>{{/if}}
-    {{#if hasMisc}}<button type="button" class="feature-action" data-roll-type="misc"><i class="fas fa-dice"></i> 기타 굴림</button>{{/if}}
-    {{#if hasDamage}}<button type="button" class="feature-action" data-roll-type="damage"><i class="fas fa-burst"></i> 피해</button>{{/if}}
+  {{#if hasTrait}}
+  <div class="card-buttons feature-roll-group">
+    <h4 class="actions-subheading"><i class="fas fa-crosshairs"></i> 능력치 판정</h4>
+    <button type="button" class="feature-action" data-roll-type="trait">{{#if traitLabel}}{{traitLabel}}{{else}}판정{{/if}}</button>
+  </div>
+  {{/if}}
+  {{#if hasMisc}}
+  <div class="card-buttons feature-roll-group">
+    <h4 class="actions-subheading"><i class="fas fa-dice"></i> 기타 굴림</h4>
+    <button type="button" class="feature-action" data-roll-type="misc">{{system.misc.value}}</button>
+  </div>
+  {{/if}}
+  {{#if hasDamage}}
+  <div class="card-buttons feature-roll-group">
+    <h4 class="actions-subheading"><i class="fas fa-droplet"></i> 피해 굴림</h4>
+    <button type="button" class="feature-action" data-roll-type="damage">{{system.damage.value}}</button>
   </div>
   {{/if}}
   <footer class="card-footer">
