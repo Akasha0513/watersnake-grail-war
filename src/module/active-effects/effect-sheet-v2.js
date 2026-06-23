@@ -72,21 +72,13 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
             label: game.i18n.localize('ARCHMAGE.SETTINGS.groups.general'),
             active: true
           },
+          stats: {
+            key: 'stats',
+            label: '스탯·방어'
+          },
           abilities: {
             key: 'abilities',
             label: '능력치'
-          },
-          attack: {
-            key: 'attack',
-            label: '판정'
-          },
-          defense: {
-            key: 'defense',
-            label: '방어/스탯'
-          },
-          ongoing: {
-            key: 'ongoing',
-            label: game.i18n.localize('ARCHMAGE.ongoing')
           }
         }
       },

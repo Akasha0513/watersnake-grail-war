@@ -185,11 +185,11 @@ export default {
 .effects-status-apply {
   width: 100%;
   box-sizing: border-box;
+  display: flex;
   align-items: center;
   gap: 4px;
   margin-top: 4px;
   flex-wrap: nowrap;
-  overflow: hidden;
 }
 .effects-status-apply .effect-status-select {
   /* 가용 폭만 차지하고 콘텐츠 길이로 옆으로 늘어나지 않게 강제 */
@@ -199,8 +199,11 @@ export default {
   max-width: 100%;
 }
 .effects-status-apply .effect-status-button {
+  /* .effect-control의 36px 고정폭을 무효화(아이콘+텍스트가 들어가게) */
   flex: 0 0 auto;
+  width: auto;
   white-space: nowrap;
+  padding: 0 6px;
 }
 
 /*

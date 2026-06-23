@@ -61,20 +61,12 @@
           <EffectDetails :effect="effect" :context="context" />
         </Tab>
 
+        <Tab group="primary" :tab="tabs.primary.stats">
+          <EffectStats :viewModel="viewModel" />
+        </Tab>
+
         <Tab group="primary" :tab="tabs.primary.abilities">
           <EffectAbilities :viewModel="viewModel" />
-        </Tab>
-
-        <Tab group="primary" :tab="tabs.primary.attack">
-          <EffectAttack :viewModel="viewModel" />
-        </Tab>
-
-        <Tab group="primary" :tab="tabs.primary.defense">
-          <EffectDefense :viewModel="viewModel" />
-        </Tab>
-
-        <Tab group="primary" :tab="tabs.primary.ongoing">
-          <EffectOngoing :effect="effect" :context="context" />
         </Tab>
       </section>
     </div>
@@ -87,10 +79,8 @@ import {
   Tabs,
   Tab,
   EffectDetails,
+  EffectStats,
   EffectAbilities,
-  EffectAttack,
-  EffectDefense,
-  EffectOngoing,
 } from '@/components';
 import { computed, inject, reactive, toRaw, watch } from 'vue';
 import { concat, localize, numberFormat } from '@/methods/Helpers';
@@ -148,59 +138,53 @@ const ongoingDamage = computed(() => {
   return `${dmg} ongoing ${type} damage`;
 });
 
-// Maps view model keys to Foundry keys and vice versa.
-// 성배전쟁 룰 기준으로 재편: 능력치 6종 + 판정(근접/사격/마술) + 방어/HP/MP/SP/이니.
-// (13th Age 잔재 제거: AC·Recovery·저항·무기 데미지 다이스·대성공 보정·고조 차단)
-const foundryToViewModel = {
-	// 능력치 보정 (.value → 'pre' 단계 적용, 수정치·HP·MP·SP·방어까지 자동 반영)
-	'system.abilities.str.value': 'strBonus',
-	'system.abilities.end.value': 'endBonus',
-	'system.abilities.agi.value': 'agiBonus',
-	'system.abilities.mgi.value': 'mgiBonus',
-	'system.abilities.lck.value': 'lckBonus',
-	'system.abilities.ins.value': 'insBonus',
-	// 판정 보정
-	'system.attributes.attack.melee.bonus': 'meleeBonus',
-	'system.attributes.attack.ranged.bonus': 'rangedBonus',
-	'system.attributes.attack.arcane.bonus': 'arcaneBonus',
-	// 방어/스탯 보정 (자동값 위에 합산)
-	'system.attributes.pd.value': 'pdBonus',
-	'system.attributes.md.value': 'mdBonus',
-	'system.attributes.hp.max': 'hpMax',
-	'system.attributes.mp.max': 'mpMax',
-	'system.attributes.sp.max': 'spMax',
-	'system.attributes.init.value': 'initBonus',
-};
+// 필드 정의: viewModel 키 ↔ (Foundry change 키, 모드).
+// ADD=증감, OVERRIDE=덮어쓰기. 같은 키가 모드별로 두 항목 존재 가능(보정치/덮어쓰기).
+const ADD = CONST.ACTIVE_EFFECT_MODES.ADD;
+const OVERRIDE = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
+const ABILS = ['str', 'end', 'agi', 'mgi', 'lck', 'ins'];
+const fieldDefs = [
+	// 최대 HP/MP/SP 증감
+	{ vm: 'hpMax', key: 'system.attributes.hp.max', mode: ADD },
+	{ vm: 'mpMax', key: 'system.attributes.mp.max', mode: ADD },
+	{ vm: 'spMax', key: 'system.attributes.sp.max', mode: ADD },
+	// 신/정방 보정치(ADD)·덮어쓰기(OVERRIDE)
+	{ vm: 'pdAdd', key: 'system.attributes.pd.value', mode: ADD },
+	{ vm: 'pdOver', key: 'system.attributes.pd.value', mode: OVERRIDE },
+	{ vm: 'mdAdd', key: 'system.attributes.md.value', mode: ADD },
+	{ vm: 'mdOver', key: 'system.attributes.md.value', mode: OVERRIDE },
+	// 급 대체 (grade.value는 actor.js 'pre' 단계에서 적용 → 신방·이니에 반영)
+	{ vm: 'gradeOver', key: 'system.attributes.grade.value', mode: OVERRIDE },
+	// 능력치: 수치(value)/보정치(mod) × 증감(ADD)/덮어쓰기(OVERRIDE)
+	...ABILS.flatMap(a => [
+		{ vm: `${a}_valAdd`, key: `system.abilities.${a}.value`, mode: ADD },
+		{ vm: `${a}_valOver`, key: `system.abilities.${a}.value`, mode: OVERRIDE },
+		{ vm: `${a}_modAdd`, key: `system.abilities.${a}.mod`, mode: ADD },
+		{ vm: `${a}_modOver`, key: `system.abilities.${a}.mod`, mode: OVERRIDE },
+	]),
+];
 const viewModel = reactive({});
 
-// Convert the AE effects into fields for the view model
-// This might be triggered by a UI change or a change from elsewhere in Foundry
+// 효과 변경 → 뷰모델 (키 + 모드로 매칭)
 watch(effect, async (newEffect) => {
-	for (const change of newEffect.changes) {
-		const viewModelKey = foundryToViewModel[change.key];
-		if (viewModelKey) {
-			viewModel[viewModelKey] = change.value;
-		}
+	for (const def of fieldDefs) {
+		const change = newEffect.changes.find(c => c.key === def.key && Number(c.mode) === def.mode);
+		viewModel[def.vm] = change ? change.value : undefined;
 	}
 }, { immediate: true, deep: true })
 
-// Send changes to the view model out to Foundry
-watch(viewModel, async (newModel) => {
+// 뷰모델 → 효과 변경
+watch(viewModel, async () => {
 	const ae = foundry.utils.duplicate(effect.value)
 	const newChanges = []
-	for (const [fKey, vmKey] of Object.entries(foundryToViewModel)) {
-		let value = newModel[vmKey]
-
-		if (!value) continue
-
-		newChanges.push({
-			key: fKey,
-			value: value,
-			mode: CONST.ACTIVE_EFFECT_MODES.ADD
-		})
+	for (const def of fieldDefs) {
+		const value = viewModel[def.vm];
+		if (value === undefined || value === null || value === '') continue;
+		// ADD 0은 무의미 → 생략. OVERRIDE는 0도 유효(0으로 덮어쓰기).
+		if (def.mode === ADD && Number(value) === 0) continue;
+		newChanges.push({ key: def.key, value: String(value), mode: def.mode });
 	}
-
-	ae.changes = newChanges.filter(c => c.value !== null)
+	ae.changes = newChanges
 	effect.changes = ae.changes
 	return foundryEffect.update(ae)
 }, { deep: true });
