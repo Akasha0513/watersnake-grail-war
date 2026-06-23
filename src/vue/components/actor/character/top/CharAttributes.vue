@@ -51,11 +51,13 @@
         <h2 class="unit-title">{{localize('ARCHMAGE.defenses')}}</h2>
         <div class="defenses grid grid-2col">
           <div class="defense defense--pd flexcol">
-            <span class="defense-value">{{actor.system.attributes.pd.value}}</span>
+            <span v-if="actor.system.attributes.pd.automatic" class="defense-value">{{actor.system.attributes.pd.value}}</span>
+            <input v-else type="number" name="system.attributes.pd.value" class="defense-value" v-model="actor.system.attributes.pd.value"/>
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.pd.key')}}</h3>
           </div>
           <div class="defense defense--md flexcol">
-            <span class="defense-value">{{actor.system.attributes.md.value}}</span>
+            <span v-if="actor.system.attributes.md.automatic" class="defense-value">{{actor.system.attributes.md.value}}</span>
+            <input v-else type="number" name="system.attributes.md.value" class="defense-value" v-model="actor.system.attributes.md.value"/>
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.md.key')}}</h3>
           </div>
         </div>

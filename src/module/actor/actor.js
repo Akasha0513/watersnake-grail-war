@@ -729,7 +729,7 @@ export class ActorArchmage extends Actor {
   }
 
   /** @inheritdoc */
-  getRollData(item) {
+  getRollData(item, { skipPrepare = false } = {}) {
     // Use the actor by default.
     let actor = this;
 
@@ -738,7 +738,8 @@ export class ActorArchmage extends Actor {
     if (token) actor = token.actor;
 
     // Reapply post active effects.
-    this.prepareDerivedData();
+    // (시트 렌더 경로에서는 직전에 prepareData가 끝나 있어 생략 — 입력 반영 지연 개선)
+    if (!skipPrepare) this.prepareDerivedData();
 
     // Retrieve the actor data.
     const origData = super.getRollData();

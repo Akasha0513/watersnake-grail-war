@@ -66,7 +66,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       isCharacter: this.actor.type === "character",
       isNPC: this.actor.type === "npc",
       config: CONFIG.HOLYGRAILWAR,
-      rollData: this.actor.getRollData(this.actor),
+      rollData: this.actor.getRollData(this.actor, { skipPrepare: true }),
       _renderKey: this._renderKey,
     };
 
