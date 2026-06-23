@@ -13,11 +13,26 @@
         <textarea name="system.details.flavor.value" v-model="actor.system.details.flavor.value" class="npc-memo" rows="3"></textarea>
       </section>
       <section class="section section--npc-stats">
-        <div class="npc-stat"><label>HP</label><input type="number" name="system.attributes.hp.value" v-model="actor.system.attributes.hp.value"/><span class="sep">/</span><input type="number" name="system.attributes.hp.max" v-model="actor.system.attributes.hp.max"/></div>
-        <div class="npc-stat"><label>MP</label><input type="number" name="system.attributes.mp.value" v-model="actor.system.attributes.mp.value"/><span class="sep">/</span><input type="number" name="system.attributes.mp.max" v-model="actor.system.attributes.mp.max"/></div>
-        <div class="npc-stat"><label>SP</label><input type="number" name="system.attributes.sp.value" v-model="actor.system.attributes.sp.value"/><span class="sep">/</span><input type="number" name="system.attributes.sp.max" v-model="actor.system.attributes.sp.max"/></div>
-        <div class="npc-stat"><label>신방</label><input type="number" name="system.attributes.pd.value" v-model="actor.system.attributes.pd.value"/></div>
-        <div class="npc-stat"><label>정방</label><input type="number" name="system.attributes.md.value" v-model="actor.system.attributes.md.value"/></div>
+        <div class="npc-stat">
+          <span class="npc-stat-label">HP</span>
+          <span class="npc-stat-value"><input type="number" name="system.attributes.hp.value" v-model="actor.system.attributes.hp.value"/><span class="sep">/</span><input type="number" name="system.attributes.hp.max" v-model="actor.system.attributes.hp.max"/></span>
+        </div>
+        <div class="npc-stat">
+          <span class="npc-stat-label">MP</span>
+          <span class="npc-stat-value"><input type="number" name="system.attributes.mp.value" v-model="actor.system.attributes.mp.value"/><span class="sep">/</span><input type="number" name="system.attributes.mp.max" v-model="actor.system.attributes.mp.max"/></span>
+        </div>
+        <div class="npc-stat">
+          <span class="npc-stat-label">SP</span>
+          <span class="npc-stat-value"><input type="number" name="system.attributes.sp.value" v-model="actor.system.attributes.sp.value"/><span class="sep">/</span><input type="number" name="system.attributes.sp.max" v-model="actor.system.attributes.sp.max"/></span>
+        </div>
+        <div class="npc-stat">
+          <span class="npc-stat-label">신방</span>
+          <span class="npc-stat-value"><input type="number" name="system.attributes.pd.value" v-model="actor.system.attributes.pd.value"/></span>
+        </div>
+        <div class="npc-stat">
+          <span class="npc-stat-label">정방</span>
+          <span class="npc-stat-value"><input type="number" name="system.attributes.md.value" v-model="actor.system.attributes.md.value"/></span>
+        </div>
       </section>
     </section>
     <section class="container container--bottom flexcol">

@@ -1937,32 +1937,59 @@ option[selected] {
 
 // NPC 간소 시트
 .archmage-v2-vue.npc {
-  padding: 6px;
+  padding: 10px;
+  gap: 8px;
 
   .npc-header {
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+
+    .unit--name {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
   }
-  .npc-memo {
-    width: 100%;
-    min-height: 48px;
-    resize: vertical;
-  }
+
   .section--npc-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 8px;
     margin: 6px 0;
 
     .npc-stat {
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 3px;
+      padding: 6px 4px;
+      border: 1px solid var(--border-color, rgba(0, 0, 0, 0.2));
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .npc-stat-label {
+      font-weight: bold;
+      font-size: 0.85em;
+      opacity: 0.8;
+    }
+    .npc-stat-value {
+      display: flex;
+      align-items: center;
+      gap: 2px;
 
-      label { font-weight: bold; }
-      input { width: 3.2em; text-align: center; }
-      .sep { opacity: 0.6; }
+      input { width: 3em; text-align: center; }
+      .sep { opacity: 0.5; }
     }
   }
+
+  .section--npc-memo {
+    .unit-title { margin-bottom: 2px; }
+    .npc-memo {
+      width: 100%;
+      min-height: 60px;
+      resize: vertical;
+    }
+  }
+
   .container--bottom {
     margin-top: 6px;
   }
