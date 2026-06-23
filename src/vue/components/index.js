@@ -14,6 +14,7 @@ export { default as InlineRollsReferenceHint } from '@/components/parts/InlineRo
 export { default as InfoBubble } from '@/components/parts/InfoBubble.vue';
 
 export { default as EffectDetails } from '@/components/effects/EffectDetails.vue';
+export { default as EffectAbilities } from '@/components/effects/EffectAbilities.vue';
 export { default as EffectAttack } from '@/components/effects/EffectAttack.vue';
 export { default as EffectDefense } from '@/components/effects/EffectDefense.vue';
 export { default as EffectOngoing } from '@/components/effects/EffectOngoing.vue';

@@ -1,78 +1,48 @@
 <template>
+	<!-- 방어/스탯 보정: 자동계산값 위에 ADD로 합산됨('default' 단계). -->
 	<div class="form-group">
-		<label> {{ localize('ARCHMAGE.ITEM.acBonus') }} </label>
+		<label> 신체 방어 </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.acBonus" />
+			<input type="number" v-model="viewModel.pdBonus" placeholder="0" />
 		</div>
 	</div>
+
 	<div class="form-group">
-		<label> {{ localize('ARCHMAGE.ITEM.mdBonus') }} </label>
+		<label> 정신 방어 </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.mdBonus" />
+			<input type="number" v-model="viewModel.mdBonus" placeholder="0" />
 		</div>
 	</div>
+
 	<div class="form-group">
-		<label> {{ localize('ARCHMAGE.ITEM.pdBonus') }} </label>
+		<label> HP </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.pdBonus" />
+			<input type="number" v-model="viewModel.hpMax" placeholder="0" />
 		</div>
 	</div>
 
-	<div class="form-group" v-if="!isNpc">
-		<label> {{ localize('ARCHMAGE.ITEM.hpBonus') }} </label>
+	<div class="form-group">
+		<label> MP </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.hpMax" />
+			<input type="number" v-model="viewModel.mpMax" placeholder="0" />
 		</div>
 	</div>
 
-	<div class="form-group" v-if="!isNpc">
-		<label> {{ localize('ARCHMAGE.ITEM.recoveriesBonus') }} </label>
+	<div class="form-group">
+		<label> SP </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.recoveries" />
+			<input type="number" v-model="viewModel.spMax" placeholder="0" />
 		</div>
 	</div>
 
-	<div class="form-group" v-if="!isNpc">
-		<label> {{ localize('ARCHMAGE.ITEM.saveBonus') }} </label>
+	<div class="form-group">
+		<label> 이니셔티브 </label>
 		<div class="field">
-			<input type="number" v-model="viewModel.saveBonus" />
-		</div>
-	</div>
-
-	<div class="form-group" v-if="!isNpc">
-		<label> {{ localize('ARCHMAGE.ITEM.disengageBonus') }} </label>
-		<div class="field">
-			<input type="number" v-model="viewModel.disengageBonus" />
-		</div>
-	</div>
-
-	<div class="form-group" v-if="!isNpc">
-		<label> {{ localize('ARCHMAGE.ITEM.initBonus') }} </label>
-		<div class="field">
-			<input type="number" v-model="viewModel.initBonus" />
-		</div>
-	</div>
-
-	<div class="form-group" v-if="!isNpc">
-		<label>
-			{{ localize('ARCHMAGE.ITEM.critDefBonus') }}
-			<InfoBubble :tooltip="localize('ARCHMAGE.ITEM.critDefBonusHint')" />
-		</label>
-		<div class="field">
-			<input type="number" v-model="viewModel.critDefBonus" />
+			<input type="number" v-model="viewModel.initBonus" placeholder="0" />
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { computed, inject, reactive, watch } from 'vue';
-import { localize } from '@/methods/Helpers';
-import { InfoBubble, } from '@/components';
-
 const props = defineProps(['viewModel']);
-const { effect } = props;
-
-const foundryEffect = inject('itemDocument')
-const isNpc = foundryEffect?.parent?.type === 'npc'
-
 </script>

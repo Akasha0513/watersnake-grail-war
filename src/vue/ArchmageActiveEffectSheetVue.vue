@@ -61,6 +61,10 @@
           <EffectDetails :effect="effect" :context="context" />
         </Tab>
 
+        <Tab group="primary" :tab="tabs.primary.abilities">
+          <EffectAbilities :viewModel="viewModel" />
+        </Tab>
+
         <Tab group="primary" :tab="tabs.primary.attack">
           <EffectAttack :viewModel="viewModel" />
         </Tab>
@@ -83,6 +87,7 @@ import {
   Tabs,
   Tab,
   EffectDetails,
+  EffectAbilities,
   EffectAttack,
   EffectDefense,
   EffectOngoing,
@@ -143,28 +148,30 @@ const ongoingDamage = computed(() => {
   return `${dmg} ongoing ${type} damage`;
 });
 
-// Maps view model keys to Foundry keys and vice versa
+// Maps view model keys to Foundry keys and vice versa.
+// 성배전쟁 룰 기준으로 재편: 능력치 6종 + 판정(근접/사격/마술) + 방어/HP/MP/SP/이니.
+// (13th Age 잔재 제거: AC·Recovery·저항·무기 데미지 다이스·대성공 보정·고조 차단)
 const foundryToViewModel = {
-	'system.attributes.attackMod.value': 'attackMod',
+	// 능력치 보정 (.value → 'pre' 단계 적용, 수정치·HP·MP·SP·방어까지 자동 반영)
+	'system.abilities.str.value': 'strBonus',
+	'system.abilities.end.value': 'endBonus',
+	'system.abilities.agi.value': 'agiBonus',
+	'system.abilities.mgi.value': 'mgiBonus',
+	'system.abilities.lck.value': 'lckBonus',
+	'system.abilities.ins.value': 'insBonus',
+	// 판정 보정
 	'system.attributes.attack.melee.bonus': 'meleeBonus',
 	'system.attributes.attack.ranged.bonus': 'rangedBonus',
-	'system.attributes.attack.divine.bonus': 'divineBonus',
 	'system.attributes.attack.arcane.bonus': 'arcaneBonus',
-	'system.attributes.weapon.melee.dice': 'meleeDice',
-	'system.attributes.weapon.ranged.dice': 'rangedDice',
-	'system.attributes.critMod.atk.value': 'critMod',
-	// no system.attributes.escalation.value, it's handled separately
-	'system.attributes.ac.value': 'acBonus',
-	'system.attributes.md.value': 'mdBonus',
+	// 방어/스탯 보정 (자동값 위에 합산)
 	'system.attributes.pd.value': 'pdBonus',
+	'system.attributes.md.value': 'mdBonus',
 	'system.attributes.hp.max': 'hpMax',
-	'system.attributes.recoveries.value': 'recoveries',
-	'system.attributes.saves.bonus': 'saveBonus',
-	'system.attributes.disengageBonus': 'disengageBonus',
+	'system.attributes.mp.max': 'mpMax',
+	'system.attributes.sp.max': 'spMax',
 	'system.attributes.init.value': 'initBonus',
-	'system.attributes.critMod.def.value': 'critDefBonus',
 };
-const viewModel = reactive({ edBlocked: false });
+const viewModel = reactive({});
 
 // Convert the AE effects into fields for the view model
 // This might be triggered by a UI change or a change from elsewhere in Foundry
@@ -173,10 +180,6 @@ watch(effect, async (newEffect) => {
 		const viewModelKey = foundryToViewModel[change.key];
 		if (viewModelKey) {
 			viewModel[viewModelKey] = change.value;
-		}
-
-		if (change.key === 'system.attributes.escalation.value') {
-			viewModel.edBlocked = change.value === '0';
 		}
 	}
 }, { immediate: true, deep: true })
@@ -187,14 +190,6 @@ watch(viewModel, async (newModel) => {
 	const newChanges = []
 	for (const [fKey, vmKey] of Object.entries(foundryToViewModel)) {
 		let value = newModel[vmKey]
-		if (fKey.includes('system.attributes.weapon')) {
-			// This is a dice expression and needs a leading '+' or '-'
-			value = String(value ?? '').trim()
-			if (value.length > 0 && !value.startsWith('+') && !value.startsWith('-')) {
-				value = `${value[0] > 0 ? '+' : '-'} ${value}`;
-			}
-			// TODO: warn if value is not a valid dice expression?
-		}
 
 		if (!value) continue
 
@@ -203,26 +198,6 @@ watch(viewModel, async (newModel) => {
 			value: value,
 			mode: CONST.ACTIVE_EFFECT_MODES.ADD
 		})
-
-		// melee.dice also applies to monk weapons
-		if (fKey === 'system.attributes.weapon.melee.dice') {
-			["jab", "punch", "kick"].forEach(k => {
-				newChanges.push({
-					key: fKey.replace("melee", k),
-					value: value,
-					mode: CONST.ACTIVE_EFFECT_MODES.ADD
-				});
-			});
-		}
-	}
-
-	// Handle ED block
-	if (newModel.edBlocked) {
-		newChanges.push({
-			key: 'system.attributes.escalation.value',
-			mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-			value: '0'
-		});
 	}
 
 	ae.changes = newChanges.filter(c => c.value !== null)
