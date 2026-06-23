@@ -162,6 +162,22 @@ export class ArchmageUtility {
     });
   }
 
+  /**
+   * 수정치 배열 → 공식. 활성 수정치(active !== false)만 baseFormula 뒤에 부호 정규화하여 합성.
+   * (통합 RollDialog 설계 §3 — modifier 모델 합성기. RollModifier: {label, value, active?, source?})
+   * @param {string} baseFormula 예: '1d20' / '2d20kh'
+   * @param {Array<{label?:string,value:string|number,active?:boolean}>} modifiers
+   * @return {string} 합성된 굴림 공식
+   */
+  static reduceModifiers(baseFormula, modifiers) {
+    return (modifiers || []).filter(m => m && m.active !== false).reduce((f, m) => {
+      let v = String(m.value ?? '').trim();
+      if (!v) return f;
+      if (v[0] === '+' || v[0] === '-') return `${f} ${v[0]} ${v.slice(1).trim()}`;
+      return `${f} + ${v}`;
+    }, baseFormula);
+  }
+
   /** 보정치를 공식에 안전하게 덧붙임 (+/- 부호 정규화, 주사위/고정 모두 허용) */
   static _appendBonus(formula, extra) {
     if (!extra) return formula;

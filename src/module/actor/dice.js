@@ -467,72 +467,48 @@ export class DiceArchmage {
     fixedBonus = null,
     critExpand = 0
   }) {
-    // Construct the terms for the roll
-    // First: the d20 (유리/불리 단계: (n+1)d20 중 kh/kl)
-    const terms = []
-    if (selection === 'adv2') {
-      terms.push('3d20kh')        // 유리 2
-    } else if (selection === 'adv1' || selection === 'advantage') {
-      terms.push('2d20kh')        // 유리 1
-    } else if (selection === 'dis2') {
-      terms.push('3d20kl')        // 불리 2
-    } else if (selection === 'dis1' || selection === 'disadvantage') {
-      terms.push('2d20kl')        // 불리 1
-    } else {
-      terms.push('1d20')          // 일반
-    }
+    // 수정치 배열로 조립 (통합 RollDialog 모델 §3). base = d20(유리/불리 단계), 나머지는 modifier.
+    let base
+    if (selection === 'adv2') base = '3d20kh'                                       // 유리 2
+    else if (selection === 'adv1' || selection === 'advantage') base = '2d20kh'     // 유리 1
+    else if (selection === 'dis2') base = '3d20kl'                                  // 불리 2
+    else if (selection === 'dis1' || selection === 'disadvantage') base = '2d20kl'  // 불리 1
+    else base = '1d20'                                                              // 일반
 
-    // feature '판정 직접'(rollCustom) 값을 고정 보정으로 합산
-    if (fixedBonus) {
-      terms.push(`${fixedBonus}`)
-    }
-
-    // Next: the ability modifier
+    const mods = []
+    // feature '판정 직접'(rollCustom) 고정 보정
+    if (fixedBonus) mods.push({ label: '직접', value: String(fixedBonus), source: 'custom' })
+    // 능력치 수정치
     const ability = actor.system.abilities[abilityKey]
-    if (ability) {
-      terms.push(`@${abilityKey}.mod`)
-    }
-
-    // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
-    if (actor.type !== 'master') terms.push("@grade")
-
-    // 고조(@ed) 자동 가산 — 일반 능력치 판정 포함 모든 판정에. (고조>0일 때만 항 추가)
-    if (Number(actor.system.attributes?.escalation?.value) > 0) terms.push("@ed")
-
-    // Next: the background bonuses (여러 개 합산, 난수 선택 가능)
-    const bgLabels = [];
+    if (ability) mods.push({ label: game.i18n.localize(`ARCHMAGE.${abilityKey}.label`), value: `@${abilityKey}.mod`, source: 'ability' })
+    // 영령의 급(서번트만)
+    if (actor.type !== 'master') mods.push({ label: '영령의 급', value: '@grade', source: 'grade' })
+    // 고조(고조>0일 때만)
+    if (Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
+    // 배경(여러 개 합산, 배경마다 난수 가능)
+    const bgLabels = []
     for (const bg of (backgrounds || [])) {
-      const b = actor.system.backgrounds?.[bg.key];
-      if (!b) continue;
-      const val = Number(b.bonus?.value) || 0;
-      if (val < 1) continue;
+      const b = actor.system.backgrounds?.[bg.key]
+      if (!b) continue
+      const val = Number(b.bonus?.value) || 0
+      if (val < 1) continue
       if (bg.random) {
-        terms.push(`1d${val}`);
-        bgLabels.push(`${b.name?.value || '배경'}(1d${val})`);
+        mods.push({ label: b.name?.value || '배경', value: `1d${val}`, source: 'background' })
+        bgLabels.push(`${b.name?.value || '배경'}(1d${val})`)
       } else {
-        terms.push(`${val}`);
-        bgLabels.push(`${b.name?.value || '배경'} +${val}`);
+        mods.push({ label: b.name?.value || '배경', value: `${val}`, source: 'background' })
+        bgLabels.push(`${b.name?.value || '배경'} +${val}`)
       }
     }
-    const backgroundLabel = bgLabels.join(', ');
+    const backgroundLabel = bgLabels.join(', ')
+    // 아이템 능력치 보너스
+    if (ability && ability.bonus) mods.push({ label: '아이템', value: `@${abilityKey}.bonus`, source: 'item' })
+    // 상황 보정
+    if (situationalBonus) mods.push({ label: '상황 보정', value: String(situationalBonus), source: 'situational' })
 
-    // Next: the item bonus
-    if (ability && ability.bonus) {
-      terms.push(`@${abilityKey}.bonus`)
-    }
-
-    // Next: the situational bonus
-    if (situationalBonus) {
-      terms.push(`${situationalBonus}`)
-    }
-
-    // Finally: the button selection if it was a flat bonus/penalty
-    if (typeof selection === 'number' && selection !== 0) {
-      terms.push(`${selection}`)
-    }
-
-    // Roll the dice
-    const roll = new Roll(terms.join(' + '), actor.getRollData())
+    // 공식 합성 → 굴림
+    const formula = game.holygrailwar.ArchmageUtility.reduceModifiers(base, mods)
+    const roll = new Roll(formula, actor.getRollData())
     await roll.roll()
 
     // 대성공 범위 확장: 자연 d20(유리/불리 시 채택된 주사위)이 (20-확장) 이상이면 대성공.
