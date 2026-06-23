@@ -77,13 +77,14 @@ export class ArchmageUtility {
 
     // 능력치 판정
     if (rollType === 'trait') {
-      // 직접 입력(숫자/변수)이 있으면 그걸로 바로 굴림: d20 + 입력값 (+ 급/고조)
+      // 직접 입력(숫자/변수)이 있으면 일반 능력치 판정과 동일한 대화상자로
+      // (능력치=없음 기본, 입력값은 고정 보정으로 합산. 유리/불리·상황보정·롤모드 적용 가능)
       const custom = sys.rollCustom?.value?.trim();
       if (custom) {
-        const terms = ['1d20', custom];
-        if (actor.type !== 'master') terms.push('@grade');
-        terms.push('@ed');
-        return ArchmageUtility._postFeatureRollResult(actor, item, '판정', 'trait', terms.join(' + '));
+        return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {
+          fixedBonus: custom,
+          title: `${item.name} — 판정`
+        });
       }
       // 아니면 능력치 선택 → 시트와 동일한 배경 판정 대화상자(해당 능력치 프리셋)
       if (!sys.rollAbility?.value) return;
@@ -119,16 +120,23 @@ export class ArchmageUtility {
             <div class="form-group"><label>강화 단계</label><select name="steps">${dmgOptions}</select></div>
             <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
-            <div class="form-group"><label>대성공으로 굴림 (개수+1·단계+1)</label><input name="critical" type="checkbox"></div>
             <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
           </div>`,
         buttons: [
-          { action: 'roll', label: '피해 굴림', default: true,
+          { action: 'roll', label: '굴림', default: true,
             callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
               steps: Number(b.form.steps.value) || 0,
               addDice: Number(b.form.addDice.value) || 0,
               extra: b.form.extra.value,
-              critical: b.form.critical.checked,
+              critical: false,
+              maximize: b.form.maximize.checked
+            }) },
+          { action: 'raise', label: '대성공',
+            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
+              steps: Number(b.form.steps.value) || 0,
+              addDice: Number(b.form.addDice.value) || 0,
+              extra: b.form.extra.value,
+              critical: true,
               maximize: b.form.maximize.checked
             }) },
           { action: 'cancel', label: '취소' }

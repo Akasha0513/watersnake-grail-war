@@ -367,7 +367,7 @@ export class DiceArchmage {
 
   static async BackgroundRoll (
     actor,
-    { defaultBackground = null, defaultAbility = null }
+    { defaultBackground = null, defaultAbility = null, fixedBonus = null, title = null }
   ) {
     const formatBonus = bonus => {
       return bonus >= 0 ? `+${bonus}` : `${bonus}`
@@ -410,13 +410,14 @@ export class DiceArchmage {
         situationalBonus: form.bonus.value,
         abilityKey: form.ability.value,
         backgrounds: backgrounds,
-        rollMode: form.rollMode.value
+        rollMode: form.rollMode.value,
+        critExpand: Number(form.critExpand?.value) || 0
       };
     }
 
     return new foundry.applications.api.DialogV2({
       window: {
-        title: game.i18n.localize('ARCHMAGE.checkBackground'),
+        title: title ?? game.i18n.localize('ARCHMAGE.checkBackground'),
         resizeable: true
       },
       content: content,
@@ -426,31 +427,31 @@ export class DiceArchmage {
           action: 'dis2',
           label: '불리 2',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, selection: 'dis2', ...extractFormData(button.form) })
+            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'dis2', ...extractFormData(button.form) })
         },
         {
           action: 'dis1',
           label: '불리 1',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, selection: 'dis1', ...extractFormData(button.form) })
+            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'dis1', ...extractFormData(button.form) })
         },
         {
           action: 'normal',
           label: '굴림',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, selection: 0, ...extractFormData(button.form) })
+            this._completeBackgroundRoll({ actor, fixedBonus, selection: 0, ...extractFormData(button.form) })
         },
         {
           action: 'adv1',
           label: '유리 1',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, selection: 'adv1', ...extractFormData(button.form) })
+            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'adv1', ...extractFormData(button.form) })
         },
         {
           action: 'adv2',
           label: '유리 2',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({ actor, selection: 'adv2', ...extractFormData(button.form) })
+            this._completeBackgroundRoll({ actor, fixedBonus, selection: 'adv2', ...extractFormData(button.form) })
         }
       ]
     }).render({ force: true })
@@ -462,7 +463,9 @@ export class DiceArchmage {
     situationalBonus,
     abilityKey,
     backgrounds = [],
-    rollMode
+    rollMode,
+    fixedBonus = null,
+    critExpand = 0
   }) {
     // Construct the terms for the roll
     // First: the d20 (유리/불리 단계: (n+1)d20 중 kh/kl)
@@ -479,6 +482,11 @@ export class DiceArchmage {
       terms.push('1d20')          // 일반
     }
 
+    // feature '판정 직접'(rollCustom) 값을 고정 보정으로 합산
+    if (fixedBonus) {
+      terms.push(`${fixedBonus}`)
+    }
+
     // Next: the ability modifier
     const ability = actor.system.abilities[abilityKey]
     if (ability) {
@@ -487,6 +495,9 @@ export class DiceArchmage {
 
     // 서번트만 영령의 급(@grade)을 더함 (마스터는 레벨/급 미가산)
     if (actor.type !== 'master') terms.push("@grade")
+
+    // 고조(@ed) 자동 가산 — 일반 능력치 판정 포함 모든 판정에. (고조>0일 때만 항 추가)
+    if (Number(actor.system.attributes?.escalation?.value) > 0) terms.push("@ed")
 
     // Next: the background bonuses (여러 개 합산, 난수 선택 가능)
     const bgLabels = [];
@@ -524,6 +535,12 @@ export class DiceArchmage {
     const roll = new Roll(terms.join(' + '), actor.getRollData())
     await roll.roll()
 
+    // 대성공 범위 확장: 자연 d20(유리/불리 시 채택된 주사위)이 (20-확장) 이상이면 대성공.
+    const natD20 = roll.dice?.[0]?.total ?? null
+    const expand = Math.max(0, Number(critExpand) || 0)
+    const isCrit = natD20 != null && natD20 >= (20 - expand)
+    const isFumble = natD20 === 1
+
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -550,6 +567,8 @@ export class DiceArchmage {
         background: {
           name: backgroundLabel
         },
+        crit: isCrit,
+        fumble: isFumble,
         rollHTML: await roll.render(),
         data: chatData
       }

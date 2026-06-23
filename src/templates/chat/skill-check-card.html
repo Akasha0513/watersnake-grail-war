@@ -7,5 +7,7 @@
       <div class="container"><strong>{{background.name}}</strong></div>
     {{/if}}
     {{{rollHTML}}}
+    {{#if crit}}<div class="roll-result-banner roll-crit" style="text-align:center;font-weight:bold;color:#1a7f37;margin:3px 0 1px;">★ 대성공!</div>{{/if}}
+    {{#if fumble}}<div class="roll-result-banner roll-fumble" style="text-align:center;font-weight:bold;color:#cf222e;margin:3px 0 1px;">✖ 대실패!</div>{{/if}}
   </div>
 </div>
