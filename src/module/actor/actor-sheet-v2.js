@@ -506,8 +506,8 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       {
         actor: this.actor, item: item, system: sys,
         actorId: this.actor.id, tokenId: tokenId,
-        hasTrait: !!(sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]),
-        traitLabel: abilityNames[sys.rollAbility?.value] || sys.rollAbility?.value || '',
+        hasTrait: !!(sys.rollCustom?.value) || !!(sys.rollAbility?.value && this.actor.system.abilities?.[sys.rollAbility.value]),
+        traitLabel: sys.rollCustom?.value || abilityNames[sys.rollAbility?.value] || sys.rollAbility?.value || '',
         hasDamage: !!sys.damage?.value,
         hasMisc: !!sys.misc?.value
       }

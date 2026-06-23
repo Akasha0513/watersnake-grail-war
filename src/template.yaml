@@ -967,6 +967,10 @@ Item:
       type: String
       label: Roll Ability
       value: ''
+    rollCustom:
+      type: String
+      label: Roll Custom
+      value: ''
     damage:
       type: String
       label: Damage

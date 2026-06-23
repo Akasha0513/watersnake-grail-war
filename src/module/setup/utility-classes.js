@@ -75,8 +75,17 @@ export class ArchmageUtility {
     if (!actor || !item) return;
     const sys = item.system;
 
-    // 능력치 판정: 시트 능력치 굴림과 동일한 배경 판정 대화상자(해당 능력치 프리셋)
+    // 능력치 판정
     if (rollType === 'trait') {
+      // 직접 입력(숫자/변수)이 있으면 그걸로 바로 굴림: d20 + 입력값 (+ 급/고조)
+      const custom = sys.rollCustom?.value?.trim();
+      if (custom) {
+        const terms = ['1d20', custom];
+        if (actor.type !== 'master') terms.push('@grade');
+        terms.push('@ed');
+        return ArchmageUtility._postFeatureRollResult(actor, item, '판정', 'trait', terms.join(' + '));
+      }
+      // 아니면 능력치 선택 → 시트와 동일한 배경 판정 대화상자(해당 능력치 프리셋)
       if (!sys.rollAbility?.value) return;
       return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, { defaultAbility: sys.rollAbility.value });
     }
@@ -121,6 +130,22 @@ export class ArchmageUtility {
         rejectClose: false
       }).render({ force: true });
     }
+  }
+
+  /** 굴림 결과를 feature-roll-card로 출력 (공통) */
+  static async _postFeatureRollResult(actor, item, label, rollType, formula) {
+    const roll = await new Roll(formula, actor.getRollData()).roll();
+    const rollHtml = await roll.render();
+    const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
+    const content = await foundry.applications.handlebars.renderTemplate(
+      'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
+      { actor, item, rollHtml, label, rollType, actorId: actor.id, tokenId, ruby: item.system.ruby?.value }
+    );
+    return ArchmageUtility.createChatMessage({
+      speaker: ArchmageUtility.getSpeaker(actor),
+      content: content,
+      rolls: [roll]
+    });
   }
 
   /** 보정치를 공식에 안전하게 덧붙임 (+/- 부호 정규화, 주사위/고정 모두 허용) */
