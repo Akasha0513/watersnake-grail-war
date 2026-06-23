@@ -27,7 +27,6 @@
             <!-- Display version of creature details. -->
             <template v-slot:display>
               <ul>
-                <li class="level">{{levelFormatted}}</li>
                 <li v-if="strengthFormatted && this.actor.system.details?.strength?.value !== 'normal'" class="details">{{strengthFormatted}}</li>
                 <li v-if="roleFormatted" class="role">{{roleFormatted}}</li>
                 <li v-if="typeFormatted" class="type">[<span class="size" v-if="this.actor.system.details?.size?.value !== 'normal'">{{ sizeFormatted }}</span>{{typeFormatted}}]</li>
@@ -35,10 +34,6 @@
             </template>
             <!-- Form inputs for creature details. -->
             <template v-slot:edit>
-              <span class="unit unit--input">
-                <label for="system.attributes.level.value">{{localize('ARCHMAGE.level')}}</label>
-                <Input type="number" name="system.attributes.level.value" :actor="actor" reactive="false"/>
-              </span>
               <span class="unit unit--input">
                 <label for="system.attributes.init.value">{{localize('ARCHMAGE.initiative')}}</label>
                 <Input type="number" name="system.attributes.init.value" :actor="actor" reactive="false"/>
@@ -61,16 +56,6 @@
               <br/>
             </template>
           </ToggleInput>
-        </div>
-        <!-- Resistance -->
-        <div class="unit unit--resistance flexrow" v-if="!headerCollapsed||actor.system.details.resistance.value">
-          <label for="system.details.resistance.value">{{localize('ARCHMAGE.resistance')}}: </label>
-          <input type="text" name="system.details.resistance.value" v-model="actor.system.details.resistance.value"/>
-        </div>
-        <!-- Vulnerability -->
-        <div class="unit unit--vulnerability flexrow" v-if="!headerCollapsed||actor.system.details.vulnerability.value">
-          <label for="system.details.vulnerability.value">{{localize('ARCHMAGE.vulnerability')}}: </label>
-          <input type="text" name="system.details.vulnerability.value" v-model="actor.system.details.vulnerability.value"/>
         </div>
       </section>
       <section class="section section--avatar">
