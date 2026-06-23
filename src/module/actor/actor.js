@@ -81,6 +81,15 @@ export class ActorArchmage extends Actor {
     //this.reset();
     this.overrides = {};
 
+    // 능력치 상시보정(flatBonus: 서번트 클래스 보정·마스터 패러미터 등)을 _source 수치에 먼저 합산.
+    // → 이후 능력치 AE가 그 위에 적용됨: ADD(강화)는 가산, OVERRIDE(빈약 등)는 덮어써서 보정 무시(E(3) 고정).
+    if (this.type === 'character' || this.type === 'master') {
+      for (const abl of Object.values(this.system.abilities ?? {})) {
+        abl.flatBonus = Number(abl.flatBonus) || 0;
+        abl.value = (Number(abl.value) || 0) + abl.flatBonus;
+      }
+    }
+
     // Apply active effects in group 0 (ability scores, base attributes).
     this.applyActiveEffects('pre');
 
@@ -473,12 +482,8 @@ export class ActorArchmage extends Actor {
     }
 
     // Ability modifiers
+    // (실효 수치 = base + 상시보정 + AE는 이미 prepareData 'pre' 이전/이후에 반영됨. 여기선 수정치만 산출.)
     for (let abl of Object.values(data.abilities)) {
-      // 상시 보정치(예장·마스터 패러미터 등)를 능력치 수치에 합산 → 실효 수치.
-      // value는 매 prepare마다 _source(기본 숫자)로 초기화되므로 누적되지 않음.
-      // (Effect의 ability AE는 'pre' 단계에서 이미 value에 반영돼 함께 합산됨)
-      abl.flatBonus = Number(abl.flatBonus) || 0;
-      abl.value = (Number(abl.value) || 0) + abl.flatBonus;
       abl.mod = Math.floor(abl.value / 3); // 홈브루 수정치 = floor(능력치/3): 3~5 E+1, 6~8 D+2, ... 21+ EX+7
       abl.lvl = abl.mod + data.attributes.level.value;
       abl.nonKey = {mod: foundry.utils.duplicate(abl.mod), lvlmod: foundry.utils.duplicate(abl.lvl)};
