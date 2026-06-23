@@ -822,6 +822,20 @@ async function addEscalationDie() {
 /* -------------------------------------------- */
 
 Hooks.once('ready', async () => {
+  // 범용 이펙트가 코어 기본 시트로 열리는 문제 수정.
+  // registerSheet의 makeDefault:true는 월드에 이미 저장된 core.sheetClasses 기본값을
+  // 덮어쓰지 못함 → ActiveEffect 기본이 코어(또는 미설정)면 우리 시트로 마이그레이션.
+  // (의도적으로 다른 시트를 고른 경우는 건드리지 않음.)
+  if (game.user.isGM) {
+    const aeSheetId = "watersnake-grail-war.ArchmageActiveEffectSheetV2";
+    const sheetClasses = foundry.utils.deepClone(game.settings.get("core", "sheetClasses") ?? {});
+    const current = foundry.utils.getProperty(sheetClasses, "ActiveEffect.base");
+    if (!current || current === "core.ActiveEffectConfig") {
+      foundry.utils.setProperty(sheetClasses, "ActiveEffect.base", aeSheetId);
+      await game.settings.set("core", "sheetClasses", sheetClasses);
+    }
+  }
+
   $(`<div class="archmage-hotbar faded-ui flexcol"></div>`).insertBefore('#players');
   await addEscalationDie();
   $('body').append('<div class="archmage-preload"></div>');

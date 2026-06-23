@@ -183,13 +183,20 @@ export default {
 <style>
 /* 36종 상태이상 부여 팔레트(드롭다운 + 부여 버튼) */
 .effects-status-apply {
+  width: 100%;
+  box-sizing: border-box;
   align-items: center;
   gap: 4px;
   margin-top: 4px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 .effects-status-apply .effect-status-select {
-  flex: 1;
+  /* 가용 폭만 차지하고 콘텐츠 길이로 옆으로 늘어나지 않게 강제 */
+  flex: 1 1 0;
+  width: 0;
   min-width: 0;
+  max-width: 100%;
 }
 .effects-status-apply .effect-status-button {
   flex: 0 0 auto;
