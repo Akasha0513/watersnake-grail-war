@@ -8,6 +8,14 @@
             <a class="effect-control" data-action="create" :title="localize('ARCHMAGE.EFFECT.AE.new')"><i class="fas fa-plus"></i></a>
           </div>
         </div>
+        <div class="effects-status-apply flexrow">
+          <select class="effect-status-select">
+            <option v-for="(status, statusKey) in statusOptions" :key="statusKey" :value="status.id">{{status.name}}</option>
+          </select>
+          <a class="effect-control effect-status-button" data-action="applyStatus" title="상태이상 부여">
+            <i class="fas fa-plus"></i> 부여
+          </a>
+        </div>
       </div>
       <ul class="effects-group-content flexcol">
         <li v-for="(effect, effectKey) in effects" :key="effectKey"
@@ -75,6 +83,11 @@ export default {
       activeEffects: {},
       classes: computed(() => `section section--effects flexcol`)
     });
+    // 자작룰 36종 상태이상 목록(드롭다운용). dead·extended(13th Age 잔재)는 이름이
+    // 로컬라이즈 키('ARCHMAGE.…')라 제외 → 한글 리터럴 이름인 36종만 남음.
+    const statusOptions = (CONFIG.statusEffects || [])
+      .filter(s => s.id && !String(s.name).startsWith('ARCHMAGE.'))
+      .map(s => ({ id: s.id, name: s.name }));
     // Define methods.
     function getEffects() {
       let effects = this.actor.effects;
@@ -121,6 +134,7 @@ export default {
     // Return our custom data, methods, and any imported methods.
     return {
       ...toRefs(componentData),
+      statusOptions,
       concat,
       localize,
       numberFormat,
@@ -167,6 +181,21 @@ export default {
 </script>
 
 <style>
+/* 36종 상태이상 부여 팔레트(드롭다운 + 부여 버튼) */
+.effects-status-apply {
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+.effects-status-apply .effect-status-select {
+  flex: 1;
+  min-width: 0;
+}
+.effects-status-apply .effect-status-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 /*
   Enter and leave animations can use different
   durations and timing functions.
