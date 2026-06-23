@@ -194,6 +194,7 @@ export class ArchmageUtility {
     const rollData = actor.getRollData();
     let formula = '';
     let label = '';
+    let labelSuffix = '';
 
     if (rollType === 'misc') {
       formula = sys.misc?.value || '';
@@ -215,8 +216,11 @@ export class ArchmageUtility {
         });
       }
       formula = ArchmageUtility._appendBonus(formula, opts.extra);
-      label = opts.critical ? '피해 (대성공)' : '피해';
-      if (opts.maximize) label += ' · 최대화';
+      label = '피해';
+      const sfx = [];
+      if (opts.critical) sfx.push('(대성공)');
+      if (opts.maximize) sfx.push('· 최대화');
+      labelSuffix = sfx.join(' ');
     }
     else return;
 
@@ -227,7 +231,7 @@ export class ArchmageUtility {
     const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
-      { actor, item, rollHtml, label, rollType, actorId: actor.id, tokenId, ruby: sys.ruby?.value }
+      { actor, item, rollHtml, label, labelSuffix, rollType, actorId: actor.id, tokenId, ruby: sys.ruby?.value }
     );
     return ArchmageUtility.createChatMessage({
       speaker: ArchmageUtility.getSpeaker(actor),
