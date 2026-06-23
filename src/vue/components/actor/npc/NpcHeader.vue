@@ -20,42 +20,9 @@
             <Editor :owner="actor.owner" target='system.details.flavor.value' button="true" editable="true" :title="localize('ARCHMAGE.flavor')" :content="actor.system.details.flavor.value"/>
           </Suspense>
         </div>
-        <!-- Creature details -->
+        <!-- 이니셔티브 표시(굴림). 보정값 편집은 설정 탭에서만(중복 input 제거 = init null 버그 수정) -->
         <div class="unit unit--roles">
           <a class="rollable rollable--init" data-roll-type="init">{{numberFormat(actor.system.attributes.init.value, 0, true)}} {{localize('ARCHMAGE.initiative')}}</a>
-          <ToggleInput :closeInputs="closeInputs">
-            <!-- Display version of creature details. -->
-            <template v-slot:display>
-              <ul>
-                <li v-if="strengthFormatted && this.actor.system.details?.strength?.value !== 'normal'" class="details">{{strengthFormatted}}</li>
-                <li v-if="roleFormatted" class="role">{{roleFormatted}}</li>
-                <li v-if="typeFormatted" class="type">[<span class="size" v-if="this.actor.system.details?.size?.value !== 'normal'">{{ sizeFormatted }}</span>{{typeFormatted}}]</li>
-              </ul>
-            </template>
-            <!-- Form inputs for creature details. -->
-            <template v-slot:edit>
-              <span class="unit unit--input">
-                <label for="system.attributes.init.value">{{localize('ARCHMAGE.initiative')}}</label>
-                <Input type="number" name="system.attributes.init.value" :actor="actor" reactive="false"/>
-              </span>
-              {{localize("ARCHMAGE.size")}}
-              <Select name="system.details.size.value" :actor="actor" :options="getOptions('creatureSizes')"/>
-              <br/>
-              {{localize("ARCHMAGE.strength")}}
-              <Select name="system.details.strength.value" :actor="actor" :options="getOptions('creatureStrengths')"/>
-              <br/>
-              {{localize("ARCHMAGE.role")}}
-              <Select name="system.details.role.value" :actor="actor" :options="getOptions('creatureRoles')"/>
-              /
-              <Select name="system.details.roleB.value" :actor="actor" :options="getOptions('creatureRoles', true)"/>
-              <br/>
-              {{localize("ARCHMAGE.type")}}
-              <Select name="system.details.type.value" :actor="actor" :options="getOptions('creatureTypes')"/>
-              /
-              <Select name="system.details.typeB.value" :actor="actor" :options="getOptions('creatureTypes', true)"/>
-              <br/>
-            </template>
-          </ToggleInput>
         </div>
       </section>
       <section class="section section--avatar">
@@ -73,12 +40,11 @@
   import { localize, numberFormat, getActor } from '@/methods/Helpers';
   import ToggleInput from '@/components/parts/ToggleInput.vue';
   import Input from '@/components/parts/Input.vue';
-  import Select from '@/components/parts/Select.vue';
   import Editor from '@/components/parts/Editor.vue';
   export default {
     name: 'NpcHeader',
     props: ['actor', 'flags', 'closeInputs'],
-    components: { ToggleInput, Input, Select, Editor },
+    components: { ToggleInput, Input, Editor },
     setup() {
       return {
         localize,
@@ -98,25 +64,6 @@
     computed: {
       levelFormatted() {
         return game.holygrailwar.ArchmageUtility.formatLevel(this.actor.system.attributes.level.value ?? 0);
-      },
-      sizeFormatted() {
-        let size = CONFIG.HOLYGRAILWAR.creatureSizes[this.actor.system.details?.size?.value] ?? this.actor.system.details?.size?.value;
-        return typeof size == 'string' ? `${size.toUpperCase()} ` : '';
-      },
-      strengthFormatted() {
-        return CONFIG.HOLYGRAILWAR.creatureStrengths[this.actor.system.details?.strength?.value] ?? this.actor.system.details?.strength?.value;
-      },
-      roleFormatted() {
-        const roleA = CONFIG.HOLYGRAILWAR.creatureRoles[this.actor.system.details?.role?.value] ?? this.actor.system.details?.role?.value;
-        const roleB = CONFIG.HOLYGRAILWAR.creatureRoles[this.actor.system.details?.roleB?.value] ?? this.actor.system.details?.roleB?.value;
-        return roleB ? `${roleA}/${roleB}` : roleA;
-      },
-      typeFormatted() {
-        let typeA = CONFIG.HOLYGRAILWAR.creatureTypes[this.actor.system.details?.type?.value] ?? this.actor.system.details?.type?.value;
-        let typeB = CONFIG.HOLYGRAILWAR.creatureTypes[this.actor.system.details?.typeB?.value] ?? this.actor.system.details?.typeB?.value;
-        if (typeB) return `${typeA.toUpperCase()}/${typeB.toUpperCase()}`;
-        if (typeof typeA == 'string') return typeA.toUpperCase();
-        return "";
       },
     },
     methods: {
@@ -167,13 +114,6 @@
             actor.setFlag('watersnake-grail-war', `sheetDisplay.header.collapsed`, this.headerCollapsed);
           });
         }
-      },
-      getOptions(key, includeNone = false) {
-        let options = CONFIG.HOLYGRAILWAR[key] ?? [];
-        if (includeNone) {
-          options = {"":"", ...options};
-        }
-        return options;
       }
     },
     watch: {

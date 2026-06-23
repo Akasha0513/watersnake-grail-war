@@ -1901,14 +1901,11 @@ option[selected] {
   background-position: center;
   background-size: 24px 24px;
 
-  @each $d in (4, 6, 8, 10, 12) {
+  // d20은 SWADE에 없어 별도 에셋(자체 제공). d4~d12는 SWADE 그레이 다이스.
+  @each $d in (4, 6, 8, 10, 12, 20) {
     &.d#{$d} {
       background-image: url('../assets/dice/d#{$d}-grey.svg');
     }
-  }
-  // d20은 SWADE에 없어 외부 에셋 사용.
-  &.d20 {
-    background-image: url('https://fvtt.aksh.run/icons/svg/d20-grey.svg');
   }
 }
 

@@ -32,18 +32,6 @@ export class ActorArchmageNpcSheetV2 extends ActorArchmageSheetV2 {
     return `systems/watersnake-grail-war/templates/actors/actor-${type}-sheet-vue.html`;
   }
 
-  /** @override */
-  getData(options) {
-    const context = super.getData();
-
-    // Prepare select fields.
-    context.data.roles = CONFIG.HOLYGRAILWAR.creatureRoles;
-    context.data.sizes = CONFIG.HOLYGRAILWAR.creatureSizes;
-    context.data.types = CONFIG.HOLYGRAILWAR.creatureTypes;
-
-    return context;
-  }
-
   // /* ------------------------------------------------------------------------ */
   // /*  Event Listeners ------------------------------------------------------- */
   // /* ------------------------------------------------------------------------ */

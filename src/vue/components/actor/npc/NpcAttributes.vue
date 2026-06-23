@@ -18,6 +18,7 @@
       <!-- MP -->
       <div class="unit unit--has-max unit--mp">
         <h2 class="unit-title">MP</h2>
+        <Progress name="mp" :current="actor.system.attributes.mp.value" :temp="actor.system.attributes.mp.temp" :max="actor.system.attributes.mp.max"/>
         <div class="resource flexrow">
           <Input type="number" name="system.attributes.mp.value" class="resource-current" :actor="actor" reactive="true"/>
           <span class="resource-separator">/</span>
@@ -27,6 +28,7 @@
       <!-- SP -->
       <div class="unit unit--has-max unit--sp">
         <h2 class="unit-title">SP</h2>
+        <Progress name="sp" :current="actor.system.attributes.sp.value" :temp="actor.system.attributes.sp.temp" :max="actor.system.attributes.sp.max"/>
         <div class="resource flexrow">
           <Input type="number" name="system.attributes.sp.value" class="resource-current" :actor="actor" reactive="true"/>
           <span class="resource-separator">/</span>
@@ -65,12 +67,7 @@ export default {
     }
   },
   data() {
-    return {
-      disengage: {
-        value: 11,
-        bonus: 0
-      }
-    }
+    return {}
   },
   components: {
     Progress,
