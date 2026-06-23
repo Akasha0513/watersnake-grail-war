@@ -111,19 +111,25 @@ export class ArchmageUtility {
     // 피해 굴림: 면수 강화(단계당 +2)·주사위 개수 추가·추가 보정을 대화상자로 입력
     if (rollType === 'damage') {
       if (!sys.damage?.value) return;
+      // 강화 단계 / 개수 추가: 0~10 드롭다운
+      const dmgOptions = Array.from({ length: 11 }, (_, i) => `<option value="${i}">${i}</option>`).join('');
       return new foundry.applications.api.DialogV2({
         window: { title: `${item.name} — 피해 굴림` },
         content: `<div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="form-group"><label>강화 단계</label><input name="steps" type="number" value="0"></div>
-            <div class="form-group"><label>개수 추가</label><input name="addDice" type="number" value="0"></div>
+            <div class="form-group"><label>강화 단계</label><select name="steps">${dmgOptions}</select></div>
+            <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
+            <div class="form-group"><label>대성공으로 굴림 (개수+1·단계+1)</label><input name="critical" type="checkbox"></div>
+            <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
           </div>`,
         buttons: [
           { action: 'roll', label: '피해 굴림', default: true,
             callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
               steps: Number(b.form.steps.value) || 0,
               addDice: Number(b.form.addDice.value) || 0,
-              extra: b.form.extra.value
+              extra: b.form.extra.value,
+              critical: b.form.critical.checked,
+              maximize: b.form.maximize.checked
             }) },
           { action: 'cancel', label: '취소' }
         ],
@@ -172,8 +178,10 @@ export class ArchmageUtility {
     }
     else if (rollType === 'damage') {
       formula = sys.damage?.value || '';
-      const steps = Number(opts.steps) || 0;
-      const addDice = Number(opts.addDice) || 0;
+      let steps = Number(opts.steps) || 0;
+      let addDice = Number(opts.addDice) || 0;
+      // 대성공: 개수 +1, 단계 +1 자동 가산
+      if (opts.critical) { steps += 1; addDice += 1; }
       // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 +2) 적용
       if (steps !== 0 || addDice !== 0) {
         formula = formula.replace(/(\d+)\s*[dD]\s*(\d+)/, (m, n, f) => {
@@ -183,11 +191,14 @@ export class ArchmageUtility {
         });
       }
       formula = ArchmageUtility._appendBonus(formula, opts.extra);
-      label = '피해';
+      label = opts.critical ? '피해 (대성공)' : '피해';
+      if (opts.maximize) label += ' · 최대화';
     }
     else return;
 
-    const roll = await new Roll(formula, rollData).roll();
+    // 피해 최대화 시 모든 주사위를 최댓값으로 강제 평가
+    const roll = new Roll(formula, rollData);
+    await roll.evaluate({ maximize: !!opts.maximize });
     const rollHtml = await roll.render();
     const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(

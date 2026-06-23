@@ -421,75 +421,36 @@ export class DiceArchmage {
       },
       content: content,
       buttons: [
+        // 불리 n = (n+1)d20 중 가장 낮은 1개(kl) / 유리 n = (n+1)d20 중 가장 높은 1개(kh)
         {
-          action: 'disadvantage',
-          label: game.i18n.localize('ARCHMAGE.rollDisadvantageShort'),
+          action: 'dis2',
+          label: '불리 2',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: 'disadvantage',
-              ...extractFormData(button.form)
-            })
+            this._completeBackgroundRoll({ actor, selection: 'dis2', ...extractFormData(button.form) })
         },
         {
-          action: 'minus4',
-          label: '-4',
+          action: 'dis1',
+          label: '불리 1',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: -4,
-              ...extractFormData(button.form)
-            })
-        },
-        {
-          action: 'minus2',
-          label: '-2',
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: -2,
-              ...extractFormData(button.form)
-            })
+            this._completeBackgroundRoll({ actor, selection: 'dis1', ...extractFormData(button.form) })
         },
         {
           action: 'normal',
-          label: game.i18n.localize('ARCHMAGE.rollNormal'),
+          label: '굴림',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: 0,
-              ...extractFormData(button.form)
-            })
+            this._completeBackgroundRoll({ actor, selection: 0, ...extractFormData(button.form) })
         },
         {
-          action: 'plus2',
-          label: '+2',
+          action: 'adv1',
+          label: '유리 1',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: +2,
-              ...extractFormData(button.form)
-            })
+            this._completeBackgroundRoll({ actor, selection: 'adv1', ...extractFormData(button.form) })
         },
         {
-          action: 'plus4',
-          label: '+4',
+          action: 'adv2',
+          label: '유리 2',
           callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: +4,
-              ...extractFormData(button.form)
-            })
-        },
-        {
-          action: 'advantage',
-          label: game.i18n.localize('ARCHMAGE.rollAdvantageShort'),
-          callback: (event, button, dialog) =>
-            this._completeBackgroundRoll({
-              actor,
-              selection: 'advantage',
-              ...extractFormData(button.form)
-            })
+            this._completeBackgroundRoll({ actor, selection: 'adv2', ...extractFormData(button.form) })
         }
       ]
     }).render({ force: true })
@@ -504,14 +465,18 @@ export class DiceArchmage {
     rollMode
   }) {
     // Construct the terms for the roll
-    // First: the d20
+    // First: the d20 (유리/불리 단계: (n+1)d20 중 kh/kl)
     const terms = []
-    if (selection === 'advantage') {
-      terms.push('2d20kh')
-    } else if (selection === 'disadvantage') {
-      terms.push('2d20kl')
+    if (selection === 'adv2') {
+      terms.push('3d20kh')        // 유리 2
+    } else if (selection === 'adv1' || selection === 'advantage') {
+      terms.push('2d20kh')        // 유리 1
+    } else if (selection === 'dis2') {
+      terms.push('3d20kl')        // 불리 2
+    } else if (selection === 'dis1' || selection === 'disadvantage') {
+      terms.push('2d20kl')        // 불리 1
     } else {
-      terms.push('1d20')
+      terms.push('1d20')          // 일반
     }
 
     // Next: the ability modifier
