@@ -34,7 +34,7 @@
 import { localize } from '@/methods/Helpers';
 export default {
   name: 'CharFeatures',
-  props: ['actor', 'group'],
+  props: ['actor', 'group', 'forType'],
   setup() {
     return { localize };
   },
@@ -55,7 +55,9 @@ export default {
   computed: {
     visibleCategories() {
       const grp = this.group || 'powers';
-      return this.categories.filter(c => c.types.includes(this.actor.type) && c.group === grp);
+      // forType가 지정되면 그 타입의 카테고리를 렌더(상대 powers 탭용).
+      const type = this.forType || this.actor.type;
+      return this.categories.filter(c => c.types.includes(type) && c.group === grp);
     }
   },
   methods: {

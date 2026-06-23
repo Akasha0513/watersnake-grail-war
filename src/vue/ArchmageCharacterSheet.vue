@@ -45,15 +45,15 @@
             <Tab group="primary" :tab="tabs.primary.details">
               <CharDetails :actor="actor" :owner="context.owner" :tab="tabs.primary.details" :flags="flags"/>
             </Tab>
-            <!-- Powers tab -->
+            <!-- Powers tab (마스터/서번트) -->
             <Tab group="primary" :tab="tabs.primary.powers">
               <CharFeatures :actor="actor"/>
             </Tab>
-            <!-- Triggers tab -->
-            <Tab group="primary" :tab="tabs.primary.triggers">
-              <CharTriggers :actor="actor" :context="context" :tab="tabs.primary.powers" :flags="flags"/>
+            <!-- 상대 타입 powers 탭 (설정 토글 시 표시) -->
+            <Tab group="primary" :tab="tabs.primary.oppositePowers">
+              <CharFeatures :actor="actor" :forType="oppositeType"/>
             </Tab>
-            <!-- Inventory tab -->
+            <!-- Inventory tab (소지품) -->
             <Tab group="primary" :tab="tabs.primary.inventory">
               <CharFeatures :actor="actor" group="inventory"/>
             </Tab>
@@ -98,7 +98,6 @@ import {
   CharResources,
   // CharDetails,
   CharPowers,
-  CharTriggers,
   CharInventory,
   CharEffects,
   CharSettings
@@ -122,7 +121,6 @@ export default {
     CharDetails,
     CharFeatures,
     CharPowers,
-    CharTriggers,
     CharInventory,
     CharEffects,
     CharSettings,
@@ -139,34 +137,32 @@ export default {
         primary: {
           details: {
             key: 'details',
-            label: localize('ARCHMAGE.details'),
+            label: '상세',
             active: false,
             componentClass: markRaw(CharDetails)
           },
           powers: {
             key: 'powers',
-            label: localize('ARCHMAGE.powers'),
+            label: this.actor.type === 'master' ? '마스터' : '서번트',
             active: true,
             componentClass: markRaw(CharPowers)
           },
-          triggers: {
-            key: 'triggers',
-            label: localize('ARCHMAGE.triggers'),
+          oppositePowers: {
+            key: 'oppositePowers',
+            label: this.actor.type === 'master' ? '서번트' : '마스터',
             active: false,
-            componentClass: markRaw(CharTriggers),
-            icon: 'fa-caret-right',
-            hideLabel: true,
-            hidden: !this.actor.flags?.['watersnake-grail-war']?.showTriggersTab
+            componentClass: markRaw(CharPowers),
+            hidden: !this.actor.flags?.['watersnake-grail-war']?.showOppositeTab
           },
           inventory: {
             key: 'inventory',
-            label: localize('ARCHMAGE.inventory'),
+            label: '소지품',
             active: false,
             componentClass: markRaw(CharInventory)
           },
           effects: {
             key: 'effects',
-            label: localize('ARCHMAGE.effects'),
+            label: '효과',
             active: false,
             componentClass: markRaw(CharEffects)
           },
@@ -211,6 +207,10 @@ export default {
   computed: {
     nightmode() {
       return game.settings.get("watersnake-grail-war", "nightmode") ? 'nightmode' : '';
+    },
+    // 상대 powers 탭에 렌더할 타입(마스터↔서번트)
+    oppositeType() {
+      return this.actor.type === 'master' ? 'character' : 'master';
     },
     flags() {
       let flags = this.actor.flags ? this.actor.flags['watersnake-grail-war'] : {};
