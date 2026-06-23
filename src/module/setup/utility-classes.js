@@ -204,8 +204,8 @@ export class ArchmageUtility {
       formula = sys.damage?.value || '';
       let steps = Number(opts.steps) || 0;
       let addDice = Number(opts.addDice) || 0;
-      // 대성공: 개수 +1, 단계 +1 자동 가산
-      if (opts.critical) { steps += 1; addDice += 1; }
+      // 대성공: 공격 다이스 1개만 추가(단계/면수는 안 올림)
+      if (opts.critical) { addDice += 1; }
       // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 +2) 적용
       if (steps !== 0 || addDice !== 0) {
         formula = formula.replace(/(\d+)\s*[dD]\s*(\d+)/, (m, n, f) => {

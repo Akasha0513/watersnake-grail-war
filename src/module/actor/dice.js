@@ -481,10 +481,10 @@ export class DiceArchmage {
     // 능력치 수정치
     const ability = actor.system.abilities[abilityKey]
     if (ability) mods.push({ label: game.i18n.localize(`ARCHMAGE.${abilityKey}.label`), value: `@${abilityKey}.mod`, source: 'ability' })
-    // 영령의 급(서번트만)
-    if (actor.type !== 'master') mods.push({ label: '영령의 급', value: '@grade', source: 'grade' })
-    // 고조(고조>0일 때만)
-    if (Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
+    // 영령의 급(서번트만). 단, 커스텀 판정(fixedBonus)은 보정이 이미 값에 다 포함이라 미가산.
+    if (actor.type !== 'master' && !fixedBonus) mods.push({ label: '영령의 급', value: '@grade', source: 'grade' })
+    // 고조(고조>0일 때만). 커스텀 판정(fixedBonus)은 미가산(필요 시 판정 직접 칸에 @ed 직접 입력).
+    if (!fixedBonus && Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
     // 배경(여러 개 합산, 배경마다 난수 가능)
     const bgLabels = []
     for (const bg of (backgrounds || [])) {
