@@ -61,7 +61,15 @@
                     <ol class="feature-fields">
                         <li>
                             <label>판정 능력치</label>
-                            <input type="text" name="system.rollAbility.value" value="{{system.rollAbility.value}}" placeholder="예: str (선택)"/>
+                            <select name="system.rollAbility.value">
+                                <option value="" {{#if (eq system.rollAbility.value "")}}selected{{/if}}>— 없음 —</option>
+                                <option value="str" {{#if (eq system.rollAbility.value "str")}}selected{{/if}}>근력</option>
+                                <option value="end" {{#if (eq system.rollAbility.value "end")}}selected{{/if}}>내구</option>
+                                <option value="agi" {{#if (eq system.rollAbility.value "agi")}}selected{{/if}}>민첩</option>
+                                <option value="mgi" {{#if (eq system.rollAbility.value "mgi")}}selected{{/if}}>마력</option>
+                                <option value="lck" {{#if (eq system.rollAbility.value "lck")}}selected{{/if}}>행운</option>
+                                <option value="ins" {{#if (eq system.rollAbility.value "ins")}}selected{{/if}}>통찰</option>
+                            </select>
                         </li>
                         <li>
                             <label>피해 다이스</label>
