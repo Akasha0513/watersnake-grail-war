@@ -616,6 +616,11 @@ export class ActorArchmage extends Actor {
     if (pdAblPref === 'end') pdAblMod = sm('end');
     else if (pdAblPref === 'agi') pdAblMod = sm('agi');
     else pdAblMod = Math.max(sm('end'), sm('agi'));
+    // 다운 상태: 신체방어 한정 능력치 수정치를 E(3)=+1로 취급(능력치 자체는 안 깎음).
+    // pd가 능력치 mod에서 동적 계산돼 static AE로 표현 불가 → 코드 특수처리.
+    if (this.effects?.some?.(e => !e.disabled && e.statuses?.has?.('down'))) {
+      pdAblMod = Math.min(pdAblMod, 1);
+    }
 
     // 신방 (자동 시): 서번트 = (삼기사14/사술사12) + 급 + (내구·민첩 수정치) / 마스터 = 10 + (내구·민첩 수정치)
     if (data.attributes.pd.automatic ?? true) {

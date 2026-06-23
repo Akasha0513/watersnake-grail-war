@@ -3,18 +3,31 @@ export const FLAGS = {};
 
 ARCHMAGE.statusEffects = [
   { id: "dead", name: "ARCHMAGE.EFFECT.StatusDead", icon: "icons/svg/skull.svg" },
-  { id: "weak_str", name: "빈약", icon: "icons/svg/downgrade.svg", description: "대상의 근력 수치를 E(3)으로 취급한다." },
-  { id: "weak_end", name: "허약", icon: "icons/svg/downgrade.svg", description: "대상의 내구 수치를 E(3)으로 취급한다." },
-  { id: "weak_agi", name: "둔화", icon: "icons/svg/downgrade.svg", description: "대상의 민첩 수치를 E(3)으로 취급한다." },
-  { id: "weak_mgi", name: "단선", icon: "icons/svg/downgrade.svg", description: "대상의 마력 수치를 E(3)으로 취급한다." },
-  { id: "weak_lck", name: "저조", icon: "icons/svg/downgrade.svg", description: "대상의 행운 수치를 E(3)으로 취급한다." },
-  { id: "weak_ins", name: "백치", icon: "icons/svg/downgrade.svg", description: "대상의 통찰 수치를 E(3)으로 취급한다." },
+  // 능력치 수치를 E(3)으로 취급: value OVERRIDE(=mode 5) 3. 'pre' 단계 적용이라 수정치·HP·방어까지 반영.
+  { id: "weak_str", name: "빈약", icon: "icons/svg/downgrade.svg", description: "대상의 근력 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.str.value", mode: 5, value: "3" }] },
+  { id: "weak_end", name: "허약", icon: "icons/svg/downgrade.svg", description: "대상의 내구 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.end.value", mode: 5, value: "3" }] },
+  { id: "weak_agi", name: "둔화", icon: "icons/svg/downgrade.svg", description: "대상의 민첩 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.agi.value", mode: 5, value: "3" }] },
+  { id: "weak_mgi", name: "단선", icon: "icons/svg/downgrade.svg", description: "대상의 마력 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.mgi.value", mode: 5, value: "3" }] },
+  { id: "weak_lck", name: "저조", icon: "icons/svg/downgrade.svg", description: "대상의 행운 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.lck.value", mode: 5, value: "3" }] },
+  { id: "weak_ins", name: "백치", icon: "icons/svg/downgrade.svg", description: "대상의 통찰 수치를 E(3)으로 취급한다.", changes: [{ key: "system.abilities.ins.value", mode: 5, value: "3" }] },
   { id: "charm", name: "매혹", icon: "icons/svg/heal.svg", description: "정신 방어 대상. 성공 시 즉각 자유 행동으로 저항 무시 마력 공격. 매혹 시전자 대상 공격에 -4." },
   { id: "incite", name: "선동", icon: "icons/svg/sound.svg", description: "정신 방어 대상. 선동가의 제안에 따른 한 가지 행동을 금지당한다." },
   { id: "grit", name: "근성", icon: "icons/svg/regen.svg", description: "HP -(최대 체력)까지 전투 가능. 피격 시 데미지 기회공격 취급. 매 턴 해주 판정 강제. 진명개방 피격 시 해주." },
   { id: "snipe", name: "저격", icon: "icons/svg/target.svg", description: "이동 불가. 피격 시 데미지 기회공격 취급. 사격 시 씬 제한·사거리 초과 역보정 무시(거리=은신값 취급)." },
   { id: "down", name: "다운", icon: "icons/svg/falling.svg", description: "기승·쌍수 불가, 다리 사용 불가. 신체 방어 한정 수정치를 E(3) 취급." },
-  { id: "powerless", name: "무력", icon: "icons/svg/downgrade.svg", description: "자신의 모든 배경을 0점 취급한다." },
+  // 모든 배경을 0점 취급: bg1~bg10 bonus.value를 각각 OVERRIDE 0.
+  { id: "powerless", name: "무력", icon: "icons/svg/downgrade.svg", description: "자신의 모든 배경을 0점 취급한다.", changes: [
+    { key: "system.backgrounds.bg1.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg2.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg3.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg4.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg5.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg6.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg7.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg8.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg9.bonus.value", mode: 5, value: "0" },
+    { key: "system.backgrounds.bg10.bonus.value", mode: 5, value: "0" }
+  ] },
   { id: "enfeeble", name: "쇠약", icon: "icons/svg/degen.svg", description: "매혹 및 연관 판정 시 보정치를 받을 수 없다. 두 개 이상의 행동을 요구하는 기능을 사용할 수 없다." },
   { id: "silence", name: "침묵", icon: "icons/svg/sound.svg", description: "영창·진명개방을 포함한 어떠한 대사도 할 수 없다." },
   { id: "bind", name: "구속", icon: "icons/svg/net.svg", description: "이동 불가. 접전/물러서기/가로막기/물리적 행동 불리함." },
