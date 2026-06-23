@@ -2,18 +2,19 @@
   <section class="section section--abilities flexcol">
     <div class="list-item-header grid grid-4col">
       <h2 class="unit-title grid-start-3">{{localize('ARCHMAGE.abilities')}}</h2>
+      <a class="ability-config" title="능력치 설정"><i class="fas fa-gear"></i></a>
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
         <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item.value)}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
-        <input type="number" v-bind:name="concat('system.abilities.', index, '.value')" class="ability-score" v-model="item.value"/>
+        <div class="ability-score ability-score--display">{{item.value}}</div>
         <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}</a>
         <div class="ability-mod" :style="concat('color:', modColor(item))" :title="modTitle(item, actor)">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
       </li>
       <!-- 보구(서번트) / 예장(마스터) -->
       <li class="list-item list-item--abilities ability grid grid-4col">
         <div class="ability-lvl">{{rank(npValue)}}</div>
-        <input type="number" name="system.attributes.np.value" class="ability-score" v-model="actor.system.attributes.np.value"/>
+        <div class="ability-score ability-score--display">{{npValue}}</div>
         <span class="ability-name">{{actor.type === 'master' ? '예장' : '보구'}}</span>
         <div class="ability-mod">{{numberFormat(npMod, 0, true)}}</div>
       </li>
@@ -90,3 +91,18 @@ export default {
   async mounted() {}
 }
 </script>
+
+<style>
+/* 능력치 설정 기어 버튼(헤더 오른쪽) */
+.section--abilities .list-item-header .ability-config {
+  justify-self: end;
+  align-self: center;
+  cursor: pointer;
+}
+/* 직접 입력칸 → 읽기 표시(편집은 설정 대화상자에서) */
+.section--abilities .ability-score--display {
+  text-align: center;
+  font-weight: bold;
+  align-self: center;
+}
+</style>

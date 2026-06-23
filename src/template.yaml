@@ -227,6 +227,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       agi:
         type: Number
         label: Dexterity
@@ -235,6 +236,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       end:
         type: Number
         label: Constitution
@@ -243,6 +245,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       mgi:
         type: Number
         label: Intelligence
@@ -251,6 +254,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       ins:
         type: Number
         label: Wisdom
@@ -259,6 +263,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       lck:
         type: Number
         label: Charisma
@@ -267,6 +272,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
     attributes:
       keyModifier:
         mod1: str
@@ -547,6 +553,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       agi:
         type: Number
         label: Dexterity
@@ -555,6 +562,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       end:
         type: Number
         label: Constitution
@@ -563,6 +571,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       mgi:
         type: Number
         label: Intelligence
@@ -571,6 +580,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       ins:
         type: Number
         label: Wisdom
@@ -579,6 +589,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
       lck:
         type: Number
         label: Charisma
@@ -587,6 +598,7 @@ Actor:
         mod: 0
         rerollPlus: 0
         rerollUsed: 0
+        flatBonus: 0
     attributes:
       keyModifier:
         mod1: str

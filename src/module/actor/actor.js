@@ -474,6 +474,11 @@ export class ActorArchmage extends Actor {
 
     // Ability modifiers
     for (let abl of Object.values(data.abilities)) {
+      // 상시 보정치(예장·마스터 패러미터 등)를 능력치 수치에 합산 → 실효 수치.
+      // value는 매 prepare마다 _source(기본 숫자)로 초기화되므로 누적되지 않음.
+      // (Effect의 ability AE는 'pre' 단계에서 이미 value에 반영돼 함께 합산됨)
+      abl.flatBonus = Number(abl.flatBonus) || 0;
+      abl.value = (Number(abl.value) || 0) + abl.flatBonus;
       abl.mod = Math.floor(abl.value / 3); // 홈브루 수정치 = floor(능력치/3): 3~5 E+1, 6~8 D+2, ... 21+ EX+7
       abl.lvl = abl.mod + data.attributes.level.value;
       abl.nonKey = {mod: foundry.utils.duplicate(abl.mod), lvlmod: foundry.utils.duplicate(abl.lvl)};

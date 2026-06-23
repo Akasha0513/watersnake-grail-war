@@ -250,6 +250,9 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
 
+    // 능력치 설정 대화상자.
+    html.on('click', '.ability-config', (event) => this._onAbilityConfig(event));
+
     // Support Image updates
     if ( this.options.editable ) {
       html.on('click', 'img[data-edit]', (event) => {
@@ -628,6 +631,66 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       }
     }
 
+  }
+
+  /* ------------------------------------------------------------------------ */
+  /*  Handle ability config ------------------------------------------------- */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * 능력치 설정 대화상자: 숫자(기본 수치) / ＋·－(rerollPlus) / 상시 보정치(flatBonus)를
+   * 한 곳에서 편집. 숫자는 _source 기준이라 상시 보정·AE와 섞이지 않음.
+   */
+  async _onAbilityConfig(event) {
+    event.preventDefault();
+    const order = ['str', 'end', 'agi', 'mgi', 'lck', 'ins'];
+    const labels = { str: '근력', end: '내구', agi: '민첩', mgi: '마력', lck: '행운', ins: '통찰' };
+    const src = this.actor._source.system.abilities || {};
+    const abilities = order.filter(k => src[k]).map(k => ({
+      key: k,
+      label: labels[k] ?? k,
+      value: src[k].value ?? 0,
+      rerollPlus: src[k].rerollPlus ?? 0,
+      flatBonus: src[k].flatBonus ?? 0
+    }));
+    const isMaster = this.actor.type === 'master';
+    const npLabel = isMaster ? '예장' : '보구';
+    const npValue = this.actor._source.system.attributes?.np?.value ?? 0;
+
+    const template = 'systems/watersnake-grail-war/templates/dialog/ability-config-dialog.html';
+    const content = await foundry.applications.handlebars.renderTemplate(template, { abilities, npLabel, npValue });
+
+    let saved = false;
+    new Dialog({
+      title: '능력치 설정',
+      content,
+      buttons: {
+        save: { label: game.i18n.localize('ARCHMAGE.CHAT.Save') || '저장', callback: () => { saved = true; } },
+        cancel: { label: game.i18n.localize('ARCHMAGE.CHAT.Cancel') || '취소', callback: () => {} }
+      },
+      default: 'save',
+      close: html => {
+        if (!saved) return;
+        const root = html[0] ?? html;
+        const num = (sel) => {
+          const el = root.querySelector(sel);
+          return el ? (Number(el.value) || 0) : null;
+        };
+        const updateData = {};
+        for (const k of order) {
+          if (!src[k]) continue;
+          const v = num(`[name="value_${k}"]`);
+          const r = num(`[name="reroll_${k}"]`);
+          const f = num(`[name="flat_${k}"]`);
+          if (v !== null) updateData[`system.abilities.${k}.value`] = v;
+          if (r !== null) updateData[`system.abilities.${k}.rerollPlus`] = Math.max(-1, Math.min(3, r));
+          if (f !== null) updateData[`system.abilities.${k}.flatBonus`] = f;
+        }
+        const np = num('[name="np_value"]');
+        if (np !== null) updateData['system.attributes.np.value'] = np;
+        return this.actor.update(updateData);
+      }
+    }, { width: 420 }).render(true);
   }
 
   /* ------------------------------------------------------------------------ */

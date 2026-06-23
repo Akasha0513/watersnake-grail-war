@@ -1,0 +1,31 @@
+<form class="ability-config-dialog" style="width: 30em;">
+	<table style="width:100%; border-collapse:collapse;">
+		<thead>
+			<tr>
+				<th style="text-align:left;">능력치</th>
+				<th>숫자</th>
+				<th>＋ / －</th>
+				<th>상시 보정</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each abilities as |abil|}}
+			<tr>
+				<td style="text-align:left; white-space:nowrap; padding:2px 6px;">{{abil.label}}</td>
+				<td style="text-align:center;"><input type="number" name="value_{{abil.key}}" value="{{abil.value}}" style="width:4.5em;"/></td>
+				<td style="text-align:center;"><input type="number" name="reroll_{{abil.key}}" value="{{abil.rerollPlus}}" min="-1" max="3" step="1" style="width:4.5em;"/></td>
+				<td style="text-align:center;"><input type="number" name="flat_{{abil.key}}" value="{{abil.flatBonus}}" style="width:4.5em;"/></td>
+			</tr>
+			{{/each}}
+			<tr>
+				<td style="text-align:left; white-space:nowrap; padding:2px 6px;">{{npLabel}}</td>
+				<td style="text-align:center;"><input type="number" name="np_value" value="{{npValue}}" style="width:4.5em;"/></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+	<p class="notes" style="margin-top:0.6rem; font-size:0.85em; opacity:0.8;">
+		＋/－ 칸: 양수 = ＋(재굴림 표기 수), 음수 = －. 상시 보정: 예장·마스터 패러미터 등으로 능력치 수치에 상시 더해지는 값(수정치·HP·MP·SP·방어에 반영).
+	</p>
+</form>
