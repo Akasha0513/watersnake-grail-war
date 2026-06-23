@@ -74,26 +74,91 @@ export class ArchmageUtility {
   static async rollFeature(actor, item, rollType) {
     if (!actor || !item) return;
     const sys = item.system;
+
+    // 능력치 판정: 시트 능력치 굴림과 동일한 배경 판정 대화상자(해당 능력치 프리셋)
+    if (rollType === 'trait') {
+      if (!sys.rollAbility?.value) return;
+      return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, { defaultAbility: sys.rollAbility.value });
+    }
+
+    // 기타 굴림: 보정치(주사위/고정)를 대화상자로 입력
+    if (rollType === 'misc') {
+      if (!sys.misc?.value) return;
+      return new foundry.applications.api.DialogV2({
+        window: { title: `${item.name} — 기타 굴림` },
+        content: `<div class="form-group" style="display:flex;flex-direction:column;gap:4px;">
+            <label>추가 보정치 (선택 · 주사위/고정 가능, 예: 1d4, +2)</label>
+            <input name="extra" type="text" placeholder="예: 1d4, +2" autofocus>
+          </div>`,
+        buttons: [
+          { action: 'roll', label: '굴림', default: true,
+            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'misc', { extra: b.form.extra.value }) },
+          { action: 'cancel', label: '취소' }
+        ],
+        rejectClose: false
+      }).render({ force: true });
+    }
+
+    // 피해 굴림: 면수 강화(단계당 +2)·주사위 개수 추가·추가 보정을 대화상자로 입력
+    if (rollType === 'damage') {
+      if (!sys.damage?.value) return;
+      return new foundry.applications.api.DialogV2({
+        window: { title: `${item.name} — 피해 굴림` },
+        content: `<div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="form-group"><label>면수 강화 단계 (단계당 +2)</label><input name="steps" type="number" value="0"></div>
+            <div class="form-group"><label>주사위 개수 추가</label><input name="addDice" type="number" value="0"></div>
+            <div class="form-group"><label>추가 보정 (선택 · 주사위/고정, 예: 1d6, +3)</label><input name="extra" type="text" placeholder=""></div>
+          </div>`,
+        buttons: [
+          { action: 'roll', label: '피해 굴림', default: true,
+            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
+              steps: Number(b.form.steps.value) || 0,
+              addDice: Number(b.form.addDice.value) || 0,
+              extra: b.form.extra.value
+            }) },
+          { action: 'cancel', label: '취소' }
+        ],
+        rejectClose: false
+      }).render({ force: true });
+    }
+  }
+
+  /** 보정치를 공식에 안전하게 덧붙임 (+/- 부호 정규화, 주사위/고정 모두 허용) */
+  static _appendBonus(formula, extra) {
+    if (!extra) return formula;
+    let e = String(extra).trim();
+    if (!e) return formula;
+    if (e.startsWith('+')) return `${formula} + ${e.slice(1).trim()}`;
+    if (e.startsWith('-')) return `${formula} - ${e.slice(1).trim()}`;
+    return `${formula} + ${e}`;
+  }
+
+  /** 기타/피해 굴림 실제 처리 (대화상자 입력값 반영) */
+  static async _completeFeatureRoll(actor, item, rollType, opts = {}) {
+    const sys = item.system;
     const rollData = actor.getRollData();
     let formula = '';
     let label = '';
-    if (rollType === 'trait') {
-      if (!(sys.rollAbility?.value && actor.system.abilities?.[sys.rollAbility.value])) return;
-      const terms = ['1d20', `@${sys.rollAbility.value}.mod`];
-      if (actor.type !== 'master') terms.push('@grade');
-      terms.push('@ed'); // 고조 주사위 (상한 적용된 값)
-      formula = terms.join(' + ');
-      label = '판정';
+
+    if (rollType === 'misc') {
+      formula = sys.misc?.value || '';
+      formula = ArchmageUtility._appendBonus(formula, opts.extra);
+      label = '기타';
     }
     else if (rollType === 'damage') {
-      if (!sys.damage?.value) return;
-      formula = sys.damage.value;
+      formula = sys.damage?.value || '';
+      const steps = Number(opts.steps) || 0;
+      const addDice = Number(opts.addDice) || 0;
+      // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 +2) 적용
+      if (steps !== 0 || addDice !== 0) {
+        formula = formula.replace(/(\d+)\s*[dD]\s*(\d+)/, (m, n, f) => {
+          const count = Math.max(1, Number(n) + addDice);
+          const faces = Math.max(2, Number(f) + 2 * steps);
+          return `${count}d${faces}`;
+        });
+      }
+      formula = ArchmageUtility._appendBonus(formula, opts.extra);
       label = '피해';
-    }
-    else if (rollType === 'misc') {
-      if (!sys.misc?.value) return;
-      formula = sys.misc.value;
-      label = '기타';
     }
     else return;
 
