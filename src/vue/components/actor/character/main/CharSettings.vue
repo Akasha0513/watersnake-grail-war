@@ -57,9 +57,9 @@
           <strong class="unit-subtitle">정방 자동 계산</strong>
           <input type="checkbox" name="system.attributes.md.automatic" v-model="actor.system.attributes.md.automatic"/>
         </div>
-        <!-- 상대 타입 탭 표시 (마스터↔서번트). 켜면 상대 powers 탭이 시트에 추가됨 -->
+        <!-- 상대 타입 탭 표시 (마스터=스킬 / 서번트=체계). 켜면 상대 powers 탭이 추가됨 -->
         <div class="sub-unit sub-unit--opposite-tab flexrow">
-          <strong class="unit-subtitle">{{ actor.type === 'master' ? '서번트 탭 표시' : '마스터 탭 표시' }}</strong>
+          <strong class="unit-subtitle">{{ actor.type === 'master' ? '스킬 탭 표시' : '체계 탭 표시' }}</strong>
           <input type="checkbox" name="flags.watersnake-grail-war.showOppositeTab" v-model="oppositeTabFlag.value"/>
         </div>
       </div>

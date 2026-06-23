@@ -57,7 +57,13 @@ export default {
       const grp = this.group || 'powers';
       // forType가 지정되면 그 타입의 카테고리를 렌더(상대 powers 탭용).
       const type = this.forType || this.actor.type;
-      return this.categories.filter(c => c.types.includes(type) && c.group === grp);
+      const isOpposite = this.forType && this.forType !== this.actor.type;
+      return this.categories.filter(c => {
+        if (c.group !== grp || !c.types.includes(type)) return false;
+        // 기타 기능(etc)은 본인 타입 탭(앞쪽)에만 표시 — 상대 탭에선 제외
+        if (isOpposite && c.key === 'etc') return false;
+        return true;
+      });
     }
   },
   methods: {

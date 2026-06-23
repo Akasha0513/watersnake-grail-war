@@ -143,13 +143,13 @@ export default {
           },
           powers: {
             key: 'powers',
-            label: this.actor.type === 'master' ? '마스터' : '서번트',
+            label: this.actor.type === 'master' ? '체계' : '스킬',
             active: true,
             componentClass: markRaw(CharPowers)
           },
           oppositePowers: {
             key: 'oppositePowers',
-            label: this.actor.type === 'master' ? '서번트' : '마스터',
+            label: this.actor.type === 'master' ? '스킬' : '체계',
             active: false,
             componentClass: markRaw(CharPowers),
             hidden: !this.actor.flags?.['watersnake-grail-war']?.showOppositeTab
