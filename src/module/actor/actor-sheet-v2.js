@@ -646,13 +646,23 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     const order = ['str', 'end', 'agi', 'mgi', 'lck', 'ins'];
     const labels = { str: '근력', end: '내구', agi: '민첩', mgi: '마력', lck: '행운', ins: '통찰' };
     const src = this.actor._source.system.abilities || {};
-    const abilities = order.filter(k => src[k]).map(k => ({
-      key: k,
-      label: labels[k] ?? k,
-      value: src[k].value ?? 0,
-      rerollPlus: src[k].rerollPlus ?? 0,
-      flatBonus: src[k].flatBonus ?? 0
-    }));
+    // ＋/－ 드롭다운 선택지: 없음(0) / －(-1) / ＋(1) / ＋＋(2)
+    const rerollChoices = [
+      { value: 0, label: '없음' },
+      { value: -1, label: '－' },
+      { value: 1, label: '＋' },
+      { value: 2, label: '＋＋' }
+    ];
+    const abilities = order.filter(k => src[k]).map(k => {
+      const cur = Number(src[k].rerollPlus) || 0;
+      return {
+        key: k,
+        label: labels[k] ?? k,
+        value: src[k].value ?? 0,
+        flatBonus: src[k].flatBonus ?? 0,
+        rerollOptions: rerollChoices.map(c => ({ value: c.value, label: c.label, selected: c.value === cur }))
+      };
+    });
     const isMaster = this.actor.type === 'master';
     const npLabel = isMaster ? '예장' : '보구';
     const npValue = this.actor._source.system.attributes?.np?.value ?? 0;
@@ -683,7 +693,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
           const r = num(`[name="reroll_${k}"]`);
           const f = num(`[name="flat_${k}"]`);
           if (v !== null) updateData[`system.abilities.${k}.value`] = v;
-          if (r !== null) updateData[`system.abilities.${k}.rerollPlus`] = Math.max(-1, Math.min(3, r));
+          if (r !== null) updateData[`system.abilities.${k}.rerollPlus`] = Math.max(-1, Math.min(2, r));
           if (f !== null) updateData[`system.abilities.${k}.flatBonus`] = f;
         }
         const np = num('[name="np_value"]');

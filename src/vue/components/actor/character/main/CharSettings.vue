@@ -53,19 +53,6 @@
             <option v-for="(opt, i) in spFormulas" :key="i" :value="opt.value">{{opt.label}}</option>
           </select>
         </div>
-        <div class="sub-unit sub-unit--reroll-plus flexcol">
-          <strong class="unit-subtitle">능력치 재굴림 (＋/＋＋)</strong>
-          <div v-for="ab in rerollAbilities" :key="ab.value" class="flexrow">
-            <span class="unit-subtitle">{{ab.label}}</span>
-            <select :name="`system.abilities.${ab.value}.rerollPlus`" v-model="actor.system.abilities[ab.value].rerollPlus">
-              <option :value="0">없음</option>
-              <option :value="1">＋</option>
-              <option :value="2">＋＋</option>
-              <option :value="3">＋＋＋</option>
-              <option :value="-1">－</option>
-            </select>
-          </div>
-        </div>
         <div class="sub-unit sub-unit--hp-adjustment flexrow">
           <strong class="unit-subtitle">HP 보정</strong>
           <input type="number" name="system.attributes.hp.extra" v-model="actor.system.attributes.hp.extra" :disabled="overrides.includes('system.attributes.hp.extra')" placeholder="0"/>
@@ -203,14 +190,6 @@ export default {
         { value: 'magdex', label: '마술: (마력+민첩)÷2' },
         { value: 'strmag', label: '마술: (근력+마력)÷2' },
         { value: 'magcon', label: '마술: (마력+내구)÷2' },
-      ],
-      rerollAbilities: [
-        { value: 'str', label: '근력' },
-        { value: 'end', label: '내구' },
-        { value: 'agi', label: '민첩' },
-        { value: 'mgi', label: '마력' },
-        { value: 'lck', label: '행운' },
-        { value: 'ins', label: '통찰' },
       ]
     }
   },
