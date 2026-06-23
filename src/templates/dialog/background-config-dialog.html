@@ -1,0 +1,23 @@
+<form class="background-config-dialog" style="width: 30em;">
+	<table style="width:100%; border-collapse:collapse;">
+		<thead>
+			<tr>
+				<th style="width:3em;">활성</th>
+				<th style="text-align:left;">이름</th>
+				<th style="width:5em;">수치</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each backgrounds as |bg|}}
+			<tr>
+				<td style="text-align:center;"><input type="checkbox" name="active_{{bg.key}}" {{#if bg.isActive}}checked{{/if}}/></td>
+				<td><input type="text" name="name_{{bg.key}}" value="{{bg.name}}" style="width:100%;"/></td>
+				<td style="text-align:center;"><input type="number" name="bonus_{{bg.key}}" value="{{bg.bonus}}" style="width:4.5em;"/></td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	<p class="notes" style="margin-top:0.6rem; font-size:0.85em; opacity:0.8;">
+		활성 체크된 배경만 사이드바·판정 대화상자에 표시됩니다.
+	</p>
+</form>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- d20 — SWADE 그레이 다이스와 동일한 #AAAAAA 플랫 스타일로 자작.
+       육각 실루엣 + 중앙 정삼각 구멍(패싯 표현). -->
+  <path fill="#AAAAAA" fill-rule="evenodd"
+        d="M32 2 L58 17 L58 47 L32 62 L6 47 L6 17 Z M32 22 L47 45 L17 45 Z"/>
+</svg>

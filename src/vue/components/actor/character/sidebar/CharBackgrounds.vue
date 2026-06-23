@@ -1,22 +1,22 @@
 <template>
   <section class="section section--backgrounds flexcol">
-    <h2 class="unit-title">{{localize('ARCHMAGE.backgrounds')}}</h2>
+    <div class="backgrounds-header flexrow">
+      <h2 class="unit-title">{{localize('ARCHMAGE.backgrounds')}}</h2>
+      <a class="background-config" title="배경 설정"><i class="fas fa-gear"></i></a>
+    </div>
     <ul class="list list--backgrounds backgrounds">
       <li v-for="(item, index) in backgrounds" :key="concat('system.backgrounds.', index)" class="list-item list-item--backgrounds background flexrow" :data-key="index"
           :data-tooltip="tooltip('pcBackground', {desc:item.name.value})">
-        <TextareaGrow :name="`system.backgrounds.${index}.name.value`" :value="item.name.value" classes="background-name" :disable-paste-parsing="true"/>
+        <span class="background-name">{{item.name.value}}</span>
         <span class="background-sign">+</span>
-        <input type="number" v-bind:name="concat('system.backgrounds.', index, '.bonus.value')" class="background-bonus" v-model="item.bonus.value"/>
-        <a class="background-delete" :data-key="index" data-tooltip="배경 삭제"><i class="fas fa-times"></i></a>
+        <span class="background-bonus">{{item.bonus.value}}</span>
       </li>
     </ul>
-    <a class="background-add"><i class="fas fa-plus"></i> 배경 추가</a>
   </section>
 </template>
 
 <script>
 import { localize, concat, tooltip } from '@/methods/Helpers';
-import TextareaGrow from '@/components/parts/TextareaGrow.vue';
 export default {
   name: 'CharBackgrounds',
   props: ['actor'],
@@ -30,11 +30,8 @@ export default {
   data() {
     return {}
   },
-  components: {
-    TextareaGrow
-  },
   computed: {
-    // 활성화된 배경만 표시 (추가/삭제는 시트 리스너가 처리)
+    // 활성화된 배경만 표시 (이름/수치/활성 편집은 배경 설정 대화상자에서)
     backgrounds() {
       let filteredBackgrounds = {};
       for (let [k,v] of Object.entries(this.actor.system.backgrounds)) {
@@ -47,3 +44,18 @@ export default {
   async mounted() {}
 }
 </script>
+
+<style>
+/* 배경 설정 기어 버튼(헤더 오른쪽) */
+.section--backgrounds .backgrounds-header {
+  align-items: center;
+  justify-content: space-between;
+}
+.section--backgrounds .backgrounds-header .background-config {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+.section--backgrounds .background-bonus {
+  font-weight: bold;
+}
+</style>

@@ -92,13 +92,6 @@
           <p class="notes">{{flag.hint}}</p>
         </div>
       </div>
-      <!-- Background Settings -->
-      <div class="unit unit--backgrounds">
-        <div v-for="(background, b) in actor.system.backgrounds" :key="b" class="settings-background" :data-key="b">
-          <input type="checkbox" :name="concat('system.backgrounds.', b, '.isActive.value')" v-model="background.isActive.value">
-          <strong class="unit-subtitle">{{localize(concat('ARCHMAGE.CHARACTERSETTINGS.', b))}}</strong>
-        </div>
-      </div>
       <!-- Resource Settings -->
       <div class="unit unit--resources">
         <!-- Custom -->

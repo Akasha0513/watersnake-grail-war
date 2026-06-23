@@ -49,7 +49,8 @@ export default {
       return out;
     },
     npValue() {
-      return Number(this.actor.system.attributes.np?.value) || 0;
+      const np = this.actor.system.attributes.np || {};
+      return (Number(np.value) || 0) + (Number(np.flatBonus) || 0);
     },
     npMod() {
       return Math.floor(this.npValue / 3);

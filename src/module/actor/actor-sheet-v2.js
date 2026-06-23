@@ -296,6 +296,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.background-add', (event) => this._addBackground(event));
     html.on('click', '.background-delete', (event) => this._removeBackground(event));
     html.on('click', '.background-die', (event) => this._rollBackgroundDie(event));
+    html.on('click', '.background-config', (event) => this._onBackgroundConfig(event));
   }
 
   /** 배경: 1d(배경 수치) 난수 굴림 */
@@ -666,9 +667,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     const isMaster = this.actor.type === 'master';
     const npLabel = isMaster ? '예장' : '보구';
     const npValue = this.actor._source.system.attributes?.np?.value ?? 0;
+    const npFlat = this.actor._source.system.attributes?.np?.flatBonus ?? 0;
 
     const template = 'systems/watersnake-grail-war/templates/dialog/ability-config-dialog.html';
-    const content = await foundry.applications.handlebars.renderTemplate(template, { abilities, npLabel, npValue });
+    const content = await foundry.applications.handlebars.renderTemplate(template, { abilities, npLabel, npValue, npFlat });
 
     let saved = false;
     new Dialog({
@@ -698,6 +700,52 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
         }
         const np = num('[name="np_value"]');
         if (np !== null) updateData['system.attributes.np.value'] = np;
+        const npFlatVal = num('[name="np_flat"]');
+        if (npFlatVal !== null) updateData['system.attributes.np.flatBonus'] = npFlatVal;
+        return this.actor.update(updateData);
+      }
+    }, { width: 420 }).render(true);
+  }
+
+  /**
+   * 배경 설정 대화상자: 8개 배경의 활성/이름/수치를 한 곳에서 편집.
+   * (활성 체크가 곧 추가/삭제 역할 — 기존 add/remove 버튼 대체)
+   */
+  async _onBackgroundConfig(event) {
+    event.preventDefault();
+    const src = this.actor._source.system.backgrounds || {};
+    const keys = Object.keys(src);
+    const backgrounds = keys.map(k => ({
+      key: k,
+      isActive: src[k].isActive?.value ?? false,
+      name: src[k].name?.value ?? '',
+      bonus: src[k].bonus?.value ?? 0
+    }));
+
+    const template = 'systems/watersnake-grail-war/templates/dialog/background-config-dialog.html';
+    const content = await foundry.applications.handlebars.renderTemplate(template, { backgrounds });
+
+    let saved = false;
+    new Dialog({
+      title: '배경 설정',
+      content,
+      buttons: {
+        save: { label: game.i18n.localize('ARCHMAGE.CHAT.Save') || '저장', callback: () => { saved = true; } },
+        cancel: { label: game.i18n.localize('ARCHMAGE.CHAT.Cancel') || '취소', callback: () => {} }
+      },
+      default: 'save',
+      close: html => {
+        if (!saved) return;
+        const root = html[0] ?? html;
+        const updateData = {};
+        for (const k of keys) {
+          const active = root.querySelector(`[name="active_${k}"]`);
+          const name = root.querySelector(`[name="name_${k}"]`);
+          const bonus = root.querySelector(`[name="bonus_${k}"]`);
+          if (active) updateData[`system.backgrounds.${k}.isActive.value`] = active.checked;
+          if (name) updateData[`system.backgrounds.${k}.name.value`] = name.value;
+          if (bonus) updateData[`system.backgrounds.${k}.bonus.value`] = Number(bonus.value) || 0;
+        }
         return this.actor.update(updateData);
       }
     }, { width: 420 }).render(true);

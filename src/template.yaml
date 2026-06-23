@@ -76,6 +76,7 @@ Actor:
           label: Noble Phantasm
           value: 3
           min: 3
+          flatBonus: 0
         mp:
           type: Number
           label: Mana Points
