@@ -105,9 +105,9 @@ export class ArchmageUtility {
       return new foundry.applications.api.DialogV2({
         window: { title: `${item.name} — 피해 굴림` },
         content: `<div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="form-group"><label>면수 강화 단계 (단계당 +2)</label><input name="steps" type="number" value="0"></div>
-            <div class="form-group"><label>주사위 개수 추가</label><input name="addDice" type="number" value="0"></div>
-            <div class="form-group"><label>추가 보정 (선택 · 주사위/고정, 예: 1d6, +3)</label><input name="extra" type="text" placeholder=""></div>
+            <div class="form-group"><label>강화 단계</label><input name="steps" type="number" value="0"></div>
+            <div class="form-group"><label>개수 추가</label><input name="addDice" type="number" value="0"></div>
+            <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
           </div>`,
         buttons: [
           { action: 'roll', label: '피해 굴림', default: true,
