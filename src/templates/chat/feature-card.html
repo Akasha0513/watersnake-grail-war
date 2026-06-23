@@ -4,7 +4,7 @@
     <img src="{{item.img}}" title="{{item.name}}" width="36" height="36"/>
     <h3 class="item-name feature-card-toggle" title="클릭: 설명 접기/펼치기">{{#if system.ruby.value}}<ruby>{{item.name}}<rt>{{system.ruby.value}}</rt></ruby>{{else}}{{item.name}}{{/if}}{{#if system.rank.value}} <span class="feature-rank">{{system.rank.value}}</span>{{/if}}</h3>
   </header>
-  <div class="card-content feature-card-desc">
+  <div class="card-content feature-card-desc" style="display:none;">
     <div class="container">
       {{#if system.description.value}}{{{system.description.value}}}{{else}}<p class="no-desc">설명 없음</p>{{/if}}
     </div>

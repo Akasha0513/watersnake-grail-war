@@ -47,8 +47,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   get template() {
-    // 마스터·NPC 모두 캐릭터 Vue 시트를 재사용
-    const type = (this.actor.type === 'master' || this.actor.type === 'npc') ? 'character' : this.actor.type;
+    const type = this.actor.type === 'master' ? 'character' : this.actor.type;
     return `systems/watersnake-grail-war/templates/actors/actor-${type}-sheet-vue.html`;
   }
 

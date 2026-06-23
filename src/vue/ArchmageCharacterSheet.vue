@@ -1,48 +1,5 @@
 <template>
-  <!-- NPC 간소 시트 (상단: 이름+메모+HP/MP/SP/방어 / 하단: 액션·예장·기타 기능) -->
-  <div v-if="actor.type === 'npc'" :class="concat('archmage-v2-vue npc flexcol ', nightmode)">
-    <section class="container container--top flexcol">
-      <header class="header npc-header">
-        <div class="unit unit--abs-label unit--name">
-          <label for="name">이름</label>
-          <input type="text" name="name" class="input-secondary" v-model="actor.name">
-        </div>
-      </header>
-      <section class="section section--npc-memo flexcol">
-        <h2 class="unit-title">메모</h2>
-        <textarea name="system.details.flavor.value" v-model="actor.system.details.flavor.value" class="npc-memo" rows="3"></textarea>
-      </section>
-      <section class="section section--npc-stats">
-        <div class="npc-stat">
-          <span class="npc-stat-label">HP</span>
-          <span class="npc-stat-value"><input type="number" name="system.attributes.hp.value" v-model="actor.system.attributes.hp.value"/><span class="sep">/</span><input type="number" name="system.attributes.hp.max" v-model="actor.system.attributes.hp.max"/></span>
-        </div>
-        <div class="npc-stat">
-          <span class="npc-stat-label">MP</span>
-          <span class="npc-stat-value"><input type="number" name="system.attributes.mp.value" v-model="actor.system.attributes.mp.value"/><span class="sep">/</span><input type="number" name="system.attributes.mp.max" v-model="actor.system.attributes.mp.max"/></span>
-        </div>
-        <div class="npc-stat">
-          <span class="npc-stat-label">SP</span>
-          <span class="npc-stat-value"><input type="number" name="system.attributes.sp.value" v-model="actor.system.attributes.sp.value"/><span class="sep">/</span><input type="number" name="system.attributes.sp.max" v-model="actor.system.attributes.sp.max"/></span>
-        </div>
-        <div class="npc-stat">
-          <span class="npc-stat-label">신방</span>
-          <span class="npc-stat-value"><input type="number" name="system.attributes.pd.value" v-model="actor.system.attributes.pd.value"/></span>
-        </div>
-        <div class="npc-stat">
-          <span class="npc-stat-label">정방</span>
-          <span class="npc-stat-value"><input type="number" name="system.attributes.md.value" v-model="actor.system.attributes.md.value"/></span>
-        </div>
-      </section>
-    </section>
-    <section class="container container--bottom flexcol">
-      <CharFeatures :actor="actor"/>
-      <CharFeatures :actor="actor" group="inventory"/>
-    </section>
-  </div>
-
-  <!-- 캐릭터/마스터 시트 -->
-  <div v-else :class="concat('archmage-v2-vue character flexcol ', nightmode)">
+  <div :class="concat('archmage-v2-vue character flexcol ', nightmode)">
 
     <!-- Top group -->
     <section class="container container--top flexcol">
