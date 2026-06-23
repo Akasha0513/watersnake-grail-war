@@ -1935,6 +1935,39 @@ option[selected] {
   }
 }
 
+// NPC 간소 시트
+.archmage-v2-vue.npc {
+  padding: 6px;
+
+  .npc-header {
+    margin-bottom: 6px;
+  }
+  .npc-memo {
+    width: 100%;
+    min-height: 48px;
+    resize: vertical;
+  }
+  .section--npc-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 6px 0;
+
+    .npc-stat {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+
+      label { font-weight: bold; }
+      input { width: 3.2em; text-align: center; }
+      .sep { opacity: 0.6; }
+    }
+  }
+  .container--bottom {
+    margin-top: 6px;
+  }
+}
+
 // Scene Terrains
 .archmage-terrains {
   pointer-events: all;

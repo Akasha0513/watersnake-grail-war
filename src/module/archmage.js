@@ -342,16 +342,11 @@ Hooks.once('init', async function() {
 
   foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
 
-  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageNpcSheetV2, {
-    label: 'ARCHMAGE.sheetNPC',
-    types: ["npc"],
-    makeDefault: true
-  });
-
+  // 성배전쟁: NPC도 캐릭터 Vue 시트를 재사용 (간소 레이아웃은 ArchmageCharacterSheet에서 npc 분기)
   // V2 actor sheet (See issue #118).
   foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageSheetV2, {
     label: 'ARCHMAGE.sheetCharacter',
-    types: ["character"],
+    types: ["character", "npc"],
     makeDefault: true
   });
 
