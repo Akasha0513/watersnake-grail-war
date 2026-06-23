@@ -289,7 +289,7 @@ Hooks.once('init', async function() {
 
     // Remove 1e hampered from context menu status effects
     let id = CONFIG.statusEffects.findIndex(e => e.id == "hampered");
-    CONFIG.statusEffects.splice(id, 1);
+    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
 
     // Update class base stats
     for (let cl of Object.keys(CONFIG.HOLYGRAILWAR.classes2e)) {
@@ -323,11 +323,11 @@ Hooks.once('init', async function() {
 
     // Remove 2e hindered from context menu status effects
     let id = CONFIG.statusEffects.findIndex(e => e.id == "hindered");
-    CONFIG.statusEffects.splice(id, 1);
+    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
 
     // Remove 2e charmed from context menu status effects
     id = CONFIG.statusEffects.findIndex(e => e.id == "charmed");
-    CONFIG.statusEffects.splice(id, 1);
+    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
   }
 
   // Assign the actor class to the CONFIG

@@ -2,311 +2,43 @@ export const ARCHMAGE = {};
 export const FLAGS = {};
 
 ARCHMAGE.statusEffects = [
-  // Dead.
-  {
-    id: "dead",
-    name: "ARCHMAGE.EFFECT.StatusDead",
-    icon: "icons/svg/skull.svg",
-    journal: "ig1kzvpojsk20dbt",
-  },
-  // Staggered
-  {
-    id: "staggered",
-    name: "ARCHMAGE.EFFECT.StatusStaggered",
-    icon: "icons/svg/blood.svg",
-    journal: "oqkyq1xn6xi2ajmi",
-  },
-  // Unconscious.
-  {
-    id: "unconscious",
-    name: "ARCHMAGE.EFFECT.StatusUnconscious",
-    icon: "icons/svg/unconscious.svg",
-    journal: "u9VHMyTBvK4lLbPa",
-    changes: [
-      {
-        key: 'system.attributes.ac.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.pd.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.md.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Charmed.
-  {
-    id: "charmed",
-    name: "ARCHMAGE.EFFECT.StatusCharmed",
-    icon: "icons/svg/heal.svg",
-    journal: "21cEqzk92tflpW7P",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Confused.
-  {
-    id: "confused",
-    name: "ARCHMAGE.EFFECT.StatusConfused",
-    icon: "icons/svg/stoned.svg",
-    journal: "21cEqzk92tflpW7N",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Dazed.
-  {
-    id: "dazed",
-    name: "ARCHMAGE.EFFECT.StatusDazed",
-    icon: "icons/svg/sun.svg",
-    journal: "dk4ua6smvjafdrqm",
-    changes: [
-      {
-        key: 'system.attributes.attackMod.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Fear.
-  {
-    id: "fear",
-    name: "ARCHMAGE.EFFECT.StatusFear",
-    icon: "icons/svg/terror.svg",
-    journal: "gy68o7eat5p6bpgq",
-    changes: [
-      {
-        key: 'system.attributes.escalation.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-        value: '0'
-      },
-      {
-        key: 'system.attributes.attackMod.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // This was a 2e playtest condition that didn't make the cut
-  // Frenzied.
-  // {
-    // id: "frenzied",
-    // name: "ARCHMAGE.EFFECT.StatusFrenzied",
-    // icon: "icons/svg/pill.svg",
-    // journal: "gy68o7eat5p6bpgr",
-    // changes: [
-      // {
-        // key: 'system.attributes.escalation.value',
-        // mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE,
-        // value: '0'
-      // },
-      // {
-        // key: 'system.attributes.attackMod.value',
-        // mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        // value: '-4'
-      // }
-    // ],
-    // flags: {
-      // archmage: {
-        // duration: "Unknown",
-      // }
-    // }
-  // },
-  // Grabbed.
-  {
-    id: "grabbed",
-    name: "ARCHMAGE.EFFECT.StatusGrabbed",
-    icon: "icons/svg/item-bag.svg",
-    journal: "aDEmM5lU3pfG3t7S",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Hampered / Hindered.
-  {
-    id: "hampered",
-    name: "ARCHMAGE.EFFECT.StatusHampered",
-    icon: "icons/svg/paralysis.svg",
-    journal: "mk69wxlsqwnydwip",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  {
-    id: "hindered",
-    name: "ARCHMAGE.EFFECT.StatusHindered",
-    icon: "icons/svg/paralysis.svg",
-    journal: "FHDyJEb29LWnO2Dg",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Helpless.
-  {
-    id: "helpless",
-    name: "ARCHMAGE.EFFECT.StatusHelpless",
-    icon: "icons/svg/falling.svg",
-    journal: "g20s05odo7v5mw2q",
-    changes: [
-      {
-        key: 'system.attributes.ac.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.pd.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.md.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Shocked.
-  {
-    id: "shocked",
-    name: "ARCHMAGE.EFFECT.StatusShocked",
-    icon: "icons/svg/lightning.svg",
-    journal: "m78aw2gepbc5ccgm",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Stuck.
-  {
-    id: "stuck",
-    name: "ARCHMAGE.EFFECT.StatusStuck",
-    icon: "icons/svg/net.svg",
-    journal: "ti7104njam2n18a5",
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Stunned.
-  {
-    id: "stunned",
-    name: "ARCHMAGE.EFFECT.StatusStunned",
-    icon: "icons/svg/daze.svg",
-    journal: "2rxwthymp5rl1dqe",
-    changes: [
-      {
-        key: 'system.attributes.ac.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.pd.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.md.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Vulnerable.
-  {
-    id: "vulnerable",
-    name: "ARCHMAGE.EFFECT.StatusVulnerable",
-    icon: "icons/svg/target.svg",
-    journal: "bi9ye2usgfsdpubs",
-    changes: [
-      {
-        key: 'system.attributes.critMod.def.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '2'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
-  // Weakened.
-  {
-    id: "weakened",
-    name: "ARCHMAGE.EFFECT.StatusWeakened",
-    icon: "icons/svg/downgrade.svg",
-    journal: "3r2jt3c6skn7gw7d",
-    changes: [
-      {
-        key: 'system.attributes.attackMod.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.ac.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.pd.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      },
-      {
-        key: 'system.attributes.md.value',
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD,
-        value: '-4'
-      }
-    ],
-    flags: {
-      archmage: {
-        duration: "Unknown",
-      }
-    }
-  },
+  { id: "dead", name: "ARCHMAGE.EFFECT.StatusDead", icon: "icons/svg/skull.svg" },
+  { id: "weak_str", name: "빈약", icon: "icons/svg/downgrade.svg", description: "대상의 근력 수치를 E(3)으로 취급한다." },
+  { id: "weak_end", name: "허약", icon: "icons/svg/downgrade.svg", description: "대상의 내구 수치를 E(3)으로 취급한다." },
+  { id: "weak_agi", name: "둔화", icon: "icons/svg/downgrade.svg", description: "대상의 민첩 수치를 E(3)으로 취급한다." },
+  { id: "weak_mgi", name: "단선", icon: "icons/svg/downgrade.svg", description: "대상의 마력 수치를 E(3)으로 취급한다." },
+  { id: "weak_lck", name: "저조", icon: "icons/svg/downgrade.svg", description: "대상의 행운 수치를 E(3)으로 취급한다." },
+  { id: "weak_ins", name: "백치", icon: "icons/svg/downgrade.svg", description: "대상의 통찰 수치를 E(3)으로 취급한다." },
+  { id: "charm", name: "매혹", icon: "icons/svg/heal.svg", description: "정신 방어 대상. 성공 시 즉각 자유 행동으로 저항 무시 마력 공격. 매혹 시전자 대상 공격에 -4." },
+  { id: "incite", name: "선동", icon: "icons/svg/sound.svg", description: "정신 방어 대상. 선동가의 제안에 따른 한 가지 행동을 금지당한다." },
+  { id: "grit", name: "근성", icon: "icons/svg/regen.svg", description: "HP -(최대 체력)까지 전투 가능. 피격 시 데미지 기회공격 취급. 매 턴 해주 판정 강제. 진명개방 피격 시 해주." },
+  { id: "snipe", name: "저격", icon: "icons/svg/target.svg", description: "이동 불가. 피격 시 데미지 기회공격 취급. 사격 시 씬 제한·사거리 초과 역보정 무시(거리=은신값 취급)." },
+  { id: "down", name: "다운", icon: "icons/svg/falling.svg", description: "기승·쌍수 불가, 다리 사용 불가. 신체 방어 한정 수정치를 E(3) 취급." },
+  { id: "powerless", name: "무력", icon: "icons/svg/downgrade.svg", description: "자신의 모든 배경을 0점 취급한다." },
+  { id: "enfeeble", name: "쇠약", icon: "icons/svg/degen.svg", description: "매혹 및 연관 판정 시 보정치를 받을 수 없다. 두 개 이상의 행동을 요구하는 기능을 사용할 수 없다." },
+  { id: "silence", name: "침묵", icon: "icons/svg/sound.svg", description: "영창·진명개방을 포함한 어떠한 대사도 할 수 없다." },
+  { id: "bind", name: "구속", icon: "icons/svg/net.svg", description: "이동 불가. 접전/물러서기/가로막기/물리적 행동 불리함." },
+  { id: "confuse", name: "혼란", icon: "icons/svg/stoned.svg", description: "일반 행동을 무조건 해당 상태이상 해주에 소비해야 한다." },
+  { id: "stigmata", name: "성흔", icon: "icons/svg/blood.svg", description: "회복을 시전하거나 회복의 대상이 될 시 결과값을 한 단계 저하시킨다. 중첩 가능." },
+  { id: "burn", name: "화상", icon: "icons/svg/fire.svg", description: "불꽃 속성. 매 턴 신체방어·SP 포함 화염 특방 제외 모든 삭감을 무시하는 2+(지속 턴) 데미지." },
+  { id: "weather", name: "풍화", icon: "icons/svg/hazard.svg", description: "바람 속성. 기능 중 하나를 사용 불가로 한다. 무장 선택 시 조잡한 무기 취급." },
+  { id: "bury", name: "매장", icon: "icons/svg/trap.svg", description: "흙 속성. 턴 개시와 동시에 짧은 행동 소비. 행동 전환으로 인한 짧은 행동도 사용 불가." },
+  { id: "erosion", name: "조례", icon: "icons/svg/hazard.svg", description: "자신이 데미지를 입을 때마다 2의 추가 데미지." },
+  { id: "frostbite", name: "동상", icon: "icons/svg/frozen.svg", description: "얼음 속성. 피격 시 얼음 속성 공격 대성공 범위 +1, 행동 시 얼음 관련 대실패 범위 +1. 중첩 가능." },
+  { id: "bleed", name: "출혈", icon: "icons/svg/blood.svg", description: "속성 없음. 매 턴 신체방어·SP를 무시하는 2 데미지. 중첩 시 중첩 횟수만큼 +1." },
+  { id: "poison", name: "중독", icon: "icons/svg/poison.svg", description: "맹독 속성. 매 턴 신체방어·SP를 무시하는 2 데미지. 해주 난이도 11+(지속 턴)." },
+  { id: "shock", name: "감전", icon: "icons/svg/lightning.svg", description: "번개 속성. 행동을 시도할 때마다 신체방어·SP를 무시하는 1 데미지." },
+  { id: "blind", name: "실명", icon: "icons/svg/blind.svg", description: "시력 관련 기능 사용 불가. 공격 시 50% 확정 빗나감, 피격 시 50% 확정 명중." },
+  { id: "frenzy", name: "광분", icon: "icons/svg/terror.svg", description: "전력 공격밖에 할 수 없다. 아군을 제외하고 공격 가능한 대상이 있다면 반드시 공격해야 한다." },
+  { id: "fear", name: "공포", icon: "icons/svg/terror.svg", description: "이탈 행동밖에 할 수 없다. 아군을 제외하고 자신을 공격할 수 있는 대상이 있다면 반드시 도주하려 해야 한다." },
+  { id: "stench", name: "악취", icon: "icons/svg/hazard.svg", description: "은신할 수 없다. 아군을 제외하고 실명/광분이 부여된 이에게 최우선 공격 대상이 된다." },
+  { id: "petrify", name: "석화", icon: "icons/svg/stoned.svg", description: "물리적 행동 불리함. 판정 없을 시 시도 불가. 위험돌파 시 -4 취급." },
+  { id: "subdue", name: "조복", icon: "icons/svg/aura.svg", description: "마술적 행동 불리함. 대상이 부여한, 혹은 대상에게 부여된 모든 마술적 가호를 파기한다." },
+  { id: "mark", name: "표적", icon: "icons/svg/target.svg", description: "대상에 대한 공격의 대성공 범위를 2 확장한다. 대상 이탈 시 이탈한 위치를 즉각 포착한다." },
+  { id: "loss", name: "결손", icon: "icons/svg/bones.svg", description: "특정 신체 부위에 개별로 적용. 해당 부위 판정에 -4, 해당 부위 행동 시도 불가." },
+  { id: "wander", name: "방황", icon: "icons/svg/daze.svg", description: "이동 시 랜덤한 방향으로 이동한다." },
+  { id: "imbalance", name: "불균형", icon: "icons/svg/hazard.svg", description: "전력/교란 공격 선언 시 그 패널티를 대상의 다음 (불균형 미적용) 공격으로 옮긴다." },
+  { id: "disarm", name: "무장해제", icon: "icons/svg/padlock.svg", description: "각 무장마다 개별로 적용. 해당 무장을 사용할 수 없다." },
 ];
 // Extended (optional) status effects
 ARCHMAGE.extendedStatusEffects = [
