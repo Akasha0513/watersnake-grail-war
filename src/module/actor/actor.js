@@ -395,10 +395,11 @@ export class ActorArchmage extends Actor {
    * @return {undefined}
    */
   _prepareCharacterData(data, model, flags) {
-    // 경험치 최대치: 레벨(8 미만)=레벨, 레벨 8 이상=레벨×2 (마스터용)
+    // 경험치 최대치(마스터용): 레벨<8 = 레벨, 레벨≥8 = 단리 배화 = 레벨×(레벨-6)
+    // (8레벨 8×2=16, 9레벨 9×3=27, 10레벨 10×4=40 …)
     if (data.attributes.xp) {
       const _lvl = Number(data.attributes.level?.value) || 0;
-      if (data.attributes.xp.automatic) data.attributes.xp.max = _lvl < 8 ? _lvl : _lvl * 2;
+      if (data.attributes.xp.automatic) data.attributes.xp.max = _lvl < 8 ? _lvl : _lvl * (_lvl - 6);
     }
 
     // Find known classes if not already detected - fixes older characters
@@ -603,6 +604,10 @@ export class ActorArchmage extends Actor {
 
     // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
     const isMaster = this.type === 'master';
+    // 마스터 영령 취급 옵션: 'none'(기본 마스터식) / 'three'(삼기사) / 'sorcery'(사술사)
+    // → HP·MP·신방·정방을 서번트식(해당 클래스)으로 계산.
+    const masterServant = isMaster ? (data.details.masterAsServant?.value || 'none') : 'none';
+    const masterAsServant = masterServant === 'three' || masterServant === 'sorcery';
     const sv = (a) => Number(data.abilities[a]?.value) || 0;   // 능력치 수치
     const sm = (a) => Math.floor(sv(a) / 3);                   // 수정치 = floor(수치/3)
     const grade = Number(data.attributes.grade?.value) || 0;   // 영령의 급
@@ -631,14 +636,20 @@ export class ActorArchmage extends Actor {
       pdAblMod = Math.min(pdAblMod, 1);
     }
 
-    // 신방 (자동 시): 서번트 = (삼기사14/사술사12) + 급 + (내구·민첩 수정치) / 마스터 = 10 + (내구·민첩 수정치)
+    // 신방 (자동 시): 서번트/마스터영령취급 = (삼기사14/사술사12) + 급 + (내구·민첩) / 일반 마스터 = 10 + (내구·민첩)
     if (data.attributes.pd.automatic ?? true) {
-      const pdBase = isMaster ? 10 : ((defCategory === 'three' ? 14 : 12) + grade);
+      let pdBase;
+      if (masterAsServant) pdBase = (masterServant === 'three' ? 14 : 12) + grade;
+      else if (isMaster) pdBase = 10;
+      else pdBase = (defCategory === 'three' ? 14 : 12) + grade;
       data.attributes.pd.value = pdBase + pdAblMod + Number(pdBonus);
     }
-    // 정방 (자동 시): 서번트 = (삼기사10/사술사12) + 통찰 수정치 / 마스터 = 8 + 통찰 수정치
+    // 정방 (자동 시): 서번트/마스터영령취급 = (삼기사10/사술사12) + 통찰 / 일반 마스터 = 8 + 통찰
     if (data.attributes.md.automatic ?? true) {
-      const mdBase = isMaster ? 8 : (defCategory === 'three' ? 10 : 12);
+      let mdBase;
+      if (masterAsServant) mdBase = (masterServant === 'three' ? 10 : 12);
+      else if (isMaster) mdBase = 8;
+      else mdBase = (defCategory === 'three' ? 10 : 12);
       data.attributes.md.value = mdBase + sm('ins') + Number(mdBonus);
     }
     // AC는 성배전쟁에서 미사용 (호환용으로 base 유지)
@@ -657,19 +668,21 @@ export class ActorArchmage extends Actor {
       data.abilities[prop].nonKey.dmg = data.tierMult * data.abilities[prop].nonKey.mod;
     }
 
-    // HP (성배전쟁): 서번트 = 근력 + 내구×3 / 마스터 = (근력 + 내구×3) ÷ 2
+    // HP (성배전쟁): 서번트/마스터영령취급 = 근력 + 내구×3 / 일반 마스터 = (근력 + 내구×3) ÷ 2
     if (data.attributes.hp.automatic) {
       let hpBaseVal = sv('str') + sv('end') * 3;
-      if (isMaster) hpBaseVal = Math.floor(hpBaseVal / 2);
+      if (isMaster && !masterAsServant) hpBaseVal = Math.floor(hpBaseVal / 2);
       data.attributes.hp.max = hpBaseVal + Number(hpBonus) + Number(data.attributes.hp.extra);
     }
 
     // MP (성배전쟁): 마력<12 = 12+마력(서)/6+마력(마) / 마력≥12 = 마력×2(서)/마력×1.5(마)
+    // (마스터 영령 취급 시 서번트식 적용)
     if (data.attributes.mp.automatic ?? true) {
       const mag = sv('mgi');
+      const servantMp = !isMaster || masterAsServant;
       let mpMax;
-      if (mag < 12) mpMax = isMaster ? 6 + mag : 12 + mag;
-      else mpMax = isMaster ? Math.floor(mag * 1.5) : mag * 2;
+      if (mag < 12) mpMax = servantMp ? 12 + mag : 6 + mag;
+      else mpMax = servantMp ? mag * 2 : Math.floor(mag * 1.5);
       data.attributes.mp.max = mpMax;
     }
 

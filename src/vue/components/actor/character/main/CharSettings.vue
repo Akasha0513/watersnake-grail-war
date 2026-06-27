@@ -18,6 +18,13 @@
             <option v-for="(opt, i) in defenseTypes" :key="i" :value="opt.value">{{opt.label}}</option>
           </select>
         </div>
+        <!-- 마스터 영령 취급 (마스터 전용): HP·MP·신방·정방을 서번트식으로 -->
+        <div v-if="actor.type === 'master'" class="sub-unit sub-unit--master-as-servant flexrow">
+          <strong class="unit-subtitle">영령 취급</strong>
+          <select name="system.details.masterAsServant.value" v-model="actor.system.details.masterAsServant.value">
+            <option v-for="(opt, i) in masterServantTypes" :key="i" :value="opt.value">{{opt.label}}</option>
+          </select>
+        </div>
         <!-- 3. HP 자동 계산 -->
         <div class="sub-unit sub-unit--calculate-max-hp flexrow">
           <strong class="unit-subtitle">HP 자동 계산</strong>
@@ -142,6 +149,11 @@ export default {
         { value: 'auto', label: '자동 (클래스 따름)' },
         { value: 'three', label: '삼기사 (14/10)' },
         { value: 'sorcery', label: '사술사 (12/12)' },
+      ],
+      masterServantTypes: [
+        { value: 'none', label: '없음 (기본 마스터)' },
+        { value: 'three', label: '삼기사' },
+        { value: 'sorcery', label: '사술사' },
       ],
       defenseAbilities: [
         { value: 'auto', label: '자동 (큰 값)' },

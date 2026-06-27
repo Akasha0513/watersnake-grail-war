@@ -134,6 +134,10 @@ Actor:
           type: String
           label: Defense Class
           value: auto
+        masterAsServant:
+          type: String
+          label: Master treated as Servant (none/three/sorcery)
+          value: none
         trueName:
           type: String
           label: True Name
