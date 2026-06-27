@@ -86,7 +86,11 @@ export class ActorArchmage extends Actor {
     if (this.type === 'character' || this.type === 'master') {
       for (const abl of Object.values(this.system.abilities ?? {})) {
         abl.flatBonus = Number(abl.flatBonus) || 0;
-        abl.value = (Number(abl.value) || 0) + abl.flatBonus;
+        const base = Number(abl.value) || 0;
+        let v = base + abl.flatBonus;
+        // 상시보정(+)으로는 능력치 수치 18을 초과할 수 없음(기본값 자체는 안 깎음).
+        if (abl.flatBonus > 0) v = Math.max(base, Math.min(v, 18));
+        abl.value = v;
       }
     }
 
