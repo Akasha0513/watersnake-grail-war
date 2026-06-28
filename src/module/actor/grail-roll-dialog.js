@@ -21,6 +21,11 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.critExpand = Number(ctx.critExpand) || 0;
     this.rollMode = game.settings.get('core', 'rollMode');
     this.modifiers = Array.isArray(ctx.modifiers) ? foundry.utils.duplicate(ctx.modifiers) : [];
+    // 영령의 급(@grade)을 토글 가능한 수정치로 추가(급>0, 커스텀 판정 제외). 기본 ON.
+    const gradeVal = Number(ctx.actor?.system?.attributes?.grade?.value) || 0;
+    if (!ctx.fixedBonus && gradeVal > 0) {
+      this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
+    }
   }
 
   static asPromise(ctx) {
@@ -87,7 +92,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (this.ctx.fixedBonus) mods.push({ label: '직접', value: String(this.ctx.fixedBonus) });
     const ab = actor.system.abilities?.[this.selectedAbility];
     if (ab) mods.push({ label: game.i18n.localize(`ARCHMAGE.${this.selectedAbility}.label`), value: `@${this.selectedAbility}.mod` });
-    if (actor.type !== 'master' && !this.ctx.fixedBonus) mods.push({ label: '영령의 급', value: '@grade' });
+    // 영령의 급은 this.modifiers(체크박스)로 이동 → 아래 modifiers 루프에서 합산
     if (!this.ctx.fixedBonus && Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed' });
     for (const bg of (this.ctx.backgrounds || [])) {
       const st = this.checkedBg[bg.key];

@@ -358,8 +358,9 @@ export class ActorArchmage extends Actor {
         // In 2e beta the bonus to disengage also applies to initiative
         incrInit += data.attributes.saves.disengageBonus;
       }
-      // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트만, 마스터 0)
-      let gradeInit = (actorData.type !== 'master') ? (Number(data.attributes.grade?.value) || 0) : 0;
+      // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트, 또는 영령 취급 마스터)
+      const _masterAsServant = actorData.type === 'master' && ['three', 'sorcery'].includes(data.details?.masterAsServant?.value);
+      let gradeInit = (actorData.type !== 'master' || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
       data.attributes.init.mod = statInit + data.attributes.init.value + gradeInit + incrInit;
     }
     else if (actorData.type === 'npc') {

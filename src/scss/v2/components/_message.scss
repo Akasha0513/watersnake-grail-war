@@ -4,11 +4,7 @@
       font-size: $font-md;
     }
   }
-
-  .dice-formula, .dice-total {
-    padding: 8px 0 2px;
-    line-height: 14px; // 24px parent line height minus padding (8px + 2px)
-  }
+  // (코어 .dice-formula/.dice-total padding·line-height 오버라이드 제거 — 코어 박스 스타일 유지)
 }
 
 .card-content {

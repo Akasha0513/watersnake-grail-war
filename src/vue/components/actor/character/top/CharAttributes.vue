@@ -45,6 +45,11 @@
           <div v-if="actor.type !== 'master' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
           <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
+        <!-- 마스터 영령의 급(영령 취급 시 신방·이니·판정에 반영) -->
+        <div v-if="actor.type === 'master'" class="labeled-input flexrow master-grade" style="align-items:center;gap:4px;margin-top:2px;">
+          <label class="unit-subtitle" style="font-size:0.75em;">영령의 급</label>
+          <input type="number" name="system.attributes.grade.value" v-model="actor.system.attributes.grade.value" style="max-width:3em;text-align:center;">
+        </div>
       </div>
       <!-- Defenses -->
       <div class="unit unit--defenses">

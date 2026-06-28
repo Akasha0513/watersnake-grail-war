@@ -1942,34 +1942,8 @@ option[selected] {
     --exploded-color: rgb(0, 100, 0);
     --min-color: rgb(200, 0, 0);
 
+    // 박스(.dice-formula/.dice-total/.dice-flavor)는 Foundry 코어 CSS 그대로 사용(오버라이드 안 함) → SWADE와 동일.
     .dice-roll { flex-direction: column; }
-    .dice-result {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    // 컨테이너 박스(공식/합계) — 코어/SWADE 룩
-    .dice-formula,
-    .dice-total {
-      background: rgba(0, 0, 0, 0.05);
-      border: 1px solid #b5b3a4;
-      border-radius: 3px;
-      margin: 2px 0;
-      padding: 2px 4px;
-      text-align: center;
-      line-height: 1.6;
-    }
-    .dice-total {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-    .dice-flavor {
-      text-align: center;
-      font-size: 0.8em;
-      opacity: 0.55;
-      margin-top: 2px;
-    }
 
     // 항목 리스트 (SWADE 규격 그대로)
     .result-list,

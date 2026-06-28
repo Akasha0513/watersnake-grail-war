@@ -417,8 +417,7 @@ export class DiceArchmage {
     // 능력치 수정치
     const ability = actor.system.abilities[abilityKey]
     if (ability) mods.push({ label: game.i18n.localize(`ARCHMAGE.${abilityKey}.label`), value: `@${abilityKey}.mod`, source: 'ability' })
-    // 영령의 급(서번트만). 단, 커스텀 판정(fixedBonus)은 보정이 이미 값에 다 포함이라 미가산.
-    if (actor.type !== 'master' && !fixedBonus) mods.push({ label: '영령의 급', value: '@grade', source: 'grade' })
+    // 영령의 급(@grade)은 대화상자의 토글 수정치로 이동 → extraMods로 들어옴(아래).
     // 고조(고조>0일 때만). 커스텀 판정(fixedBonus)은 미가산(필요 시 판정 직접 칸에 @ed 직접 입력).
     if (!fixedBonus && Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
     // 배경(여러 개 합산, 배경마다 난수 가능)
@@ -476,6 +475,11 @@ export class DiceArchmage {
     // SWADE식 항목 박스(formula-list)로 분해
     const formulaParts = game.holygrailwar.ArchmageUtility.rollFormulaParts(roll)
 
+    // 플레이버(판정명): 커스텀=순수값 판정 / 능력치=「{능력치} 판정」 / 그 외=판정
+    const flavorText = fixedBonus
+      ? '특수 판정'
+      : (abilityKey && ability ? `${game.i18n.localize(`ARCHMAGE.${abilityKey}.label`)} 판정` : '판정')
+
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -503,6 +507,7 @@ export class DiceArchmage {
           name: backgroundLabel
         },
         modifiers: modList,
+        flavor: flavorText,
         crit: isCrit,
         fumble: isFumble,
         formulaParts: formulaParts,
