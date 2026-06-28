@@ -21,9 +21,11 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.critExpand = Number(ctx.critExpand) || 0;
     this.rollMode = game.settings.get('core', 'rollMode');
     this.modifiers = Array.isArray(ctx.modifiers) ? foundry.utils.duplicate(ctx.modifiers) : [];
-    // 영령의 급(@grade)을 토글 가능한 수정치로 추가(급>0, 커스텀 판정 제외). 기본 ON.
+    // 영령의 급(@grade)을 토글 가능한 수정치로 추가. 기본 ON. 커스텀 판정(fixedBonus)은 제외.
+    // 서번트는 항상 표시(급 0이어도), 마스터는 급>0일 때만.
+    const isServant = ctx.actor?.type !== 'master';
     const gradeVal = Number(ctx.actor?.system?.attributes?.grade?.value) || 0;
-    if (!ctx.fixedBonus && gradeVal > 0) {
+    if (!ctx.fixedBonus && (isServant || gradeVal > 0)) {
       this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
     }
   }
