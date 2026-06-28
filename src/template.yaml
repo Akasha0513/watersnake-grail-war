@@ -68,8 +68,8 @@ Actor:
         grade:
           type: Number
           label: Spirit Rank
-          value: 1
-          min: 1
+          value: 0
+          min: 0
           max: 6
         np:
           type: Number
