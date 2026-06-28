@@ -69,6 +69,20 @@
           <strong class="unit-subtitle">{{ actor.type === 'master' ? '스킬 탭 표시' : '체계 탭 표시' }}</strong>
           <input type="checkbox" name="flags.watersnake-grail-war.showOppositeTab" v-model="oppositeTabFlag.value"/>
         </div>
+        <!-- 임시 HP/MP 표시 토글 -->
+        <div class="sub-unit sub-unit--show-temp-hp flexrow">
+          <strong class="unit-subtitle">임시 HP 표시</strong>
+          <input type="checkbox" name="flags.watersnake-grail-war.showTempHp" v-model="tempHpFlag.value"/>
+        </div>
+        <div class="sub-unit sub-unit--show-temp-mp flexrow">
+          <strong class="unit-subtitle">임시 MP 표시</strong>
+          <input type="checkbox" name="flags.watersnake-grail-war.showTempMp" v-model="tempMpFlag.value"/>
+        </div>
+        <!-- 마스터 급 표시 토글 -->
+        <div v-if="actor.type === 'master'" class="sub-unit sub-unit--show-grade flexrow">
+          <strong class="unit-subtitle">급 표시</strong>
+          <input type="checkbox" name="flags.watersnake-grail-war.showGrade" v-model="gradeFlag.value"/>
+        </div>
       </div>
       <!-- Resource Settings -->
       <div class="unit unit--resources">
@@ -176,6 +190,15 @@ export default {
     // 상대 타입 탭 표시 플래그(표시는 computed, 저장은 name 기반 submitOnChange).
     oppositeTabFlag() {
       return { value: this.actor.flags?.['watersnake-grail-war']?.showOppositeTab ?? false };
+    },
+    tempHpFlag() {
+      return { value: this.actor.flags?.['watersnake-grail-war']?.showTempHp ?? false };
+    },
+    tempMpFlag() {
+      return { value: this.actor.flags?.['watersnake-grail-war']?.showTempMp ?? false };
+    },
+    gradeFlag() {
+      return { value: this.actor.flags?.['watersnake-grail-war']?.showGrade ?? false };
     },
     resourcesCustom() {
       let resources = {};

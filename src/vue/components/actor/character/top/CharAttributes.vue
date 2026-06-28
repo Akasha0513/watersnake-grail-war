@@ -15,7 +15,7 @@
           <div v-if="actor.system.attributes.hp.automatic" class="resource-max">{{actor.system.attributes.hp.max}}</div>
           <input v-else type="number" name="system.attributes.hp.max" class="resource-max" v-model="actor.system.attributes.hp.max">
         </div>
-        <div class="labeled-input flexrow">
+        <div v-if="showTempHp" class="labeled-input flexrow">
           <label for="system.attributes.hp.temp" class="unit-subtitle">{{localize('ARCHMAGE.tempHp')}}</label>
           <input type="number" name="system.attributes.hp.temp" class="temp-hp" v-model="actor.system.attributes.hp.temp">
         </div>
@@ -30,7 +30,7 @@
           <div v-if="actor.system.attributes.mp.automatic" class="resource-max">{{actor.system.attributes.mp.max}}</div>
           <input v-else type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
-        <div class="labeled-input flexrow">
+        <div v-if="showTempMp" class="labeled-input flexrow">
           <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
           <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
         </div>
@@ -45,10 +45,10 @@
           <div v-if="actor.type !== 'master' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
           <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
-        <!-- 마스터 영령의 급(영령 취급 시 신방·이니·판정에 반영) -->
-        <div v-if="actor.type === 'master'" class="labeled-input flexrow master-grade" style="align-items:center;gap:4px;margin-top:2px;">
-          <label class="unit-subtitle" style="font-size:0.75em;">영령의 급</label>
-          <input type="number" name="system.attributes.grade.value" v-model="actor.system.attributes.grade.value" style="max-width:3em;text-align:center;">
+        <!-- 마스터 급(영령 취급 시 신방·이니·판정에 반영). 설정 토글로 표시. -->
+        <div v-if="actor.type === 'master' && showGrade" class="labeled-input flexrow">
+          <label for="system.attributes.grade.value" class="unit-subtitle">급</label>
+          <input type="number" name="system.attributes.grade.value" class="temp-hp" v-model="actor.system.attributes.grade.value">
         </div>
       </div>
       <!-- Defenses -->
@@ -134,6 +134,10 @@ export default {
     secondEdition() {
       return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     },
+    // 설정 토글(플래그) — 임시 HP/MP 표시, 마스터 급 표시
+    showTempHp() { return this.actor.flags?.['watersnake-grail-war']?.showTempHp ?? false; },
+    showTempMp() { return this.actor.flags?.['watersnake-grail-war']?.showTempMp ?? false; },
+    showGrade() { return this.actor.flags?.['watersnake-grail-war']?.showGrade ?? false; },
     deathSaves() {
       const deathFails = this.actor.system.attributes.saves.deathFails;
       const max = parseInt(deathFails.max) || 4;
