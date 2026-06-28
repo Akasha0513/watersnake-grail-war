@@ -1888,29 +1888,16 @@ option[selected] {
   }
 }
 
-// SWADE식 다이스 아이콘 (굴림 카드 펼침 보기).
-// 코어 roll.render() 마크업의 li.roll.die.dN 에 die-type SVG를 배경으로 깔아 표시.
-// (d4~d12는 SWADE 그레이 다이스, d20은 동일 스타일 자작 — assets/dice/)
-.chat-card.swade-card .dice-tooltip .dice-rolls .roll.die {
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
-  text-align: center;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 24px 24px;
-
-  // d20은 SWADE에 없어 별도 에셋(자체 제공). d4~d12는 SWADE 그레이 다이스.
-  @each $d in (4, 6, 8, 10, 12, 20) {
-    &.d#{$d} {
-      background-image: url('../assets/dice/d#{$d}-grey.svg');
-    }
-  }
-}
-
 // ── SWADE식 굴림 메시지 모방 (능력치/배경/feature 굴림 카드) ───────────────
 .chat-card.swade-roll-message {
+  // 굴림 플레이버(판정명) — SWADE식 상단 라인
+  .roll-flavor {
+    font-weight: bold;
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
   // 수정치 접기 (<details>/<summary>)
   .modifiers {
     font-size: 0.9em;

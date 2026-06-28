@@ -1,8 +1,6 @@
 <div class="archmage chat-card swade-card swade-roll-message ability-card">
-  <header class="card-header flexrow">
-    <h3 class="item-name">{{#if ability.name}}{{ability.name}} {{ability.rank}}({{numberFormat ability.bonus decimals=0 sign=true}}){{/if}}</h3>
-  </header>
   <div class="card-content">
+    <div class="roll-flavor">{{#if ability.name}}{{ability.name}}{{#if ability.rank}} {{ability.rank}}{{/if}} 판정{{else}}판정{{/if}}</div>
     {{#if background.name}}
       <div class="roll-bg-line">{{background.name}}</div>
     {{/if}}
