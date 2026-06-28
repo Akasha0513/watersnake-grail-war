@@ -1950,63 +1950,71 @@ option[selected] {
     &.roll-fumble { color: #cf222e; background: rgba(207, 34, 46, 0.12); }
   }
 
-  // SWADE식 formula-list: 모든 항(주사위/숫자/연산자)을 박스로
+  // SWADE swade-roll 충실 복제: 코어 .dice-formula/.dice-total 컨테이너 박스 + formula-list li
   .swade-roll {
-    text-align: center;
+    --exploded-color: rgb(0, 100, 0);
+    --min-color: rgb(200, 0, 0);
 
+    .dice-roll { flex-direction: column; }
+    .dice-result {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    // 컨테이너 박스(공식/합계) — 코어/SWADE 룩
+    .dice-formula,
+    .dice-total {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid #b5b3a4;
+      border-radius: 3px;
+      margin: 2px 0;
+      padding: 2px 4px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .dice-total {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    .dice-flavor {
+      text-align: center;
+      font-size: 0.8em;
+      opacity: 0.55;
+      margin-top: 2px;
+    }
+
+    // 항목 리스트 (SWADE 규격 그대로)
+    .result-list,
     .formula-list {
-      list-style: none;
-      margin: 4px 0;
       padding: 0;
+      margin: 0;
+      list-style: none;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-
-      li {
-        height: 26px;
-        min-width: 26px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        box-sizing: border-box;
-      }
-      li.die {
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: 26px 26px;
-
-        .val { line-height: 1; }
-      }
-      li.die.max .val { color: #1a7f37; }   // 최댓값
-      li.die.min .val { color: #cf222e; }   // 1
-      li.die.discarded { opacity: 0.4; }     // 유리/불리로 버려진 주사위
-      li.num {
-        padding: 0 7px;
-        border: 1px solid rgba(0, 0, 0, 0.18);
-        border-radius: 3px;
-        background: rgba(255, 255, 255, 0.5);
-      }
-      li.op {
-        min-width: 0;
-        padding: 0 2px;
-        opacity: 0.7;
-      }
     }
-
-    // 합계 = 큰 결과 박스
-    .dice-total {
-      font-size: 1.5em;
+    .result-list li,
+    .formula-list li {
+      height: 25px;
+      min-width: 25px;
+      margin: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       font-weight: bold;
-      line-height: 1.6;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-      border-radius: 3px;
-      background: rgba(255, 255, 240, 0.6);
-      box-shadow: 0 0 2px #fff inset;
-      margin: 2px 0;
     }
+    .result-list li.die,
+    .formula-list li.die {
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 25px 25px;
+    }
+    // min(1)·max·버려진 주사위 마커
+    .formula-list li.die.min span { color: var(--min-color); }
+    .formula-list li.die.max span { color: var(--exploded-color); }
+    .formula-list li.die.discarded { opacity: 0.4; }
   }
 }
 

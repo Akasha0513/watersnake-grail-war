@@ -15,10 +15,17 @@
     </details>
     {{/if}}
     <div class="swade-roll">
-      <ol class="formula-list">
-        {{#each formulaParts}}{{#if op}}<li class="op">{{result}}</li>{{else}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span class="val">{{result}}</span></li>{{else}}<li class="num" data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/if}}{{/each}}
-      </ol>
-      <div class="dice-total" data-tooltip="굴림 결과">{{total}}</div>
+      <div class="dice-roll">
+        <div class="dice-result">
+          <div class="dice-formula">
+            <ol class="formula-list">
+              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
+            </ol>
+          </div>
+          <div class="dice-flavor">굴림 결과</div>
+          <div class="dice-total">{{total}}</div>
+        </div>
+      </div>
     </div>
     {{#if crit}}<div class="roll-result-banner roll-crit">★ 대성공!</div>{{/if}}
     {{#if fumble}}<div class="roll-result-banner roll-fumble">✖ 대실패!</div>{{/if}}
