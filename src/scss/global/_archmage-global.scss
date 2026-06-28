@@ -1909,6 +1909,74 @@ option[selected] {
   }
 }
 
+// ── SWADE식 굴림 메시지 모방 (능력치/배경/feature 굴림 카드) ───────────────
+.chat-card.swade-roll-message {
+  // 수정치 접기 (<details>/<summary>)
+  .modifiers {
+    font-size: 0.9em;
+    margin: 2px 0 4px;
+
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      list-style: revert;
+      padding: 1px 0;
+    }
+    .modifier-list {
+      list-style: disc;
+      margin: 2px 0 2px 0;
+      padding-left: 1.5em;
+
+      li { line-height: 1.4; }
+    }
+  }
+
+  .roll-bg-line {
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+
+  // 대성공/대실패 배너
+  .roll-result-banner {
+    text-align: center;
+    font-weight: bold;
+    line-height: 22px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    box-shadow: 0 0 2px #fff inset;
+    margin: 4px 0 1px;
+
+    &.roll-crit { color: #1a7f37; background: rgba(26, 127, 55, 0.12); }
+    &.roll-fumble { color: #cf222e; background: rgba(207, 34, 46, 0.12); }
+  }
+
+  // 네이티브 roll.render() 위에 SWADE 룩
+  .swade-roll {
+    .dice-roll { flex-direction: column; }
+
+    // 원시 공식 문자열은 숨김(항목은 수정치 접기 + 툴팁 flavor로 봄)
+    .dice-formula { display: none; }
+
+    // 합계 = 큰 결과 박스
+    .dice-total {
+      font-size: 1.5em;
+      font-weight: bold;
+      line-height: 1.6;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      background: rgba(255, 255, 240, 0.6);
+      box-shadow: 0 0 2px #fff inset;
+      margin: 2px 0;
+      cursor: pointer;
+    }
+
+    // 항목별 분해(툴팁)의 헤더 = SWADE식 소제목 느낌
+    .dice-tooltip .tooltip-part {
+      .part-header { font-weight: bold; opacity: 0.85; }
+    }
+  }
+}
+
 // feature 채팅 카드 본문/푸터 (랭크·종류는 푸터 메타 텍스트)
 .chat-card.feature-card {
   .card-content .container {

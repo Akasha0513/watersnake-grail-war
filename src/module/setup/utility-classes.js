@@ -169,12 +169,14 @@ export class ArchmageUtility {
    * @param {Array<{label?:string,value:string|number,active?:boolean}>} modifiers
    * @return {string} 합성된 굴림 공식
    */
-  static reduceModifiers(baseFormula, modifiers) {
+  static reduceModifiers(baseFormula, modifiers, { flavor = false } = {}) {
     return (modifiers || []).filter(m => m && m.active !== false).reduce((f, m) => {
       let v = String(m.value ?? '').trim();
       if (!v) return f;
-      if (v[0] === '+' || v[0] === '-') return `${f} ${v[0]} ${v.slice(1).trim()}`;
-      return `${f} + ${v}`;
+      // flavor=true면 각 항에 [라벨] 부착 → 네이티브 굴림 툴팁이 SWADE처럼 항목명을 표시.
+      const fl = (flavor && m.label) ? `[${m.label}]` : '';
+      if (v[0] === '+' || v[0] === '-') return `${f} ${v[0]} ${v.slice(1).trim()}${fl}`;
+      return `${f} + ${v}${fl}`;
     }, baseFormula);
   }
 

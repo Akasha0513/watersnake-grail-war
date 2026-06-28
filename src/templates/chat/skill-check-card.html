@@ -1,13 +1,21 @@
-<div class="archmage chat-card swade-card ability-card">
+<div class="archmage chat-card swade-card swade-roll-message ability-card">
   <header class="card-header flexrow">
     <h3 class="item-name">{{#if ability.name}}{{ability.name}} {{ability.rank}}({{numberFormat ability.bonus decimals=0 sign=true}}){{/if}}</h3>
   </header>
   <div class="card-content">
     {{#if background.name}}
-      <div class="container"><strong>{{background.name}}</strong></div>
+      <div class="roll-bg-line">{{background.name}}</div>
     {{/if}}
-    {{{rollHTML}}}
-    {{#if crit}}<div class="roll-result-banner roll-crit" style="text-align:center;font-weight:bold;color:#1a7f37;margin:3px 0 1px;">★ 대성공!</div>{{/if}}
-    {{#if fumble}}<div class="roll-result-banner roll-fumble" style="text-align:center;font-weight:bold;color:#cf222e;margin:3px 0 1px;">✖ 대실패!</div>{{/if}}
+    {{#if modifiers.length}}
+    <details class="modifiers">
+      <summary>수정치</summary>
+      <ul class="modifier-list">
+        {{#each modifiers}}<li>{{label}}: {{disp}}</li>{{/each}}
+      </ul>
+    </details>
+    {{/if}}
+    <div class="swade-roll">{{{rollHTML}}}</div>
+    {{#if crit}}<div class="roll-result-banner roll-crit">★ 대성공!</div>{{/if}}
+    {{#if fumble}}<div class="roll-result-banner roll-fumble">✖ 대실패!</div>{{/if}}
   </div>
 </div>

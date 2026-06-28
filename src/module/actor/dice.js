@@ -448,9 +448,23 @@ export class DiceArchmage {
     // 상황 보정
     if (situationalBonus) mods.push({ label: '상황 보정', value: String(situationalBonus), source: 'situational' })
 
-    // 공식 합성 → 굴림
-    const formula = game.holygrailwar.ArchmageUtility.reduceModifiers(base, mods)
-    const roll = new Roll(formula, actor.getRollData())
+    // 수정치 접기 표시용(라벨 + 표시값). @-참조는 rollData로 해석.
+    const rd = actor.getRollData()
+    const signed = n => (Number(n) >= 0 ? `+${Number(n)}` : `${Number(n)}`)
+    const dispOf = (val) => {
+      const s = String(val).trim()
+      if (/^[+-]?\d+(\.\d+)?$/.test(s)) return signed(s)
+      if (s.startsWith('@')) {
+        const v = foundry.utils.getProperty(rd, s.slice(1))
+        return (v !== undefined && v !== null && !isNaN(Number(v))) ? signed(v) : s
+      }
+      return s
+    }
+    const modList = mods.map(m => ({ label: m.label, disp: dispOf(m.value) }))
+
+    // 공식 합성(항목별 flavor 라벨 → SWADE식 네이티브 툴팁) → 굴림
+    const formula = game.holygrailwar.ArchmageUtility.reduceModifiers(base, mods, { flavor: true })
+    const roll = new Roll(formula, rd)
     await roll.roll()
 
     // 대성공 범위 확장: 자연 d20(유리/불리 시 채택된 주사위)이 (20-확장) 이상이면 대성공.
@@ -485,6 +499,7 @@ export class DiceArchmage {
         background: {
           name: backgroundLabel
         },
+        modifiers: modList,
         crit: isCrit,
         fumble: isFumble,
         rollHTML: await roll.render(),
