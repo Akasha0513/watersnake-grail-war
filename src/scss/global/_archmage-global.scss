@@ -1950,12 +1950,51 @@ option[selected] {
     &.roll-fumble { color: #cf222e; background: rgba(207, 34, 46, 0.12); }
   }
 
-  // 네이티브 roll.render() 위에 SWADE 룩
+  // SWADE식 formula-list: 모든 항(주사위/숫자/연산자)을 박스로
   .swade-roll {
-    .dice-roll { flex-direction: column; }
+    text-align: center;
 
-    // 원시 공식 문자열은 숨김(항목은 수정치 접기 + 툴팁 flavor로 봄)
-    .dice-formula { display: none; }
+    .formula-list {
+      list-style: none;
+      margin: 4px 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+
+      li {
+        height: 26px;
+        min-width: 26px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-sizing: border-box;
+      }
+      li.die {
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 26px 26px;
+
+        .val { line-height: 1; }
+      }
+      li.die.max .val { color: #1a7f37; }   // 최댓값
+      li.die.min .val { color: #cf222e; }   // 1
+      li.die.discarded { opacity: 0.4; }     // 유리/불리로 버려진 주사위
+      li.num {
+        padding: 0 7px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.5);
+      }
+      li.op {
+        min-width: 0;
+        padding: 0 2px;
+        opacity: 0.7;
+      }
+    }
 
     // 합계 = 큰 결과 박스
     .dice-total {
@@ -1967,12 +2006,6 @@ option[selected] {
       background: rgba(255, 255, 240, 0.6);
       box-shadow: 0 0 2px #fff inset;
       margin: 2px 0;
-      cursor: pointer;
-    }
-
-    // 항목별 분해(툴팁)의 헤더 = SWADE식 소제목 느낌
-    .dice-tooltip .tooltip-part {
-      .part-header { font-weight: bold; opacity: 0.85; }
     }
   }
 }

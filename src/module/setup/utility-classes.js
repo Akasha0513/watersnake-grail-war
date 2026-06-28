@@ -149,11 +149,11 @@ export class ArchmageUtility {
   /** 굴림 결과를 feature-roll-card로 출력 (공통) */
   static async _postFeatureRollResult(actor, item, label, rollType, formula) {
     const roll = await new Roll(formula, actor.getRollData()).roll();
-    const rollHtml = await roll.render();
+    const formulaParts = ArchmageUtility.rollFormulaParts(roll);
     const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
-      { actor, item, rollHtml, label, rollType, actorId: actor.id, tokenId, ruby: item.system.ruby?.value }
+      { actor, item, formulaParts, total: roll.total, label, rollType, actorId: actor.id, tokenId, ruby: item.system.ruby?.value }
     );
     return ArchmageUtility.createChatMessage({
       speaker: ArchmageUtility.getSpeaker(actor),
@@ -178,6 +178,41 @@ export class ArchmageUtility {
       if (v[0] === '+' || v[0] === '-') return `${f} ${v[0]} ${v.slice(1).trim()}${fl}`;
       return `${f} + ${v}${fl}`;
     }, baseFormula);
+  }
+
+  /**
+   * 평가된 Roll을 SWADE식 formula-list 박스 배열로 분해.
+   * 각 항(주사위 결과/숫자/연산자)을 박스로 — 주사위는 SVG배경+min/max마커, hover=flavor 라벨.
+   * @return {Array} formulaParts [{op|die|num, result, hint, cls, img}]
+   */
+  static rollFormulaParts(roll) {
+    const T = foundry.dice.terms;
+    const haveSvg = [4, 6, 8, 10, 12, 20];
+    const parts = [];
+    for (const term of (roll?.terms || [])) {
+      if (term instanceof T.OperatorTerm) {
+        parts.push({ op: true, result: term.operator });
+      } else if (term instanceof T.NumericTerm) {
+        parts.push({ result: term.number, hint: term.flavor || '' });
+      } else if (term instanceof T.DiceTerm) {
+        for (const r of (term.results || [])) {
+          const cls = [];
+          if (r.discarded) cls.push('discarded');
+          if (r.result === 1) cls.push('min');
+          if (r.result === term.faces) cls.push('max');
+          parts.push({
+            die: true,
+            result: r.result,
+            hint: term.flavor ? `${term.flavor} (d${term.faces})` : `d${term.faces}`,
+            cls: cls.join(' '),
+            img: haveSvg.includes(term.faces) ? `systems/watersnake-grail-war/assets/dice/d${term.faces}-grey.svg` : ''
+          });
+        }
+      } else {
+        parts.push({ result: term.total ?? '' });
+      }
+    }
+    return parts;
   }
 
   /** 보정치를 공식에 안전하게 덧붙임 (+/- 부호 정규화, 주사위/고정 모두 허용) */
@@ -229,11 +264,11 @@ export class ArchmageUtility {
     // 피해 최대화 시 모든 주사위를 최댓값으로 강제 평가
     const roll = new Roll(formula, rollData);
     await roll.evaluate({ maximize: !!opts.maximize });
-    const rollHtml = await roll.render();
+    const formulaParts = ArchmageUtility.rollFormulaParts(roll);
     const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
-      { actor, item, rollHtml, label, labelSuffix, rollType, actorId: actor.id, tokenId, ruby: sys.ruby?.value }
+      { actor, item, formulaParts, total: roll.total, label, labelSuffix, rollType, actorId: actor.id, tokenId, ruby: sys.ruby?.value }
     );
     return ArchmageUtility.createChatMessage({
       speaker: ArchmageUtility.getSpeaker(actor),

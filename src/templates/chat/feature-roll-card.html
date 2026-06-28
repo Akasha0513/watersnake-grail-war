@@ -4,7 +4,12 @@
     <h3 class="item-name">{{#if ruby}}<ruby>{{item.name}}<rt>{{ruby}}</rt></ruby>{{else}}{{item.name}}{{/if}}&nbsp;—&nbsp;{{label}}{{#if labelSuffix}} <span style="font-size:0.78em;opacity:0.7;font-weight:normal;white-space:nowrap;">{{labelSuffix}}</span>{{/if}}</h3>
   </header>
   <div class="card-content">
-    <div class="swade-roll">{{{rollHtml}}}</div>
+    <div class="swade-roll">
+      <ol class="formula-list">
+        {{#each formulaParts}}{{#if op}}<li class="op">{{result}}</li>{{else}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span class="val">{{result}}</span></li>{{else}}<li class="num" data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/if}}{{/each}}
+      </ol>
+      <div class="dice-total" data-tooltip="굴림 결과">{{total}}</div>
+    </div>
   </div>
   <footer class="card-buttons feature-card-footer">
     <button type="button" class="feature-reroll"><i class="fas fa-rotate"></i> 재굴림</button>

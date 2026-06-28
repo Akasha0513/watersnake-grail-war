@@ -14,7 +14,12 @@
       </ul>
     </details>
     {{/if}}
-    <div class="swade-roll">{{{rollHTML}}}</div>
+    <div class="swade-roll">
+      <ol class="formula-list">
+        {{#each formulaParts}}{{#if op}}<li class="op">{{result}}</li>{{else}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span class="val">{{result}}</span></li>{{else}}<li class="num" data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/if}}{{/each}}
+      </ol>
+      <div class="dice-total" data-tooltip="굴림 결과">{{total}}</div>
+    </div>
     {{#if crit}}<div class="roll-result-banner roll-crit">★ 대성공!</div>{{/if}}
     {{#if fumble}}<div class="roll-result-banner roll-fumble">✖ 대실패!</div>{{/if}}
   </div>

@@ -473,6 +473,9 @@ export class DiceArchmage {
     const isCrit = natD20 != null && natD20 >= (20 - expand)
     const isFumble = natD20 === 1
 
+    // SWADE식 항목 박스(formula-list)로 분해
+    const formulaParts = game.holygrailwar.ArchmageUtility.rollFormulaParts(roll)
+
     // Render the chat content template
     const chatData = {
       user: game.user.id,
@@ -502,7 +505,8 @@ export class DiceArchmage {
         modifiers: modList,
         crit: isCrit,
         fumble: isFumble,
-        rollHTML: await roll.render(),
+        formulaParts: formulaParts,
+        total: roll.total,
         data: chatData
       }
     )
