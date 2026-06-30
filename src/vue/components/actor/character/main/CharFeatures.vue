@@ -12,6 +12,7 @@
             class="list-item feature-item flexcol" :data-item-id="item._id">
           <div class="feature-header flexrow">
             <a class="feature-chat feature-chat-icon" :data-item-id="item._id" title="채팅에 전송"><i class="far fa-comment-alt"></i></a>
+            <a class="feature-chat-private feature-chat-icon" :data-item-id="item._id" title="본인과 GM에게만 전송"><i class="fas fa-user-secret"></i></a>
             <a class="feature-name feature-expand" @click="toggle(item._id)">
               <ruby v-if="item.system.ruby && item.system.ruby.value">{{item.name}}<rt>{{item.system.ruby.value}}</rt></ruby><template v-else>{{item.name}}</template>
               <span v-if="item.system.rank && item.system.rank.value" class="feature-rank">{{item.system.rank.value}}</span>

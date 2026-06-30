@@ -22,7 +22,7 @@
                         <option value="etc" {{#if (eq system.category.value "etc")}}selected{{/if}}>기타 기능</option>
                     </select>
                 </li>
-                {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np"))}}
+                {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np") (eq system.category.value "etc"))}}
                 <li>
                     <label>랭크</label>
                     <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+"/>

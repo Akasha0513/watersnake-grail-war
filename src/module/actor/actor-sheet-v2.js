@@ -246,6 +246,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.item-delete', (event) => this._deleteItem(event));
     html.on('click', '.item-edit', (event) => this._editItem(event));
     html.on('click', '.feature-chat', (event) => this._postFeature(event));
+    html.on('click', '.feature-chat-private', (event) => this._postFeature(event, true));
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
@@ -496,7 +497,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   }
 
   /** feature 아이템을 채팅에 버튼 카드로 출력 (굴림은 채팅 카드에서 수행) */
-  async _postFeature(event) {
+  async _postFeature(event, isPrivate = false) {
     event.preventDefault();
     const id = event.currentTarget.dataset.itemId;
     const item = this.actor.items.get(id);
@@ -518,7 +519,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content
-    });
+    }, isPrivate ? { rollMode: 'gmroll' } : {});
   }
 
   /**
