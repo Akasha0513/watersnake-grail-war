@@ -52,6 +52,10 @@ Actor:
           type: Number
           label: Initiative Modifier
           value: 0
+        checkBonus:
+          type: Number
+          label: Check Bonus
+          value: 0
         level:
           type: Number
           label: Level

@@ -44,7 +44,8 @@ export default {
       expanded: {},
       categories: [
         { key: 'system', label: '체계', types: ['master', 'npc'], group: 'powers' },
-        { key: 'action', label: '액션', types: ['master', 'npc'], group: 'powers' },
+        { key: 'action', label: '고급 액션', types: ['master', 'npc'], group: 'powers' },
+        { key: 'actionHigh', label: '최고급 액션', types: ['master', 'npc'], group: 'powers' },
         { key: 'equip', label: '예장', types: ['master', 'character', 'npc'], group: 'inventory' },
         { key: 'skill', label: '스킬', types: ['character'], group: 'powers' },
         { key: 'variable', label: '가변 기능', types: ['character'], group: 'powers' },

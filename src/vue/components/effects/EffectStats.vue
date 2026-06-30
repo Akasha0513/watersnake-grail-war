@@ -35,6 +35,17 @@
 	<hr/>
 
 	<div class="form-group">
+		<label> 이니셔티브 보정 </label>
+		<div class="field"><input type="number" v-model="viewModel.initAdd" placeholder="0" /></div>
+	</div>
+	<div class="form-group">
+		<label> 모든 판정 보정 </label>
+		<div class="field"><input type="number" v-model="viewModel.checkBonusAdd" placeholder="0" /></div>
+	</div>
+
+	<hr/>
+
+	<div class="form-group">
 		<label> 급 대체 </label>
 		<div class="field"><input type="number" v-model="viewModel.gradeOver" placeholder="—" /></div>
 	</div>

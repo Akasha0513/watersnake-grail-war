@@ -153,6 +153,9 @@ const fieldDefs = [
 	{ vm: 'pdOver', key: 'system.attributes.pd.value', mode: OVERRIDE },
 	{ vm: 'mdAdd', key: 'system.attributes.md.value', mode: ADD },
 	{ vm: 'mdOver', key: 'system.attributes.md.value', mode: OVERRIDE },
+	// 이니셔티브 보정(init.value ADD → init.mod에 합산) / 모든 판정 보정(checkBonus.value ADD → 판정 대화상자 토글)
+	{ vm: 'initAdd', key: 'system.attributes.init.value', mode: ADD },
+	{ vm: 'checkBonusAdd', key: 'system.attributes.checkBonus.value', mode: ADD },
 	// 급 대체 (grade.value는 actor.js 'pre' 단계에서 적용 → 신방·이니에 반영)
 	{ vm: 'gradeOver', key: 'system.attributes.grade.value', mode: OVERRIDE },
 	// 능력치: 수치(value)/보정치(mod) × 증감(ADD)/덮어쓰기(OVERRIDE)

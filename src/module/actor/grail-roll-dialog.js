@@ -28,6 +28,11 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!ctx.fixedBonus && (isServant || gradeVal > 0)) {
       this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
     }
+    // 모든 판정 보정(checkBonus, AE로 설정 가능)을 토글 수정치로. 기본 ON. 값≠0·커스텀 아닐 때만.
+    const checkBonusVal = Number(ctx.actor?.system?.attributes?.checkBonus?.value) || 0;
+    if (!ctx.fixedBonus && checkBonusVal !== 0) {
+      this.modifiers.unshift({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus' });
+    }
   }
 
   static asPromise(ctx) {
