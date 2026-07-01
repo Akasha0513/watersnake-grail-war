@@ -72,13 +72,21 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
             label: game.i18n.localize('ARCHMAGE.SETTINGS.groups.general'),
             active: true
           },
-          stats: {
-            key: 'stats',
-            label: '스탯·방어'
-          },
           abilities: {
             key: 'abilities',
             label: '능력치'
+          },
+          defenses: {
+            key: 'defenses',
+            label: '급·방어'
+          },
+          resources: {
+            key: 'resources',
+            label: '자원·이니'
+          },
+          checkbonus: {
+            key: 'checkbonus',
+            label: '판정 보정'
           }
         }
       },

@@ -61,12 +61,20 @@
           <EffectDetails :effect="effect" :context="context" />
         </Tab>
 
-        <Tab group="primary" :tab="tabs.primary.stats">
-          <EffectStats :viewModel="viewModel" />
-        </Tab>
-
         <Tab group="primary" :tab="tabs.primary.abilities">
           <EffectAbilities :viewModel="viewModel" />
+        </Tab>
+
+        <Tab group="primary" :tab="tabs.primary.defenses">
+          <EffectDefenses :viewModel="viewModel" />
+        </Tab>
+
+        <Tab group="primary" :tab="tabs.primary.resources">
+          <EffectResources :viewModel="viewModel" />
+        </Tab>
+
+        <Tab group="primary" :tab="tabs.primary.checkbonus">
+          <EffectCheckBonus :viewModel="viewModel" :effect="effect" />
         </Tab>
       </section>
     </div>
@@ -79,8 +87,10 @@ import {
   Tabs,
   Tab,
   EffectDetails,
-  EffectStats,
   EffectAbilities,
+  EffectDefenses,
+  EffectResources,
+  EffectCheckBonus,
 } from '@/components';
 import { computed, inject, reactive, toRaw, watch } from 'vue';
 import { concat, localize, numberFormat } from '@/methods/Helpers';

@@ -440,6 +440,22 @@ export class ActorArchmage extends Actor {
       value: data.attributes.level.value + data.attributes.escalation.value
     };
 
+    // AE의 판정 보정 항목(이름+값) 집계 → 굴림 대화상자에서 항목별 토글로 노출.
+    // 값은 formula 가능(굴림 시점에 대화상자가 해석). 비활성 효과는 제외.
+    const checkBonusList = [];
+    for (const e of this.effects) {
+      if (e.disabled) continue;
+      const list = e.flags?.['watersnake-grail-war']?.checkBonuses;
+      if (Array.isArray(list)) {
+        for (const cb of list) {
+          const val = String(cb?.value ?? '').trim();
+          if (val === '') continue;
+          checkBonusList.push({ label: (cb.label || e.name || '판정 보정'), value: val });
+        }
+      }
+    }
+    data.attributes.checkBonusList = checkBonusList;
+
     this.applyActiveEffects('std')
   }
 

@@ -28,10 +28,20 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!ctx.fixedBonus && (isServant || gradeVal > 0)) {
       this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
     }
-    // 모든 판정 보정(checkBonus, AE로 설정 가능)을 토글 수정치로. 기본 ON. 값≠0·커스텀 아닐 때만.
-    const checkBonusVal = Number(ctx.actor?.system?.attributes?.checkBonus?.value) || 0;
-    if (!ctx.fixedBonus && checkBonusVal !== 0) {
-      this.modifiers.unshift({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus' });
+    // 판정 보정 → 영령의 급 아래로(push) 토글 추가. 커스텀 판정(fixedBonus)은 제외.
+    if (!ctx.fixedBonus) {
+      // ① 단일 "모든 판정 보정"(checkBonus.value)
+      const checkBonusVal = Number(ctx.actor?.system?.attributes?.checkBonus?.value) || 0;
+      if (checkBonusVal !== 0) {
+        this.modifiers.push({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus' });
+      }
+      // ② AE 판정 보정 항목(이름별, 다중). 값은 formula 가능(굴림 시 해석).
+      const cbList = ctx.actor?.system?.attributes?.checkBonusList;
+      if (Array.isArray(cbList)) {
+        for (const cb of cbList) {
+          this.modifiers.push({ label: cb.label || '판정 보정', value: String(cb.value), active: true, source: 'checkBonus' });
+        }
+      }
     }
   }
 
