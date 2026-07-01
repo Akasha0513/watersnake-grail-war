@@ -54,10 +54,14 @@ export default {
         this.tabs[this.currentTab].active = true;
       }
 
-      // Update the flag.
+      // Update the flag. render:false → 탭 전환이 재렌더를 일으켜 아직 저장 안 된 입력값(HP 등)을
+      // DB값으로 되돌리던 버그 방지. (탭 상태는 저장하되 화면은 다시 그리지 않음.)
       if (typeof this.actor !== 'undefined' && !this.actor.pack) {
         getActor(this.actor).then(actor => {
-          actor.setFlag('watersnake-grail-war', `sheetDisplay.tabs.${this.group}.value`, this.currentTab);
+          actor.update(
+            { [`flags.watersnake-grail-war.sheetDisplay.tabs.${this.group}.value`]: this.currentTab },
+            { render: false }
+          );
         });
       }
       // Close the mobile menu if open. We also need a click listener in the actor sheet class

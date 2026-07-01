@@ -542,9 +542,15 @@
 // npc 시트(캐릭터 UI를 좁은 폭으로 사용)는 항상 좁으므로, 본문(탭+내용)이 가로로 붙어
 // 탭이 세로로 깨지던 문제를 폭 무관하게 세로 스택으로 강제. (container-query 존과 무관하게 적용)
 .archmage-v2.sheet.npc-sheet .window-content {
-  // 좁은 폭에서 기본 탭(상세/체계/…)이 세로로 쌓이던 것 → 가로 한 줄로.
-  // (section--main은 이미 flexcol이라 방향 강제 안 함. content flex-grow도 안 줘서 빈 탭에
-  //  큰 여백이 생기지 않게 함.)
+  // 좁은 폭에서 본문(탭+내용)이 가로로 붙어 탭이 세로로 깨지던 것 → 세로 스택.
+  // (content에 flex-grow는 주지 않음 → 빈 탭에 큰 여백이 생기지 않게.)
+  .section--main {
+    flex-direction: column !important;
+  }
+  .section--main > .section--tabs {
+    flex: 0 0 auto;
+    width: 100%;
+  }
   .section--main .tabs.tabs--primary {
     display: flex;
     flex-direction: row;
@@ -552,6 +558,7 @@
     justify-content: center;
   }
   .section--main > .section--tabs-content {
+    width: 100%;
     min-width: 0;
   }
 
