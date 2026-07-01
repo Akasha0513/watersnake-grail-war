@@ -2526,3 +2526,26 @@ a.effect-link,
     }
   }
 }
+
+// 라운드 시작 알림 배너 (combatRound 훅에서 채팅으로 출력)
+.grail-round-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 10px;
+  text-align: center;
+  font-family: 'GyeongbokgungSumunjangTitle', 'mason-serif', 'Nodesto', serif;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+  border-top: 2px groove rgba(0, 0, 0, 0.25);
+  border-bottom: 2px groove rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.04);
+
+  .grn-sep {
+    opacity: 0.5;
+  }
+  .grn-ed {
+    color: #9c1f1f;
+  }
+}

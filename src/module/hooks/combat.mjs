@@ -4,6 +4,32 @@ export async function combatStart(updateData) {
     if (firstCombatant) {
         await executeLifecycleMacro(firstCombatant, "startOfTurn");
     }
+    await handleRoundNotice(updateData);
+}
+
+/**
+ * 자작룰 라운드(=Foundry 3라운드)가 시작될 때 "라운드 N / 전투고조 N" 배너를 채팅에 출력.
+ * 활성 GM만 생성(중복 방지). 같은 자작룰 라운드는 전투 플래그로 1회만 알림.
+ */
+export async function handleRoundNotice(combat) {
+    if (!combat || !game.user?.isActiveGM) return;
+    const Util = game.holygrailwar?.ArchmageUtility;
+    if (!Util) return;
+
+    const round = Util.getGameRound(combat);
+    if (round < 1) return;
+
+    // 이미 알린 라운드(또는 되감기)면 건너뜀 — 증가할 때만 알림.
+    const last = combat.getFlag('watersnake-grail-war', 'lastRoundNotice');
+    if (last != null && round <= last) return;
+    await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
+
+    const escalation = Util.getEscalation(combat);
+    const content = await foundry.applications.handlebars.renderTemplate(
+        'systems/watersnake-grail-war/templates/chat/round-notice-card.html',
+        { round, escalation }
+    );
+    await ChatMessage.create({ content });
 }
 
 export async function combatTurn(combat, context, options) {
@@ -150,6 +176,7 @@ export async function handleRoundEffects(combat, context, options) {
 
 export async function combatRound(combat, context, options) {
     await combatTurn(combat, context, options);
+    await handleRoundNotice(combat);
 }
 
 export async function preDeleteCombat(combat, context, options) {
