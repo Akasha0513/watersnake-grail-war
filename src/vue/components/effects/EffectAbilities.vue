@@ -1,13 +1,13 @@
 <template>
-	<!-- 능력치별 수치/보정치 증감(ADD)·덮어쓰기(OVERRIDE).
-	     수치(value) = 'pre' 단계 적용 → 수정치·HP·방어까지 반영.
-	     보정치(mod) = 'default' 단계 적용 → 표시·판정용(파생계산엔 미반영). -->
+	<!-- 능력치별. 기반수치(value): 증감(ADD)은 'pre' 단계, 기반 대체(override)는 대체 후 강화 누적.
+	     보정치(mod): 증감(ADD)·덮어쓰기(OVERRIDE)는 'default' 단계(표시·판정용).
+	     값에 @grade.value 등 식 가능(단, 기반 대체는 계산 이른 단계라 @능력치 참조는 제한적). -->
 	<table class="effect-abilities-table">
 		<thead>
 			<tr>
 				<th>능력치</th>
-				<th>수치 증감</th>
-				<th>수치 덮어쓰기</th>
+				<th>기반 증감</th>
+				<th>기반 대체</th>
 				<th>보정 증감</th>
 				<th>보정 덮어쓰기</th>
 			</tr>
@@ -16,7 +16,7 @@
 			<tr v-for="ab in abilities" :key="ab.key">
 				<td class="ability-label">{{ ab.label }}</td>
 				<td><input type="text" v-model="viewModel[ab.key + '_valAdd']" placeholder="0" /></td>
-				<td><input type="text" v-model="viewModel[ab.key + '_valOver']" placeholder="—" /></td>
+				<td><input type="text" v-model="viewModel[ab.key + '_baseOver']" placeholder="—" /></td>
 				<td><input type="text" v-model="viewModel[ab.key + '_modAdd']" placeholder="0" /></td>
 				<td><input type="text" v-model="viewModel[ab.key + '_modOver']" placeholder="—" /></td>
 			</tr>

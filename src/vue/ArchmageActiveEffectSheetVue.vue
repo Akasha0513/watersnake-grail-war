@@ -144,24 +144,35 @@ const ADD = CONST.ACTIVE_EFFECT_MODES.ADD;
 const OVERRIDE = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
 const ABILS = ['str', 'end', 'agi', 'mgi', 'lck', 'ins'];
 const fieldDefs = [
-	// 최대 HP/MP/SP 증감
+	// 최대 HP/MP/SP: 증감(ADD)·덮어쓰기(OVERRIDE)·기반 대체(override 엔진이 직접 읽음)
 	{ vm: 'hpMax', key: 'system.attributes.hp.max', mode: ADD },
 	{ vm: 'mpMax', key: 'system.attributes.mp.max', mode: ADD },
 	{ vm: 'spMax', key: 'system.attributes.sp.max', mode: ADD },
-	// 신/정방 보정치(ADD)·덮어쓰기(OVERRIDE)
+	{ vm: 'hpMaxOver', key: 'system.attributes.hp.max', mode: OVERRIDE },
+	{ vm: 'mpMaxOver', key: 'system.attributes.mp.max', mode: OVERRIDE },
+	{ vm: 'spMaxOver', key: 'system.attributes.sp.max', mode: OVERRIDE },
+	{ vm: 'hpBaseOver', key: 'system.overrides.hp.base', mode: OVERRIDE },
+	{ vm: 'mpBaseOver', key: 'system.overrides.mp.base', mode: OVERRIDE },
+	{ vm: 'spBaseOver', key: 'system.overrides.sp.base', mode: OVERRIDE },
+	// 신/정방: 보정치(ADD)·덮어쓰기(OVERRIDE)·기반 대체·수정치 대체
 	{ vm: 'pdAdd', key: 'system.attributes.pd.value', mode: ADD },
 	{ vm: 'pdOver', key: 'system.attributes.pd.value', mode: OVERRIDE },
 	{ vm: 'mdAdd', key: 'system.attributes.md.value', mode: ADD },
 	{ vm: 'mdOver', key: 'system.attributes.md.value', mode: OVERRIDE },
-	// 이니셔티브 보정(init.value ADD → init.mod에 합산) / 모든 판정 보정(checkBonus.value ADD → 판정 대화상자 토글)
+	{ vm: 'pdBaseOver', key: 'system.overrides.pd.base', mode: OVERRIDE },
+	{ vm: 'pdModOver', key: 'system.overrides.pd.mod', mode: OVERRIDE },
+	{ vm: 'mdBaseOver', key: 'system.overrides.md.base', mode: OVERRIDE },
+	{ vm: 'mdModOver', key: 'system.overrides.md.mod', mode: OVERRIDE },
+	// 이니셔티브 보정(init.value ADD) / 모든 판정 보정(checkBonus.value ADD → 판정 대화상자 토글)
 	{ vm: 'initAdd', key: 'system.attributes.init.value', mode: ADD },
 	{ vm: 'checkBonusAdd', key: 'system.attributes.checkBonus.value', mode: ADD },
-	// 급 대체 (grade.value는 actor.js 'pre' 단계에서 적용 → 신방·이니에 반영)
+	// 급: 증감(ADD)·대체(OVERRIDE) — 'pre' 단계 적용 → 신방·이니에 반영
+	{ vm: 'gradeAdd', key: 'system.attributes.grade.value', mode: ADD },
 	{ vm: 'gradeOver', key: 'system.attributes.grade.value', mode: OVERRIDE },
-	// 능력치: 수치(value)/보정치(mod) × 증감(ADD)/덮어쓰기(OVERRIDE)
+	// 능력치: 기반수치 증감(value ADD)/기반수치 대체(override, 후 강화 누적)/보정 증감(mod ADD)/보정 덮어쓰기(mod OVERRIDE)
 	...ABILS.flatMap(a => [
 		{ vm: `${a}_valAdd`, key: `system.abilities.${a}.value`, mode: ADD },
-		{ vm: `${a}_valOver`, key: `system.abilities.${a}.value`, mode: OVERRIDE },
+		{ vm: `${a}_baseOver`, key: `system.overrides.abilities.${a}.base`, mode: OVERRIDE },
 		{ vm: `${a}_modAdd`, key: `system.abilities.${a}.mod`, mode: ADD },
 		{ vm: `${a}_modOver`, key: `system.abilities.${a}.mod`, mode: OVERRIDE },
 	]),

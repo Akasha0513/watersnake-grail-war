@@ -84,9 +84,11 @@ export class ActorArchmage extends Actor {
     // 능력치 상시보정(flatBonus: 서번트 클래스 보정·마스터 패러미터 등)을 _source 수치에 먼저 합산.
     // → 이후 능력치 AE가 그 위에 적용됨: ADD(강화)는 가산, OVERRIDE(빈약 등)는 덮어써서 보정 무시(E(3) 고정).
     if (this.type === 'character' || this.type === 'master' || this.type === 'npc') {
-      for (const abl of Object.values(this.system.abilities ?? {})) {
+      for (const [k, abl] of Object.entries(this.system.abilities ?? {})) {
         abl.flatBonus = Number(abl.flatBonus) || 0;
-        const base = Number(abl.value) || 0;
+        // 기반수치 대체(AE override): 있으면 _source 대신 그 값을 기반으로. 이후 강화(flatBonus·ADD AE)는 누적.
+        const baseOv = this._effectOverride(`abilities.${k}.base`);
+        const base = baseOv !== null ? baseOv : (Number(abl.value) || 0);
         let v = base + abl.flatBonus;
         // 상시보정(+)으로는 능력치 수치 18을 초과할 수 없음(기본값 자체는 안 깎음).
         if (abl.flatBonus > 0) v = Math.max(base, Math.min(v, 18));
@@ -186,7 +188,7 @@ export class ActorArchmage extends Actor {
         c.name = e?.name;
         c.priority = c.priority ?? (c.mode * 10);
         return c;
-      })).filter(relevant);
+      })).filter(c => relevant(c) && !String(c.key).startsWith('system.overrides.'));
     }, []);
 
     // Apply stacking rules:
@@ -344,6 +346,43 @@ export class ActorArchmage extends Actor {
 
     // Expand the set of final overrides
     this.overrides = foundry.utils.expandObject(overrides);
+  }
+
+  /**
+   * AE 값(숫자 또는 @참조/산술식)을 숫자로 해석. 해석 불가/빈값이면 null.
+   * (기반수치·수정치 대체 등 파생계산이 직접 읽는 override 값 처리용.)
+   */
+  _resolveEffectFormula(raw) {
+    const s = String(raw ?? '').trim();
+    if (s === '') return null;
+    if (!isNaN(s)) return Number(s);
+    try {
+      const rd = this.getRollData({ skipPrepare: true });
+      const replaced = Roll.replaceFormulaData(s, rd, { missing: 0, warn: false });
+      const val = Roll.safeEval(replaced);
+      if (typeof val === 'number' && isFinite(val)) return val;
+    } catch (e) { /* 무시 */ }
+    return null;
+  }
+
+  /**
+   * 활성 이펙트에서 `system.overrides.<subkey>` 키의 값을 읽어 반환(마지막 활성값). 없으면 null.
+   * 이 키들은 applyActiveEffects에서 제외되고, 파생계산이 계산 순서에 맞춰 직접 읽는다.
+   * 예: 'pd.base'(신방 기반 대체), 'pd.mod'(신방 수정치 대체), 'abilities.str.base'(근력 기반 대체).
+   */
+  _effectOverride(subkey) {
+    const fullKey = `system.overrides.${subkey}`;
+    let result = null;
+    for (const e of this.effects) {
+      if (e.disabled) continue;
+      for (const c of e.changes) {
+        if (c.key === fullKey) {
+          const v = this._resolveEffectFormula(c.value);
+          if (v !== null) result = v;
+        }
+      }
+    }
+    return result;
   }
 
   /** @inheritdoc */
@@ -660,7 +699,10 @@ export class ActorArchmage extends Actor {
       if (masterAsServant) pdBase = (masterServant === 'three' ? 14 : 12) + grade;
       else if (isMaster) pdBase = 10;
       else pdBase = (defCategory === 'three' ? 14 : 12) + grade;
-      data.attributes.pd.value = pdBase + pdAblMod + Number(pdBonus);
+      const pdBaseOv = this._effectOverride('pd.base'); if (pdBaseOv !== null) pdBase = pdBaseOv;   // 기반 대체(후 강화 누적)
+      let pdMod = pdAblMod;
+      const pdModOv = this._effectOverride('pd.mod'); if (pdModOv !== null) pdMod = pdModOv;          // 수정치 대체
+      data.attributes.pd.value = pdBase + pdMod + Number(pdBonus);
     }
     // 정방 (자동 시): 서번트/마스터영령취급 = (삼기사10/사술사12) + 통찰 / 일반 마스터 = 8 + 통찰
     if (data.attributes.md.automatic ?? true) {
@@ -668,7 +710,10 @@ export class ActorArchmage extends Actor {
       if (masterAsServant) mdBase = (masterServant === 'three' ? 10 : 12);
       else if (isMaster) mdBase = 8;
       else mdBase = (defCategory === 'three' ? 10 : 12);
-      data.attributes.md.value = mdBase + sm('ins') + Number(mdBonus);
+      const mdBaseOv = this._effectOverride('md.base'); if (mdBaseOv !== null) mdBase = mdBaseOv;   // 기반 대체(후 강화 누적)
+      let mdMod = sm('ins');
+      const mdModOv = this._effectOverride('md.mod'); if (mdModOv !== null) mdMod = mdModOv;          // 수정치 대체
+      data.attributes.md.value = mdBase + mdMod + Number(mdBonus);
     }
     // AC는 성배전쟁에서 미사용 (호환용으로 base 유지)
     data.attributes.ac.value = Number(data.attributes.ac.base) + Number(acBonus);
@@ -690,6 +735,7 @@ export class ActorArchmage extends Actor {
     if (data.attributes.hp.automatic) {
       let hpBaseVal = sv('str') + sv('end') * 3;
       if (isMaster && !masterAsServant) hpBaseVal = Math.floor(hpBaseVal / 2);
+      const hpBaseOv = this._effectOverride('hp.base'); if (hpBaseOv !== null) hpBaseVal = hpBaseOv;  // 기반 대체(후 강화 누적)
       data.attributes.hp.max = hpBaseVal + Number(hpBonus) + Number(data.attributes.hp.extra);
     }
 
@@ -701,6 +747,7 @@ export class ActorArchmage extends Actor {
       let mpMax;
       if (mag < 12) mpMax = servantMp ? 12 + mag : 6 + mag;
       else mpMax = servantMp ? mag * 2 : Math.floor(mag * 1.5);
+      const mpBaseOv = this._effectOverride('mp.base'); if (mpBaseOv !== null) mpMax = mpBaseOv;  // 기반 대체(후 강화 누적)
       data.attributes.mp.max = mpMax;
     }
 
@@ -715,6 +762,7 @@ export class ActorArchmage extends Actor {
         case 'magcon': spVal = (spMag + spCon) / 2; break; // 마술: (마력+내구)÷2 (내구 한쪽 대체)
         default: spVal = (spStr + spDex) / 2;        // strdex: (근력+민첩)÷2
       }
+      const spBaseOv = this._effectOverride('sp.base'); if (spBaseOv !== null) spVal = spBaseOv;  // 기반 대체(후 강화 누적)
       data.attributes.sp.max = Math.floor(spVal);
     }
 
