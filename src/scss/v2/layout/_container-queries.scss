@@ -600,15 +600,18 @@
       grid-column: 1 / -1;
     }
 
+    // 기본은 반칸 셀(작은 크기).
     .unit--custom {
       min-width: 0;
       padding: 0 4px;
     }
-    // 커스텀이 홀수라 마지막 하나가 혼자 남으면 가운데 정렬(령주 없을 때 기준).
-    .unit--custom:last-child:nth-child(odd) {
+    // 커스텀이 홀수라 마지막 하나가 혼자 남으면 → 반칸 폭 유지한 채 중앙 정렬.
+    // nth-of-type 사용: 숨겨진 resource-divider는 <div>라 <section> 파리티에서 제외됨
+    // → nth-child처럼 파리티가 어긋나지 않고 '커스텀 개수 홀수'를 정확히 잡음.
+    .unit--custom:last-of-type:nth-of-type(odd) {
       grid-column: 1 / -1;
       justify-self: center;
-      width: 100%;
+      width: calc(50% - 4px);
       max-width: calc(50% - 4px);
     }
     .progress-bar {
