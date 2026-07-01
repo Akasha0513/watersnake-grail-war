@@ -52,18 +52,13 @@ export async function combatTurn(combat, context, options) {
     await _add2eFighterMomentum(endCombatant);
     await executeLifecycleMacro(startCombatant, "startOfTurn");
 
-    // Exit early if the feature is disabled.
-    if (!game.settings.get('watersnake-grail-war', 'enableOngoingEffectsMessages')) return;
-
-    // If the direction is negative, ignore the turn
+    // 13th Age의 "지속효과 턴 알림" 카드(handleTurnEffects/handleRoundEffects)는 제거됨.
+    // 성배전쟁 상태이상 AE는 duration/save-ends 플래그를 쓰지 않아, 매 턴 "unknown duration"
+    // 카드가 반복 출력되던 노이즈를 없애기 위함.
     if (options.direction < 0) return;
-
-    await handleTurnEffects("End", combat, endCombatant, context, options);
-    await handleTurnEffects("Start", combat, startCombatant, context, options);
     if (CONFIG.HOLYGRAILWAR.is2e) {
         await handleStoke(combat, context, options);
     }
-    await handleRoundEffects(combat, context, options);
 }
 
 export async function handleTurnEffects(prefix, combat, combatant, context, options) {
@@ -199,75 +194,8 @@ export async function combatRound(combat, context, options) {
 export async function preDeleteCombat(combat, context, options) {
     await cleanupStoke(combat, context, options);
     $('.archmage-escalation-display').addClass('hide');
-
-
-    // Exit early if the feature is disabled.
-    if (!game.settings.get('watersnake-grail-war', 'enableOngoingEffectsMessages')) return;
-
-    const saveEndsEffects = ["EasySaveEnds", "NormalSaveEnds", "HardSaveEnds"];
-
-    // Remove all battle effects
-    for (const combatant of combat.combatants) {
-        let effectsToDelete = [];
-
-        if (combatant.token.isLinked) {
-            // Probably player-facing, create end-of-combat chat card
-            const currentCombatantEffectData = {
-                selfEnded: [],
-                savesEnds: [],
-                selfTriggered: [],
-                otherEnded: [],
-                unknown: [],
-            };
-
-            for (const effect of combatant.actor.effects) {
-                if (!effect.active) continue;
-                const isOngoing = effect.flags['watersnake-grail-war']?.ongoingDamage ? true: false;
-                effect.isOngoing = isOngoing;
-                const isCrit = isOngoing && effect.flags['watersnake-grail-war']?.ongoingDamageCrit === true;
-                effect.isCrit = isCrit;
-                effect.ongoingDamage = isOngoing ? Number(effect.flags['watersnake-grail-war'].ongoingDamage) : 0;
-                effect.ongoingTooltip = game.i18n.format('ARCHMAGE.CHAT.ongoingDamageTooltip', {
-                    damage: effect.ongoingDamage,
-                    type: effect.flags['watersnake-grail-war']?.ongoingDamageType ?? '',
-                });
-                if (isCrit) {
-                    effect.ongoingDamage = effect.ongoingDamage * 2;
-                }
-                const duration = effect.flags['watersnake-grail-war']?.duration || "Unknown";
-                // If duration is longer than battle skip
-                if (["Infinite", "EndOfArc"].includes(duration)) continue;
-                // If it's a save-ends effect store it as such
-                else if (saveEndsEffects.includes(duration)) {
-                    currentCombatantEffectData.savesEnds.push(effect);
-                }
-                // If it's unknown also store it as such
-                else if (duration === "Unknown") {
-                    currentCombatantEffectData.unknown.push(effect);
-                }
-                // Everything else should end with the battle
-                else {
-                    currentCombatantEffectData.selfEnded.push(effect);
-                    effectsToDelete.push(effect.id);
-                }
-            }
-
-            // Render card
-            await renderOngoingEffectsCard("End of Battle Effects", combatant, currentCombatantEffectData);
-
-        } else {
-            // Probably random monster, just delete silently
-            for (const effect of combatant.actor.effects) {
-                // If duration is "Infinite", skip
-                if (effect.flags['watersnake-grail-war']?.duration === "Infinite") continue;
-                // Everything else should end with the battle
-                else effectsToDelete.push(effect.id);
-            }
-        }
-
-        // Auto-delete AEs
-        await combatant.actor.deleteEmbeddedDocuments("ActiveEffect", effectsToDelete);
-    }
+    // 전투 종료 시 상태이상(AE) 자동삭제 및 "End of Battle Effects" 카드는 제거됨.
+    // (사용자 요청: 전투가 끝나도 상태이상을 유지한다.)
 }
 
 async function handleStoke(combat, context, options) {
