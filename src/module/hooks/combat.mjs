@@ -187,7 +187,13 @@ export async function handleRoundEffects(combat, context, options) {
 
 export async function combatRound(combat, context, options) {
     await combatTurn(combat, context, options);
-    await handleRoundNotice(combat);
+    // context.round = 새 Foundry 라운드. (combat.current.round는 이 훅 시점에 아직 이전 값이라 사용 금지 —
+    //  그대로 쓰면 자작룰 라운드가 한 사이클씩 밀림.) getGameRound/getEscalation과 동일 공식으로 계산.
+    const fr = Number(context?.round) || 0;
+    if (fr < 1) return;
+    const base = Math.floor((fr - 1) / 3);
+    const edOffset = combat.getFlag('watersnake-grail-war', 'edOffset') ?? 0;
+    await handleRoundNotice(combat, { round: base + 1, escalation: Math.max(0, base + edOffset) });
 }
 
 export async function preDeleteCombat(combat, context, options) {
