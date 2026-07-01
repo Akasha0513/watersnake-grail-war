@@ -580,19 +580,36 @@
     white-space: nowrap;
   }
 
-  // 커스텀 리소스: 좁은 npc 시트에서 세로로 크게 잡히던 것 → 컴팩트하게.
+  // 커스텀 리소스: 좁은 npc 시트에서 세로로 크게 잡히던 것 → 컴팩트 2열 그리드로.
   .section--main > .section--resources {
     // section--main이 column으로 바뀌면서 vue의 flex:0 0 140px가 '높이 140px 고정'으로
-    // 해석돼 리소스 3개 중 3번째가 잘리고, 비었을 땐 140px 여백이 남던 것 → 내용 높이로.
+    // 해석돼 3개째가 잘리던 것 → 내용 높이로. section--main이 스크롤을 담당.
     flex: 0 0 auto;
+    // flex-wrap(46% 근사치)은 폭에 따라 들쭉날쭉·잘림 → grid 2열로 못박음.
+    // 개수와 무관하게 1 2 / 3 4 … 로 흐르고 절대 잘리지 않음.
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    align-items: start;
+    gap: 4px 8px;
     font-size: 0.8em;
-    padding: 2px 0;
-    flex-wrap: wrap;
+    padding: 2px 4px;
+
+    // 령주(마스터/NPC 전용)는 한 줄 전체 차지 → 커스텀 그리드 정렬을 흐트러뜨리지 않게.
+    .unit--command-seals {
+      grid-column: 1 / -1;
+    }
 
     .unit--custom {
-      flex: 1 1 46%;
       min-width: 0;
       padding: 0 4px;
+    }
+    // 커스텀이 홀수라 마지막 하나가 혼자 남으면 가운데 정렬(령주 없을 때 기준).
+    .unit--custom:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: 100%;
+      max-width: calc(50% - 4px);
     }
     .progress-bar {
       height: 6px;
