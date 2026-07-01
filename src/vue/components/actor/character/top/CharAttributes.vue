@@ -42,11 +42,11 @@
         <div class="resource flexrow">
           <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
           <span class="resource-separator">/</span>
-          <div v-if="actor.type !== 'master' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
+          <div v-if="actor.type === 'character' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
           <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
         <!-- 마스터 급(영령 취급 시 신방·이니·판정에 반영). 설정 토글로 표시. -->
-        <div v-if="actor.type === 'master' && showGrade" class="labeled-input flexrow">
+        <div v-if="actor.type !== 'character' && showGrade" class="labeled-input flexrow">
           <label for="system.attributes.grade.value" class="unit-subtitle">급</label>
           <input type="number" name="system.attributes.grade.value" class="temp-hp" v-model="actor.system.attributes.grade.value">
         </div>
@@ -71,7 +71,7 @@
         </div>
       </div>
       <!-- 영령의 급(서번트) / 레벨+경험치(마스터) -->
-      <div v-if="actor.type !== 'master'" class="unit unit--grade flexcol">
+      <div v-if="actor.type === 'character'" class="unit unit--grade flexcol">
         <h2 class="unit-title">영령의 급</h2>
         <div class="resource flexrow">
           <input type="text" name="system.details.gradeName.value" class="resource-current grade-name" style="flex: 2; text-align: center;" v-model="actor.system.details.gradeName.value" placeholder="대영웅">

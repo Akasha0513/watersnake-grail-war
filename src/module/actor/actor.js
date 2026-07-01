@@ -83,7 +83,7 @@ export class ActorArchmage extends Actor {
 
     // 능력치 상시보정(flatBonus: 서번트 클래스 보정·마스터 패러미터 등)을 _source 수치에 먼저 합산.
     // → 이후 능력치 AE가 그 위에 적용됨: ADD(강화)는 가산, OVERRIDE(빈약 등)는 덮어써서 보정 무시(E(3) 고정).
-    if (this.type === 'character' || this.type === 'master') {
+    if (this.type === 'character' || this.type === 'master' || this.type === 'npc') {
       for (const abl of Object.values(this.system.abilities ?? {})) {
         abl.flatBonus = Number(abl.flatBonus) || 0;
         const base = Number(abl.value) || 0;
@@ -134,11 +134,9 @@ export class ActorArchmage extends Actor {
     data.tierMult = CONFIG.HOLYGRAILWAR.tierMultPerLevel[data.attributes.level.value];
 
     // Prepare Character data
-    if (actorData.type === 'character' || actorData.type === 'master') {
+    // npc(일반인·마술사)는 마스터와 동일하게 취급 → 마스터/캐릭터 파생계산 경로 사용.
+    if (actorData.type === 'character' || actorData.type === 'master' || actorData.type === 'npc') {
       this._prepareCharacterData(data, model, flags);
-    }
-    else if (actorData.type === 'npc') {
-      this._prepareNPCData(data, model, flags);
     }
 
     // Get the escalation die value.
@@ -347,7 +345,8 @@ export class ActorArchmage extends Actor {
     const data = actorData.system;
 
     // Initiative
-    if (actorData.type === 'character' || actorData.type === 'master') {
+    // npc(일반인·마술사)는 마스터와 동일 취급.
+    if (actorData.type === 'character' || actorData.type === 'master' || actorData.type === 'npc') {
       let incrInit = 0;
       let statInit = data.abilities?.agi?.nonKey?.mod || 0;
       if (game.settings.get("watersnake-grail-war", "secondEdition")) {
@@ -358,13 +357,11 @@ export class ActorArchmage extends Actor {
         // In 2e beta the bonus to disengage also applies to initiative
         incrInit += data.attributes.saves.disengageBonus;
       }
-      // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트, 또는 영령 취급 마스터)
-      const _masterAsServant = actorData.type === 'master' && ['three', 'sorcery'].includes(data.details?.masterAsServant?.value);
-      let gradeInit = (actorData.type !== 'master' || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
+      // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트, 또는 영령 취급 마스터/npc)
+      const _isMasterLike = actorData.type === 'master' || actorData.type === 'npc';
+      const _masterAsServant = _isMasterLike && ['three', 'sorcery'].includes(data.details?.masterAsServant?.value);
+      let gradeInit = (!_isMasterLike || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
       data.attributes.init.mod = statInit + data.attributes.init.value + gradeInit + incrInit;
-    }
-    else if (actorData.type === 'npc') {
-      data.attributes.init.mod = data.attributes.init.value;
     }
 
     // Get the escalation die value.
@@ -604,7 +601,7 @@ export class ActorArchmage extends Actor {
     data.abilities.lck.bonus = chaBonus;
 
     // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
-    const isMaster = this.type === 'master';
+    const isMaster = this.type === 'master' || this.type === 'npc';
     // 마스터 영령 취급 옵션: 'none'(기본 마스터식) / 'three'(삼기사) / 'sorcery'(사술사)
     // → HP·MP·신방·정방을 서번트식(해당 클래스)으로 계산.
     const masterServant = isMaster ? (data.details.masterAsServant?.value || 'none') : 'none';
@@ -871,7 +868,7 @@ export class ActorArchmage extends Actor {
           break;
 
         case 'saves':
-          if (this.type === "character" || this.type === "master") data.skulls = v.deathFails.value || 0;
+          if (this.type === "character" || this.type === "master" || this.type === "npc") data.skulls = v.deathFails.value || 0;
           if (!(k in data)) data[k] = v;
           break;
 
@@ -893,8 +890,8 @@ export class ActorArchmage extends Actor {
     data.attr = data.attributes;
     data.abil = data.abilities;
 
-    // Process resource shorthands and custom resource names
-    if (this.type === "character" || this.type === "master"){
+    // Process resource shorthands and custom resource names (npc도 마스터와 동일 취급)
+    if (this.type === "character" || this.type === "master" || this.type === "npc"){
       data.rsc = {
         cps: data.resources.perCombat.commandPoints.current,
         focus: data.resources.perCombat.focus.current,
@@ -910,15 +907,6 @@ export class ActorArchmage extends Actor {
           data.rsc[label+"max"] = v.max;
         }
       }
-    }
-
-    // Handle stoke.
-    if (this.type === "npc") {
-      data.rsc = {
-        stoke: data.resources?.spendable?.stoke?.enabled
-          ? (data.resources?.spendable?.stoke?.current || 0)
-          : 0,
-      };
     }
 
     if (item?.system.powerLevel?.value) {

@@ -925,32 +925,348 @@ Actor:
     templates:
       - standard
       - resources
-    publicationSource: ''
+    abilities:
+      str:
+        type: Number
+        label: Strength
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+      agi:
+        type: Number
+        label: Dexterity
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+      end:
+        type: Number
+        label: Constitution
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+      mgi:
+        type: Number
+        label: Intelligence
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+      ins:
+        type: Number
+        label: Wisdom
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+      lck:
+        type: Number
+        label: Charisma
+        value: 10
+        min: 3
+        mod: 0
+        rerollPlus: 0
+        rerollUsed: 0
+        flatBonus: 0
+    attributes:
+      keyModifier:
+        mod1: str
+        mod2: str
+      recoveries:
+        type: Number
+        label: Recoveries
+        value: 8
+        max: 8
+        dice: d8
+        base: 8
+        automatic: true
+      weapon:
+        melee:
+          type: String
+          label: Melee weapon dice
+          dice: d8
+          shield: false
+          dualwield: false
+          twohanded: false
+        ranged:
+          type: String
+          label: Ranged weapon dice
+          dice: d8
+        jab:
+          type: String
+          label: JAB dice
+          dice: d6
+        punch:
+          type: String
+          label: PUNCH dice
+          dice: d8
+        kick:
+          type: String
+          label: KICK dice
+          dice: d10
     details:
-      flavor:
+      alignment:
+        type: String
+        label: Alignment
+      class:
+        type: String
+        label: Class
         value: ''
-      role:
+      race:
+        type: String
+        label: Race
         value: ''
-      roleB:
+      out:
+        label: One Unique Thing
+        type: String
         value: ''
-      size:
-        value: ''
-      sizeB:
-        value: ''
-      strength:
-        value: ''
-      type:
-        value: ''
-      resistance:
-        value: ''
-      vulnerability:
-        value: ''
+    backgrounds:
+      bg1:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+      bg2:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+      bg3:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+      bg4:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg5:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg6:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg7:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg8:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg9:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+      bg10:
+        name:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+    icons:
+      i1:
+        name:
+          type: String
+          value: ''
+        relationship:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+        results: []
+      i2:
+        name:
+          type: String
+          value: ''
+        relationship:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+        results: []
+      i3:
+        name:
+          type: String
+          value: ''
+        relationship:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: true
+        results: []
+      i4:
+        name:
+          type: String
+          value: ''
+        relationship:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+        results: []
+      i5:
+        name:
+          type: String
+          value: ''
+        relationship:
+          type: String
+          value: ''
+        bonus:
+          type: Number
+          value: 0
+        isActive:
+          type: Boolean
+          value: false
+        results: []
     resources:
-      perCombat: {}
-      spendable:
-        stoke:
+      perCombat:
+        momentum:
+          enabled: false
+          current: false
+        commandPoints:
           enabled: false
           current: 0
+        focus:
+          enabled: false
+          current: false
+        rhythm:
+          enabled: false
+          current: 'none'
+          default: 'none'
+          secondEdition: true
+        bravado:
+          enabled: false
+          current: 0
+          secondEdition: true
+      spendable:
+        ki:
+          enabled: false
+          current: 0
+          max: 0
+        custom1:
+          label: ""
+          current: 0
+          max: 0
+          enabled: false
+          rest: "none"
+        rerolls:
+          enabled: false
+          AC:
+            current: 0
+            max: 0
+          save:
+            current: 0
+            max: 0
+    incrementals:
+      abilityScoreBonus: false
+      extraMagicItem: false
+      feat: false
+      talent: false
+      hp: false
+      iconRelationshipPoint: false
+      powerSpell1: false
+      powerSpell2: false
+      powerSpell3: false
+      powerSpell4: false
+      skills: false
+      # 2E incrementals
+      recovery: false
+      skillInitiative: false
+      abilMultiplier: false
+    coins:
+      platinum: 0
+      gold: 0
+      silver: 0
+      copper: 0
+    lifecycleHooks:
+      startOfTurn: ''
+      endOfTurn: ''
 Item:
   types:
     - power

@@ -143,13 +143,13 @@ export default {
           },
           powers: {
             key: 'powers',
-            label: this.actor.type === 'master' ? '체계' : '스킬',
+            label: this.actor.type !== 'character' ? '체계' : '스킬',
             active: true,
             componentClass: markRaw(CharPowers)
           },
           oppositePowers: {
             key: 'oppositePowers',
-            label: this.actor.type === 'master' ? '스킬' : '체계',
+            label: this.actor.type !== 'character' ? '스킬' : '체계',
             active: false,
             componentClass: markRaw(CharPowers),
             hidden: !this.actor.flags?.['watersnake-grail-war']?.showOppositeTab
@@ -210,7 +210,7 @@ export default {
     },
     // 상대 powers 탭에 렌더할 타입(마스터↔서번트)
     oppositeType() {
-      return this.actor.type === 'master' ? 'character' : 'master';
+      return this.actor.type !== 'character' ? 'character' : 'master';
     },
     flags() {
       let flags = this.actor.flags ? this.actor.flags['watersnake-grail-war'] : {};

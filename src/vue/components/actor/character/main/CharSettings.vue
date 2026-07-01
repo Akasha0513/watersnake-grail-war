@@ -5,21 +5,21 @@
       <!-- 성배전쟁 설정 (지정 순서) -->
       <div class="unit unit--base-settings">
         <!-- 1. 서번트 클래스 (서번트 전용) -->
-        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--servant-class flexrow">
+        <div v-if="actor.type === 'character'" class="sub-unit sub-unit--servant-class flexrow">
           <strong class="unit-subtitle">서번트 클래스</strong>
           <select name="system.details.servantClass.value" v-model="actor.system.details.servantClass.value">
             <option v-for="(opt, i) in servantClasses" :key="i" :value="opt.value">{{opt.label}}</option>
           </select>
         </div>
         <!-- 2. 방어 분류 (서번트 전용) -->
-        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--defense-type flexrow">
+        <div v-if="actor.type === 'character'" class="sub-unit sub-unit--defense-type flexrow">
           <strong class="unit-subtitle">방어 분류</strong>
           <select name="system.details.defenseType.value" v-model="actor.system.details.defenseType.value">
             <option v-for="(opt, i) in defenseTypes" :key="i" :value="opt.value">{{opt.label}}</option>
           </select>
         </div>
         <!-- 마스터 영령 취급 (마스터 전용): HP·MP·신방·정방을 서번트식으로 -->
-        <div v-if="actor.type === 'master'" class="sub-unit sub-unit--master-as-servant flexrow">
+        <div v-if="actor.type !== 'character'" class="sub-unit sub-unit--master-as-servant flexrow">
           <strong class="unit-subtitle">영령 취급</strong>
           <select name="system.details.masterAsServant.value" v-model="actor.system.details.masterAsServant.value">
             <option v-for="(opt, i) in masterServantTypes" :key="i" :value="opt.value">{{opt.label}}</option>
@@ -36,12 +36,12 @@
           <input type="checkbox" name="system.attributes.mp.automatic" v-model="actor.system.attributes.mp.automatic"/>
         </div>
         <!-- 5. SP 자동 계산 (서번트 전용) -->
-        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--calculate-sp flexrow">
+        <div v-if="actor.type === 'character'" class="sub-unit sub-unit--calculate-sp flexrow">
           <strong class="unit-subtitle">SP 자동 계산</strong>
           <input type="checkbox" name="system.attributes.sp.automatic" v-model="actor.system.attributes.sp.automatic"/>
         </div>
         <!-- 6. SP 공식 (서번트 전용) -->
-        <div v-if="actor.type !== 'master'" class="sub-unit sub-unit--sp-formula flexrow">
+        <div v-if="actor.type === 'character'" class="sub-unit sub-unit--sp-formula flexrow">
           <strong class="unit-subtitle">SP 공식</strong>
           <select name="system.attributes.sp.formula" v-model="actor.system.attributes.sp.formula">
             <option v-for="(opt, i) in spFormulas" :key="i" :value="opt.value">{{opt.label}}</option>
@@ -66,7 +66,7 @@
         </div>
         <!-- 상대 타입 탭 표시 (마스터=스킬 / 서번트=체계). 켜면 상대 powers 탭이 추가됨 -->
         <div class="sub-unit sub-unit--opposite-tab flexrow">
-          <strong class="unit-subtitle">{{ actor.type === 'master' ? '스킬 탭 표시' : '체계 탭 표시' }}</strong>
+          <strong class="unit-subtitle">{{ actor.type !== 'character' ? '스킬 탭 표시' : '체계 탭 표시' }}</strong>
           <input type="checkbox" name="flags.watersnake-grail-war.showOppositeTab" v-model="oppositeTabFlag.value"/>
         </div>
         <!-- 임시 HP/MP 표시 토글 -->
@@ -79,7 +79,7 @@
           <input type="checkbox" name="flags.watersnake-grail-war.showTempMp" v-model="tempMpFlag.value"/>
         </div>
         <!-- 마스터 급 표시 토글 -->
-        <div v-if="actor.type === 'master'" class="sub-unit sub-unit--show-grade flexrow">
+        <div v-if="actor.type !== 'character'" class="sub-unit sub-unit--show-grade flexrow">
           <strong class="unit-subtitle">급 표시</strong>
           <input type="checkbox" name="flags.watersnake-grail-war.showGrade" v-model="gradeFlag.value"/>
         </div>

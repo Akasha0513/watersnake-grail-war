@@ -341,16 +341,10 @@ Hooks.once('init', async function() {
 
   foundry.documents.collections.Actors.unregisterSheet('core', foundry.appv1.sheets.ActorSheet);
 
-  foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageNpcSheetV2, {
-    label: 'ARCHMAGE.sheetNPC',
-    types: ["npc"],
-    makeDefault: true
-  });
-
-  // V2 actor sheet (See issue #118).
+  // 캐릭터(서번트) + npc(일반인·마술사)는 동일한 캐릭터 시트 사용 (npc=마스터 취급).
   foundry.documents.collections.Actors.registerSheet("watersnake-grail-war", ActorArchmageSheetV2, {
     label: 'ARCHMAGE.sheetCharacter',
-    types: ["character"],
+    types: ["character", "npc"],
     makeDefault: true
   });
 
@@ -831,6 +825,16 @@ Hooks.once('ready', async () => {
     const current = foundry.utils.getProperty(sheetClasses, "ActiveEffect.base");
     if (!current || current === "core.ActiveEffectConfig") {
       foundry.utils.setProperty(sheetClasses, "ActiveEffect.base", aeSheetId);
+      await game.settings.set("core", "sheetClasses", sheetClasses);
+    }
+
+    // npc(일반인·마술사)를 마스터처럼 캐릭터 시트로 통합. 월드에 옛 NPC 시트가 기본으로
+    // 저장돼 있으면(또는 미설정) 캐릭터 시트로 마이그레이션.
+    const npcOld = "watersnake-grail-war.ActorArchmageNpcSheetV2";
+    const npcNew = "watersnake-grail-war.ActorArchmageSheetV2";
+    const npcCurrent = foundry.utils.getProperty(sheetClasses, "Actor.npc");
+    if (!npcCurrent || npcCurrent === npcOld) {
+      foundry.utils.setProperty(sheetClasses, "Actor.npc", npcNew);
       await game.settings.set("core", "sheetClasses", sheetClasses);
     }
   }

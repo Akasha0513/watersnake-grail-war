@@ -15,7 +15,7 @@
       <li class="list-item list-item--abilities ability grid grid-4col">
         <div class="ability-lvl">{{rank(npValue)}}</div>
         <div class="ability-score ability-score--display">{{npValue}}</div>
-        <span class="ability-name">{{actor.type === 'master' ? '예장' : '보구'}}</span>
+        <span class="ability-name">{{actor.type !== 'character' ? '예장' : '보구'}}</span>
         <div class="ability-mod">{{numberFormat(npMod, 0, true)}}</div>
       </li>
     </ul>

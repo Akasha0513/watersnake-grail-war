@@ -8,13 +8,13 @@
     </div>
     <!-- 진명(서번트) / 이름(마스터) -->
     <div class="unit unit--abs-label unit--race">
-      <label for="system.details.trueName.value">{{actor.type === 'master' ? '이름' : '진명'}}</label>
+      <label for="system.details.trueName.value">{{actor.type !== 'character' ? '이름' : '진명'}}</label>
       <input type="text" name="system.details.trueName.value" class="input-secondary" v-model="actor.system.details.trueName.value">
     </div>
     <!-- 클래스(서번트) / 종족(마스터) -->
     <div class="unit unit--abs-label unit--class">
-      <label>{{actor.type === 'master' ? '종족' : '클래스'}}</label>
-      <input v-if="actor.type === 'master'" type="text" name="system.details.race.value" class="input-secondary" v-model="actor.system.details.race.value">
+      <label>{{actor.type !== 'character' ? '종족' : '클래스'}}</label>
+      <input v-if="actor.type !== 'character'" type="text" name="system.details.race.value" class="input-secondary" v-model="actor.system.details.race.value">
       <input v-else type="text" name="system.details.class.value" class="input-secondary" v-model="actor.system.details.class.value">
     </div>
     <!-- 계약자 (공통) -->
