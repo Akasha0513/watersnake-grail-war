@@ -579,4 +579,31 @@
   .section--settings .unit-subtitle {
     white-space: nowrap;
   }
+
+  // 커스텀 리소스: 좁은 npc 시트에서 세로로 크게 잡히던 것 → 컴팩트하게.
+  .section--main > .section--resources {
+    font-size: 0.8em;
+    padding: 2px 0;
+    flex-wrap: wrap;
+
+    .unit--custom {
+      flex: 1 1 46%;
+      min-width: 0;
+      padding: 0 4px;
+    }
+    .progress-bar {
+      height: 6px;
+      margin: 2px 0;
+    }
+    .resource {
+      margin: 0;
+    }
+    .resource-title-input,
+    .resource-current,
+    .resource-max {
+      padding: 0 2px;
+      height: auto;
+      line-height: 1.3;
+    }
+  }
 }
