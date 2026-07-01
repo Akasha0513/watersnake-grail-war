@@ -2525,6 +2525,24 @@ a.effect-link,
       max-width: 100%;
     }
   }
+
+  // 효과(AE) 에디터 입력칸 — 테마 기본 스타일만으론 다크에서 대비가 안 나고 테두리가
+  // 강조색으로 떠 보이던 문제 수정. 테마 변수(라이트/다크 자동) + 안전한 폴백.
+  &.effects {
+    input[type="number"],
+    input[type="text"] {
+      color: var(--input-text-color, var(--color-text-primary, #e6e6ea));
+      background: var(--input-background-color, rgba(0, 0, 0, 0.3));
+      border: 1px solid var(--input-border-color, var(--color-border, #6a6a72));
+      border-radius: 3px;
+      padding: 1px 4px;
+      box-shadow: none;
+
+      &::placeholder {
+        color: var(--color-text-subtle, var(--color-text-secondary, rgba(230, 230, 234, 0.45)));
+      }
+    }
+  }
 }
 
 // 라운드 시작 알림 배너 (combatRound 훅에서 채팅으로 출력)
