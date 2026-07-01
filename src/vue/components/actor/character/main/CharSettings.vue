@@ -1,6 +1,6 @@
 <template>
   <section :class="classes">
-    <h2 class="unit-title">{{localize('ARCHMAGE.CHARACTERSETTINGS.settings')}}</h2>
+    <h2 class="unit-title">설정</h2>
     <section class="sheet-settings grid grid-6col">
       <!-- 성배전쟁 설정 (지정 순서) -->
       <div class="unit unit--base-settings">
@@ -84,18 +84,11 @@
           <input type="checkbox" name="flags.watersnake-grail-war.showGrade" v-model="gradeFlag.value"/>
         </div>
       </div>
-      <!-- Resource Settings -->
+      <!-- 커스텀 리소스 (마스터/서번트/npc 공통). On resting(휴식 자동처리)은 미사용이라 제외. -->
       <div class="unit unit--resources">
-        <!-- Custom -->
         <div v-for="(resource, r) in resourcesCustom" :key="r" class="settings-resource" :data-key="r">
           <input type="checkbox" :name="concat('system.resources.spendable.', r, '.enabled')" v-model="resource.enabled">
           <strong class="unit-subtitle">{{localize(concat('ARCHMAGE.CHARACTER.RESOURCES.', r))}}</strong>
-          <br/>
-          {{localize(concat('ARCHMAGE.RESTS.header'))}}:&nbsp;
-          <select :name="concat('system.resources.spendable.', r, '.rest')" v-model="resource.rest">
-            <option v-for="(option, index) in resourceRestTypes" :key="index" :value="option.value">
-            {{localize(concat('ARCHMAGE.RESTS.',option.value))}}</option>
-          </select>
         </div>
       </div>
 
@@ -141,13 +134,6 @@ export default {
   },
   data() {
     return {
-      resourceRestTypes: [
-        { value: 'none', label: game.i18n.localize("ARCHMAGE.RESTS.none") },
-        { value: 'quickreset', label: game.i18n.localize("ARCHMAGE.RESTS.quickreset") },
-        { value: 'fullreset', label: game.i18n.localize("ARCHMAGE.RESTS.fullreset") },
-        { value: 'quick', label: game.i18n.localize("ARCHMAGE.RESTS.quick") },
-        { value: 'full', label: game.i18n.localize("ARCHMAGE.RESTS.full") },
-      ],
       servantClasses: [
         { value: '', label: '— 선택 —' },
         { value: 'saber', label: '세이버 (삼기사)' },
