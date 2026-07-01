@@ -985,17 +985,3 @@ export class MacroUtils {
   }
 }
 
-/**
- * Keyboard Controls Reference Sheet
- * @type {Application}
- */
-export class ArchmageReference extends Application {
-  static get defaultOptions() {
-    const options = super.defaultOptions;
-    options.title = "능력치 및 인라인 굴림 참조"
-    options.id = "archmage-help";
-    options.template = "systems/watersnake-grail-war/templates/sidebar/apps/archmage-help.html";
-    options.width = 820;
-    return options;
-  }
-}

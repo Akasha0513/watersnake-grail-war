@@ -26,10 +26,13 @@ const PACK_DEST = "dist/packs";
  * Gulp Task: Compile packs from the yaml source content to .db files.
  */
 function compilePacks() {
+  // 팩 소스가 없거나 비어 있으면 건너뜀 (13th Age 컴펜디움 제거 후 안전).
+  if (!fs.existsSync(PACK_SRC)) return Promise.resolve();
   // Every folder in the src dir will become a compendium.
   const folders = fs.readdirSync(PACK_SRC).filter((file) => {
     return fs.statSync(path.join(PACK_SRC, file)).isDirectory();
   });
+  if (folders.length === 0) return Promise.resolve();
 
   const packs = folders.map((folder) => {
     return gulp.src(path.join(PACK_SRC, folder))

@@ -1,35 +1,46 @@
 export async function combatStart(updateData) {
+    // 라운드 시작 알림을 먼저 출력 — combatStart는 combatTurnChange(모듈 턴 알림)보다 먼저 발생하므로
+    // 여기서 메시지를 먼저 만들면 턴 알림보다 앞선다. 이 시점엔 combat.current.round가 아직 1로
+    // 갱신되기 전이라 라운드1/전투고조0을 명시적으로 전달한다.
+    await handleRoundNotice(updateData, { round: 1, escalation: 0 });
+
     // Ensure the start-of-turn hook fires for the first combatant, combatTurn doesn't fire here
     const firstCombatant = updateData.turns[0];
     if (firstCombatant) {
         await executeLifecycleMacro(firstCombatant, "startOfTurn");
     }
-    await handleRoundNotice(updateData);
 }
 
 /**
  * 자작룰 라운드(=Foundry 3라운드)가 시작될 때 "라운드 N / 전투고조 N" 배너를 채팅에 출력.
  * 활성 GM만 생성(중복 방지). 같은 자작룰 라운드는 전투 플래그로 1회만 알림.
+ * @param {Combat} combat
+ * @param {?{round:number, escalation:number}} override  값을 직접 지정(전투 시작 시 combat.current가 아직 갱신 전).
  */
-export async function handleRoundNotice(combat) {
+export async function handleRoundNotice(combat, override = null) {
     if (!combat || !game.user?.isActiveGM) return;
     const Util = game.holygrailwar?.ArchmageUtility;
     if (!Util) return;
 
-    const round = Util.getGameRound(combat);
+    const round = override ? override.round : Util.getGameRound(combat);
     if (round < 1) return;
 
     // 이미 알린 라운드(또는 되감기)면 건너뜀 — 증가할 때만 알림.
     const last = combat.getFlag('watersnake-grail-war', 'lastRoundNotice');
     if (last != null && round <= last) return;
-    await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
 
-    const escalation = Util.getEscalation(combat);
+    const escalation = override ? override.escalation : Util.getEscalation(combat);
     const content = await foundry.applications.handlebars.renderTemplate(
         'systems/watersnake-grail-war/templates/chat/round-notice-card.html',
         { round, escalation }
     );
-    await ChatMessage.create({ content });
+    // 메시지를 먼저 생성(턴 알림보다 앞서도록), 그 다음 플래그 저장.
+    // roundNotice 플래그 → 렌더 훅에서 헤더/포트레이트 숨김.
+    await ChatMessage.create({
+        content,
+        flags: { 'watersnake-grail-war': { roundNotice: true } }
+    });
+    await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
 }
 
 export async function combatTurn(combat, context, options) {

@@ -13,7 +13,6 @@ import { wrapRolls } from './item/_item-sheet-helpers.mjs';
 import { ArchmageMacros } from './setup/macros.js';
 import { ArchmageUtility } from './setup/utility-classes.js';
 import { MacroUtils } from './setup/utility-classes.js';
-import { ArchmageReference } from './setup/utility-classes.js';
 import { ContextMenu2 } from './setup/contextMenu2.js';
 import { DamageApplicator } from './setup/damageApplicator.js';
 import { DiceArchmage } from './actor/dice.js';
@@ -926,11 +925,6 @@ Hooks.once('ready', async () => {
       compendiumBrowser.render(true);
     }
 
-    if (event?.target?.classList?.contains('archmage-rolls-reference')) {
-      event.preventDefault();
-      new ArchmageReference().render(true);
-    }
-
     if (event?.target?.classList?.contains('create-baseline-monster')) {
       event.preventDefault();
       baselineMonsterDialog();
@@ -1198,36 +1192,6 @@ Hooks.on("updateScene", (scene, data, options, userId) => {
 
 Hooks.on("renderSettings", async (app, html) => {
   html = $(html);
-  let button = $(`<button id="archmage-reference-btn" class="archmage-rolls-reference" type="button" data-action="archmage-help"><i class="fas fa-dice-d20"></i> 능력치 및 인라인 굴림 참조</button>`);
-  html.find('button[data-app="controls"]').after(button);
-
-  // Event trigger has been moved to the ready hook using the archmage-rolls-reference class.
-  // button.on('click', ev => {
-  //   ev.preventDefault();
-  //   new ArchmageReference().render(true);
-  // });
-
-  let helpButton = $(`<button id="archmage-help-btn" type="button" data-action="archmage-help"><i class="fas fa-question-circle"></i> System Documentation</button>`);
-  html.find('button[data-app="controls"]').after(helpButton);
-
-  helpButton.on('click', ev => {
-    ev.preventDefault();
-    window.open('https://asacolips.gitbook.io/toolkit13-system/', 'archmageHelp', 'width=1032,height=720');
-  });
-
-  let licenseButton = $(`<button id="archmage-license-btn" type="button" data-action="archmage-help"><i class="fas fa-book"></i> ${game.i18n.localize('ARCHMAGE.DIALOG.CUP.title')}</button>`);
-  html.find('button[data-app="controls"]').after(licenseButton);
-
-  licenseButton.on('click', ev => {
-    ev.preventDefault();
-    new Dialog({
-      title: game.i18n.localize('ARCHMAGE.DIALOG.CUP.title'),
-      content: game.i18n.localize('ARCHMAGE.DIALOG.CUP.content'),
-      buttons: {},
-    }).render(true);
-  });
-
-
   // This is intentionally in renderSettings, as it is one of the last bits of HTML to get rendered, which is required for the Tour to hook in
   let tourVisibility = game.settings.get('watersnake-grail-war', 'tourVisibility');
   let showTours = tourVisibility !== 'off' ? true : false;
@@ -1515,6 +1479,10 @@ function uuidv4() {
 // 성배전쟁: feature 카드(능력치 판정/피해/기타) 버튼 굴림 + 재굴림 처리
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   const html = $(rawhtml);
+  // 라운드 시작 알림: 헤더/포트레이트 숨기고 배너만 표시 (CSS에서 처리).
+  if (chatMessage.getFlag('watersnake-grail-war', 'roundNotice')) {
+    rawhtml.classList?.add('grail-round-notice-message');
+  }
   const resolveActor = (card) => {
     const tokenId = card.dataset.tokenId;
     return (tokenId && game.actors.tokens[tokenId]) || game.actors.get(card.dataset.actorId);

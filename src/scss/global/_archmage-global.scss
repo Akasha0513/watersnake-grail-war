@@ -2549,3 +2549,10 @@ a.effect-link,
     color: #9c1f1f;
   }
 }
+
+// 라운드 알림 메시지: 헤더/포트레이트 숨기고 배너만 (턴 알림처럼, 단 포트레이트 없이 GM 발화 아님)
+.chat-message.grail-round-notice-message {
+  .message-header { display: none !important; }
+  .message-content { padding: 0; margin: 0; }
+  .grail-round-notice { margin: 0; }
+}

@@ -47,7 +47,8 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/prepopulate/powers--list.html",
     "systems/watersnake-grail-war/templates/prepopulate/tabs-content.html",
 
-    "systems/watersnake-grail-war/templates/sidebar/apps/archmage-help.html",
+    "systems/watersnake-grail-war/templates/chat/round-notice-card.html",
+
     "systems/watersnake-grail-war/templates/sidebar/apps/a11y-preview.html"
   ];
 
