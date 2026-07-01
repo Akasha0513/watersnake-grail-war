@@ -582,6 +582,9 @@
 
   // 커스텀 리소스: 좁은 npc 시트에서 세로로 크게 잡히던 것 → 컴팩트하게.
   .section--main > .section--resources {
+    // section--main이 column으로 바뀌면서 vue의 flex:0 0 140px가 '높이 140px 고정'으로
+    // 해석돼 리소스 3개 중 3번째가 잘리고, 비었을 땐 140px 여백이 남던 것 → 내용 높이로.
+    flex: 0 0 auto;
     font-size: 0.8em;
     padding: 2px 0;
     flex-wrap: wrap;
