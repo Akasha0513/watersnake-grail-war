@@ -1,6 +1,6 @@
 id: watersnake-grail-war
 title: "성배전쟁 ORPG"
-version: "0.2.63"
+version: "0.2.64"
 authors:
   - name: akasha0513
   - name: "원작 룰: watersnake"
@@ -10,8 +10,8 @@ description: "watersnake의 성배전쟁 자작룰(제13시대 기반 d20)을 �
 
 compatibility:
   minimum: "13"
-  verified: "14.364"
-  maximum: "14"
+  verified: "13.351"
+  maximum: "13"
 
 documentTypes:
   Actor:
