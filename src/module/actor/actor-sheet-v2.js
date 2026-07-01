@@ -29,7 +29,9 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       classes: options.classes.concat(['archmage-v2', 'actor', 'character-sheet']).filter(c => c !== 'archmage'),
       width: compactMode ? 826 : 960,
       height: compactMode ? 750 : 960,
-      submitOnClose: true,
+      // submitOnClose=false: 닫을 때 시트의 (오래된) 폼값을 재제출해 시트 밖에서 바뀐 체력 등을
+      // 최대치로 덮어쓰던 버그 방지. 편집은 submitOnChange로 즉시 저장되므로 안전.
+      submitOnClose: false,
       submitOnChange: true,
       dragDrop: [{dragSelector: '.item-list .item', dropSelector: null}]
     });
