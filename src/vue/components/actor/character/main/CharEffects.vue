@@ -51,7 +51,7 @@
               </div>
             </div>
             <div class="item-controls effect-controls">
-              <a class="effect-control" :data-item-id="effect._id" data-action="toggle" :title="localize('ARCHMAGE.EFFECT.AE.toggle')"><i :class="concat('fas fa-', effect.disabled ? 'check' : 'times')"></i></a>
+              <a class="effect-control effect-toggle" :class="{ 'is-off': effect.disabled }" :data-item-id="effect._id" data-action="toggle" :title="effect.disabled ? '비활성 (클릭해 켜기)' : '활성 (클릭해 끄기)'"><i :class="concat('fas fa-', effect.disabled ? 'toggle-off' : 'toggle-on')"></i></a>
               <a class="effect-control" :data-item-id="effect._id" data-action="edit" :title="localize('ARCHMAGE.EFFECT.AE.edit')"><i class="fas fa-edit"></i></a>
               <a class="effect-control" :data-item-id="effect._id" data-action="delete" :title="localize('ARCHMAGE.EFFECT.AE.delete')"><i class="fas fa-trash"></i></a>
             </div>
@@ -165,14 +165,15 @@ export default {
       const element = this.$el.querySelector(`.effect-${id} > .effect-detail--description`);
     }
   },
-  // watch: {
-  //   'actor.effects': {
-  //     deep: true,
-  //     handler() {
-  //       this.getEffects()
-  //     }
-  //   }
-  // },
+  watch: {
+    // 효과 추가/삭제/토글(disabled) 시 목록 즉시 갱신 (아이콘·활성 상태 반영).
+    'actor.effects': {
+      deep: true,
+      handler() {
+        this.getEffects();
+      }
+    }
+  },
   // Execute getEffects as soon as we're mounted.
   async mounted() {
     this.getEffects();
@@ -221,4 +222,8 @@ export default {
 .slide-fade-leave-to {
   transform: translateY(-60%);
 }
+
+/* 활성/비활성 토글 아이콘 */
+.effect-toggle { cursor: pointer; }
+.effect-toggle.is-off { opacity: 0.45; }
 </style>

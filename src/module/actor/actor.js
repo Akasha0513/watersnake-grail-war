@@ -85,12 +85,17 @@ export class ActorArchmage extends Actor {
     // → 이후 능력치 AE가 그 위에 적용됨: ADD(강화)는 가산, OVERRIDE(빈약 등)는 덮어써서 보정 무시(E(3) 고정).
     if (this.type === 'character' || this.type === 'master' || this.type === 'npc') {
       for (const [k, abl] of Object.entries(this.system.abilities ?? {})) {
-        abl.flatBonus = Number(abl.flatBonus) || 0;
+        // 상시보정(flatBonus): AE로 대체(override) 또는 기존값 + 증감(add). 18 상한 대상.
+        const fbOver = this._effectOverride(`abilities.${k}.flatBonus`);
+        abl.flatBonus = (fbOver !== null ? fbOver : (Number(abl.flatBonus) || 0)) + this._effectAdd(`abilities.${k}.flatBonus`);
+        // ±개수(rerollPlus): AE로 대체 또는 기존값 + 증감. (표기용)
+        const rpOver = this._effectOverride(`abilities.${k}.rerollPlus`);
+        abl.rerollPlus = (rpOver !== null ? rpOver : (Number(abl.rerollPlus) || 0)) + this._effectAdd(`abilities.${k}.rerollPlus`);
         // 기반수치 대체(AE override): 있으면 _source 대신 그 값을 기반으로. 이후 강화(flatBonus·ADD AE)는 누적.
         const baseOv = this._effectOverride(`abilities.${k}.base`);
         const base = baseOv !== null ? baseOv : (Number(abl.value) || 0);
         let v = base + abl.flatBonus;
-        // 상시보정(+)으로는 능력치 수치 18을 초과할 수 없음(기본값 자체는 안 깎음).
+        // 상시보정(+)으로는 능력치 수치 18을 초과할 수 없음(AE 상시보정 포함). 기본값 자체는 안 깎음.
         if (abl.flatBonus > 0) v = Math.max(base, Math.min(v, 18));
         abl.value = v;
       }
@@ -372,17 +377,35 @@ export class ActorArchmage extends Actor {
    */
   _effectOverride(subkey) {
     const fullKey = `system.overrides.${subkey}`;
+    const OVERRIDE = CONST.ACTIVE_EFFECT_MODES.OVERRIDE;
     let result = null;
     for (const e of this.effects) {
       if (e.disabled) continue;
       for (const c of e.changes) {
-        if (c.key === fullKey) {
+        if (c.key === fullKey && Number(c.mode) === OVERRIDE) {
           const v = this._resolveEffectFormula(c.value);
           if (v !== null) result = v;
         }
       }
     }
     return result;
+  }
+
+  /** `system.overrides.<subkey>` 키의 ADD change들을 합산해 반환(없으면 0). formula 지원. */
+  _effectAdd(subkey) {
+    const fullKey = `system.overrides.${subkey}`;
+    const ADD = CONST.ACTIVE_EFFECT_MODES.ADD;
+    let sum = 0;
+    for (const e of this.effects) {
+      if (e.disabled) continue;
+      for (const c of e.changes) {
+        if (c.key === fullKey && Number(c.mode) === ADD) {
+          const v = this._resolveEffectFormula(c.value);
+          if (v !== null) sum += v;
+        }
+      }
+    }
+    return sum;
   }
 
   /** @inheritdoc */

@@ -65,6 +65,10 @@
           <EffectAbilities :viewModel="viewModel" />
         </Tab>
 
+        <Tab group="primary" :tab="tabs.primary.abilitybonus">
+          <EffectAbilityBonus :viewModel="viewModel" />
+        </Tab>
+
         <Tab group="primary" :tab="tabs.primary.defenses">
           <EffectDefenses :viewModel="viewModel" />
         </Tab>
@@ -88,6 +92,7 @@ import {
   Tab,
   EffectDetails,
   EffectAbilities,
+  EffectAbilityBonus,
   EffectDefenses,
   EffectResources,
   EffectCheckBonus,
@@ -185,6 +190,13 @@ const fieldDefs = [
 		{ vm: `${a}_baseOver`, key: `system.overrides.abilities.${a}.base`, mode: OVERRIDE },
 		{ vm: `${a}_modAdd`, key: `system.abilities.${a}.mod`, mode: ADD },
 		{ vm: `${a}_modOver`, key: `system.abilities.${a}.mod`, mode: OVERRIDE },
+	]),
+	// 능력치 상시보정(flatBonus, 18상한 대상)·±개수(rerollPlus): 증감(ADD)/대체(OVERRIDE)
+	...ABILS.flatMap(a => [
+		{ vm: `${a}_flatAdd`, key: `system.overrides.abilities.${a}.flatBonus`, mode: ADD },
+		{ vm: `${a}_flatOver`, key: `system.overrides.abilities.${a}.flatBonus`, mode: OVERRIDE },
+		{ vm: `${a}_rerollAdd`, key: `system.overrides.abilities.${a}.rerollPlus`, mode: ADD },
+		{ vm: `${a}_rerollOver`, key: `system.overrides.abilities.${a}.rerollPlus`, mode: OVERRIDE },
 	]),
 ];
 const viewModel = reactive({});

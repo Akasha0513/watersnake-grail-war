@@ -76,6 +76,10 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
             key: 'abilities',
             label: '능력치'
           },
+          abilitybonus: {
+            key: 'abilitybonus',
+            label: '상시보정'
+          },
           defenses: {
             key: 'defenses',
             label: '급·방어'

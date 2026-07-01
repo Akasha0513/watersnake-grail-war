@@ -19,6 +19,7 @@ export { default as EffectStats } from '@/components/effects/EffectStats.vue';
 export { default as EffectDefenses } from '@/components/effects/EffectDefenses.vue';
 export { default as EffectResources } from '@/components/effects/EffectResources.vue';
 export { default as EffectCheckBonus } from '@/components/effects/EffectCheckBonus.vue';
+export { default as EffectAbilityBonus } from '@/components/effects/EffectAbilityBonus.vue';
 export { default as EffectAttack } from '@/components/effects/EffectAttack.vue';
 export { default as EffectDefense } from '@/components/effects/EffectDefense.vue';
 export { default as EffectOngoing } from '@/components/effects/EffectOngoing.vue';
