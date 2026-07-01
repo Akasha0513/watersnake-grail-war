@@ -40,12 +40,6 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
           icon: "fa-solid fa-image",
           label: "ITEM.ViewArt",
           ownership: "OWNER"
-        },
-        {
-          action: "parseInlineRolls",
-          icon: "fa-solid fa-dice",
-          label: "ARCHMAGE.UI.parseInlineRolls",
-          ownership: "OWNER"
         }
       ]
     },

@@ -599,16 +599,6 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register('watersnake-grail-war', 'allowPasteParsing', {
-    name: "ARCHMAGE.SETTINGS.allowPasteParsingName",
-    hint: "ARCHMAGE.SETTINGS.allowPasteParsingHint",
-    scope: 'client',
-    config: true,
-    default: false,
-    type: Boolean,
-    requiresReload: false,
-  });
-
   game.settings.register('watersnake-grail-war', 'showNaturalRolls', {
     name: "ARCHMAGE.SETTINGS.showNaturalRollsName",
     hint: "ARCHMAGE.SETTINGS.showNaturalRollsHint",
@@ -1043,7 +1033,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
     {
       label: 'ARCHMAGE.SETTINGS.groups.general',
       settings: [
-        'allowPasteParsing',
         'extendedStatusEffects',
         'initiativeDexTiebreaker',
         'initiativeStaticNpc',
