@@ -161,7 +161,11 @@ export default {
       let value = event.target.value;
       if (event.target.type === 'number') value = value === '' ? 0 : Number(value);
       const actor = await getActor(this.actor);
-      if (actor) await actor.update({ [name]: value });
+      console.log('[HGW] saveResource', name, '=', value, '| actor?', !!actor, actor?.name);
+      if (actor) {
+        await actor.update({ [name]: value });
+        console.log('[HGW] after update hp.value =', actor.system?.attributes?.hp?.value, '/ max', actor.system?.attributes?.hp?.max);
+      }
     },
     getAvatarDimensions() {
       let img = this.$refs['avatar'];
