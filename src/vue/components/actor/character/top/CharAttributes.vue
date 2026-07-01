@@ -11,14 +11,14 @@
         <h2 class="unit-title">{{localize('ARCHMAGE.hitPoints')}}</h2>
         <Progress name="hp" :current="actor.system.attributes.hp.value" :temp="actor.system.attributes.hp.temp" :max="actor.system.attributes.hp.max"/>
         <div class="resource flexrow">
-          <input type="number" name="system.attributes.hp.value" class="resource-current" v-model="actor.system.attributes.hp.value" @change="saveResource">
+          <input type="number" name="system.attributes.hp.value" class="resource-current" v-model="actor.system.attributes.hp.value">
           <span class="resource-separator">/</span>
           <div v-if="actor.system.attributes.hp.automatic" class="resource-max">{{actor.system.attributes.hp.max}}</div>
-          <input v-else type="number" name="system.attributes.hp.max" class="resource-max" v-model="actor.system.attributes.hp.max" @change="saveResource">
+          <input v-else type="number" name="system.attributes.hp.max" class="resource-max" v-model="actor.system.attributes.hp.max">
         </div>
         <div v-if="showTempHp" class="labeled-input flexrow">
           <label for="system.attributes.hp.temp" class="unit-subtitle">{{localize('ARCHMAGE.tempHp')}}</label>
-          <input type="number" name="system.attributes.hp.temp" class="temp-hp" v-model="actor.system.attributes.hp.temp" @change="saveResource">
+          <input type="number" name="system.attributes.hp.temp" class="temp-hp" v-model="actor.system.attributes.hp.temp">
         </div>
       </div>
       <!-- MP -->
@@ -26,14 +26,14 @@
         <h2 class="unit-title">MP</h2>
         <Progress name="mp" :current="actor.system.attributes.mp.value" :temp="actor.system.attributes.mp.temp" :max="actor.system.attributes.mp.max"/>
         <div class="resource flexrow">
-          <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value" @change="saveResource">
+          <input type="number" name="system.attributes.mp.value" class="resource-current" v-model="actor.system.attributes.mp.value">
           <span class="resource-separator">/</span>
           <div v-if="actor.system.attributes.mp.automatic" class="resource-max">{{actor.system.attributes.mp.max}}</div>
-          <input v-else type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max" @change="saveResource">
+          <input v-else type="number" name="system.attributes.mp.max" class="resource-max" v-model="actor.system.attributes.mp.max">
         </div>
         <div v-if="showTempMp" class="labeled-input flexrow">
           <label for="system.attributes.mp.temp" class="unit-subtitle">임시 MP</label>
-          <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp" @change="saveResource">
+          <input type="number" name="system.attributes.mp.temp" class="temp-hp" v-model="actor.system.attributes.mp.temp">
         </div>
       </div>
       <!-- SP (서번트·마스터 공통) -->
@@ -41,15 +41,15 @@
         <h2 class="unit-title">SP</h2>
         <Progress name="sp" :current="actor.system.attributes.sp.value" :max="actor.system.attributes.sp.max"/>
         <div class="resource flexrow">
-          <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value" @change="saveResource">
+          <input type="number" name="system.attributes.sp.value" class="resource-current" v-model="actor.system.attributes.sp.value">
           <span class="resource-separator">/</span>
           <div v-if="actor.type === 'character' && actor.system.attributes.sp.automatic" class="resource-max">{{actor.system.attributes.sp.max}}</div>
-          <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max" @change="saveResource">
+          <input v-else type="number" name="system.attributes.sp.max" class="resource-max" v-model="actor.system.attributes.sp.max">
         </div>
         <!-- 마스터 급(영령 취급 시 신방·이니·판정에 반영). 설정 토글로 표시. -->
         <div v-if="actor.type !== 'character' && showGrade" class="labeled-input flexrow">
           <label for="system.attributes.grade.value" class="unit-subtitle">급</label>
-          <input type="number" name="system.attributes.grade.value" class="temp-hp" v-model="actor.system.attributes.grade.value" @change="saveResource">
+          <input type="number" name="system.attributes.grade.value" class="temp-hp" v-model="actor.system.attributes.grade.value">
         </div>
       </div>
       <!-- Defenses -->
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { concat, localize, tooltip, getActor } from '@/methods/Helpers';
+import { concat, localize, tooltip } from '@/methods/Helpers';
 import Progress from '@/components/parts/Progress.vue';
 export default {
   name: 'CharAttributes',
@@ -153,20 +153,6 @@ export default {
     },
   },
   methods: {
-    // HP/MP/SP 등 리소스 입력을 실제 액터에 직접 저장 (Vue 입력이 폼 submitOnChange로
-    // 저장 안 되는 경우 대비 — 값이 최대치로 되돌아가던 버그 방지).
-    async saveResource(event) {
-      const name = event.target?.name;
-      if (!name) return;
-      let value = event.target.value;
-      if (event.target.type === 'number') value = value === '' ? 0 : Number(value);
-      const actor = await getActor(this.actor);
-      console.log('[HGW] saveResource', name, '=', value, '| actor?', !!actor, actor?.name);
-      if (actor) {
-        await actor.update({ [name]: value });
-        console.log('[HGW] after update hp.value =', actor.system?.attributes?.hp?.value, '/ max', actor.system?.attributes?.hp?.max);
-      }
-    },
     getAvatarDimensions() {
       let img = this.$refs['avatar'];
       let width = img.naturalWidth;

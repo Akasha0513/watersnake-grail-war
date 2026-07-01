@@ -1971,6 +1971,9 @@ export class ActorArchmage extends Actor {
     filtered = filtered.map(e => e.id);
     if (filtered.length == 0 && data.system.attributes.hp.value/maxHp <= thres) {
         let effectData = CONFIG.statusEffects.find(x => x.id == id);
+        // 해당 상태이상 정의가 없으면 스킵 (13th Age의 staggered/unconscious 등은 제거됨).
+        // 없을 때 그대로 두면 effectData.name 접근에서 크래시 → HP 업데이트 전체가 롤백됐음.
+        if (!effectData) return;
         let createData = foundry.utils.deepClone(effectData);
         createData.name = game.i18n.localize(effectData.name);
         createData["flags.core.overlay"] = true;
@@ -2157,7 +2160,6 @@ export class ActorArchmage extends Actor {
     let deltaTemp = 0;
     let deltaRec = 0;
     let maxHp = data.system.attributes?.hp?.max || this.system.attributes.hp.max;
-    console.log('[HGW] _preUpdate hp | data.hp=', JSON.stringify(data.system.attributes?.hp), '| changes.hp=', JSON.stringify(changes.system?.attributes?.hp), '| this.hp.value=', this.system.attributes.hp.value, '| maxHp=', maxHp);
 
     if (changes.system.attributes?.hp?.temp !== undefined) {
       // Store for later display
@@ -2211,7 +2213,6 @@ export class ActorArchmage extends Actor {
       // Do not exceed max hps
       deltaActual = Math.min(deltaActual, maxHp - hp.value);
       data.system.attributes.hp.value = hp.value + deltaActual;
-      console.log('[HGW] _preUpdate hp FINAL value =', data.system.attributes.hp.value, '(deltaActual', deltaActual, ')');
 
       // Handle hp-related conditions
       if (game.settings.get('watersnake-grail-war', 'automateHPConditions') && !game.modules.get("combat-utility-belt")?.active) {
