@@ -23,7 +23,6 @@ import { EffectArchmageSheet } from "./active-effects/effect-sheet.js";
 import { registerModuleArt } from './setup/register-module-art.js';
 import { TokenArchmage } from './actor/token.js';
 import {combatRound, combatStart, combatTurn, preDeleteCombat} from "./hooks/combat.mjs";
-import { ArchmageCompendiumBrowserApplication } from './applications/compendium-browser.js';
 import { ArchmageActiveEffectSheetV2 } from './active-effects/effect-sheet-v2.js';
 import { baselineMonsterDialog } from './actor/baseline-monster.js';
 
@@ -145,7 +144,6 @@ Hooks.once('init', async function() {
     MacroUtils,
     rollItemMacro,
     ActorHelpersV2,
-    ArchmageCompendiumBrowserApplication,
     isSocketGM: () => game.users.activeGM.id === game.user.id,
     system: {
       moduleArt: {
@@ -804,7 +802,8 @@ async function addEscalationDie() {
     switch (a.dataset.type) {
       case "condition":
         const journalId = CONFIG.HOLYGRAILWAR.statusEffects.find(x => x.id === id)?.journal;
-        doc = journalId ? await game.packs.get("watersnake-grail-war.conditions").getDocument(journalId) : false;
+        // conditions 팩은 13th Age 콘텐츠 정리 때 삭제됨 → 없으면 크래시 대신 무시(옵셔널 체이닝).
+        doc = journalId ? await game.packs.get("watersnake-grail-war.conditions")?.getDocument(journalId) : false;
         break;
       case "effect":
         console.warn("Effects not currently supported");
@@ -913,19 +912,8 @@ Hooks.once('ready', async () => {
     event.dataTransfer.setData("text/plain", JSON.stringify(data));
   });
 
-  // Handle click events for the compendium browser.
+  // Handle click events for the baseline monster generator.
   document.addEventListener("click", (event) => {
-    if (event?.target?.classList?.contains("open-archmage-browser")) {
-      // Retrieve the existing compendium browser, if any.
-      let compendiumBrowser = Object.values(ui.windows).find(app => app.constructor.name == 'ArchmageCompendiumBrowserApplication');
-      // Otherwise, build a new one.
-      if (!compendiumBrowser) {
-        compendiumBrowser = new ArchmageCompendiumBrowserApplication({defaultTab: event.target.dataset.tab ?? 'creatures'});
-      }
-      // Render the browser.
-      compendiumBrowser.render(true);
-    }
-
     if (event?.target?.classList?.contains('create-baseline-monster')) {
       event.preventDefault();
       baselineMonsterDialog();
@@ -953,10 +941,6 @@ Hooks.on("renderDocumentDirectory", (app, html, options) => {
   if (options.documentCls === 'actor') {
     htmlElement.querySelector(".directory-footer").insertAdjacentHTML("beforeend", `
       <div class="flexrow">
-        <button type="button" class="open-archmage-browser" data-tab="creatures">
-          <i class="fas fa-face-smile-horns open-archmage-browser"></i>
-        ${game.i18n.localize('ARCHMAGE.COMPENDIUMBROWSER.buttons.browseCreatures')}
-        </button>
         <button type="button" class="create-baseline-monster" style="flex-grow: 0;"
           data-tooltip="${game.i18n.localize('ARCHMAGE.COMPENDIUMBROWSER.buttons.baselineMonster')}"
           data-tooltip-direction="UP">
@@ -964,13 +948,6 @@ Hooks.on("renderDocumentDirectory", (app, html, options) => {
         </button>
       </div>
     `);
-  }
-  if (options.documentCls === 'item') {
-    htmlElement.querySelector(".directory-footer").insertAdjacentHTML("beforeend", `
-      <div class="flexrow">
-        <button type="button" class="open-archmage-browser" data-tab="powers"><i class="fas fa-swords open-archmage-browser"></i>${game.i18n.localize('ARCHMAGE.COMPENDIUMBROWSER.buttons.browsePowers')}</button>
-        <button type="button" class="open-archmage-browser" data-tab="items"><i class="fas fa-wand-magic-sparkles open-archmage-browser"></i>${game.i18n.localize('ARCHMAGE.COMPENDIUMBROWSER.buttons.browseItems')}</button>
-      </div>`);
   }
 });
 
@@ -2019,9 +1996,6 @@ Hooks.on('renderCombatTracker', async (_combatTracker, _html, {combat}) => {
       app.render();
     }
 
-    if (app.constructor.name === 'ArchmageCompendiumBrowserApplication') {
-      app.render();
-    }
   }
 });
 

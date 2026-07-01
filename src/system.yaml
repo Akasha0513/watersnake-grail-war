@@ -1,6 +1,6 @@
 id: watersnake-grail-war
 title: "성배전쟁 ORPG"
-version: "0.2.85"
+version: "0.2.86"
 authors:
   - name: akasha0513
   - name: "원작 룰: watersnake"
@@ -66,10 +66,6 @@ languages:
   - lang: en
     name: English
     path: languages/en.json
-
-  - lang: es
-    name: Español
-    path: languages/es.json
 
 socket: true
 url: https://github.com/akasha0513/watersnake-grail-war

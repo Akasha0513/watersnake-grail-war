@@ -1,49 +1,12 @@
-import { OneDotSevenTour } from './1_7_tour.js';
-import { OneDotEightTour } from './1_8_tour.js';
-import { OneDotNineTour } from './1_9_tour.js';
-import { OneDotTenTour } from './1_10_tour.js';
-import { OneDotSeventeenTour } from './1_17_tour.js';
-import { OneDotNineteenTour } from './1_19_tour.js';
-
+// 13th Age 버전 투어(1.7~1.19)는 성배전쟁과 무관해 전부 제거됨.
+// archmage.js가 여전히 new TourGuide().registerTours()를 호출하므로 클래스 껍데기는 유지(no-op).
 export class TourGuide {
 
     async registerTours() {
-        game.tours.register("watersnake-grail-war", "1.7.0", new OneDotSevenTour());
-        game.tours.register("watersnake-grail-war", "1.8.0", new OneDotEightTour());
-        game.tours.register("watersnake-grail-war", "1.9.0", new OneDotNineTour());
-        game.tours.register("watersnake-grail-war", "1.10.0", new OneDotTenTour());
-        game.tours.register("watersnake-grail-war", "1.17.0", new OneDotSeventeenTour());
-        //game.tours.register("watersnake-grail-war", "1.19.0", new OneDotNineteenTour());
-        // game.tours.register("watersnake-grail-war", "actorSheet", new Tour({
-        //     title: "Active Effects Tour",
-        //     description: "Learn how to use the Active Effects feature",
-        //     steps: []
-        // }))
+        // 등록할 투어 없음.
     }
 
     startNewFeatureTours() {
-        let lastTourVersion = game.settings.get("watersnake-grail-war", "lastTourVersion");
-
-        if (foundry.utils.isNewerVersion("1.7.0", lastTourVersion)) {
-            game.tours.get("watersnake-grail-war.1.7.0").start();
-        }
-        else if (foundry.utils.isNewerVersion("1.8.0", lastTourVersion)) {
-            game.tours.get("watersnake-grail-war.1.8.0").start();
-        }
-        else if (foundry.utils.isNewerVersion("1.9.0", lastTourVersion)) {
-            game.tours.get("watersnake-grail-war.1.9.0").start();
-        }
-        else if (foundry.utils.isNewerVersion("1.10.0", lastTourVersion)) {
-            game.tours.get("watersnake-grail-war.1.10.0").start();
-        }
-        else if (foundry.utils.isNewerVersion("1.17.0", lastTourVersion)) {
-            game.tours.get("watersnake-grail-war.1.17.0").start();
-        }
-        else if (foundry.utils.isNewerVersion("1.19.0", lastTourVersion)) {
-            // This release is NPC focused, so only show it to GMs.
-            if (game.user.isGM) {
-                game.tours.get("watersnake-grail-war.1.19.0").start();
-            }
-        }
+        // 표시할 신규 기능 투어 없음.
     }
 }
