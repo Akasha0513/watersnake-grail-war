@@ -1,7 +1,7 @@
 <template>
   <section class="section section--resources flexrow flexshrink" :data-resource-count="resourceCount" :data-custom-count="customResourceCount">
-    <!-- 령주 (마스터) -->
-    <section v-if="actor.type !== 'character'" class="unit unit--command-seals">
+    <!-- 령주 (마스터 전용, npc 제외) -->
+    <section v-if="actor.type === 'master'" class="unit unit--command-seals">
       <h2 class="unit-title">령주</h2>
       <div class="resource flexrow command-seals">
         <a class="command-seal-step command-seal-minus" title="령주 −1"><i class="fas fa-minus"></i></a>

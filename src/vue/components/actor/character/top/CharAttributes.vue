@@ -4,7 +4,8 @@
     <div class="unit unit--img profile-img" :data-tooltip="tooltip('portrait')">
       <img :src="actor.img" ref="avatar" :alt="localize('ARCHMAGE.avatarAlt')" :width="avatarWidth" :height="avatarHeight" :class="avatarClass" data-edit="img"/>
     </div>
-    <div class="unit unit--attributes grid grid-5col border-both">
+    <!-- npc는 급/레벨 유닛이 없어 4열, 그 외 5열 -->
+    <div class="unit unit--attributes grid border-both" :class="actor.type === 'npc' ? 'grid-4col' : 'grid-5col'">
       <!-- HP -->
       <div class="unit unit--has-max unit--hp" :data-tooltip="tooltip('pcHitpoints')">
         <h2 class="unit-title">{{localize('ARCHMAGE.hitPoints')}}</h2>
@@ -84,7 +85,8 @@
           </div>
         </div>
       </div>
-      <div v-else class="unit unit--grade flexcol">
+      <!-- 레벨+경험치: 마스터 전용 (npc 제외) -->
+      <div v-else-if="actor.type === 'master'" class="unit unit--grade flexcol">
         <h2 class="unit-title">레벨</h2>
         <div class="resource flexrow">
           <input type="number" name="system.attributes.level.value" class="resource-current" v-model="actor.system.attributes.level.value">
