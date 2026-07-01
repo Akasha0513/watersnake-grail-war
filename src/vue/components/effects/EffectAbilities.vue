@@ -15,10 +15,10 @@
 		<tbody>
 			<tr v-for="ab in abilities" :key="ab.key">
 				<td class="ability-label">{{ ab.label }}</td>
-				<td><input type="number" v-model="viewModel[ab.key + '_valAdd']" placeholder="0" /></td>
-				<td><input type="number" v-model="viewModel[ab.key + '_valOver']" placeholder="—" /></td>
-				<td><input type="number" v-model="viewModel[ab.key + '_modAdd']" placeholder="0" /></td>
-				<td><input type="number" v-model="viewModel[ab.key + '_modOver']" placeholder="—" /></td>
+				<td><input type="text" v-model="viewModel[ab.key + '_valAdd']" placeholder="0" /></td>
+				<td><input type="text" v-model="viewModel[ab.key + '_valOver']" placeholder="—" /></td>
+				<td><input type="text" v-model="viewModel[ab.key + '_modAdd']" placeholder="0" /></td>
+				<td><input type="text" v-model="viewModel[ab.key + '_modOver']" placeholder="—" /></td>
 			</tr>
 		</tbody>
 	</table>

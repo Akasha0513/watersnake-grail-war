@@ -538,3 +538,29 @@
     }
   }
 }
+
+// npc 시트(캐릭터 UI를 좁은 폭으로 사용)는 항상 좁으므로, 본문(탭+내용)이 가로로 붙어
+// 탭이 세로로 깨지던 문제를 폭 무관하게 세로 스택으로 강제. (container-query 존과 무관하게 적용)
+.archmage-v2.sheet.npc-sheet .window-content {
+  .section--main {
+    flex-direction: column !important;
+  }
+
+  .section--main > .section--tabs {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .section--main .tabs.tabs--primary {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .section--main > .section--tabs-content {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+}

@@ -200,7 +200,27 @@ export class ActorArchmage extends Actor {
     let stackingBonuses = {};
     let uniqueBonusLabels = {};
     let stackedChange;
+
+    // formula 지원: AE 값에 @참조/산술식이 있으면 롤데이터로 해석해 숫자화.
+    // (순환 방지 위해 prepare 재실행 없이 현재 상태의 롤데이터 사용 — 'default'/'post' 단계에선
+    //  능력치·수정치가 이미 계산돼 @str.mod 등 참조 가능. 'pre' 단계에선 능력치 참조는 제한적.)
+    let _effRollData = null;
+    const _resolveVal = (raw) => {
+      const s = String(raw ?? '').trim();
+      if (s === '' || !isNaN(s)) return s;              // 빈값/숫자는 그대로
+      try {
+        if (!_effRollData) _effRollData = this.getRollData({ skipPrepare: true });
+        const replaced = Roll.replaceFormulaData(s, _effRollData, { missing: 0, warn: false });
+        const val = Roll.safeEval(replaced);
+        if (typeof val === 'number' && isFinite(val)) return String(val);
+      } catch (e) { /* 해석 실패 → 원본 유지(숫자 아니면 0으로 처리됨) */ }
+      return s;
+    };
+
     for ( let change of changes ) {
+      // formula 해석 (숫자/빈값이면 그대로).
+      change.value = _resolveVal(change.value);
+
       // First save numeric value if we have it
       if (!isNaN(change.value)) {
         change.numeric = Number(change.value);
