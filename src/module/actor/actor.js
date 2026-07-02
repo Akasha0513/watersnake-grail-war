@@ -1017,7 +1017,9 @@ export class ActorArchmage extends Actor {
       saveType: label,
       success: success,
       data: chatData,
-      target
+      target,
+      formulaParts: game.holygrailwar.ArchmageUtility.rollFormulaParts(roll),
+      total: roll.total
     };
 
     // Render the template
@@ -1116,7 +1118,9 @@ export class ActorArchmage extends Actor {
         saveType: title,
         success: success,
         data: chatData,
-        target
+        target,
+        formulaParts: game.holygrailwar.ArchmageUtility.rollFormulaParts(roll),
+        total: roll.total
       };
 
       // Render the template.

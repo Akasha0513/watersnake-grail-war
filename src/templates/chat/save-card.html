@@ -1,38 +1,23 @@
-<div class="archmage chat-card">
-  <header class="card-header">
-    <h3 class="ability-usage ability-usage--recharge">{{saveType}}</h3>
-  </header>
+<div class="archmage chat-card swade-card swade-roll-message save-card">
   <div class="card-content">
-    <div class="dice-roll">
-      <div class="dice-result">
-          <div class="dice-formula">{{data.roll.formula}} >= {{target}}</div>
-          <div class="dice-tooltip">
-            <section class="tooltip-part">
-              <div class="dice">
-                  <header class="part-header flexrow">
-                      <span class="part-formula">{{data.roll.formula}}</span>
-                      <span class="part-total">{{data.roll.total}}</span>
-                  </header>
-                  <ol class="dice-rolls">
-                    {{#each data.roll.terms as |term i|}}
-                      <li class="roll die d{{term.faces}}">{{term.total}}</li>
-                    {{/each}}
-                  </ol>
-              </div>
-            </section>
+    <div class="roll-flavor">{{saveType}}{{#if target}} <span class="save-target">(목표 {{target}}+)</span>{{/if}}</div>
+    <div class="swade-roll">
+      <div class="dice-roll">
+        <div class="dice-result">
+          <div class="dice-formula">
+            <ol class="formula-list">
+              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
+            </ol>
           </div>
-          <h4 class="dice-total">{{data.roll.total}}</h4>
+          <div class="dice-flavor">굴림 결과</div>
+          <div class="dice-total">{{total}}</div>
+        </div>
       </div>
     </div>
-    <div class="card-row" style="padding-top: 5px;">
-      <div class="card-prop">
-        {{#if success}}
-        <span style="color: green;"><b>{{localize 'ARCHMAGE.SAVE.success'}}</b></span>
-        {{else}}
-        <span style="color: red;"><b>{{localize 'ARCHMAGE.SAVE.failure'}}</b></span>
-        {{/if}}
-
-      </div>
-    </div>
+    {{#if success}}
+    <div class="roll-result-banner roll-success">✔ {{localize 'ARCHMAGE.SAVE.success'}}</div>
+    {{else}}
+    <div class="roll-result-banner roll-fail">✖ {{localize 'ARCHMAGE.SAVE.failure'}}</div>
+    {{/if}}
   </div>
 </div>

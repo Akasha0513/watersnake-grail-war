@@ -1935,6 +1935,16 @@ option[selected] {
 
     &.roll-crit { color: #1a7f37; background: rgba(26, 127, 55, 0.12); }
     &.roll-fumble { color: #cf222e; background: rgba(207, 34, 46, 0.12); }
+    // 세이브·물러서기 성공/실패
+    &.roll-success { color: #1a7f37; background: rgba(26, 127, 55, 0.12); }
+    &.roll-fail { color: #cf222e; background: rgba(207, 34, 46, 0.12); }
+  }
+
+  // 세이브/물러서기 목표치 표기(플레이버 옆, 흐리게)
+  .save-target {
+    font-weight: normal;
+    opacity: 0.7;
+    font-size: 0.9em;
   }
 
   // SWADE swade-roll 충실 복제: 코어 .dice-formula/.dice-total 컨테이너 박스 + formula-list li
