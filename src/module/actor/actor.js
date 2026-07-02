@@ -1966,38 +1966,6 @@ export class ActorArchmage extends Actor {
   }
 
   /**
-   * HP conditions helper method
-   *
-   * @return {undefined}
-   */
-  async _updateHpCondition(data, id, thres, maxHp, label) {
-    let filtered = this.effects.filter(x => x.name === label);
-    filtered = filtered.map(e => e.id);
-    if (filtered.length == 0 && data.system.attributes.hp.value/maxHp <= thres) {
-        let effectData = CONFIG.statusEffects.find(x => x.id == id);
-        // 해당 상태이상 정의가 없으면 스킵 (13th Age의 staggered/unconscious 등은 제거됨).
-        // 없을 때 그대로 두면 effectData.name 접근에서 크래시 → HP 업데이트 전체가 롤백됐음.
-        if (!effectData) return;
-        let createData = foundry.utils.deepClone(effectData);
-        createData.name = game.i18n.localize(effectData.name);
-        createData["flags.core.overlay"] = true;
-        createData.statuses = [createData.id];
-        MacroUtils.setDuration(createData, CONFIG.HOLYGRAILWAR.effectDurationTypes.Infinite)
-        delete createData.id;
-        const cls = getDocumentClass("ActiveEffect");
-        await cls.create(createData, {parent: this});
-    } else if (filtered.length > 0 && data.system.attributes.hp.value/maxHp > thres) {
-      // Clear effect from update data if it exists or it will be recreated
-      if (data.effects != undefined) {
-        for ( let effId of filtered ) {
-          data.effects = data.effects.filter(e => e._id != effId);
-        }
-      }
-      await this.deleteEmbeddedDocuments("ActiveEffect", filtered);
-    }
-  }
-
-  /**
    * Scrolling text helper method
    *
    * @return {undefined}
@@ -2217,21 +2185,6 @@ export class ActorArchmage extends Actor {
       // Do not exceed max hps
       deltaActual = Math.min(deltaActual, maxHp - hp.value);
       data.system.attributes.hp.value = hp.value + deltaActual;
-
-      // Handle hp-related conditions
-      if (game.settings.get('watersnake-grail-war', 'automateHPConditions') && !game.modules.get("combat-utility-belt")?.active) {
-        // Staggered
-        await this._updateHpCondition(data, "staggered", 0.5, maxHp,
-          game.i18n.localize("ARCHMAGE.EFFECT.StatusStaggered"));
-        // Dead / Unconscious
-        if (this.type == 'npc'){
-          await this._updateHpCondition(data, "dead", 0, maxHp,
-            game.i18n.localize("ARCHMAGE.EFFECT.StatusDead"));
-        } else {
-          await this._updateHpCondition(data, "unconscious", 0, maxHp,
-            game.i18n.localize("ARCHMAGE.EFFECT.StatusUnconscious"));
-        }
-      }
 
       // Handle first skull in 2e.
       if (game.settings.get('watersnake-grail-war', 'secondEdition')) {

@@ -396,24 +396,6 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("watersnake-grail-war", "automateHPConditions", {
-    name: "ARCHMAGE.SETTINGS.automateHPConditionsName",
-    hint: "ARCHMAGE.SETTINGS.automateHPConditionsHint",
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true
-  });
-
-  game.settings.register("watersnake-grail-war", "staggeredOverlay", {
-    name: "ARCHMAGE.SETTINGS.staggeredOverlayName",
-    hint: "ARCHMAGE.SETTINGS.staggeredOverlayHint",
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true
-  });
-
   game.settings.register("watersnake-grail-war", "multiTargetAttackRolls", {
     name: "ARCHMAGE.SETTINGS.multiTargetAttackRollsName",
     hint: "ARCHMAGE.SETTINGS.multiTargetAttackRollsHint",
@@ -962,8 +944,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
       label: 'ARCHMAGE.SETTINGS.groups.automation',
       settings: [
         'resetIconsOnRest',
-        'automateHPConditions',
-        'staggeredOverlay',
         'multiTargetAttackRolls',
         'hideExtraRolls',
         'showDefensesInChat',
