@@ -436,63 +436,6 @@
   }
 }
 
-// Power importer dialog.
-.archmage-prepopulate {
-  .window-content {
-    container-type: size;
-    container-name: archmage-prepopulate-content;
-  }
-}
-
-@container archmage-prepopulate-content (max-width: #{$cq-mobile}) {
-  .archmage-prepopulate {
-    .sheet-tabs {
-      border: none;
-
-      .item {
-        border: 2px solid $c-blue--dark;
-        margin: 4px;
-      }
-    }
-
-    .grid {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-
-    .l-center {
-      margin: auto;
-    }
-
-    .class-content {
-      .archmage-class-title {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        margin-top: 0;
-
-        &::before,
-        &::after {
-          position: relative;
-          flex: 1;
-        }
-      }
-
-      table {
-        display: block;
-        max-width: fit-content;
-        margin: 0 auto;
-        overflow-x: auto;
-        white-space: nowrap;
-
-        td {
-          min-width: 100px;
-          padding: 0 5px;
-        }
-      }
-    }
-  }
-}
-
 
 // AppV2 sheets.
 .archmage-appv2 {

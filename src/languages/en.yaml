@@ -91,8 +91,6 @@ ARCHMAGE:
   icon: Icon
   iconic: Zenith
   iconRelationships: Icon Relationships
-  import: Import Powers
-  importSubmit: Import
   incrementalAdvances: Incremental Advances
   initAdjustment: Initiative Adjustment
   initBonus: Optional Initiative Bonus
@@ -330,8 +328,6 @@ ARCHMAGE:
     hideCurrencyName: Hide Currency
     hideEmptyPowerGroupsHint: Hide empty Power groups on the sheet (besides the default one).
     hideEmptyPowerGroupsName: Hide empty Power groups
-    hideImportPowersHint: Hide the Import Powers button for players.
-    hideImportPowersName: Hide Import Powers
     hideIncrementalsHint: Hide the Incremental Advances section.
     hideIncrementalsName: Hide Incremental Advances
     hideOneUniqueThingHint: Hide the One Unique Thing section.
@@ -377,27 +373,6 @@ ARCHMAGE:
     settings: Settings
     shield: Shield
     twohanded: Two-handed Weapon
-  RACES:
-    aasimar: Aasimar
-    darkelf: Dark Elf
-    demontouched: Demontouched
-    dragonic: Dragonic
-    dragonspawn: Dragonspawn
-    drow: Drow
-    dwarf: Dwarf
-    dwarfforged: Dwarf-forged
-    forgeborn: Forgeborn
-    gnome: Gnome
-    halfelf: Half-Elf
-    halfling: Halfling
-    halforc: Half-Orc
-    highelf: High Elf
-    holyone: Holy One
-    human: Human
-    tiefling: Tiefling
-    trollkin: Troll-Kin
-    silverelf: Silver Elf
-    woodelf: Wood Elf
   CLASSES:
     barbarian: Barbarian
     bard: Bard
@@ -526,8 +501,6 @@ ARCHMAGE:
     platinumHint: 1 Platinum = 10 Gold
     silver: Silver
     silverHint: 1 Silver = 10 Copper
-  PREPOPULATE:
-    help: "Click the checkboxes to the left of any powers you would like to add, and then click submit to add them to your character. You can click any power's name to expand it and view its text and available feats."
   COMPENDIUMBROWSER:
     buttons:
       baselineMonster: 'Create Baseline Monster'

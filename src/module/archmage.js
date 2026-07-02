@@ -781,7 +781,6 @@ Hooks.once('ready', async () => {
     "creatureSizes",
     "creatureStrengths",
     "creatureRoles",
-    "raceList",
     "classList"
   ].forEach(s => {
     for (const [k, v] of Object.entries(CONFIG.HOLYGRAILWAR[s])) {

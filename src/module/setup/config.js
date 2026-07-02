@@ -430,34 +430,6 @@ ARCHMAGE.defaultMonsterTokens = {
   'undead': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/undead.webp',
 };
 
-ARCHMAGE.raceList = {
-  'aasimar': "ARCHMAGE.RACES.aasimar",
-  'darkelf': "ARCHMAGE.RACES.darkelf",
-  'demontouched': "ARCHMAGE.RACES.demontouched",
-  'dragonic': "ARCHMAGE.RACES.dragonic",
-  'dragonspawn': "ARCHMAGE.RACES.dragonspawn",
-  'drow': "ARCHMAGE.RACES.drow",
-  'dwarf': "ARCHMAGE.RACES.dwarf",
-  'dwarfforged': "ARCHMAGE.RACES.dwarfforged",
-  'forgeborn': "ARCHMAGE.RACES.forgeborn",
-  'gnome': "ARCHMAGE.RACES.gnome",
-  'halfelf': "ARCHMAGE.RACES.halfelf",
-  'halfling': "ARCHMAGE.RACES.halfling",
-  'halforc': "ARCHMAGE.RACES.halforc",
-  'highelf': "ARCHMAGE.RACES.highelf",
-  'holyone': "ARCHMAGE.RACES.holyone",
-  'human': "ARCHMAGE.RACES.human",
-  'tiefling': "ARCHMAGE.RACES.tiefling",
-  'trollkin': "ARCHMAGE.RACES.trollkin",
-  'silverelf': "ARCHMAGE.RACES.silverelf",
-  'woodelf': "ARCHMAGE.RACES.woodelf"
-};
-
-ARCHMAGE.classPacks = [
-  'classes',
-  'classes-kin-2e'
-];
-
 ARCHMAGE.classList = {
   'barbarian': 'ARCHMAGE.CLASSES.barbarian',
   'bard': 'ARCHMAGE.CLASSES.bard',
@@ -1014,12 +986,6 @@ FLAGS.characterFlags = {
   "showTriggersTab": {
     name: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabName",
     hint: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "hideImportPowers": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideImportPowersName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideImportPowersHint",
     section: "Sheet",
     type: Boolean
   },

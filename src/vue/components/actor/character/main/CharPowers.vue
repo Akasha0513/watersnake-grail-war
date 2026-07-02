@@ -20,9 +20,6 @@
         <label for="power-filter-search">{{localize('ARCHMAGE.filter')}}</label>
         <input type="text" name="power-filter-search" v-model="searchValue" :placeholder="localize('ARCHMAGE.filterName')"/>
       </div>
-      <div class="import-powers" v-if="shouldDisplayImportButton(actor)">
-        <button class="item-import button" :title="localize('ARCHMAGE.import')" data-item-type="power" data-type="power" type="button"><i class="fas fa-atlas"></i> {{localize('ARCHMAGE.import')}}</button>
-      </div>
     </header>
     <!-- Powers, by group. -->
     <section v-for="(group, groupKey) in filterGroupsForDisplay(actor, groups, powerGroups)" :key="groupKey" class="power-group">
@@ -338,12 +335,6 @@ export default {
       }
 
       return out;
-    },
-    shouldDisplayImportButton(actor) {
-      if (actor?.flags?.['watersnake-grail-war']?.hideImportPowers === true && !game.user.isGM) {
-        return false;
-      }
-      return true;
     },
     /**
      * Compute CSS class to assign based on special usage
