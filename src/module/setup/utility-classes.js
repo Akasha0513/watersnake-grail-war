@@ -405,62 +405,6 @@ export class ArchmageUtility {
     }
   }
 
-  // Formats a list of matched classes like ['wizard', 'chaosmage'] for display,
-  // returning a string like "Wizard, Chaos Mage"
-  static formatClassList(classes) {
-    if (!classes || classes.length < 1) {
-      return "";
-    }
-    var out = [];
-    for (let i = 0; i < classes.length; ++i) {
-      const readable = CONFIG.HOLYGRAILWAR.classList[classes[i]];
-      if (readable) {
-        out.push(readable);
-      }
-    }
-    return out.join(", ");
-  }
-
-  // Inverts a given object/map (switching keys and values) and sorts it by key length
-  static invertMapAndSortByKeyLength(map) {
-    var newMap = new Map();
-    // Swap keys with values
-    for (const key in map) {
-      const value = map[key];
-      newMap.set(value, key);
-    }
-    // Sort by key length
-    newMap = new Map([...newMap.entries()].sort((a, b) => {
-      return b[0].length - a[0].length;
-    }));
-    return newMap;
-  }
-
-  static prepareClassInputForDetection(input) {
-    if (game.i18n.lang === "en") {
-      return input;
-    }
-
-    const classNames = ArchmageUtility.invertMapAndSortByKeyLength(CONFIG.HOLYGRAILWAR.classList);
-    var output = input.toLowerCase();
-    for (const [key, value] of classNames) {
-      output = output.replaceAll(key.toLowerCase(), value);
-    }
-
-    return output;
-  }
-
-  // Find known classes
-  static detectClasses(className) {
-    className = ArchmageUtility.prepareClassInputForDetection(className);
-    let classList = Object.keys(CONFIG.HOLYGRAILWAR.classList);
-    let classRegex = new RegExp(classList.join('|'), 'g');
-    className = className ? className.toLowerCase().replace(/[^a-zA-z\d]/g, '') : '';
-    let matchedClasses = className.match(classRegex);
-    if (matchedClasses !== null) matchedClasses = [...new Set(matchedClasses)].sort();
-    return matchedClasses;
-  }
-
   static formatNewItemName(itemType) {
     return game.i18n.format("ARCHMAGE.newItem",
       { item: game.i18n.localize(`ARCHMAGE.${itemType}`) });

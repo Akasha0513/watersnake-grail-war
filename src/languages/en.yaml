@@ -217,8 +217,6 @@ ARCHMAGE:
       appearance: Appearance
       accessibility: Accessibility
       general: General
-    automateBaseStatsFromClassHint: Automatically populate AC, PD, MD, base HP, Recovery and Weapon dices based on class name(s).
-    automateBaseStatsFromClassName: Automatically compute base stats
     ColorblindHint: Change the colors of the power cards to a more accessibile color palette.
     ColorblindName: Enable Colorblind Accessibility Mode
     ColorblindIssuesMessage: We're always trying to improve our accessibility. Suggest accessibility improvements at <a href="https://gitlab.com/asacolips-projects/foundry-mods/archmage/-/issues/new" target="_blank">our issue tracker</a> and include the <strong>a11y</strong> label.
@@ -362,21 +360,10 @@ ARCHMAGE:
     shield: Shield
     twohanded: Two-handed Weapon
   CLASSES:
-    barbarian: Barbarian
+    # PowerSpells.vue(비술 시트 주문 섹션 제목)가 사용하는 3키만 유지 — 클래스 감지 체인은 제거됨.
     bard: Bard
-    chaosmage: Chaos Mage
     cleric: Cleric
-    commander: Commander
-    druid: Druid
-    fighter: Fighter
-    monk: Monk
-    necromancer: Necromancer
-    occultist: Occultist
-    paladin: Paladin
-    ranger: Ranger
-    rogue: Rogue
     sorcerer: Sorcerer
-    wizard: Wizard
   CREATUREROLES:
     archer: Archer
     blocker: Blocker
@@ -957,7 +944,6 @@ ARCHMAGE:
     noToken: No token selected.
     tooManyLevels: Changing a monster by more than 6 levels is not recommended.
     levelLimits: Level can't increase above 15 or decrease below 0.
-    classChange: "Class change detected, base stats adjusted: {classes}."
   TOOLTIP:
     portrait: Portrait image.<br>Click to edit (may need permissions).
     pcAbility: |

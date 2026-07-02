@@ -95,7 +95,6 @@ export class ItemArchmage extends Item {
     }, null);
 
     // Handle special class triggers
-    await this._handleMonkFormAC(itemToRender);
     await this._handleSong(itemToRender, usageMode);
     await this._handleBreathSpell(itemToRender);
     await this._handleRetainFocus(itemToRender, hitEvalRes, actorUpdateData, chatData);
@@ -724,53 +723,6 @@ export class ItemArchmage extends Item {
   }
 
 
-
-  /**
-   * Check if we are rolling a monk form, add related AC active effect
-   */
-  async _handleMonkFormAC(itemToRender) {
-    if (itemToRender.type != "power") return;
-    if (!this.itemActor?.system.details.detectedClasses?.includes("monk")) return;
-
-    const effects = this.itemActor?.effects;
-    const group = itemToRender.system.group.value?.toLowerCase();
-    let bonusMagnitudeMap = {};
-    bonusMagnitudeMap[game.i18n.localize("ARCHMAGE.MONKFORMS.opening")] = 1;
-    bonusMagnitudeMap[game.i18n.localize("ARCHMAGE.MONKFORMS.flow")] = 2;
-    bonusMagnitudeMap[game.i18n.localize("ARCHMAGE.MONKFORMS.finishing")] = 3;
-    if (!Object.keys(bonusMagnitudeMap).includes(group)) return;
-    let bonusMagnitude = bonusMagnitudeMap[group];
-
-    // Check for other monk AC bonuses
-    let effectsToDelete = [];
-    let alreadyHasBetterBonus = false;
-    if (effects) {
-      effects.forEach(e => {
-        if (e.name == game.i18n.localize("ARCHMAGE.MONKFORMS.aelabel")) {
-          if (Number(e.changes[0].value) <= bonusMagnitude) {
-            effectsToDelete.push(e.id);
-          }
-          else alreadyHasBetterBonus = true;
-        }
-      });
-    }
-    await this.itemActor?.deleteEmbeddedDocuments("ActiveEffect", effectsToDelete);
-
-    if (alreadyHasBetterBonus) return;
-
-    // Now create new AC bonus effect
-    let effectData = {
-      name: game.i18n.localize("ARCHMAGE.MONKFORMS.aelabel"),
-      icon: "icons/svg/shield.svg",
-      changes: [{
-        key: "system.attributes.ac.value",
-        value: bonusMagnitude,
-        mode: CONST.ACTIVE_EFFECT_MODES.ADD
-      }]
-    }
-    MacroUtils.setDuration(effectData, CONFIG.HOLYGRAILWAR.effectDurationTypes.StartOfNextTurn)
-    await this.itemActor?.createEmbeddedDocuments("ActiveEffect", [effectData]);
-  }
 
   async _handleSong(itemToRender, usageMode) {
     if (itemToRender.type != "power") return;

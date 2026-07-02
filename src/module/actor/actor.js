@@ -494,11 +494,6 @@ export class ActorArchmage extends Actor {
       if (data.attributes.xp.automatic) data.attributes.xp.max = _lvl < 8 ? _lvl : _lvl * (_lvl - 6);
     }
 
-    // Find known classes if not already detected - fixes older characters
-    if (!data.details.detectedClasses && data.details.class?.value) {
-      let matchedClasses = ArchmageUtility.detectClasses(data.details.class.value);
-      data.details.detectedClasses = matchedClasses;
-    }
 
 
     // Handle one unique thing.
@@ -2209,44 +2204,6 @@ export class ActorArchmage extends Actor {
         wpn.mWpn1h = mWpn;
       }
 
-      // Compute penalties due to equipment (if classes known)
-      if (this.system.details.detectedClasses) {
-        let shieldPen = new Array();
-        let twohandedPen = new Array();
-        let mWpn1h = new Array();
-        let mWpn2h = new Array();
-        let skilledWarrior = new Array();
-        this.system.details.detectedClasses.forEach(function(item) {
-          shieldPen.push(CONFIG.HOLYGRAILWAR.classes[item].shld_pen);
-          mWpn1h.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_1h);
-          mWpn2h.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_2h);
-          if (CONFIG.HOLYGRAILWAR.classes[item].wpn_2h > CONFIG.HOLYGRAILWAR.classes[item].wpn_1h
-            && CONFIG.HOLYGRAILWAR.classes[item].wpn_2h >= CONFIG.HOLYGRAILWAR.classes.monk.wpn_2h) {
-            // Handles special case of monk MC with classes that don't benefit from 2h
-            twohandedPen.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_2h_pen);
-          }
-          skilledWarrior.push(CONFIG.HOLYGRAILWAR.classes[item].skilled_warrior)
-        });
-        wpn.shieldPen = Math.max.apply(null, shieldPen);
-        if (twohandedPen.length > 0) wpn.twohandedPen = Math.max.apply(null, twohandedPen);
-        mWpn1h = Math.max.apply(null, mWpn1h);
-        mWpn2h = Math.max.apply(null, mWpn2h);
-        if (skilledWarrior.length > 1 && !skilledWarrior.every(a => a)) {
-          mWpn1h = Math.max(mWpn1h - 2, 4);
-          mWpn2h = Math.max(mWpn2h - 2, 4);
-        }
-        // Only use class values if the current values haven't been tampered with
-        if (this.system.attributes.weapon.melee.twohanded && wpn.mWpn2h == mWpn2h) {
-          wpn.mWpn1h = mWpn1h;
-        }
-        else if (!this.system.attributes.weapon.melee.twohanded && wpn.mWpn1h == mWpn1h) {
-          wpn.mWpn2h = mWpn2h;
-        }
-        else { // Values differ from rules, don't do anything
-          wpn.shieldPen = 0;
-          wpn.twohandedPen = 0;
-        }
-      }
 
       if (changes.system.attributes.weapon.melee.shield !== undefined) {
         // Here we received an update of the shield checkbox
@@ -2312,207 +2269,8 @@ export class ActorArchmage extends Actor {
       data.system.attributes.weapon.melee.dice = `d${mWpn}`;
     }
 
-    else if (changes.system.details?.class !== undefined) {
-      // Here we received an update of the class name for a character
-
-      let matchedClasses = ArchmageUtility.detectClasses(data.system.details.class.value);
-      if (matchedClasses !== null
-        && game.settings.get('watersnake-grail-war', 'automateBaseStatsFromClass')) {
-        // Remove duplicates and Sort to avoid problems with future matches
-        matchedClasses = [...new Set(matchedClasses)].sort();
-
-        // Check that the matched classes actually changed
-        if (this.system.details.detectedClasses !== undefined
-          && JSON.stringify(this.system.details.detectedClasses) == JSON.stringify(matchedClasses)
-          ) {
-          return;
-        }
-
-        // Class changed, alert the user we're about to muck with the base stats
-        ui.notifications.info(game.i18n.format("ARCHMAGE.UI.classChange",
-          { classes: ArchmageUtility.formatClassList(matchedClasses) }));
-
-        // Collect base stats for detected classes
-        let base = {
-          hp: new Array(),
-          ac: new Array(),
-          ac_hvy: new Array(),
-          shld_pen: new Array(),
-          pd: new Array(),
-          md: new Array(),
-          rec: new Array(),
-          rec_num: new Array(),
-          mWpn_1h: new Array(),
-          mWpn_2h: new Array(),
-          rWpn: new Array(),
-          skilledWarrior: new Array()
-        }
-
-        matchedClasses.forEach(function(item) {
-          base.hp.push(CONFIG.HOLYGRAILWAR.classes[item].hp);
-          base.ac.push(CONFIG.HOLYGRAILWAR.classes[item].ac_lgt);
-          if (CONFIG.HOLYGRAILWAR.classes[item].ac_hvy_pen < 0) {base.ac_hvy.push(CONFIG.HOLYGRAILWAR.classes[item].ac_hvy_pen);}
-          else {base.ac_hvy.push(CONFIG.HOLYGRAILWAR.classes[item].ac_hvy);}
-          base.shld_pen.push(CONFIG.HOLYGRAILWAR.classes[item].shld_pen);
-          base.pd.push(CONFIG.HOLYGRAILWAR.classes[item].pd);
-          base.md.push(CONFIG.HOLYGRAILWAR.classes[item].md);
-          base.rec.push(CONFIG.HOLYGRAILWAR.classes[item].rec_die);
-          base.rec_num.push(CONFIG.HOLYGRAILWAR.classes[item].rec_num || 8); // 8 is the default for 1e classes
-          base.mWpn_1h.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_1h);
-          if (CONFIG.HOLYGRAILWAR.classes[item].wpn_2h_pen < 0) {base.mWpn_2h.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_2h_pen);}
-          else {base.mWpn_2h.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_2h);}
-          base.rWpn.push(CONFIG.HOLYGRAILWAR.classes[item].wpn_rngd);
-          base.skilledWarrior.push(CONFIG.HOLYGRAILWAR.classes[item].skilled_warrior);
-        });
-
-        // Combine base stats based on detected classes
-        if (base.skilledWarrior.length == 1) base.skilledWarrior = true;
-        else base.skilledWarrior = base.skilledWarrior.every(a => a);
-        base.hp = (base.hp.reduce((a, b) => a + b, 0) / base.hp.length);
-        base.ac = Math.max.apply(null, base.ac);
-        if (Math.min.apply(null, base.ac_hvy) > 0) base.ac = Math.max.apply(null, base.ac_hvy);
-        base.shld_pen = base.shld_pen.some(a => a < 0);
-        base.pd = Math.max.apply(null, base.pd);
-        base.md = Math.max.apply(null, base.md);
-        if (base.rec.length == 1) base.rec = base.rec[0];
-        else base.rec = (Math.ceil(base.rec.reduce((a, b) => a/2 + b/2) / base.rec.length) * 2);
-        if (base.rec_num.length == 1) base.rec_num = base.rec_num[0];
-        // TODO: placeholder, waiting for final design
-        else base.rec_num = Math.round(base.rec_num.reduce((a, b) => a + b, 0) / base.rec_num.length)
-        base.mWpn_1h = Math.max.apply(null, base.mWpn_1h);
-        base.mWpn_2h_pen = base.mWpn_2h.every(a => a < 0);
-        base.mWpn_2h = Math.max.apply(null, base.mWpn_2h);
-        base.rWpn = Math.max.apply(null, base.rWpn);
-        let jabWpn = 6;
-        let punchWpn = 8;
-        let kickWpn = 10;
-        if (!base.skilledWarrior) {
-          base.mWpn_1h = Math.max(base.mWpn_1h - 2, 4);
-          base.mWpn_2h = Math.max(base.mWpn_2h - 2, 4);
-          base.rWpn = Math.max(base.rWpn - 2, 4);
-          jabWpn -= 2;
-          punchWpn -= 2;
-          kickWpn -= 2;
-        }
-        let lvl = this.system.attributes.level.value;
-        let shield = false;
-        let dualwield = false;
-        let twohanded = false;
-        // Pick best weapon (and possibly shield)
-        base.mWpn = base.mWpn_1h;
-        if (matchedClasses.includes("monk")) {
-          dualwield = true;
-        }
-        else if (!base.shld_pen) {
-          base.ac += 1;
-          shield = true;
-        }
-        else if (!base.mWpn_2h_pen && base.mWpn_2h > base.mWpn_1h) {
-          base.mWpn = base.mWpn_2h;
-          twohanded = true;
-        }
-
-        // Assign computed values
-        data.system.attributes = {
-          hp: {base: base.hp},
-          ac: {base: base.ac},
-          pd: {base: base.pd},
-          md: {base: base.md},
-          recoveries: {
-            dice: `d${base.rec}`,
-            base: base.rec_num
-            },
-          weapon: {
-            melee: {
-              dice: `d${base.mWpn}`,
-              shield: shield,
-              dualwield: dualwield,
-              twohanded: twohanded
-            },
-            ranged: {dice: `d${base.rWpn}`},
-            jab: {dice: `d${jabWpn}`},
-            punch: {dice: `d${punchWpn}`},
-            kick: {dice: `d${kickWpn}`}
-          }
-        };
-
-        // Handle extra recoveries for fighters
-        if (matchedClasses.includes("fighter")) {
-          data.system.attributes.recoveries.base += 1;
-        }
-
-        // Set Key Modifier for multiclasses
-        if (matchedClasses.length == 2) {
-          // Check that we have the data stored - just in case
-          if (CONFIG.HOLYGRAILWAR.keyModifiers[matchedClasses[0]]
-            && CONFIG.HOLYGRAILWAR.keyModifiers[matchedClasses[0]][matchedClasses[1]]) {
-            let km = CONFIG.HOLYGRAILWAR.keyModifiers[matchedClasses[0]][matchedClasses[1]];
-            data.system.attributes.keyModifier = { mod1: km[0], mod2: km[1] };
-          } else console.log("Unknown Key Modifier for "+matchedClasses.toString());
-        } else {
-          // Just set Str/Str, equivalent to disabling the Key Modifier
-          data.system.attributes.keyModifier = { mod1: 'str', mod2: 'str' };
-        }
-
-        // Enable resources based on detected classes
-        data.system.resources = {
-          perCombat: {
-            momentum: {enabled: matchedClasses.includes("rogue")},
-            commandPoints: {enabled: matchedClasses.includes("commander")},
-            focus: {enabled: matchedClasses.includes("occultist")},
-          },
-          spendable: {ki: {enabled: matchedClasses.includes("monk")}}
-        };
-        let busyResources = [];
-        for (let cl of matchedClasses) {
-          if (CONFIG.HOLYGRAILWAR.classResources[cl]) {
-            this._setUpCustomResources(data, CONFIG.HOLYGRAILWAR.classResources[cl], busyResources);
-          }
-        }
-
-        // Enable the triggers tab for certain classes
-        data.flags ||= {}
-        data.flags['watersnake-grail-war'] ||= {}
-        data.flags['watersnake-grail-war'].showTriggersTab = matchedClasses.some(x => ["bard", "commander", "occultist"].includes(x));
-      }
-      // Store matched classes for future reference
-      data.system.details.detectedClasses = matchedClasses;
-    }
 
     return data;
-  }
-
-  // Set up custom resources
-  _setUpCustomResources(data, resources, resourcesToAvoid) {
-    for (let res of resources) {
-      // Find a free custom resource
-      let resId = undefined;
-      let alreadyConfigured = false;
-      for (let key of Object.keys(this.system.resources.spendable)) {
-        if (key == "ki") continue;
-        let candidate = this.system.resources.spendable[key];
-        if (candidate.label == res[0] && candidate.enabled) {
-          alreadyConfigured = true;
-          break;
-        } else if (resourcesToAvoid.includes(key)) {
-          continue;
-        } else if (!candidate.enabled) {
-          resId = key;
-          resourcesToAvoid.push(resId);
-          break;
-        }
-      }
-      if (alreadyConfigured) break;
-
-      // Configure resource
-      data.system.resources.spendable[resId] = {
-        current: res.length > 2 ? res[2] : 0,
-        enabled: true,
-        label: res[0],
-        max: res.length > 3 ? res[3] : 0,
-        rest: res[1]
-      };
-    }
   }
 
   /** @override */
@@ -2656,8 +2414,6 @@ export class ActorArchmage extends Actor {
   isMulticlass() {
     // If not a character can't be MC
     if (this.type != "character") return false;
-    // If we know two or more classes, is MC
-    if (this.system.details.detectedClasses?.length > 1) return true;
     // If the KM is configured, is MC - catches 3pp classes
     if (this.system.attributes.keyModifier.mod1 != this.system.attributes.keyModifier.mod2) return true;
     // Is not MC

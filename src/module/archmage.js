@@ -413,15 +413,6 @@ Hooks.once('init', async function() {
     type: Boolean
   });
 
-  game.settings.register('watersnake-grail-war', 'automateBaseStatsFromClass', {
-    name: "ARCHMAGE.SETTINGS.automateBaseStatsFromClassName",
-    hint: "ARCHMAGE.SETTINGS.automateBaseStatsFromClassHint",
-    scope: 'client',
-    config: true,
-    default: true,
-    type: Boolean
-  });
-
   game.settings.register('watersnake-grail-war', 'sheetTooltips', {
     name: "ARCHMAGE.SETTINGS.sheetTooltipsName",
     hint: "ARCHMAGE.SETTINGS.sheetTooltipsHint",
@@ -709,8 +700,7 @@ Hooks.once('ready', async () => {
     "creatureTypes",
     "creatureSizes",
     "creatureStrengths",
-    "creatureRoles",
-    "classList"
+    "creatureRoles"
   ].forEach(s => {
     for (const [k, v] of Object.entries(CONFIG.HOLYGRAILWAR[s])) {
       CONFIG.HOLYGRAILWAR[s][k] = game.i18n.localize(v);
@@ -851,7 +841,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
         'allowRerolls',
         'rechargeOncePerDay',
         'optionalBaseCritRange',
-        'automateBaseStatsFromClass',
         'showPrivateGMAttackRolls',
       ],
       highlights: [

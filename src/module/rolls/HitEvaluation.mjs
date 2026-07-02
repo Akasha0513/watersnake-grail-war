@@ -71,13 +71,6 @@ export default class HitEvaluation {
                       $roll_self.addClass('dc-fail');
                       hasFumbled = true;
                     }
-                    // Barbarian crit.
-                    else if (attacker?.system?.details.detectedClasses?.includes("barbarian")
-                      && roll_data.formula.match(/^2d20kh/g) && part.results[0].result > 10
-                      && part.results[1].result > 10) {
-                      $roll_self.addClass('dc-crit');
-                      hasCrit = true;
-                    }
                     // Natural 2, if dual-wielding.
                     else if (attacker && attacker?.type === 'character'
                       && attacker.system.attributes.weapon.melee.dualwield
