@@ -23,11 +23,6 @@
       </div>
       <!-- Resource Settings -->
       <div class="unit unit--resources">
-        <!-- Stoke -->
-        <div v-if="CONFIG.HOLYGRAILWAR.is2e && actor?.system?.resources?.spendable?.stoke" class="settings-resource">
-          <input type="checkbox" name="system.resources.spendable.stoke.enabled" v-model="actor.system.resources.spendable.stoke.enabled">
-          <strong class="unit-subtitle">{{localize('ARCHMAGE.CHARACTER.RESOURCES.stoke')}}</strong>
-        </div>
         <!-- Custom -->
         <div v-for="(resource, r) in resourcesCustom" :key="r" class="settings-resource" :data-key="r">
           <input type="checkbox" :name="concat('system.resources.spendable.', r, '.enabled')" v-model="resource.enabled">
@@ -64,7 +59,6 @@ export default {
       let resources = {};
       if (this.actor.system?.resources?.spendable) {
         for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-          if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
           if (k.includes('custom')) resources[k] = v;
         }
       }

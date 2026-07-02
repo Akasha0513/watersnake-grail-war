@@ -619,9 +619,7 @@ export class ArchmageUtility {
       return undefined;
     }
 
-    const isSecondEdition = game.settings.get('watersnake-grail-war', 'secondEdition');
     const keyPrefix = "ARCHMAGE.TOOLTIP.";
-    const secondEditionSuffix = "V2";
 
     var format = {};
     var out = "";
@@ -636,12 +634,7 @@ export class ArchmageUtility {
     }
 
     for (const key of keys) {
-      var val = "";
-
-      val = game.i18n.format(keyPrefix + key + secondEditionSuffix, format);
-      if (!isSecondEdition || val.startsWith(keyPrefix)) {
-        val = game.i18n.format(keyPrefix + key, format);
-      }
+      var val = game.i18n.format(keyPrefix + key, format);
 
       out += "\n" + val.trim();
     }

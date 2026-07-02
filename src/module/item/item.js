@@ -66,10 +66,6 @@ export class ItemArchmage extends Item {
     // Handle crit modifier
     const crit_mod = await this._rollCritMod(itemToRender);
 
-    // Handle special class triggers
-    await this._handleFighterCombatRhythm(itemToRender, actorUpdateData);  // TODO: deprecated, remove at some future point far from end of 2e playtest
-    await this._handleFighterMomentum(itemToRender);
-
     // Check targets.
     let targets = await this._rollMultiTargets(itemToRender);
 
@@ -103,20 +99,6 @@ export class ItemArchmage extends Item {
     await this._handleSong(itemToRender, usageMode);
     await this._handleBreathSpell(itemToRender);
     await this._handleRetainFocus(itemToRender, hitEvalRes, actorUpdateData, chatData);
-
-    // Set a flag for stoke adjustments.
-    if (CONFIG.HOLYGRAILWAR.is2e) {
-      if (this.itemActor?.type === 'npc' && this.itemActor?.system?.resources?.spendable?.stoke?.enabled) {
-        if (game.combat?.combatant) {
-          const combatantUuid = game.combat.combatant?.actor?.uuid;
-          const breathString = game.i18n.localize('ARCHMAGE.CHAT.breath').toLocaleLowerCase().trim();
-          if (combatantUuid && combatantUuid == this.itemActor.uuid && this.name.toLocaleLowerCase().includes(breathString)) {
-            // This will be set to false at the start of the actor's turn.
-            await this.itemActor.update({ "system.resources.spendable.stoke.breathUsed": true });
-          }
-        }
-      }
-    }
 
     // Run embedded macro.
     let macro = await this._rollExecuteMacro(itemToRender, itemUpdateData, actorUpdateData, chatData, hitEvalRes, sequencerAnim, token, usageMode);
@@ -435,28 +417,6 @@ export class ItemArchmage extends Item {
           if (stop) return true;
         }
 
-        // Combat Rhythm - TODO: deprecated, remove at some future point far from end of 2e playtest
-        else if (res.perCombat.rhythm?.enabled &&
-            (str == game.i18n.localize("ARCHMAGE.CHARACTER.RHYTHMCHOICES.offense").toLowerCase()
-            || str == game.i18n.localize("ARCHMAGE.CHARACTER.RHYTHMCHOICES.defense").toLowerCase())) {
-          let path = 'system.resources.perCombat.rhythm.current';
-          let msg = game.i18n.localize("ARCHMAGE.UI.errNoRhythm");
-          let resObj =  res.perCombat.rhythm;
-          let opt = (str == game.i18n.localize("ARCHMAGE.CHARACTER.RHYTHMCHOICES.offense").toLowerCase()) ? "offense" : "defense";
-          let stop = await this._rollProcessResource(actorUpdateData, itemUpdateData, path, sign, null, resObj, msg, opt);
-          if (stop) return true;
-        }
-
-        // Bravado
-        if (res.perCombat.bravado.enabled && num &&
-            str == game.i18n.localize("ARCHMAGE.CHARACTER.RESOURCES.bravado").toLowerCase()) {
-          let path = 'system.resources.perCombat.bravado.current';
-          let msg = game.i18n.localize("ARCHMAGE.UI.errNotEnoughBravado");
-          let resObj = res.perCombat.bravado;
-          let stop = await this._rollProcessResource(actorUpdateData, itemUpdateData, path, sign, num, resObj, msg);
-          if (stop) return true;
-        }
-
         // Recoveries
         else if ((str == game.i18n.localize("ARCHMAGE.CHARACTER.RESOURCES.recoveries").toLowerCase()
             || str == game.i18n.localize("ARCHMAGE.CHARACTER.RESOURCES.recovery").toLowerCase()) && num) {
@@ -536,7 +496,7 @@ export class ItemArchmage extends Item {
       }
     }
 
-    // Binary (and rhythm) case
+    // Binary case
     else {
       if (sign) {
         // Resource update case
@@ -812,40 +772,6 @@ export class ItemArchmage extends Item {
     await this.itemActor?.createEmbeddedDocuments("ActiveEffect", [effectData]);
   }
 
-  // TODO: deprecated, remove at some future point far from end of 2e playtest
-  async _handleFighterCombatRhythm(itemToRender, actorUpdateData) {
-    if (itemToRender.type != "power") return;
-    if (!this.itemActor?.system.resources?.perCombat?.rhythm?.enabled) return;
-    if (!actorUpdateData["system.resources.perCombat.rhythm.current"]) return;
-
-    // If this power sets offense and we are in defense and vice-versa roll 2d20kh.
-    if (
-      (this.itemActor.system.resources.perCombat.rhythm.current == "defense"
-      && actorUpdateData["system.resources.perCombat.rhythm.current"] == "offense") ||
-      (this.itemActor.system.resources.perCombat.rhythm.current == "offense"
-      && actorUpdateData["system.resources.perCombat.rhythm.current"] == "defense")
-    ) {
-      // Replace "1d20" and "d20" in the attack line with "2d20kh"
-      const attackLine = itemToRender.system.attack.value;
-      itemToRender.system.attack.value = attackLine.replace("1d20", "d20").replace("d20", "2d20kh");
-    }
-  }
-
-  async _handleFighterMomentum(itemToRender) {
-    if (!game.settings.get("watersnake-grail-war", "secondEdition")
-      || itemToRender.type != "power"
-      || itemToRender.system.powerSource.value != "class"
-      || !this.itemActor?.system?.details?.detectedClasses?.includes("fighter")
-      || !this.itemActor?.system.resources?.perCombat?.momentum?.enabled
-      || !this.itemActor?.system.resources?.perCombat?.momentum?.current
-      || itemToRender.system.powerSourceName.value.toLowerCase() != game.i18n.localize("fighter").toLowerCase()
-      ) return;
-
-    // Replace "1d20" and "d20" in the attack line with "2d20kh"
-    const attackLine = itemToRender.system.attack.value;
-    itemToRender.system.attack.value = attackLine.replace("1d20", "d20").replace("d20", "2d20kh");
-  }
-
   async _handleSong(itemToRender, usageMode) {
     if (itemToRender.type != "power") return;
     if (!itemToRender.system.sustainedEffect.value) return;
@@ -884,9 +810,6 @@ export class ItemArchmage extends Item {
   }
 
   async _handleBreathSpell(itemToRender){
-    // This is only relevant for 1e
-    if (game.settings.get("watersnake-grail-war", "secondEdition")) return;
-
     if (itemToRender.type != "power") return;
     if (!itemToRender.system.breathWeapon.value) return;
 

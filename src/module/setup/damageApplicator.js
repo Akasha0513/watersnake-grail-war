@@ -189,18 +189,7 @@ export class DamageApplicator {
           };
           const $attackRow = $(element.closest('.card-prop'));
           const targets = Targeting.getTargetsFromRowText(rowText, $attackRow, targetOptions.numTargets, targetOptions.cachedTargets);
-          let addEdToCritRange = false;
-          let addStokeToCritRange = false;
-          if (game.settings.get('watersnake-grail-war', 'secondEdition') && item) {
-            addEdToCritRange = item.system.breathWeapon?.value?.length > 0;
-            if (actor.system.details?.type?.value === 'dragon') {
-              const breathString = game.i18n.localize('ARCHMAGE.CHAT.breath').toLocaleLowerCase().trim();
-              if (item.name.toLocaleLowerCase().includes(breathString)) {
-                  addStokeToCritRange = true;
-              }
-          }
-          }
-          const hitEvaluationResults = HitEvaluation.processRowText(rowText, targets, $attackRow, actor, addEdToCritRange, addStokeToCritRange);
+          const hitEvaluationResults = HitEvaluation.processRowText(rowText, targets, $attackRow, actor, false, false);
 
           if (hitEvaluationResults.defenses.length > 0) {
             // @todo Re-evaluate rolls here.

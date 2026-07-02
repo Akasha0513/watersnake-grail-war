@@ -229,13 +229,9 @@ ARCHMAGE.featTiers = {
 }
 
 ARCHMAGE.numDicePerLevel = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-// ARCHMAGE.numDicePerLevel2e = [0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20];
-// TODO: keep this handy for now until we know where the rules settle
-ARCHMAGE.numDicePerLevel2e = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 // Goes to 15th to support monsters
 ARCHMAGE.tierMultPerLevel = [0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
-ARCHMAGE.tierMultPerLevel2e = [0, 1, 1, 1, 1, 2, 2, 2, 4, 4, 4, 8, 8, 8, 8, 8];
 
 // Animal companion data
 ARCHMAGE.animalCompanion = {
@@ -676,49 +672,11 @@ ARCHMAGE.classes = {
   }
 };
 
-ARCHMAGE.classes2e = {
-  barbarian: {
-    rec_die: 12,
-  },
-  bard: {
-    rec_die: 6,
-  },
-  chaosmage: {},
-  cleric: {
-    ac_hvy_pen: -2,
-    ac_lgt: 11,
-  },
-  commander: {},
-  druid: {},
-  fighter: {},
-  monk: {},
-  necromancer: {},
-  occultist: {},
-  paladin: {},
-  ranger: {
-    ac_lgt: 13,
-    rec_die: 6,
-  },
-  rogue: {},
-  sorcerer: {
-    wpn_2h: 8,
-  },
-  wizard: {}
-}
-
 ARCHMAGE.classResources = {
   // List custom resources to configure for classes that use them
   // Stored as an array of two-element arrays with label and reset
   'chaosmage': [["CM Daily Spells", "full", 2, 2], ["CM Per-Battle Spells", "quick", 1, 1]],
   'druid' : [["TC Daily Spells", "full", 1, 1]]
-}
-
-ARCHMAGE.classResources2e = {
-  // List custom resources to configure for classes that use them - added if 2e enabled
-  // Stored as an array of two-element arrays with label and reset
-  // 'barbarian': [["Frenzy", "quickreset"]], // optional, manually setup via instructions
-  // These were part of the 2e playtest but didn't make the cut
-  // 'bard' : [["Combat Riffs", "quick", 2, 2], ["Healing Magics", "quick", 2, 2], ["Miss Me Effects", "quick", 2, 2]]
 }
 
 ARCHMAGE.keyModifiers = {
@@ -922,44 +880,6 @@ ARCHMAGE.baselineMonsterStats = {
     triple: {
       damage: [12, 15, 21, 30, 42, 54, 63, 84, 114, 150, 174, 210, 270, 330, 405],
       hp: [60, 81, 108, 135, 162, 216, 270, 324, 432, 540, 648, 864, 1080, 1296, 1728]
-    }
-  }
-}
-
-ARCHMAGE.baselineMonsterStats2e = {
-  // arrays indexed by level, 0 to 14
-  attackBonuses: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
-  ac: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
-  pd: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
-  md: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-  init: [3, 3, 6, 6, 6, 9, 9, 9, 12, 12, 12, 15, 15, 15, 18],
-
-  byStrength: {
-    normal: {
-      damage: [6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120, 160],
-      hp: [25, 30, 40, 50, 60, 80, 100, 120, 160, 200, 240, 320, 400, 480, 640]
-    },
-    mook: {
-      damage: [3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 30, 40, 50, 60, 80],
-      hp: [6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120, 160]
-    },
-    weakling: {
-      damage: [3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 30, 40, 50, 60, 80],
-      hp: [13, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120, 160, 200, 240, 320]
-    },
-    elite: {
-      damage: [9, 12, 15, 18, 22, 30, 38, 45, 60, 75, 90, 120, 150, 180, 240],
-      hp: [38, 45, 60, 75, 90, 120, 150, 180, 240, 300, 360, 480, 600, 720, 960]
-    },
-    double: {
-      damage: [9, 12, 15, 18, 22, 30, 35, 45, 60, 75, 90, 120, 150, 180, 240],
-      damageSecondary: [3, 4, 5, 6, 8, 10, 15, 15, 20, 25, 30, 40, 50, 60, 80],
-      hp: [50, 60, 80, 100, 120, 160, 200, 240, 320, 400, 480, 640, 800, 960, 1280]
-    },
-    triple: {
-      damage: [9, 12, 15, 18, 22, 30, 35, 45, 60, 75, 90, 120, 150, 180, 240],
-      damageSecondary: [9, 12, 15, 18, 22, 30, 35, 45, 60, 75, 90, 120, 150, 180, 240],
-      hp: [75, 90, 120, 150, 180, 240, 300, 360, 480, 600, 720, 960, 1200, 1440, 1920]
     }
   }
 }

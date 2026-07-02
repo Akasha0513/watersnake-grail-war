@@ -171,7 +171,7 @@ import {
 } from '@/components';
 const props = defineProps(['item', 'context']);
 
-const disengageKey = CONFIG.HOLYGRAILWAR.is2e ? 'ARCHMAGE.ITEM.disengageBonus' : 'ARCHMAGE.ITEM.disengageInitBonus';
+const disengageKey = 'ARCHMAGE.ITEM.disengageInitBonus';
 </script>
 
 <style lang="css" module>

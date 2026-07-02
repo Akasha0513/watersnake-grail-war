@@ -169,18 +169,7 @@ export class ArchmagePowerSheetV2 extends VueRenderingMixin(ArchmageBaseItemShee
    */
   async _enrichPowers(context, enrichmentOptions, editorOptions) {
     // Enrich other fields.
-    const spellFields = CONFIG.HOLYGRAILWAR.is2e ? [
-      'spellLevel2',
-      'spellLevel3',
-      'spellLevel4',
-      'spellLevel5',
-      'spellLevel6',
-      'spellLevel7',
-      'spellLevel8',
-      'spellLevel9',
-      'spellLevel10',
-      'spellLevel11',
-    ] : [
+    const spellFields = [
       'spellLevel3',
       'spellLevel5',
       'spellLevel7',

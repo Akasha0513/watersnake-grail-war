@@ -452,15 +452,6 @@ Actor:
         focus:
           enabled: false
           current: false
-        rhythm:
-          enabled: false
-          current: 'none'
-          default: 'none'
-          secondEdition: true
-        bravado:
-          enabled: false
-          current: 0
-          secondEdition: true
       spendable:
         ki:
           enabled: false
@@ -492,10 +483,6 @@ Actor:
       powerSpell3: false
       powerSpell4: false
       skills: false
-      # 2E incrementals
-      recovery: false
-      skillInitiative: false
-      abilMultiplier: false
     coins:
       platinum: 0
       gold: 0
@@ -727,15 +714,6 @@ Actor:
         focus:
           enabled: false
           current: false
-        rhythm:
-          enabled: false
-          current: 'none'
-          default: 'none'
-          secondEdition: true
-        bravado:
-          enabled: false
-          current: 0
-          secondEdition: true
       spendable:
         ki:
           enabled: false
@@ -767,10 +745,6 @@ Actor:
       powerSpell3: false
       powerSpell4: false
       skills: false
-      # 2E incrementals
-      recovery: false
-      skillInitiative: false
-      abilMultiplier: false
     coins:
       platinum: 0
       gold: 0
@@ -1002,15 +976,6 @@ Actor:
         focus:
           enabled: false
           current: false
-        rhythm:
-          enabled: false
-          current: 'none'
-          default: 'none'
-          secondEdition: true
-        bravado:
-          enabled: false
-          current: 0
-          secondEdition: true
       spendable:
         ki:
           enabled: false
@@ -1042,10 +1007,6 @@ Actor:
       powerSpell3: false
       powerSpell4: false
       skills: false
-      # 2E incrementals
-      recovery: false
-      skillInitiative: false
-      abilMultiplier: false
     coins:
       platinum: 0
       gold: 0

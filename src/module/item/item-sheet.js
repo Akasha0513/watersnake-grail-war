@@ -48,9 +48,6 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
   async getData(options) {
     const context = super.getData(options);
 
-    // Edition
-    context.secondEdition = game.settings.get("watersnake-grail-war", "secondEdition");
-
     // Sequencer support
     context.sequencerEnabled = game.modules.get("sequencer")?.active;
 

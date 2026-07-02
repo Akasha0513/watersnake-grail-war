@@ -8,8 +8,6 @@ ARCHMAGE:
   activeEffects: Active Effects
   add: Add
   adventurer: Adventurer
-  arc: Arc
-  arc-desperate: Arc/Desperate
   at-will: At-Will
   attack: Attack
   attackMod: Attack Modifier
@@ -215,7 +213,6 @@ ARCHMAGE:
   SETTINGS:
     newSetting: New!
     groups:
-      edition: Edition Rules
       automation: Automation
       appearance: Appearance
       accessibility: Accessibility
@@ -254,8 +251,6 @@ ARCHMAGE:
     allowRerollsName: Allow dice rerolls
     optionalBaseCritRangeName: Crit 18+
     optionalBaseCritRangeHint: Optional rule expanding everyone's base crit range to 18+ instead of 20.
-    secondEditionHint: Turn this on to use the 13th Age second edition rules, off if you'd prefer the first edition rules.
-    secondEditionName: Use 2e Rules
     ShowDebugLogsHint: Turn this on for bug reports
     ShowDebugLogsName: Show debug logs?
     showDefensesInChatHint: Enable this to display a list of targeted defenses in the attack line of chat power cards.
@@ -286,7 +281,6 @@ ARCHMAGE:
     showToken: 'Show Token'
     showTokenTitle: 'Token: {name}'
     RESOURCES:
-      bravado: Bravado
       commandPoint: Command Point
       commandPoints: Command Points
       commandPointsGained: Gained {points} command points.
@@ -310,12 +304,6 @@ ARCHMAGE:
       rerolls: Rerolls
       rerollSave: Reroll Save
       rerollSaveDesc: Reroll a save
-      rhythm: Combat Rhythm
-      stoke: Stoke
-    RHYTHMCHOICES:
-      none: None
-      offense: Offense
-      defense: Defense
   CHARACTERFLAGS:
     averageRecoveriesHint: Average results for recovery rolls instead of rolling them.
     averageRecoveriesName: Average Recovery Rolls
@@ -453,7 +441,6 @@ ARCHMAGE:
     NextTurnFilter: until the \w* of \w* next turn
   INCREMENTALS:
     abilityScoreBonusHint: +1 to 3 abilities (3rd/6th/9th Level)
-    abilityScoreBonus2eHint: +1 to 3/4/5 ability scores (3rd/6th/9th Level)
     abilityScoreBonusName: Ability Score Bonus
     classFeatureHint: If you have a class feature that improves every level, bump up its effective level by one
     classFeatureName: Class Feature
@@ -860,7 +847,6 @@ ARCHMAGE:
     vulnerable: Vulnerability to {vulns}
     vulnerableTooltip: The &ldquo;vulnerable&rdquo; condition is present but a type is not specified.
     vulnerableCondition: condition
-    vulnerableText2e: "possibly {damage} damage"
     vulnerableText1e: "crit range may be expanded"
   TERRAINS:
     label: Terrains Present
@@ -953,13 +939,11 @@ ARCHMAGE:
     targeted: Targeted
     selected: Selected
     errMacroSyntax: There was an error in your macro syntax. See the console (F12) for details.
-    errNotEnoughBravado: You don't have enough Bravado to use this power. Use anyway?
     errNotEnoughCP: You don't have enough Command Points to use this command. Use anyway?
     errNotEnoughKi: You don't have enough Ki to use this power. Use anyway?
     errNoMomentum: You need Momentum to use this power. Use anyway?
     errNoFocus: You need Focus to use this power. Use anyway?
     errNoRecoveries: You don't have any recoveries left. Use anyway?
-    errNoRhythm: You need to enter your Combat Rhythm to use this power. Use anyway?
     errNoCustomResource: "You don't have enough {res}. Use anyway?"
     errNotInteger: must be an integer number
     errNoInitiativeOutsideCombat: Can't roll initiative without an encounter in the combat tracker.

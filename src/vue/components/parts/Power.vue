@@ -80,25 +80,12 @@ export default {
       return this.actor?.flags?.['watersnake-grail-war']?.diceFormulaMode ?? 'short';
     },
     powerDetailFields() {
-      const spellFields = game.settings.get("watersnake-grail-war", "secondEdition")
-        ? [
-          'spellLevel2',
-          'spellLevel3',
-          'spellLevel4',
-          'spellLevel5',
-          'spellLevel6',
-          'spellLevel7',
-          'spellLevel8',
-          'spellLevel9',
-          'spellLevel10',
-          'spellLevel11',
-        ]
-        : [
-          'spellLevel3',
-          'spellLevel5',
-          'spellLevel7',
-          'spellLevel9',
-        ]
+      const spellFields = [
+        'spellLevel3',
+        'spellLevel5',
+        'spellLevel7',
+        'spellLevel9',
+      ]
       let powerFields = [
         'trigger',
         'sustainOn',

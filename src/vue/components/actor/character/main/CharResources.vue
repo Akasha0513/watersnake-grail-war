@@ -49,10 +49,6 @@ export default {
         value: 0,
         max: 0
       },
-      stoke: {
-        enabled: false,
-        current: 0,
-      },
       rerolls: {
         AC: {
           value: 0,
@@ -62,22 +58,16 @@ export default {
           value: 0,
           max: 0
         }
-      },
-      rhythm: 'none',
-      bravado: 0
+      }
     }
   },
   computed: {
     customResources() {
       let resources = {};
       for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-        if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
         if (k.includes('custom') && v.enabled) resources[k] = v;
       }
       return resources;
-    },
-    secondEdition() {
-      return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
     },
     resourceCount() {
       let count = 0;
@@ -86,11 +76,6 @@ export default {
       if (this.actor.system.resources.spendable?.rerolls?.enabled) count++;
       if (this.actor.system.resources.perCombat?.focus?.enabled) count++;
       if (this.actor.system.resources.perCombat?.momentum?.enabled) count++;
-      if ( game.settings.get('watersnake-grail-war', 'secondEdition') ) {
-        if (this.actor.system.resources.perCombat?.rhythm?.enabled) count++;
-        if (this.actor.system.resources.spendable?.stoke?.enabled) count++;
-        if (this.actor.system.resources.perCombat?.bravado?.enabled) count++;
-      }
       return count;
     },
     customResourceCount() {
@@ -108,11 +93,6 @@ export default {
       this.focus = this.actor.system.resources.perCombat?.focus?.current;
       this.ki = this.actor.system.resources.spendable?.ki;
       this.rerolls = this.actor.system.resources.spendable?.rerolls;
-      if ( game.settings.get('watersnake-grail-war', 'secondEdition') ) {
-        this.stoke = this.actor.system.resources.spendable?.stoke;
-        this.rhythm = this.actor.system.resources.perCombat?.rhythm?.current;
-        this.bravado = this.actor.system.resources.perCombat?.bravado?.current;
-      }
     }
   },
   watch: {

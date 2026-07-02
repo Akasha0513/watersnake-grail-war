@@ -49,16 +49,11 @@ export async function combatTurn(combat, context, options) {
 
     // Execute start/end of turn macros
     await executeLifecycleMacro(endCombatant, "endOfTurn");
-    await _add2eFighterMomentum(endCombatant);
     await executeLifecycleMacro(startCombatant, "startOfTurn");
 
     // 13th Age의 "지속효과 턴 알림" 카드(handleTurnEffects/handleRoundEffects)는 제거됨.
     // 성배전쟁 상태이상 AE는 duration/save-ends 플래그를 쓰지 않아, 매 턴 "unknown duration"
     // 카드가 반복 출력되던 노이즈를 없애기 위함.
-    if (options.direction < 0) return;
-    if (CONFIG.HOLYGRAILWAR.is2e) {
-        await handleStoke(combat, context, options);
-    }
 }
 
 export async function combatRound(combat, context, options) {
@@ -73,55 +68,12 @@ export async function combatRound(combat, context, options) {
 }
 
 export async function preDeleteCombat(combat, context, options) {
-    await cleanupStoke(combat, context, options);
     $('.archmage-escalation-display').addClass('hide');
     // 전투 종료 시 상태이상(AE) 자동삭제 및 "End of Battle Effects" 카드는 제거됨.
     // (사용자 요청: 전투가 끝나도 상태이상을 유지한다.)
 }
 
-async function handleStoke(combat, context, options) {
-    const endCombatant = combat.combatant;
-    const {enabled, current, breathUsed} = endCombatant?.actor?.system?.resources?.spendable?.stoke ?? {};
-    if (endCombatant?.actor?.type === 'npc' && enabled) {
-        const stokeDelta = breathUsed ? -1 : 1;
-        const newCurrent = Math.max(0, (current ?? 0) + stokeDelta);
-        await endCombatant.actor.update({
-            'system.resources.spendable.stoke.current': newCurrent,
-            'system.resources.spendable.stoke.breathUsed': false
-        });
-        // Show scrolling text for the update.
-        endCombatant.actor._showScrollingText(stokeDelta, game.i18n.localize('ARCHMAGE.CHARACTER.RESOURCES.stoke'), {}, '#1776D5');
-    }
-}
-
-async function cleanupStoke(combat, context, options) {
-    for (const c of combat.combatants) {
-        // If the combatant has a stoke resource, reset it
-        if (c?.actor?.system?.resources?.spendable?.stoke?.enabled) {
-            await c.actor.update({
-                'system.resources.spendable.stoke.current': 0,
-                'system.resources.spendable.stoke.breathUsed': false
-            });
-        }
-    }
-}
-
 /* -------------------------------------------- */
-
-function saveEndsNameToTarget(saveEnds) {
-    let target = 11;
-    if (saveEnds === "EasySaveEnds") {
-        target = 6;
-    } else if (saveEnds === "NormalSaveEnds") {
-        target = 11;
-    } else if (saveEnds === "HardSaveEnds") {
-        target = 16;
-    }
-    return target;
-}
-
-/* -------------------------------------------- */
-
 
 async function executeLifecycleMacro(combatant, hookName) {
     // If this isn't the actor's player, emit a socket request for that player to execute the hook
@@ -156,17 +108,3 @@ async function executeLifecycleMacro(combatant, hookName) {
     }
 }
 
-async function _add2eFighterMomentum(combatant) {
-    // Pseudo combatants may not have an actor.
-    if (!combatant?.actor) return;
-
-    // Only woks in 2e and for fighters
-    if (!(game.settings.get("watersnake-grail-war", "secondEdition") && combatant.actor?.system?.details?.detectedClasses?.includes("fighter"))) return;
-
-    // Update actor's resource
-    let updateData = {}
-    if (combatant.actor?.system.resources?.perCombat?.momentum?.enabled) {
-      updateData['system.resources.perCombat.momentum.current'] = true;
-    }
-    await combatant.actor.update(updateData);
-}

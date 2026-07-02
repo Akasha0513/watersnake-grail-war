@@ -133,9 +133,6 @@ export default {
     Progress
   },
   computed: {
-    secondEdition() {
-      return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
-    },
     // 설정 토글(플래그) — 임시 HP/MP 표시, 마스터 급 표시
     showTempHp() { return this.actor.flags?.['watersnake-grail-war']?.showTempHp ?? false; },
     showTempMp() { return this.actor.flags?.['watersnake-grail-war']?.showTempMp ?? false; },

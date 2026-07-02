@@ -29,18 +29,10 @@ export default {
   computed: {},
   methods: {
     getIncrementalTitle(incremental) {
-      if (incremental == 'abilityScoreBonus') {
-        if (game.settings.get('watersnake-grail-war', 'secondEdition')) {
-          incremental = `${incremental}2e`;
-        }
-      }
       return `ARCHMAGE.INCREMENTALS.${incremental}Hint`;
     },
     getOrderedIncrementals(actor) {
       let incrementalKeys = ['abilityScoreBonus', 'skills', 'extraMagicItem', 'feat', 'talent', 'hp', 'iconRelationshipPoint', 'powerSpell1', 'powerSpell2', 'powerSpell3', 'powerSpell4'];
-      if (game.settings.get("watersnake-grail-war", "secondEdition")) {
-        incrementalKeys = ['abilityScoreBonus', 'classFeature', 'feat', 'hp', 'extraMagicItem', 'md', 'pd', 'powerSpell1', 'skillInitiative', 'talent', 'abilMultiplier'];
-      }
       let newIncrementalArray = {};
       incrementalKeys.forEach(e => newIncrementalArray[e] = actor.system.incrementals[e]);
       return newIncrementalArray;

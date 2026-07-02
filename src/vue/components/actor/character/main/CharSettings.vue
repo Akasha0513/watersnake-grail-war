@@ -189,7 +189,6 @@ export default {
     resourcesCustom() {
       let resources = {};
       for (let [k,v] of Object.entries(this.actor.system.resources.spendable)) {
-        if ( v.secondEdition && !game.settings.get('watersnake-grail-war', 'secondEdition') ) continue;
         if (k.includes('custom')) resources[k] = v;
       }
       return resources;

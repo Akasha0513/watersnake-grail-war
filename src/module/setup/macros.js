@@ -52,8 +52,7 @@ export class ArchmageMacros {
     let penalty = -4;
 
     // Reduce the penalty if we have the (1e) champion feat
-    if (game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'champion')[0].isActive.value
-      && !game.settings.get('watersnake-grail-war', 'secondEdition')) {
+    if (game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'champion')[0].isActive.value) {
       penalty = -2;
     }
 
@@ -269,42 +268,21 @@ export class ArchmageMacros {
     let effects = [];
     let bonus = 2;
 
-    const is2e = game.settings.get("watersnake-grail-war", "secondEdition");
-    const shieldEquipped = actor.system.attributes?.weapon?.melee?.shield ?? false;
     const feats = {
       adventurer: game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'adventurer')[0].isActive.value,
       champion: game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'champion')[0].isActive.value,
       epic: game.holygrailwar.MacroUtils.getFeatsByTier(archmage.item, 'epic')[0].isActive.value,
     };
-    if (is2e) {
-      // Calculate bonus.
-      bonus = !shieldEquipped ? 1 : 2;
-      if (feats.adventurer) {
-        bonus = !shieldEquipped ? 2 : 3;
-      }
-      // Apply to AC.
-      effects.push({ key: "system.attributes.ac.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      // Champion and/or Epic feat applies to PD.
-      if (feats.champion || feats.epic) {
-        effects.push({ key: "system.attributes.pd.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      }
-      // Epic feat applies to MD.
-      if (feats.epic) {
-        effects.push({ key: "system.attributes.md.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      }
+    // If the champion feat in active increase the bonus
+    if (feats.champion) bonus = 3;
+    effects.push({ key: "system.attributes.ac.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
+    // If the adventurer feat in active apply to PD
+    if (feats.adventurer) {
+      effects.push({ key: "system.attributes.pd.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
     }
-    else {
-      // If the champion feat in active increase the bonus
-      if (feats.champion) bonus = 3;
-      effects.push({ key: "system.attributes.ac.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      // If the adventurer feat in active apply to PD
-      if (feats.adventurer) {
-        effects.push({ key: "system.attributes.pd.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      }
-      // If the epic feat in active apply to MD
-      if (feats.epic) {
-        effects.push({ key: "system.attributes.md.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
-      }
+    // If the epic feat in active apply to MD
+    if (feats.epic) {
+      effects.push({ key: "system.attributes.md.value", value: bonus, mode: CONST.ACTIVE_EFFECT_MODES.ADD });
     }
 
     let effectData = {

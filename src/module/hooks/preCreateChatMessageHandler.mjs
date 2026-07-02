@@ -108,24 +108,6 @@ export default class preCreateChatMessageHandler {
         if (hitEvaluationResults?.vulnerabilities?.length <= 0) return
 
         let effectStr = game.i18n.localize("ARCHMAGE.CHAT.vulnerableText1e");
-        if (CONFIG.HOLYGRAILWAR.is2e) {
-            // Damage: 1x level for mooks or weaklings, 2x level for others
-            let damageAmount = 2*actor.system.attributes.level.value
-            let tooltip = '2*@lvl';
-            const attackerIsMook = actor.system?.details?.role?.value === "mook";
-            const attackerIsWeakling = actor.system?.details?.strength?.value === "weakling";
-            if (attackerIsMook || attackerIsWeakling) {
-                damageAmount /= 2;
-                tooltip = "@lvl";
-            }
-
-            const damage = `
-                <a class="inline-result inline-roll--archmage" data-tooltip-text="${tooltip}">
-                    <i class="fa-solid fa-dice-d20" inert=""></i>
-                    ${damageAmount}
-                </a>`
-            effectStr = game.i18n.format("ARCHMAGE.CHAT.vulnerableText2e", {damage})
-        }
 
         const vulns = hitEvaluationResults.vulnerabilities.map(v => {
             if (v === "vulnerable") return `<abbr data-tooltip="${game.i18n.localize("ARCHMAGE.CHAT.vulnerableTooltip")}">???</abbr>`

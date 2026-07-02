@@ -41,11 +41,7 @@ export default {
       level: {}
     }
   },
-  computed: {
-    secondEdition() {
-      return game.settings.get('watersnake-grail-war', 'secondEdition') === true;
-    }
-  },
+  computed: {},
   methods: { /* See created. */},
   async mounted() {
     this.level = this.actor.system.attributes.level;

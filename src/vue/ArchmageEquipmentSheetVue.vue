@@ -108,7 +108,6 @@ const bonuses = computed(() => {
   let bonuses = {};
   for (let [prop, value] of Object.entries(equipment.value.system.attributes)) {
     if (value.bonus) {
-      if (prop == 'disengage' && game.settings.get("watersnake-grail-war", "secondEdition")) prop = 'disengage&initiative';
       bonuses[prop] = value.bonus;
     }
     else if (prop == 'attack') {

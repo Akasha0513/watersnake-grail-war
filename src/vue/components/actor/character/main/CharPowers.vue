@@ -26,7 +26,7 @@
       <div class="power-group-header">
         <!-- Group title and add button. -->
         <div class="power-header-title grid power-grid">
-          <h2 class="power-group-title unit-title">{{localize(CONFIG.HOLYGRAILWAR.is2e && group === 'ARCHMAGE.daily' ? 'ARCHMAGE.arc' : group)}}</h2>
+          <h2 class="power-group-title unit-title">{{localize(group)}}</h2>
           <div class="item-controls">
             <a class="item-control item-create" data-item-type="power" :data-group-type="groupBy" :data-power-type="groupKey"><i class="fas fa-plus"></i> {{localize('ARCHMAGE.add')}}</a>
           </div>

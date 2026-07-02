@@ -98,16 +98,6 @@ Hooks.once('init', async function() {
   // Preload template partials.
   preloadHandlebarsTemplates();
 
-  game.settings.register("watersnake-grail-war", "secondEdition", {
-    name: "ARCHMAGE.SETTINGS.secondEditionName",
-    hint: "ARCHMAGE.SETTINGS.secondEditionHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-    requiresReload: true
-  });
-
   game.holygrailwar = {
     ActorArchmage,
     ActorArchmageSheetV2,
@@ -208,32 +198,6 @@ Hooks.once('init', async function() {
   });
 
   CONFIG.HOLYGRAILWAR = ARCHMAGE;
-  // Default the 2e constant to false, but the setting will be checked later in the 'ready' hook.
-  CONFIG.HOLYGRAILWAR.is2e = false;
-
-  // Override 2e conditions journals before copying them to CONFIG
-  // We do it here because we want to keep a copy of *all* conditions in ARCHMAGE.statusEffects
-  // in order to be able to e.g. recognize both hindered and hampered
-  if (game.settings.get("watersnake-grail-war", "secondEdition")) {
-
-    // Remove AE from and update vulnerable
-    let id = ARCHMAGE.statusEffects.findIndex(e => e.id == "vulnerable");
-    delete ARCHMAGE.statusEffects[id].changes;
-    ARCHMAGE.statusEffects[id].journal = "uHqgXlfj0rkf0XRE";
-
-    // Update grabbed.
-    id = ARCHMAGE.statusEffects.findIndex(e => e.id == "grabbed");
-    ARCHMAGE.statusEffects[id].journal = "e74tdY4XILWFW9VB";
-
-    // Update stunned
-    id = ARCHMAGE.statusEffects.findIndex(e => e.id == "stunned");
-    ARCHMAGE.statusEffects[id].journal = "2rxwthymp5rl1dqf";
-
-    // Update confused
-    id = ARCHMAGE.statusEffects.findIndex(e => e.id == "confused");
-    ARCHMAGE.statusEffects[id].journal = "21cEqzk92tflpW7O";
-
-  }
 
   // Update status effects.
   function _setArchmageStatusEffects(extended) {
@@ -252,59 +216,24 @@ Hooks.once('init', async function() {
   });
   _setArchmageStatusEffects(game.settings.get('watersnake-grail-war', 'extendedStatusEffects'));
 
-  // Update 2e constants
-  if (game.settings.get("watersnake-grail-war", "secondEdition")) {
-    // Update dice number at higher level
-    CONFIG.HOLYGRAILWAR.numDicePerLevel = CONFIG.HOLYGRAILWAR.numDicePerLevel2e;
+  // 2e 제거 이후 1e 경로 고정: 2e 전용 플래그·피트 티어·상태이상 정리.
+  // Remove Mental Phenomenon flag
+  delete FLAGS.characterFlags.dexToInt;
+  // Remove Grim Determination flag
+  delete FLAGS.characterFlags.grimDetermination;
+  // Remove Blessing of Heaven flag
+  delete FLAGS.characterFlags.dexToCha;
 
-    // Update tier multiplier Array
-    CONFIG.HOLYGRAILWAR.tierMultPerLevel = CONFIG.HOLYGRAILWAR.tierMultPerLevel2e;
+  // Remove 11th level feat tier
+  delete CONFIG.HOLYGRAILWAR.featTiers.iconic;
 
-    // Update monster baseline stats
-    CONFIG.HOLYGRAILWAR.baselineMonsterStats = CONFIG.HOLYGRAILWAR.baselineMonsterStats2e;
+  // Remove 2e hindered from context menu status effects
+  let id = CONFIG.statusEffects.findIndex(e => e.id == "hindered");
+  if (id >= 0) CONFIG.statusEffects.splice(id, 1);
 
-    // Remove 1e hampered from context menu status effects
-    let id = CONFIG.statusEffects.findIndex(e => e.id == "hampered");
-    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
-
-    // Update class base stats
-    for (let cl of Object.keys(CONFIG.HOLYGRAILWAR.classes2e)) {
-      for (let k of Object.keys(CONFIG.HOLYGRAILWAR.classes2e[cl])) {
-        CONFIG.HOLYGRAILWAR.classes[cl][k] = CONFIG.HOLYGRAILWAR.classes2e[cl][k];
-      }
-    }
-
-    // Update daily -> arc
-    CONFIG.HOLYGRAILWAR.powerUsages['daily'] = 'ARCHMAGE.arc';
-    CONFIG.HOLYGRAILWAR.powerUsages['daily-desperate'] = 'ARCHMAGE.arc-desperate';
-    CONFIG.HOLYGRAILWAR.equipUsages['daily'] = 'ARCHMAGE.arc';
-    CONFIG.HOLYGRAILWAR.equipUsages['daily-desperate'] = 'ARCHMAGE.arc-desperate';
-    CONFIG.HOLYGRAILWAR.featUsages['daily'] = 'ARCHMAGE.arc';
-
-    // Add additional classResources
-    CONFIG.HOLYGRAILWAR.classResources = foundry.utils.mergeObject(
-      CONFIG.HOLYGRAILWAR.classResources,
-      CONFIG.HOLYGRAILWAR.classResources2e
-    );
-  } else {
-    // Remove Mental Phenomenon flag
-    delete FLAGS.characterFlags.dexToInt;
-    // Remove Grim Determination flag
-    delete FLAGS.characterFlags.grimDetermination;
-    // Remove Blessing of Heaven flag
-    delete FLAGS.characterFlags.dexToCha;
-
-    // Remove 11th level feat tier
-    delete CONFIG.HOLYGRAILWAR.featTiers.iconic;
-
-    // Remove 2e hindered from context menu status effects
-    let id = CONFIG.statusEffects.findIndex(e => e.id == "hindered");
-    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
-
-    // Remove 2e charmed from context menu status effects
-    id = CONFIG.statusEffects.findIndex(e => e.id == "charmed");
-    if (id >= 0) CONFIG.statusEffects.splice(id, 1);
-  }
+  // Remove 2e charmed from context menu status effects
+  id = CONFIG.statusEffects.findIndex(e => e.id == "charmed");
+  if (id >= 0) CONFIG.statusEffects.splice(id, 1);
 
   // Assign the actor class to the CONFIG
   CONFIG.Actor.documentClass = ActorArchmage;
@@ -810,9 +739,6 @@ Hooks.once('ready', async () => {
 
   CONFIG.HOLYGRAILWAR.ActorTabFocusSheet = ActorTabFocusSheet
 
-  // Add a constant for whether or not we're on 2e.
-  CONFIG.HOLYGRAILWAR.is2e = game.settings.get('watersnake-grail-war', 'secondEdition');
-
   // Add effect link drag data
   document.addEventListener("dragstart", event => {
     if ( !event.target.classList.contains("effect-link") ) return;
@@ -912,10 +838,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
   html = $(html);
   // Define groups for organization.
   const groups = [
-    {
-      label: 'ARCHMAGE.SETTINGS.groups.edition',
-      settings: ['secondEdition'],
-    },
     {
       label: 'ARCHMAGE.SETTINGS.groups.automation',
       settings: [
@@ -1181,10 +1103,6 @@ Hooks.on('dropCanvasData', async (canvas, data) => {
 
 async function _applyAE(actor, data) {
   if ( data.type === "condition" ) {
-    // Handle hampered in 2e.
-    if (CONFIG.HOLYGRAILWAR.is2e && data.id === 'hampered') {
-      data.id = 'hindered';
-    }
     // Check for existing statuses.
     let statusEffect = CONFIG.statusEffects.find(x => x.id === data.id || x.id === data.name?.toLowerCase());
     const ends = data.ends ?? "Unknown";

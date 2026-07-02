@@ -180,13 +180,9 @@ export default {
         for (let resourceType of Object.values(this.actor.system.resources)) {
           if (resourceType) {
             for (let [k,resource] of Object.entries(resourceType)) {
-              // Exclude stoke if this is a 1e game.
-              if (CONFIG.HOLYGRAILWAR.is2e || k !== 'stoke') {
-                // Otherwise update the hasResources value.
-                if (resource?.enabled) {
-                  hasResources = true;
-                  break;
-                }
+              if (resource?.enabled) {
+                hasResources = true;
+                break;
               }
             }
           }
