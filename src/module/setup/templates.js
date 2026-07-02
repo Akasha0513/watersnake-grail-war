@@ -18,7 +18,6 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/chat/consumable-card.html",
     "systems/watersnake-grail-war/templates/chat/equipment-card.html",
     "systems/watersnake-grail-war/templates/chat/feat-card.html",
-    "systems/watersnake-grail-war/templates/chat/icon-relationship-card.html",
     "systems/watersnake-grail-war/templates/chat/loot-card.html",
     "systems/watersnake-grail-war/templates/chat/nastierspecial-card.html",
     "systems/watersnake-grail-war/templates/chat/power-card.html",

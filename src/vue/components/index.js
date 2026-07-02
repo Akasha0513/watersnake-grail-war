@@ -41,7 +41,6 @@ export { default as CharAttributes } from '@/components/actor/character/top/Char
 export { default as CharAbilities } from '@/components/actor/character/sidebar/CharAbilities.vue';
 export { default as CharBackgrounds } from '@/components/actor/character/sidebar/CharBackgrounds.vue';
 export { default as CharInitiative } from '@/components/actor/character/sidebar/CharInitiative.vue';
-export { default as CharIconRelationships } from '@/components/actor/character/sidebar/CharIconRelationships.vue';
 export { default as CharOut } from '@/components/actor/character/sidebar/CharOut.vue';
 export { default as CharIncrementals } from '@/components/actor/character/sidebar/CharIncrementals.vue';
 

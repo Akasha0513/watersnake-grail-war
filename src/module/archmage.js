@@ -108,26 +108,6 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register("watersnake-grail-war", "alternateIconRollingMethod", {
-    name: "ARCHMAGE.SETTINGS.alternateIconRollingMethodName",
-    hint: "ARCHMAGE.SETTINGS.alternateIconRollingMethodHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-    requiresReload: false
-  });
-
-  game.settings.register("watersnake-grail-war", "resetIconsOnRest", {
-    name: "ARCHMAGE.SETTINGS.resetIconsOnRestName",
-    hint: "ARCHMAGE.SETTINGS.resetIconsOnRestHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true,
-    requiresReload: false
-  });
-
   game.holygrailwar = {
     ActorArchmage,
     ActorArchmageSheetV2,
@@ -935,15 +915,11 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
   const groups = [
     {
       label: 'ARCHMAGE.SETTINGS.groups.edition',
-      settings: ['secondEdition', 'alternateIconRollingMethod'],
-      highlights: [
-        'alternateIconRollingMethod',
-      ],
+      settings: ['secondEdition'],
     },
     {
       label: 'ARCHMAGE.SETTINGS.groups.automation',
       settings: [
-        'resetIconsOnRest',
         'multiTargetAttackRolls',
         'hideExtraRolls',
         'showDefensesInChat',

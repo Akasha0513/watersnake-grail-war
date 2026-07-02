@@ -248,8 +248,6 @@ ARCHMAGE:
     compactModeName: Compact Sheet Mode
     rechargeOncePerDayHint: Attempt to recharge powers on quick rests only once (true) or re-attempt after every quick rest (false)?
     rechargeOncePerDayName: Recharge once per day only
-    resetIconsOnRestHint: Automatically clear icon relationship results (advantages, uses) on a full heal-up.
-    resetIconsOnRestName: Reset Icon Relationships on Full Heal-Up
     RoundUpDamageApplicationHint: When applying damage (or healing) via the right-click context menu, should it round up (true) or round down (false)? Default is true (round up). This will be applied the same way for both characters and NPCs.
     RoundUpDamageApplicationName: Round damage/healing up (true) or down (false)
     allowTargetDamageApplicationHint: Whether or not to allow damage and healing on chat messages to be applied to targeted tokens in addition to selected tokens. Targeting does not require permissions, so this can allow players and GMs to apply damage to ANY token they can see.
@@ -260,8 +258,6 @@ ARCHMAGE:
     optionalBaseCritRangeHint: Optional rule expanding everyone's base crit range to 18+ instead of 20.
     secondEditionHint: Turn this on to use the 13th Age second edition rules, off if you'd prefer the first edition rules.
     secondEditionName: Use 2e Rules
-    alternateIconRollingMethodHint: Turn this on to use Jonathan's alternate icon rolling method, which allows you to roll for icons in the moment instead of at the start of the arc.
-    alternateIconRollingMethodName: Use Alternate Icon Rolling Method
     ShowDebugLogsHint: Turn this on for bug reports
     ShowDebugLogsName: Show debug logs?
     showDefensesInChatHint: Enable this to display a list of targeted defenses in the attack line of chat power cards.
@@ -521,18 +517,6 @@ ARCHMAGE:
     skillInitiativeHint: Add +1 to all skill and initiative checks
     abilMultiplierName: Ability Multiplier
     abilMultiplierHint: Double/quadruple the ability modifier contribution to damage and healing (4th/7th level)
-  ICONROLLS:
-    tooltip1e5: Benefit with complication
-    tooltip1e6: Benefit
-    tooltip2e5: Benefit with a twist
-    tooltip2e6: Benefit
-    tooltip2ealt6: Connection used this arc
-    rolldialogtitle: Roll for Icon Relationships
-    rollone: "{name} Only"
-    rollall: Roll All
-    rollDialogHint: "Roll dice for <strong>{name}</strong> only, or for all icons?"
-    noDiceLeft: You have no icon dice left to roll.
-    chatCardTitle: Icon Relationship Roll
   COINS:
     copper: Copper
     copperHint: 10 Copper = 1 Silver
@@ -1077,10 +1061,6 @@ ARCHMAGE:
       Hit Points can be regained by using <b>Recoveries</b>, <b>Potions</b> and some spells and powers.
       A <b>Full Heal-Up</b> resets HP back to full. When <b>Leveling Up</b> (or taking the <b>Incremental Advance</b> for Hit Points), your current Hit Points increase by the same amount as your Maximum Hit Points.
       <b>Temporary Hit Points</b> don't stack and are used up before normal Hit Points. They reset to 0 when rolling initiative and after each battle.
-    pcIconRelationship: |
-      Icons are the most known and important NPCs and their factions in your campaign.
-      Your character's relationship to some of these icons (whether <i>positive</i>, <i>negative</i> or <i>conflicted</i>) will result in occasional <b>Advantages</b> (sometimes with <b>Complications</b> attached).
-      Click to roll icon dice, one per relationship point. For each point, Foundry shows a small symbol you can click to toggle between used (or empty), <b>5</b> (<b>Complicated Advantage</b>) or <b>6</b> (<b>Unambiguous Advantage</b>).
     pcInitiative: |
       Initiative is a D20 roll, with <b>Dexterity</b> modifier and class level as bonus.
       In combat, combatants act in initiative order. Initiative is determined <b>once</b> at the beginning of combat.

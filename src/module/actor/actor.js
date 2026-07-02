@@ -508,19 +508,6 @@ export class ActorArchmage extends Actor {
       data.details.detectedClasses = matchedClasses;
     }
 
-    // Build out the icon results structure if it hasn't been
-    // previously initialized.
-    if (data?.icons) {
-      for (let [k,v] of Object.entries(data.icons)) {
-        if (v.results && v.results.length != v.bonus.value) {
-          let results = [];
-          for (let i = 0; i < v.bonus.value; i++) {
-            results[i] = v.results[i] ?? 0
-          }
-          v.results = results;
-        }
-      }
-    }
 
     // Handle one unique thing.
     if (!data.details.out.value && data?.out?.value) {
@@ -1712,15 +1699,6 @@ export class ActorArchmage extends Actor {
 
     // Reset desperate recharge flag
     updateData["system.attributes.saves.desperateTriggered"] = false;
-
-    // Reset icons
-    if (game.settings.get("watersnake-grail-war", "resetIconsOnRest")) {
-      [1, 2, 3, 4, 5].forEach(i => {
-        if (this.system.icons[`i${i}`].isActive.value) {
-          updateData[`system.icons.i${i}.results`] = Array(this.system.icons[`i${i}`].bonus.value).fill(0)
-        }
-      });
-    }
 
     // Update actor at this point (items are updated separately)
     if ( !foundry.utils.isEmpty(updateData) ) {

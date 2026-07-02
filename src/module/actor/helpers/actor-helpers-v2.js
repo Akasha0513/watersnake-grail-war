@@ -20,24 +20,6 @@ export class ActorHelpersV2 {
     // Pass.
   }
 
-  static _prepareIcons(actorData) {
-    // Handle icons.
-    if (actorData.system?.icons) {
-      for (let [k,v] of Object.entries(actorData.system.icons)) {
-        if (v.results) {
-          let results = {};
-          for (let i = 0; i < v.bonus.value; i++) {
-            results[i] = {
-              // TODO: Make this dynamic.
-              value: 6
-            }
-          }
-          v.results = results;
-        }
-      }
-    }
-  }
-
   static _prepareAbilityScores(actorData) {
     let levelMultiplier = 1;
     if (actorData.system.attributes.level.value >= 5) {
