@@ -17,7 +17,7 @@ export async function combatStart(updateData) {
  * @param {Combat} combat
  * @param {?{round:number, escalation:number}} override  값을 직접 지정(전투 시작 시 combat.current가 아직 갱신 전).
  */
-export async function handleRoundNotice(combat, override = null) {
+async function handleRoundNotice(combat, override = null) {
     if (!combat || !game.user?.isActiveGM) return;
     const Util = game.holygrailwar?.ArchmageUtility;
     if (!Util) return;

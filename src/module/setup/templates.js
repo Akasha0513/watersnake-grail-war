@@ -36,7 +36,6 @@ export const preloadHandlebarsTemplates = async function() {
 
     "systems/watersnake-grail-war/templates/items/_item-effect-part.html",
     "systems/watersnake-grail-war/templates/items/item-action-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-class-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-equipment-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-loot-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-nastier-special-sheet.html",
