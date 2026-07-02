@@ -238,6 +238,10 @@ export class ActorArchmage extends Actor {
 
       // For non-stacking bonuses, let the users sort it out
       if (change.mode != CONST.ACTIVE_EFFECT_MODES.ADD) {
+        // OVERRIDE 등 비가산 모드는 위에서 비워둔 숫자값을 복원해서 apply.
+        // (복원 없이 value=""로 apply하면 0으로 캐스팅돼 '급 대체 4'가 0이 되던 버그.
+        //  ADD 경로는 아래 uniquePenalties 병합에서 복원되지만 이 경로는 그냥 통과라 여기서 복원.)
+        if (change.value === "") change.value = String(change.numeric);
         uniqueChanges.push(change);
         continue;
       }
