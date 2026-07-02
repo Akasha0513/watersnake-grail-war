@@ -2541,6 +2541,17 @@ a.effect-link,
       box-shadow: none !important;
       background: none !important;
     }
+
+    // 표 헤더(열 제목: 기반 증감/대체 등)·행 라벨(능력치명)이 코어 기본 어두운 색을
+    // 물려받아 다크 시트에서 안 보이던 문제 → 밝은 본문색으로 고정.
+    th,
+    td,
+    .ability-label {
+      color: var(--color-text-primary, #e6e6ea);
+    }
+    th {
+      opacity: 0.85;   // 헤더는 살짝 흐리게 구분
+    }
   }
 }
 
