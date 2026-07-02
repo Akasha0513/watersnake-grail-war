@@ -710,13 +710,14 @@ export class ActorArchmage extends Actor {
     // 신방 (자동 시): 서번트/마스터영령취급 = (삼기사14/사술사12) + 급 + (내구·민첩) / 일반 마스터 = 10 + (내구·민첩)
     if (data.attributes.pd.automatic ?? true) {
       let pdBase;
-      if (masterAsServant) pdBase = (masterServant === 'three' ? 14 : 12) + grade;
+      let pdGrade = 0;   // 급은 기반과 별개 — pd.base override 시에도 유지·가산돼야 함(기반 대체 후 강화 누적)
+      if (masterAsServant) { pdBase = (masterServant === 'three' ? 14 : 12); pdGrade = grade; }
       else if (isMaster) pdBase = 10;
-      else pdBase = (defCategory === 'three' ? 14 : 12) + grade;
-      const pdBaseOv = this._effectOverride('pd.base'); if (pdBaseOv !== null) pdBase = pdBaseOv;   // 기반 대체(후 강화 누적)
+      else { pdBase = (defCategory === 'three' ? 14 : 12); pdGrade = grade; }
+      const pdBaseOv = this._effectOverride('pd.base'); if (pdBaseOv !== null) pdBase = pdBaseOv;   // 순수 기반(10/12/14)만 대체
       let pdMod = pdAblMod;
       const pdModOv = this._effectOverride('pd.mod'); if (pdModOv !== null) pdMod = pdModOv;          // 수정치 대체
-      data.attributes.pd.value = pdBase + pdMod + Number(pdBonus);
+      data.attributes.pd.value = pdBase + pdGrade + pdMod + Number(pdBonus);
     }
     // 정방 (자동 시): 서번트/마스터영령취급 = (삼기사10/사술사12) + 통찰 / 일반 마스터 = 8 + 통찰
     if (data.attributes.md.automatic ?? true) {
