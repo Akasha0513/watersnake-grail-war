@@ -112,10 +112,9 @@ export class ArchmageUtility {
     // 피해 굴림: 면수 강화(단계당 +2)·주사위 개수 추가·추가 보정을 대화상자로 입력
     if (rollType === 'damage') {
       if (!sys.damage?.value) return;
-      // 강화 단계: 0~10 (면수 강화, 단계당 +2). 개수 추가: -5~10 (주사위 개수, 0 기본).
-      // 음수 개수는 처리부에서 Math.max(1,…)로 최소 1개까지만 줄어듦.
-      const dmgOptions = Array.from({ length: 11 }, (_, i) => `<option value="${i}">${i}</option>`).join('');
-      const addDiceOptions = Array.from({ length: 16 }, (_, i) => {
+      // 강화 단계(면수, 단계당 ±2)·개수 추가(주사위 개수) 모두 -5~10 (0 기본).
+      // 최소값: 개수 0개·면수 0 (그 이하는 해당 주사위 항이 0). 예: d2에서 1단계↓ = 0.
+      const dmgOptions = Array.from({ length: 16 }, (_, i) => {
         const v = i - 5;
         return `<option value="${v}"${v === 0 ? ' selected' : ''}>${v}</option>`;
       }).join('');
@@ -123,7 +122,7 @@ export class ArchmageUtility {
         window: { title: `${item.name} — 피해 굴림` },
         content: `<div style="display:flex;flex-direction:column;gap:6px;">
             <div class="form-group"><label>강화 단계</label><select name="steps">${dmgOptions}</select></div>
-            <div class="form-group"><label>개수 추가</label><select name="addDice">${addDiceOptions}</select></div>
+            <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
             <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
           </div>`,
@@ -249,11 +248,13 @@ export class ArchmageUtility {
       let addDice = Number(opts.addDice) || 0;
       // 대성공: 공격 다이스 1개만 추가(단계/면수는 안 올림)
       if (opts.critical) { addDice += 1; }
-      // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 +2) 적용
+      // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 ±2) 적용.
+      // 개수·면수 바닥값은 0 — 둘 중 하나라도 0이면 해당 주사위 항은 0(유효한 Roll 위해 리터럴 '0').
       if (steps !== 0 || addDice !== 0) {
         formula = formula.replace(/(\d+)\s*[dD]\s*(\d+)/, (m, n, f) => {
-          const count = Math.max(1, Number(n) + addDice);
-          const faces = Math.max(2, Number(f) + 2 * steps);
+          const count = Math.max(0, Number(n) + addDice);
+          const faces = Math.max(0, Number(f) + 2 * steps);
+          if (count === 0 || faces === 0) return '0';
           return `${count}d${faces}`;
         });
       }
