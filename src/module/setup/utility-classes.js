@@ -112,13 +112,18 @@ export class ArchmageUtility {
     // 피해 굴림: 면수 강화(단계당 +2)·주사위 개수 추가·추가 보정을 대화상자로 입력
     if (rollType === 'damage') {
       if (!sys.damage?.value) return;
-      // 강화 단계 / 개수 추가: 0~10 드롭다운
+      // 강화 단계: 0~10 (면수 강화, 단계당 +2). 개수 추가: -5~10 (주사위 개수, 0 기본).
+      // 음수 개수는 처리부에서 Math.max(1,…)로 최소 1개까지만 줄어듦.
       const dmgOptions = Array.from({ length: 11 }, (_, i) => `<option value="${i}">${i}</option>`).join('');
+      const addDiceOptions = Array.from({ length: 16 }, (_, i) => {
+        const v = i - 5;
+        return `<option value="${v}"${v === 0 ? ' selected' : ''}>${v}</option>`;
+      }).join('');
       return new foundry.applications.api.DialogV2({
         window: { title: `${item.name} — 피해 굴림` },
         content: `<div style="display:flex;flex-direction:column;gap:6px;">
             <div class="form-group"><label>강화 단계</label><select name="steps">${dmgOptions}</select></div>
-            <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
+            <div class="form-group"><label>개수 추가</label><select name="addDice">${addDiceOptions}</select></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
             <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
           </div>`,
