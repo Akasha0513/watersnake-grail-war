@@ -1,12 +1,13 @@
 <template>
-	<!-- 능력치별. 기반수치(value): 증감(ADD)은 'pre' 단계, 기반 대체(override)는 대체 후 강화 누적.
+	<!-- 능력치별. 최종 증감(value ADD, 'pre' 단계): 기반+상시보정(18상한) 계산이 끝난 뒤
+	     최종 능력치에 더해지는 가산(상한 무시). 기반 대체(override)는 _source 값을 대체(그 위에 상시보정·ADD 누적).
 	     보정치(mod): 증감(ADD)·덮어쓰기(OVERRIDE)는 'default' 단계(표시·판정용).
 	     값에 @grade.value 등 식 가능(단, 기반 대체는 계산 이른 단계라 @능력치 참조는 제한적). -->
 	<table class="effect-abilities-table">
 		<thead>
 			<tr>
 				<th>능력치</th>
-				<th>기반 증감</th>
+				<th>최종 증감</th>
 				<th>기반 대체</th>
 				<th>보정 증감</th>
 				<th>보정 덮어쓰기</th>
