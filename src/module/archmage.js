@@ -17,7 +17,6 @@ import { ContextMenu2 } from './setup/contextMenu2.js';
 import { DamageApplicator } from './setup/damageApplicator.js';
 import { DiceArchmage } from './actor/dice.js';
 import { preloadHandlebarsTemplates } from "./setup/templates.js";
-import { TourGuide } from './tours/tourguide.js';
 import { ActorHelpersV2 } from './actor/helpers/actor-helpers-v2.js';
 import { EffectArchmageSheet } from "./active-effects/effect-sheet.js";
 import { registerModuleArt } from './setup/register-module-art.js';
@@ -460,15 +459,6 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("watersnake-grail-war", "enableOngoingEffectsMessages", {
-    name: "ARCHMAGE.SETTINGS.enableOngoingEffectsMessagesName",
-    hint: "ARCHMAGE.SETTINGS.enableOngoingEffectsMessagesHint",
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true
-  });
-
   game.settings.register('watersnake-grail-war', 'roundUpDamageApplication', {
     name: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationName",
     hint: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationHint",
@@ -539,27 +529,6 @@ Hooks.once('init', async function() {
     config: true,
     default: true,
     type: Boolean
-  });
-
-  game.settings.register('watersnake-grail-war', 'lastTourVersion', {
-    scope: 'client',
-    config: false,
-    default: "1.6.0",
-    type: String,
-  });
-
-  game.settings.register('watersnake-grail-war', 'tourVisibility', {
-    name: "ARCHMAGE.SETTINGS.tourVisibilityName",
-    hint: "ARCHMAGE.SETTINGS.tourVisibilityHint",
-    scope: 'world',
-    config: true,
-    default: 'all',
-    type: String,
-    choices: {
-      all: 'ARCHMAGE.SETTINGS.tourVisibilityAll',
-      gm: 'ARCHMAGE.SETTINGS.tourVisibilityGM',
-      off: 'ARCHMAGE.SETTINGS.tourVisibilityOff',
-    }
   });
 
   game.settings.register('watersnake-grail-war', 'sheetTooltips', {
@@ -992,7 +961,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
     {
       label: 'ARCHMAGE.SETTINGS.groups.automation',
       settings: [
-        'enableOngoingEffectsMessages',
         'resetIconsOnRest',
         'automateHPConditions',
         'staggeredOverlay',
@@ -1037,7 +1005,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
         'initiativeDexTiebreaker',
         'initiativeStaticNpc',
         'unboundEscDie',
-        'tourVisibility',
       ],
       highlights: [
       ],
@@ -1156,24 +1123,6 @@ Hooks.on("updateScene", (scene, data, options, userId) => {
 });
 
 /* ---------------------------------------------- */
-
-Hooks.on("renderSettings", async (app, html) => {
-  html = $(html);
-  // This is intentionally in renderSettings, as it is one of the last bits of HTML to get rendered, which is required for the Tour to hook in
-  let tourVisibility = game.settings.get('watersnake-grail-war', 'tourVisibility');
-  let showTours = tourVisibility !== 'off' ? true : false;
-
-  if (tourVisibility == 'gm' && !game.user.isGM) {
-    showTours = false;
-  }
-
-  if (showTours) {
-    let tourGuide = new TourGuide();
-    await tourGuide.registerTours();
-    // @todo fix tours for v10
-    // tourGuide.startNewFeatureTours();
-  }
-});
 
 Hooks.on('diceSoNiceReady', (dice3d) => {
   dice3d.addSystem({ id: "archmage", name: "Archmage" }, false);

@@ -69,22 +69,6 @@
     @import 'components/message';
   }
 
-  .introjs-overlay {
-    opacity: 0.5 !important;
-  }
-
-  .introjs-tooltip {
-    max-width: 400px;
-    width: 400px;
-    font-size: 16px;
-    font-family: $font-stack-base;
-
-    .introjs-button {
-      font-size: 16px;
-      font-family: $font-stack-base;
-    }
-  }
-
   // @todo replace this when we make the v2 power sheet.
   .item-sheet {
     @import 'components/items/power-sheet';

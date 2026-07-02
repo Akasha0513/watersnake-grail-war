@@ -36,15 +36,12 @@ esmodules:
 
 scripts:
   - scripts/lib/parse-md.js
-  - scripts/migrate/archmage-updates.js
-  - scripts/lib/intro.js
   # - scripts/vue/archmage-methods.js
 
 styles:
   - css/archmage.css
   - css/v2/archmage-v2.css
   - vue/styles.vue.css
-  - css/lib/introjs.css
   - css/korean-fonts.css
 
 flags:
