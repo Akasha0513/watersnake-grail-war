@@ -1075,188 +1075,67 @@ export class ActorArchmage extends Actor {
   }
 
   async rollDisengage() {
-    const target = 6;
+    // 룰: 보정 없이 1d20 순수값이 (6 + 추가 접전 인원) 이상이면 성공.
+    const defaultRollMode = game.settings.get('core', 'rollMode');
+    const rollModeOptions = Object.entries(CONFIG.Dice.rollModes).map(([k, m]) =>
+      `<option value="${k}"${k === defaultRollMode ? ' selected' : ''}>${game.i18n.localize(m.label ?? m)}</option>`).join('');
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>추가 접전 인원</label>
+          <input type="number" name="extra" value="0" min="0" step="1" autofocus/>
+        </div>
+        <div class="form-group">
+          <label>롤 모드</label>
+          <select name="rollMode">${rollModeOptions}</select>
+        </div>
+      </form>`;
 
-    let terms = ['d20'];
-    // Add bonuses, if any
-    let bonus = this.system.attributes.saves.disengageBonus; // From items
-    bonus += (this.system.attributes?.disengageBonus || 0); // From sheet
-    if (bonus != 0) terms.push(bonus.toString());
-
-    const dialogOptions = {width: 520};
-    let situational = 0;
-    let data = {};
-
-    // Create the chat message title.
-    let title = game.i18n.localize('ARCHMAGE.CHAT.disengage');
-
-    // Inner roll function
-    let rollMode = game.settings.get("core", "rollMode");
-    let rolled = false;
-    let roll = async (html = null, data = {}) => {
-      // Don't include situational bonus unless it is defined
-      if (!data.bonus && terms.indexOf('@bonus') !== -1) {
-        terms.pop();
-      }
-
-      if (situational != 0) {
-        terms.push(situational);
-      }
-
-      let form = html ? html.find('form')[0] : null;
-      rollMode = form ? form.rollMode.value : rollMode;
-
-      // Execute the roll
-      let roll = new Roll(terms.join('+'), data);
-      await roll.evaluate();
-
-      // Determine the roll result.
-      let rollResult = roll.total;
-      let success = rollResult >= target;
-
-      // Grab the template.
-      const template = `systems/watersnake-grail-war/templates/chat/save-card.html`;
-      const token = this.token;
-
-      // Prepare chat data for the template.
-      const chatData = {
-        user: game.user.id,
-        roll: roll, // TODO: fix template to use rolls prop
-        rolls: [roll],
-        speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this)
-      };
-
-      // Prepare template data.
-      const templateData = {
-        actor: this,
-        tokenId: token ? `${token.id}` : null,
-        saveType: title,
-        success: success,
-        data: chatData,
-        target,
-        formulaParts: game.holygrailwar.ArchmageUtility.rollFormulaParts(roll),
-        total: roll.total
-      };
-
-      // Render the template.
-      foundry.applications.handlebars.renderTemplate(template, templateData).then(content => {
-        chatData.content = content;
-        game.holygrailwar.ArchmageUtility.createChatMessage(chatData, { rollMode: rollMode });
-      });
-    };
-
-    // Modify the roll and handle fast-forwarding
-    if (event?.shiftKey) return roll(null, data);
-    else terms = terms.concat(['@bonus']);
-
-    // Render modal dialog
-    const template = 'systems/watersnake-grail-war/templates/chat/roll-dialog.html';
-    let dialogData = {
-      formula: terms.join(' + '),
-      data: data,
-      defaultRollMode: rollMode,
-      rollModes: CONFIG.Dice.rollModes
-    };
-
-    foundry.applications.handlebars.renderTemplate(template, dialogData).then(dlg => {
-      new Dialog({
-        title: title,
-        content: dlg,
-        buttons: {
-          bon2: {
-            label: '+2',
-            callback: () => {
-              situational = 2;
-              rolled = true;
-            }
-          },
-          bon1: {
-            label: '+1',
-            callback: () => {
-              situational = 1;
-              rolled = true;
-            }
-          },
-          normal: {
-            label: game.i18n.localize("ARCHMAGE.rollNormal"),
-            callback: () => {
-              rolled = true;
-            }
-          },
-          pen1: {
-            label: '-1',
-            callback: () => {
-              situational = -1;
-              rolled = true;
-            }
-          },
-          pen2: {
-            label: '-2',
-            callback: () => {
-              situational = -2;
-              rolled = true;
-            }
-          },
-          pen3: {
-            label: '-3',
-            callback: () => {
-              situational = -3;
-              rolled = true;
-            }
-          },
-          pen4: {
-            label: '-4',
-            callback: () => {
-              situational = -4;
-              rolled = true;
-            }
-          },
-          pen5: {
-            label: '-5',
-            callback: () => {
-              situational = -5;
-              rolled = true;
-            }
-          },
-          pen6: {
-            label: '-6',
-            callback: () => {
-              situational = -6;
-              rolled = true;
-            }
-          },
-          pen7: {
-            label: '-7',
-            callback: () => {
-              situational = -7;
-              rolled = true;
-            }
-          },
-          pen8: {
-            label: '-8',
-            callback: () => {
-              situational = -8;
-              rolled = true;
-            }
-          },
-          pen9: {
-            label: '-9',
-            callback: () => {
-              situational = -9;
-              rolled = true;
-            }
-          },
+    const choice = await foundry.applications.api.DialogV2.wait({
+      window: { title: '물러서기' },
+      content,
+      buttons: [
+        {
+          action: 'roll',
+          label: '굴림',
+          default: true,
+          callback: (event, button) => ({
+            extra: Math.max(0, Math.floor(Number(button.form.elements.extra?.value) || 0)),
+            rollMode: button.form.elements.rollMode?.value || defaultRollMode
+          })
         },
-        default: 'normal',
-        close: html => {
-          if (rolled) {
-            rollMode = html.find('[name="rollMode"]').val();
-            data['bonus'] = html.find('[name="bonus"]').val();
-            roll(html, data);
-          }
-        }
-      }, dialogOptions).render(true);
+        { action: 'cancel', label: '취소' }
+      ],
+      rejectClose: false
     });
+    if (!choice || choice === 'cancel') return;
+
+    // 난이도 = 6 + 추가 접전 인원. 보정 없는 순수 1d20.
+    const target = 6 + choice.extra;
+    const roll = new Roll('1d20');
+    await roll.evaluate();
+    const success = roll.total >= target;
+
+    const template = `systems/watersnake-grail-war/templates/chat/save-card.html`;
+    const token = this.token;
+    const chatData = {
+      user: game.user.id,
+      roll: roll, // TODO: fix template to use rolls prop
+      rolls: [roll],
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this)
+    };
+    const templateData = {
+      actor: this,
+      tokenId: token ? `${token.id}` : null,
+      saveType: '물러서기',
+      success: success,
+      data: chatData,
+      target,
+      formulaParts: game.holygrailwar.ArchmageUtility.rollFormulaParts(roll),
+      total: roll.total
+    };
+    chatData.content = await foundry.applications.handlebars.renderTemplate(template, templateData);
+    await game.holygrailwar.ArchmageUtility.createChatMessage(chatData, { rollMode: choice.rollMode });
   }
 
   /* -------------------------------------------- */
