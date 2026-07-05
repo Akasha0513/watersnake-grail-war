@@ -418,8 +418,8 @@ export class DiceArchmage {
     const ability = actor.system.abilities[abilityKey]
     if (ability) mods.push({ label: game.i18n.localize(`ARCHMAGE.${abilityKey}.label`), value: `@${abilityKey}.mod`, source: 'ability' })
     // 영령의 급(@grade)은 대화상자의 토글 수정치로 이동 → extraMods로 들어옴(아래).
-    // 고조(고조>0일 때만). 커스텀 판정(fixedBonus)은 미가산(필요 시 판정 직접 칸에 @ed 직접 입력).
-    if (!fixedBonus && Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
+    // 고조(역할별 유효치>0일 때만). 커스텀 판정(fixedBonus)은 미가산(필요 시 판정 직접 칸에 @ed 직접 입력).
+    if (!fixedBonus && Number(actor.system.attributes?.escalation?.effective) > 0) mods.push({ label: '고조', value: '@ed', source: 'ed' })
     // 배경(여러 개 합산, 배경마다 난수 가능)
     const bgLabels = []
     for (const bg of (backgrounds || [])) {

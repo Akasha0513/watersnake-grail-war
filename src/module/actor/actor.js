@@ -412,6 +412,19 @@ export class ActorArchmage extends Actor {
     return sum;
   }
 
+  /**
+   * 역할별 유효 전투고조(판정 가산치) 계산.
+   * 룰: 서번트(및 영령 취급 마스터/npc) = min(고조, 영령의 급) / 마스터·npc = floor(고조/3).
+   * raw(escalation.value)는 위젯·AE·standardBonuses용으로 그대로 두고, 굴림 경로만 이 값을 쓴다.
+   */
+  _effectiveEscalation(raw) {
+    const ed = Math.max(0, Number(raw) || 0);
+    const isMasterLike = this.type === 'master' || this.type === 'npc';
+    const asServant = isMasterLike && ['three', 'sorcery'].includes(this.system.details?.masterAsServant?.value);
+    if (!isMasterLike || asServant) return Math.min(ed, Math.max(0, Number(this.system.attributes?.grade?.value) || 0));
+    return Math.floor(ed / 3);
+  }
+
   /** @inheritdoc */
   prepareEmbeddedEntities() {
     // @todo is this still needed? Causes issues in v10.
@@ -453,6 +466,9 @@ export class ActorArchmage extends Actor {
     }
 
     this.applyActiveEffects('ed');
+
+    // 역할별 유효 고조(굴림 가산치). AE가 escalation.value를 덮어쓸 수 있어 'ed' 적용 후 계산.
+    data.attributes.escalation.effective = this._effectiveEscalation(data.attributes.escalation.value);
 
     // Must recompute this here because the e.d. might have changed.
     data.attributes.standardBonuses = {
@@ -849,10 +865,9 @@ export class ActorArchmage extends Actor {
     for (let [k, v] of Object.entries(newData)) {
       switch (k) {
         case 'escalation': {
-          // 고조 주사위 상한: 서번트 ≤ 영령의 급 / 마스터 = 고조÷3(내림)
-          const edRaw = Number(v.value) || 0;
-          if (actor.type === 'master') data.ed = Math.floor(edRaw / 3);
-          else data.ed = Math.min(edRaw, Number(data.attributes?.grade?.value) || 0);
+          // 역할별 유효 고조: 서번트(및 영령 취급 마스터/npc) = min(고조, 급) / 마스터·npc = 고조÷3(내림).
+          // effective는 prepareDerivedData에서 계산됨. skipPrepare 경로 대비 fallback 유지.
+          data.ed = v.effective ?? actor._effectiveEscalation(v.value);
           break;
         }
 

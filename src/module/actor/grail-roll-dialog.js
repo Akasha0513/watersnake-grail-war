@@ -110,7 +110,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const ab = actor.system.abilities?.[this.selectedAbility];
     if (ab) mods.push({ label: game.i18n.localize(`ARCHMAGE.${this.selectedAbility}.label`), value: `@${this.selectedAbility}.mod` });
     // 영령의 급은 this.modifiers(체크박스)로 이동 → 아래 modifiers 루프에서 합산
-    if (!this.ctx.fixedBonus && Number(actor.system.attributes?.escalation?.value) > 0) mods.push({ label: '고조', value: '@ed' });
+    if (!this.ctx.fixedBonus && Number(actor.system.attributes?.escalation?.effective) > 0) mods.push({ label: '고조', value: '@ed' });
     for (const bg of (this.ctx.backgrounds || [])) {
       const st = this.checkedBg[bg.key];
       if (!st || !st.checked) continue;
