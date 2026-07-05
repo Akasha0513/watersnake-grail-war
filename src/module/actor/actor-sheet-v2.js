@@ -769,7 +769,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
     if (type == 'item' && opt) this._onItemRoll(opt);
     else if (type == 'recovery') this._onRecoveryRoll(event);
-    else if (type == 'save') this._onSaveRoll(opt);
+    else if (type == 'save') this._onSaveRoll();
     else if (type == 'disengage') this._onDisengageRoll(opt);
     else if (type == 'init') this._onInitRoll();
     else if (type == 'ability') this._onAbilityRoll(opt);
@@ -813,13 +813,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
 
   /**
-   * Roll a saving throw for the actor.
-   *
-   * @param {string} difficulty
-   *   The save type, such as 'easy', 'normal', 'hard', or 'death'.
+   * 상태이상 저항 굴림 (1d20 순수 11+).
    */
-  async _onSaveRoll(difficulty) {
-    this.actor.rollSave(difficulty);
+  async _onSaveRoll() {
+    this.actor.rollSave();
   }
 
 

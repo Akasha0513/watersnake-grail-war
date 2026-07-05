@@ -1527,13 +1527,8 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         }
         break;
       case "save":
-        const duration = parent.dataset.save;
-        const durationToDifficulty = {
-          "EasySaveEnds": "easy",
-          "NormalSaveEnds": "normal",
-          "HardSaveEnds": "hard",
-        }
-        await actor.rollSave(durationToDifficulty[duration] ?? "normal");
+        // 상태이상 저항(순수 11+) 단일화 — 구 13th Age 난이도 구분 제거.
+        await actor.rollSave();
         if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectSaved.${effectId}`, true);
         else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectSaved.${effectId}`});
         break;

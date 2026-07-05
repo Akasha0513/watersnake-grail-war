@@ -865,13 +865,13 @@ ARCHMAGE:
     disengage: 물러서기
     easy: Easy Save
     easyShort: Easy
-    failure: Failed
+    failure: 실패
     hard: Hard Save
     hardShort: Hard
     lastGasp: Last Gasp Save
     normal: Normal Save
     normalShort: Normal
-    success: Succeeded
+    success: 성공
     rollSave: Roll Save
   EFFECT:
     AE:

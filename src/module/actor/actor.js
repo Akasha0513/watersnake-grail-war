@@ -995,83 +995,34 @@ export class ActorArchmage extends Actor {
     return parts.filter(p => p !== null).join(" + ");
   }
 
-  async rollSave(difficulty, target=11) {
-    // Determine target dc
-    if (difficulty == 'easy') target = 6;
-    else if (['hard', 'death', 'lastGasp'].includes(difficulty)) target = 16;
+  async rollSave() {
+    // 룰: 차례 종료 시 1d20 순수값 11+ → 보유 상태이상 1개 해제(어느 것을 풀지는 수동 선택).
+    // (구 13th Age easy/hard/death/lastGasp 분기 제거 — 인자는 하위호환 위해 무시.)
+    const target = 11;
+    const roll = new Roll('1d20');
+    await roll.evaluate();
+    const success = roll.total >= target;
 
-    let formula = 'd20';
-    // Add bonuses, if any
-    let bonus = this.system.attributes.saves.bonus;
-    if (bonus != 0) formula = formula + "+" + bonus.toString();
-    let roll = new Roll(formula);
-    let result = await roll.roll();
-
-    // Create the chat message title.
-    let label = game.i18n.localize(`ARCHMAGE.SAVE.${difficulty}`);
-
-    // Determine the roll result.
-    let rollResult = result.total;
-    let success = rollResult >= target;
-
-    // Basic template rendering data
     const template = `systems/watersnake-grail-war/templates/chat/save-card.html`;
     const token = this.token;
-
-    // Basic chat message data
     const chatData = {
       user: game.user.id,
       roll: roll, // TODO: fix template to use rolls prop
       rolls: [roll],
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this)
     };
-
     const templateData = {
       actor: this,
       tokenId: token ? `${token.id}` : null,
-      saveType: label,
+      saveType: '상태이상 저항',
       success: success,
       data: chatData,
       target,
       formulaParts: game.holygrailwar.ArchmageUtility.rollFormulaParts(roll),
       total: roll.total
     };
-
-    // Render the template
-    chatData["content"] = await foundry.applications.handlebars.renderTemplate(template, templateData);
+    chatData.content = await foundry.applications.handlebars.renderTemplate(template, templateData);
     await game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-
-    // Handle recoveries or failures on death saves.
-    if (difficulty == 'death') {
-      if (success) {
-        if (this.system.attributes.hp.value <= 0) this.rollRecovery({}, true);
-      } else {
-        await this.update({'system.attributes.saves.deathFails.value': Math.min(Number(this.system.attributes.saves.deathFails.max), Number(this.system.attributes.saves.deathFails.value) + 1)});
-        // Handle desperate recharge
-        await this.rechargeDesperate();
-      }
-    }
-
-    // Handle failures of last gasp saves.
-    if (difficulty == 'lastGasp' && !success) {
-      await this.update({
-        'system.attributes.saves.lastGaspFails.value': Math.min(4, Number(this.system.attributes.saves.lastGaspFails.value) + 1)
-      });
-      // If this is the first failed last gasps save, add helpless
-      let filtered = this.effects.filter(x => x.name === game.i18n.localize("ARCHMAGE.EFFECT.StatusHelpless"));
-      if (filtered.length == 0 && this.system.attributes.saves.lastGaspFails.value == 1) {
-        let effectData = CONFIG.statusEffects.find(x => x.id == "helpless");
-        let createData = foundry.utils.deepClone(effectData);
-        createData.name = game.i18n.localize(effectData.name);
-        createData["flags.core.statusId"] = effectData.id;
-        delete createData.id;
-        const cls = getDocumentClass("ActiveEffect");
-        await cls.create(createData, {parent: this});
-      }
-    } else if (difficulty == 'lastGasp' && success) {
-      // Condition shaken off, clear all last gasp saves
-      await this.update({ 'system.attributes.saves.lastGaspFails.value': 0 });
-    }
   }
 
   async rollDisengage() {
