@@ -77,6 +77,10 @@
           <EffectResources :viewModel="viewModel" />
         </Tab>
 
+        <Tab group="primary" :tab="tabs.primary.escalation">
+          <EffectEscalation :viewModel="viewModel" />
+        </Tab>
+
         <Tab group="primary" :tab="tabs.primary.checkbonus">
           <EffectCheckBonus :viewModel="viewModel" :effect="effect" />
         </Tab>
@@ -95,6 +99,7 @@ import {
   EffectAbilityBonus,
   EffectDefenses,
   EffectResources,
+  EffectEscalation,
   EffectCheckBonus,
 } from '@/components';
 import { computed, inject, reactive, toRaw, watch } from 'vue';

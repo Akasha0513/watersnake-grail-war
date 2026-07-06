@@ -2552,6 +2552,36 @@ a.effect-link,
     th {
       opacity: 0.85;   // 헤더는 살짝 흐리게 구분
     }
+
+    // 폼 라벨·섹션 제목·힌트·범례도 동일하게 밝은색 고정(코어 상속색 차단).
+    label,
+    legend,
+    h3,
+    p {
+      color: var(--color-text-primary, #e6e6ea);
+    }
+
+    // 셀렉트(고조 기준·지속시간 등)는 input과 같은 다크 스타일. 펼침 목록(option)은
+    // 반투명 배경이 안 먹히므로 불투명 다크로.
+    select {
+      color: var(--color-text-primary, #e6e6ea);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 3px;
+      box-shadow: none !important;
+      outline: none;
+
+      &:focus {
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: none !important;
+        outline: none;
+      }
+
+      option {
+        color: var(--color-text-primary, #e6e6ea);
+        background: #23262b;
+      }
+    }
   }
 }
 

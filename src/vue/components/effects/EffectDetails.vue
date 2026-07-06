@@ -1,23 +1,23 @@
 <template>
 	<div class="form-group" v-if="foundryEffect.parent.documentName === 'Actor'">
-		<label>{{ localize("EFFECT.FIELDS.origin.label") }}</label>
+		<label>원천</label>
 		<div class="form-fields">
 			<input type="text" name="origin" v-model="viewModel.origin" />
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label>{{ localize("EFFECT.FIELDS.disabled.label") }}</label>
+		<label>비활성화</label>
 		<input type="checkbox" v-model="viewModel.disabled" />
 	</div>
 
 	<div class="form-group">
-		<label>{{ localize("ARCHMAGE.ITEM.stacksAlways") }}</label>
+		<label>중첩 항상 허용</label>
 		<input type="checkbox" v-model="viewModel.stacksAlways" />
 	</div>
 
 	<div class="form-group">
-		<label>{{ localize("EFFECT.TABS.duration") }}</label>
+		<label>지속시간</label>
 		<div class="form-fields">
 			<select name="duration" v-model="viewModel.duration">
 				<option value="">{{ localize('ARCHMAGE.noneOption') }}</option>
