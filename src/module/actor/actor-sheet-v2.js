@@ -621,14 +621,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
       case 'toggle':
         return effect.update({disabled: !effect.disabled});
-
-      case 'applyStatus': {
-        // 36종 상태이상 팔레트: 드롭다운에서 고른 상태이상을 부여(토큰 HUD와 동일 경로).
-        const select = target.closest('.effects-group-header')?.querySelector('.effect-status-select');
-        const statusId = select?.value;
-        if (!statusId) return;
-        return this.actor.toggleStatusEffect(statusId, { active: true });
-      }
     }
 
   }

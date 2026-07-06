@@ -8,14 +8,6 @@
             <a class="effect-control" data-action="create" :title="localize('ARCHMAGE.EFFECT.AE.new')"><i class="fas fa-plus"></i></a>
           </div>
         </div>
-        <div class="effects-status-apply">
-          <select class="effect-status-select">
-            <option v-for="(status, statusKey) in statusOptions" :key="statusKey" :value="status.id">{{status.name}}</option>
-          </select>
-          <a class="effect-control effect-status-button" data-action="applyStatus" title="상태이상 부여">
-            <i class="fas fa-plus"></i> 부여
-          </a>
-        </div>
       </div>
       <ul class="effects-group-content flexcol">
         <li v-for="(effect, effectKey) in effects" :key="effectKey"
@@ -83,11 +75,6 @@ export default {
       activeEffects: {},
       classes: computed(() => `section section--effects flexcol`)
     });
-    // 자작룰 36종 상태이상 목록(드롭다운용). dead·extended(13th Age 잔재)는 이름이
-    // 로컬라이즈 키('ARCHMAGE.…')라 제외 → 한글 리터럴 이름인 36종만 남음.
-    const statusOptions = (CONFIG.statusEffects || [])
-      .filter(s => s.id && !String(s.name).startsWith('ARCHMAGE.'))
-      .map(s => ({ id: s.id, name: s.name }));
     // Define methods.
     function getEffects() {
       let effects = this.actor.effects;
@@ -134,7 +121,6 @@ export default {
     // Return our custom data, methods, and any imported methods.
     return {
       ...toRefs(componentData),
-      statusOptions,
       concat,
       localize,
       numberFormat,
@@ -182,30 +168,6 @@ export default {
 </script>
 
 <style>
-/* 36종 상태이상 부여 팔레트(드롭다운 + 부여 버튼).
-   grid로 컬럼을 고정(1fr=select / auto=버튼) → select가 버튼을 밀어내지 못함(잘림 방지). */
-.effects-status-apply {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px;
-  align-items: center;
-  margin-top: 4px;
-  width: 100%;
-  box-sizing: border-box;
-}
-.effects-status-apply .effect-status-select {
-  width: 100%;        /* 자기 grid 셀(minmax 0,1fr) 안에서만 채움 */
-  min-width: 0;
-  box-sizing: border-box;
-}
-.effects-status-apply .effect-status-button {
-  /* .effect-control의 36px 고정폭을 확실히 무효화(아이콘+"부여"가 들어가게) */
-  width: auto !important;
-  flex: none;
-  white-space: nowrap;
-  padding: 0 8px;
-}
-
 /*
   Enter and leave animations can use different
   durations and timing functions.
