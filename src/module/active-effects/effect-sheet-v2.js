@@ -86,7 +86,7 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
           },
           resources: {
             key: 'resources',
-            label: '자원·이니'
+            label: '자원·이니·고조'
           },
           checkbonus: {
             key: 'checkbonus',

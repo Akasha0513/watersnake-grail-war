@@ -184,6 +184,14 @@ const fieldDefs = [
 	// 급: 증감(ADD)·대체(OVERRIDE) — 'pre' 단계 적용 → 신방·이니에 반영
 	{ vm: 'gradeAdd', key: 'system.attributes.grade.value', mode: ADD },
 	{ vm: 'gradeOver', key: 'system.attributes.grade.value', mode: OVERRIDE },
+	// 전투고조: 인식 증감/대체('ed' 가중치 — 역할 변환 전 raw) + 유효치 파이프라인(overrides.ed.* — actor._escalationPipeline)
+	{ vm: 'edRawAdd', key: 'system.attributes.escalation.value', mode: ADD },
+	{ vm: 'edRawOver', key: 'system.attributes.escalation.value', mode: OVERRIDE },
+	{ vm: 'edModeOver', key: 'system.overrides.ed.mode', mode: OVERRIDE },
+	{ vm: 'edCapOver', key: 'system.overrides.ed.cap', mode: OVERRIDE },
+	{ vm: 'edBonusAdd', key: 'system.overrides.ed.bonus', mode: ADD },
+	{ vm: 'edValueOver', key: 'system.overrides.ed.value', mode: OVERRIDE },
+	{ vm: 'edInvert', key: 'system.overrides.ed.invert', mode: OVERRIDE },
 	// 능력치: 기반수치 증감(value ADD)/기반수치 대체(override, 후 강화 누적)/보정 증감(mod ADD)/보정 덮어쓰기(mod OVERRIDE)
 	...ABILS.flatMap(a => [
 		{ vm: `${a}_valAdd`, key: `system.abilities.${a}.value`, mode: ADD },

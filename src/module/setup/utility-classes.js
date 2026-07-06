@@ -441,6 +441,12 @@ export class ArchmageUtility {
 
   static cleanActiveEffectLabel(label) {
     return label
+      .replace("system.overrides.ed.mode", "고조 기준")
+      .replace("system.overrides.ed.cap", "고조 상한")
+      .replace("system.overrides.ed.bonus", "고조 최종 증감")
+      .replace("system.overrides.ed.value", "고조 최종")
+      .replace("system.overrides.ed.invert", "고조 반전")
+      .replace("escalation", "고조")
       .replace("data.attributes", "")
       .replace("system.attributes", "")
       .replace("attack", game.i18n.localize("ARCHMAGE.attack"))

@@ -216,7 +216,7 @@ export class ActorArchmage extends Actor {
       const s = String(raw ?? '').trim();
       if (s === '' || !isNaN(s)) return s;              // 빈값/숫자는 그대로
       try {
-        if (!_effRollData) _effRollData = this.getRollData({ skipPrepare: true });
+        if (!_effRollData) _effRollData = this.getRollData(null, { skipPrepare: true });
         const replaced = Roll.replaceFormulaData(s, _effRollData, { missing: 0, warn: false });
         const val = Roll.safeEval(replaced);
         if (typeof val === 'number' && isFinite(val)) return String(val);
@@ -366,7 +366,7 @@ export class ActorArchmage extends Actor {
     if (s === '') return null;
     if (!isNaN(s)) return Number(s);
     try {
-      const rd = this.getRollData({ skipPrepare: true });
+      const rd = this.getRollData(null, { skipPrepare: true });
       const replaced = Roll.replaceFormulaData(s, rd, { missing: 0, warn: false });
       const val = Roll.safeEval(replaced);
       if (typeof val === 'number' && isFinite(val)) return val;
@@ -425,6 +425,37 @@ export class ActorArchmage extends Actor {
     return Math.floor(ed / 3);
   }
 
+  /**
+   * 전투고조 유효치 파이프라인(캐릭터별 AE 보정). prepareDerivedData에서만 호출.
+   * ① 인식 증감/대체: applyActiveEffects('ed')가 escalation.value에 이미 적용(호출 전).
+   * ② 기준 대체(ed.mode: 1=서번트, 2=마스터) + 상한 대체(ed.cap: formula, 서번트형 전용, 빈값/해석불가→급)
+   * ③ 최종 증감(ed.bonus, ADD 합산, 제한 무시) ④ 최종 대체(ed.value, 0도 유효=차단) ⑤ 반전(ed.invert=1 → 부호 반전)
+   * formula(@end.mod 등) 해석 중 @ed 재진입은 getRollData 폴백(_effectiveEscalation 기본 변환)으로 종료 — 무한재귀 없음.
+   */
+  _escalationPipeline(raw) {
+    const ed = Math.max(0, Number(raw) || 0);
+    const isMasterLike = this.type === 'master' || this.type === 'npc';
+    const asServant = isMasterLike && ['three', 'sorcery'].includes(this.system.details?.masterAsServant?.value);
+    let servantLike = !isMasterLike || asServant;            // 기본: 역할대로(masterAsServant 동작 유지)
+    const mode = this._effectOverride('ed.mode');            // ②
+    if (mode === 1) servantLike = true;
+    else if (mode === 2) servantLike = false;
+    let eff;
+    if (servantLike) {
+      let cap = Math.max(0, Number(this.system.attributes?.grade?.value) || 0);
+      const capOver = this._effectOverride('ed.cap');        // ②' null이면 급 유지
+      if (capOver !== null) cap = Math.max(0, capOver);
+      eff = Math.min(ed, cap);
+    } else {
+      eff = Math.floor(ed / 3);
+    }
+    eff += this._effectAdd('ed.bonus');                      // ③
+    const finalOver = this._effectOverride('ed.value');      // ④
+    if (finalOver !== null) eff = finalOver;
+    if (this._effectOverride('ed.invert') === 1) eff = -eff; // ⑤
+    return eff;
+  }
+
   /** @inheritdoc */
   prepareEmbeddedEntities() {
     // @todo is this still needed? Causes issues in v10.
@@ -468,7 +499,8 @@ export class ActorArchmage extends Actor {
     this.applyActiveEffects('ed');
 
     // 역할별 유효 고조(굴림 가산치). AE가 escalation.value를 덮어쓸 수 있어 'ed' 적용 후 계산.
-    data.attributes.escalation.effective = this._effectiveEscalation(data.attributes.escalation.value);
+    // 캐릭터별 보정 파이프라인(기준/상한 대체·최종 증감/대체·반전)은 _escalationPipeline 참조.
+    data.attributes.escalation.effective = this._escalationPipeline(data.attributes.escalation.value);
 
     // Must recompute this here because the e.d. might have changed.
     data.attributes.standardBonuses = {

@@ -19,10 +19,34 @@
 	<hr/>
 
 	<div class="form-group"><label>이니셔티브 증감</label><div class="field"><input type="text" v-model="viewModel.initAdd" placeholder="0" /></div></div>
+
+	<h3 class="effect-group-title">전투고조</h3>
+	<div class="form-group"><label>인식 고조 증감</label><div class="field"><input type="text" v-model="viewModel.edRawAdd" placeholder="0" /></div></div>
+	<div class="form-group"><label>인식 고조 대체</label><div class="field"><input type="text" v-model="viewModel.edRawOver" placeholder="—" /></div></div>
+	<div class="form-group"><label>고조 기준</label><div class="field">
+		<select v-model="edModeSel">
+			<option value="">기본(역할대로)</option>
+			<option value="1">서번트 기준</option>
+			<option value="2">마스터 기준</option>
+		</select>
+	</div></div>
+	<div class="form-group"><label>고조 상한 대체</label><div class="field"><input type="text" v-model="viewModel.edCapOver" placeholder="급 (예: @end.mod)" /></div></div>
+	<div class="form-group"><label>고조 최종 증감</label><div class="field"><input type="text" v-model="viewModel.edBonusAdd" placeholder="0 (제한 무시)" /></div></div>
+	<div class="form-group"><label>고조 최종 대체</label><div class="field"><input type="text" v-model="viewModel.edValueOver" placeholder="— (0=차단)" /></div></div>
+	<div class="form-group"><label>고조 반전</label><div class="field">
+		<input type="checkbox" :checked="String(viewModel.edInvert ?? '') === '1'" @change="e => viewModel.edInvert = e.target.checked ? '1' : ''" />
+	</div></div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
 const props = defineProps(['viewModel']);
+// 셀렉트: viewModel이 undefined일 때 '기본' 옵션이 선택돼 보이도록 ''로 정규화.
+// ''는 저장 루프에서 행 제거로 처리됨(ArchmageActiveEffectSheetVue 저장 규칙).
+const edModeSel = computed({
+	get: () => String(props.viewModel.edModeOver ?? ''),
+	set: (v) => { props.viewModel.edModeOver = v; }
+});
 </script>
 
 <style scoped>
