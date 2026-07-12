@@ -2614,3 +2614,57 @@ a.effect-link,
   .message-content { padding: 0; margin: 0; }
   .grail-round-notice { margin: 0; }
 }
+
+// feature 선언 배너 (🕵️ 버튼 → "{이름}의 『feature』‼"). roll20/턴 알림식 서식, desc 카드와 구별.
+.grail-feature-call {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0;
+  overflow: hidden;
+  border-top: 2px groove rgba(0, 0, 0, 0.2);
+  border-bottom: 2px groove rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  // 라이트(파치먼트) 기본
+  background: linear-gradient(90deg, rgba(245, 236, 222, 0.95), rgba(238, 224, 205, 0.9));
+  color: #2a2018;
+
+  .gfc-portrait {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    background: rgba(0, 0, 0, 0.15);   // 이미지 없을 때 대체색
+  }
+  .gfc-text {
+    flex: 1;
+    padding-right: 12px;
+    text-align: right;
+    font-family: 'GyeongbokgungSumunjangTitle', 'mason-serif', 'Nodesto', serif;
+    font-style: italic;
+    font-size: 1.1em;
+    letter-spacing: 0.02em;
+  }
+  .gfc-feature { color: #9c1f1f; font-weight: bold; }
+  .gfc-bang { color: #9c1f1f; margin-left: 1px; }
+}
+
+// 다크 테마: 슬레이트 배경 + 밝은 텍스트
+.theme-dark .grail-feature-call {
+  background: linear-gradient(90deg, rgba(30, 29, 36, 0.96), rgba(20, 19, 26, 0.92));
+  color: #e6e6ea;
+  border-top-color: rgba(255, 255, 255, 0.12);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+
+  .gfc-feature, .gfc-bang { color: #e8a0a0; }
+}
+
+// 선언 배너 메시지: 헤더/포트레이트 숨기고 배너만
+.chat-message.grail-feature-call-message {
+  .message-header { display: none !important; }
+  .message-content { padding: 0; margin: 0; }
+  .grail-feature-call { margin: 0; }
+}

@@ -1261,6 +1261,10 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   if (chatMessage.getFlag('watersnake-grail-war', 'roundNotice')) {
     rawhtml.classList?.add('grail-round-notice-message');
   }
+  // feature 선언 배너: 헤더/포트레이트 숨기고 배너만 표시 (CSS에서 처리).
+  if (chatMessage.getFlag('watersnake-grail-war', 'featureCall')) {
+    rawhtml.classList?.add('grail-feature-call-message');
+  }
   const resolveActor = (card) => {
     const tokenId = card.dataset.tokenId;
     return (tokenId && game.actors.tokens[tokenId]) || game.actors.get(card.dataset.actorId);

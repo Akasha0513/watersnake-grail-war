@@ -246,7 +246,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.item-delete', (event) => this._deleteItem(event));
     html.on('click', '.item-edit', (event) => this._editItem(event));
     html.on('click', '.feature-chat', (event) => this._postFeature(event));
-    html.on('click', '.feature-chat-private', (event) => this._postFeature(event, true));
+    html.on('click', '.feature-chat-private', (event) => this._announceFeature(event));
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
@@ -518,6 +518,27 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content
     }, isPrivate ? { rollMode: 'gmroll' } : {});
+  }
+
+  /** feature를 roll20식 선언 배너로 전체 공개 출력 ("{이름}의 『{feature}』‼"). desc 카드와 구별되는 자체 서식. */
+  async _announceFeature(event) {
+    event.preventDefault();
+    const id = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(id);
+    if (!item) return;
+    const speaker = game.holygrailwar.ArchmageUtility.getSpeaker(this.actor);
+    const speakerName = speaker.alias || this.actor.name;
+    const token = this.actor.token ?? this.actor.getActiveTokens?.()?.[0]?.document;
+    const portrait = token?.texture?.src || this.actor.img;
+    const content = await foundry.applications.handlebars.renderTemplate(
+      'systems/watersnake-grail-war/templates/chat/feature-call-card.html',
+      { speakerName, featureName: item.name, portrait }
+    );
+    await game.holygrailwar.ArchmageUtility.createChatMessage({
+      speaker: speaker,
+      content: content,
+      flags: { 'watersnake-grail-war': { featureCall: true } }
+    });
   }
 
   /**
