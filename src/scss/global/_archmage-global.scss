@@ -2615,20 +2615,18 @@ a.effect-link,
   .grail-round-notice { margin: 0; }
 }
 
-// feature 선언 배너 (🕵️ 버튼 → "{이름}의 『feature』‼"). roll20/턴 알림식 서식, desc 카드와 구별.
+// feature 선언 배너 (🕵️ 버튼 → "{이름}의 『feature』‼"). fvtt-chat-enhancements 턴 알림풍:
+// 평평한 반투명 배경·40px·포트레이트 좌측 둥근 모서리·가운데 정렬·본문색 통일. desc 카드와 구별.
 .grail-feature-call {
   display: flex;
   align-items: center;
-  gap: 10px;
   min-height: 40px;
   padding: 0;
   overflow: hidden;
-  border-top: 2px groove rgba(0, 0, 0, 0.2);
-  border-bottom: 2px groove rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  // 라이트(파치먼트) 기본
-  background: linear-gradient(90deg, rgba(245, 236, 222, 0.95), rgba(238, 224, 205, 0.9));
-  color: #2a2018;
+  border-radius: 6px;
+  // 라이트 기본: 평평한 반투명
+  background: rgba(255, 255, 255, 0.35);
+  color: var(--color-text-primary, #2a2018);
 
   .gfc-portrait {
     flex: 0 0 40px;
@@ -2636,30 +2634,27 @@ a.effect-link,
     height: 40px;
     object-fit: cover;
     border: none;
-    border-radius: 4px 0 0 4px;
+    border-radius: 6px 0 0 6px;
     background: rgba(0, 0, 0, 0.15);   // 이미지 없을 때 대체색
   }
   .gfc-text {
     flex: 1;
-    padding-right: 12px;
-    text-align: right;
+    // 포트레이트 폭(40px)만큼 우패딩 → 배너 전체폭 기준 가운데 정렬 (턴 알림과 동일 기법)
+    padding: 0 40px 0 0;
+    text-align: center;
     font-family: 'GyeongbokgungSumunjangTitle', 'mason-serif', 'Nodesto', serif;
-    font-style: italic;
     font-size: 1.1em;
     letter-spacing: 0.02em;
   }
-  .gfc-feature { color: #9c1f1f; font-weight: bold; }
-  .gfc-bang { color: #9c1f1f; margin-left: 1px; }
+  // 강조색 없이 본문색 통일 (『』·‼는 텍스트로 유지)
+  .gfc-feature,
+  .gfc-bang { color: inherit; }
 }
 
-// 다크 테마: 슬레이트 배경 + 밝은 텍스트
+// 다크 테마: 평평한 반투명 다크 + 밝은 텍스트
 .theme-dark .grail-feature-call {
-  background: linear-gradient(90deg, rgba(30, 29, 36, 0.96), rgba(20, 19, 26, 0.92));
-  color: #e6e6ea;
-  border-top-color: rgba(255, 255, 255, 0.12);
-  border-bottom-color: rgba(255, 255, 255, 0.12);
-
-  .gfc-feature, .gfc-bang { color: #e8a0a0; }
+  background: rgba(15, 14, 20, 0.45);
+  color: var(--color-text-primary, #e6e6ea);
 }
 
 // 선언 배너 메시지: 헤더/포트레이트 숨기고 배너만
