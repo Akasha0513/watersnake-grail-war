@@ -2615,18 +2615,17 @@ a.effect-link,
   .grail-round-notice { margin: 0; }
 }
 
-// feature 선언 배너 (🕵️ 버튼 → "{이름}의 『feature』‼"). fvtt-chat-enhancements 턴 알림풍:
-// 평평한 반투명 배경·40px·포트레이트 좌측 둥근 모서리·가운데 정렬·본문색 통일. desc 카드와 구별.
+// feature 선언 배너 (🕵️ 버튼 → "{이름}의 『feature』‼"). fvtt-chat-enhancements 턴 알림과 정밀 일치:
+// 자체 배경 없이 메시지 박스 테마 배경 상속, 40px, 포트레이트 좌측 둥근 모서리, 가운데 정렬,
+// 폰트는 턴 이름과 동일(모듈 --mingjo-bold 명조 / 없으면 시스템 본문 세리프). desc 카드와 구별.
 .grail-feature-call {
   display: flex;
   align-items: center;
   min-height: 40px;
-  padding: 0;
   overflow: hidden;
   border-radius: 6px;
-  // 라이트 기본: 평평한 반투명
-  background: rgba(255, 255, 255, 0.35);
-  color: var(--color-text-primary, #2a2018);
+  color: var(--color-text-primary, #e6e6ea);
+  // 배경 없음 — 메시지 박스의 테마 배경을 그대로 상속(턴 알림과 동일 톤)
 
   .gfc-portrait {
     flex: 0 0 40px;
@@ -2642,8 +2641,10 @@ a.effect-link,
     // 포트레이트 폭(40px)만큼 우패딩 → 배너 전체폭 기준 가운데 정렬 (턴 알림과 동일 기법)
     padding: 0 40px 0 0;
     text-align: center;
-    font-family: 'GyeongbokgungSumunjangTitle', 'mason-serif', 'Nodesto', serif;
-    font-size: 1.1em;
+    // 턴 알림(.message-sender h4)과 동일 폰트: 모듈 --mingjo-bold(명조), 없으면 시스템 본문 세리프
+    font-family: var(--mingjo-bold, 'Ridibatang', serif);
+    font-size: calc(var(--font-size, 14px) + 2px);
+    font-weight: 600;
     letter-spacing: 0.02em;
   }
   // 강조색 없이 본문색 통일 (『』·‼는 텍스트로 유지)
@@ -2651,14 +2652,9 @@ a.effect-link,
   .gfc-bang { color: inherit; }
 }
 
-// 다크 테마: 평평한 반투명 다크 + 밝은 텍스트
-.theme-dark .grail-feature-call {
-  background: rgba(15, 14, 20, 0.45);
-  color: var(--color-text-primary, #e6e6ea);
-}
-
-// 선언 배너 메시지: 헤더/포트레이트 숨기고 배너만
+// 선언 배너 메시지: 헤더/포트레이트 숨기고, 턴처럼 패딩 0(포트레이트 플러시·40px)
 .chat-message.grail-feature-call-message {
+  padding: 0 !important;
   .message-header { display: none !important; }
   .message-content { padding: 0; margin: 0; }
   .grail-feature-call { margin: 0; }
