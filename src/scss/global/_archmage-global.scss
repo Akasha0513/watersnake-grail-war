@@ -2652,10 +2652,24 @@ a.effect-link,
   .gfc-bang { color: inherit; }
 }
 
-// 선언 배너 메시지: 헤더/포트레이트 숨기고, 턴처럼 패딩 0(포트레이트 플러시·40px)
+// 선언 배너 메시지: 헤더/포트레이트 숨기고, 턴처럼 패딩 0(포트레이트 플러시·40px) +
+// 앞뒤로 끊긴 독립 블록(.added 병합돼도 강제 분리 — 턴과 동일).
 .chat-message.grail-feature-call-message {
   padding: 0 !important;
+  margin-top: 4px !important;     // 턴과 동일 간격 — .added여도 앞뒤 분리
+  margin-bottom: 4px !important;
+  border-radius: 6px !important;  // 독립 블록(모든 모서리 라운드)
+  overflow: hidden;              // 포트레이트 사각 모서리를 라운드로 클립
   .message-header { display: none !important; }
   .message-content { padding: 0; margin: 0; }
   .grail-feature-call { margin: 0; }
+}
+// 앞뒤 이웃 메시지의 인접 모서리도 라운드 → 배너가 깔끔히 끊겨 보이게(턴처럼)
+.chat-message.message:has(+ .grail-feature-call-message) {
+  border-bottom-left-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+}
+.chat-message.grail-feature-call-message + .chat-message.message {
+  border-top-left-radius: 6px !important;
+  border-top-right-radius: 6px !important;
 }
