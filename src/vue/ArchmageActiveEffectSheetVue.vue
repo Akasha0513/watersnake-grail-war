@@ -81,6 +81,10 @@
           <EffectEscalation :viewModel="viewModel" />
         </Tab>
 
+        <Tab group="primary" :tab="tabs.primary.attack">
+          <EffectDamage :viewModel="viewModel" />
+        </Tab>
+
         <Tab group="primary" :tab="tabs.primary.checkbonus">
           <EffectCheckBonus :viewModel="viewModel" :effect="effect" />
         </Tab>
@@ -100,6 +104,7 @@ import {
   EffectDefenses,
   EffectResources,
   EffectEscalation,
+  EffectDamage,
   EffectCheckBonus,
 } from '@/components';
 import { computed, inject, reactive, toRaw, watch } from 'vue';
@@ -197,6 +202,13 @@ const fieldDefs = [
 	{ vm: 'edBonusAdd', key: 'system.overrides.ed.bonus', mode: ADD },
 	{ vm: 'edValueOver', key: 'system.overrides.ed.value', mode: OVERRIDE },
 	{ vm: 'edInvert', key: 'system.overrides.ed.invert', mode: OVERRIDE },
+	// 근접/사격 피해 보정(공격 타입 지정 feature 피해 굴림에 합산 — _completeFeatureRoll)
+	{ vm: 'dmgMeleeStep', key: 'system.overrides.dmg.melee.step', mode: ADD },
+	{ vm: 'dmgMeleeDice', key: 'system.overrides.dmg.melee.dice', mode: ADD },
+	{ vm: 'dmgMeleeBonus', key: 'system.overrides.dmg.melee.bonus', mode: ADD },
+	{ vm: 'dmgRangedStep', key: 'system.overrides.dmg.ranged.step', mode: ADD },
+	{ vm: 'dmgRangedDice', key: 'system.overrides.dmg.ranged.dice', mode: ADD },
+	{ vm: 'dmgRangedBonus', key: 'system.overrides.dmg.ranged.bonus', mode: ADD },
 	// 능력치: 기반수치 증감(value ADD)/기반수치 대체(override, 후 강화 누적)/보정 증감(mod ADD)/보정 덮어쓰기(mod OVERRIDE)
 	...ABILS.flatMap(a => [
 		{ vm: `${a}_valAdd`, key: `system.abilities.${a}.value`, mode: ADD },

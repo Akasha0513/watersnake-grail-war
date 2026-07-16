@@ -81,6 +81,26 @@
                             <input type="text" name="system.damage.value" value="{{system.damage.value}}" placeholder="예: 1d8 (선택)"/>
                         </li>
                         <li>
+                            <label>공격 타입</label>
+                            <select name="system.attackType.value">
+                                <option value="" {{#if (eq system.attackType.value "")}}selected{{/if}}>— 없음 —</option>
+                                <option value="melee" {{#if (eq system.attackType.value "melee")}}selected{{/if}}>근접 공격</option>
+                                <option value="ranged" {{#if (eq system.attackType.value "ranged")}}selected{{/if}}>사격 공격</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>피해 가산 능력치</label>
+                            <select name="system.damageAbility.value" title="서번트(및 영령 취급)만 피해에 수정치 자동 가산">
+                                <option value="" {{#if (eq system.damageAbility.value "")}}selected{{/if}}>— 없음 —</option>
+                                <option value="str" {{#if (eq system.damageAbility.value "str")}}selected{{/if}}>근력</option>
+                                <option value="end" {{#if (eq system.damageAbility.value "end")}}selected{{/if}}>내구</option>
+                                <option value="agi" {{#if (eq system.damageAbility.value "agi")}}selected{{/if}}>민첩</option>
+                                <option value="mgi" {{#if (eq system.damageAbility.value "mgi")}}selected{{/if}}>마력</option>
+                                <option value="lck" {{#if (eq system.damageAbility.value "lck")}}selected{{/if}}>행운</option>
+                                <option value="ins" {{#if (eq system.damageAbility.value "ins")}}selected{{/if}}>통찰</option>
+                            </select>
+                        </li>
+                        <li>
                             <label>기타 다이스</label>
                             <input type="text" name="system.misc.value" value="{{system.misc.value}}" placeholder="예: 2d6 (선택)"/>
                         </li>

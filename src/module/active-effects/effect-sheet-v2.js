@@ -92,6 +92,10 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
             key: 'escalation',
             label: '고조'
           },
+          attack: {
+            key: 'attack',
+            label: '공격'
+          },
           checkbonus: {
             key: 'checkbonus',
             label: '판정 보정'

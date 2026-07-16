@@ -1106,6 +1106,14 @@ Item:
       type: String
       label: Damage
       value: ''
+    attackType:
+      type: String
+      label: Attack Type
+      value: ''
+    damageAbility:
+      type: String
+      label: Damage Ability
+      value: ''
     misc:
       type: String
       label: Misc Dice

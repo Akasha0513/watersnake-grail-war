@@ -29,5 +29,7 @@
   {{/if}}
   <footer class="card-footer">
     {{#if system.kind.value}}<span>종류: {{system.kind.value}}</span>{{/if}}
+    {{#if (eq system.attackType.value "melee")}}<span>근접 공격</span>{{/if}}
+    {{#if (eq system.attackType.value "ranged")}}<span>사격 공격</span>{{/if}}
   </footer>
 </div>

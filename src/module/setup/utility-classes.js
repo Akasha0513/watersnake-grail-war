@@ -248,15 +248,35 @@ export class ArchmageUtility {
       let addDice = Number(opts.addDice) || 0;
       // 대성공: 공격 다이스 1개만 추가(단계/면수는 안 올림)
       if (opts.critical) { addDice += 1; }
+      // 공격 타입(근접/사격)이 지정된 feature는 AE 피해 보정(overrides.dmg.*)을 합산.
+      // _effectAdd = 활성 AE ADD 합산(formula 해석, 굴림 시점이라 재귀 없음).
+      const atkType = ['melee', 'ranged'].includes(sys.attackType?.value) ? sys.attackType.value : null;
+      if (atkType) {
+        steps += actor._effectAdd(`dmg.${atkType}.step`);
+        addDice += actor._effectAdd(`dmg.${atkType}.dice`);
+      }
       // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 ±2) 적용.
+      // 개수 없는 표기(d8)도 1개로 취급해 매칭(마스터 무기 표기에서 강화가 무시되던 버그 수정).
       // 개수·면수 바닥값은 0 — 둘 중 하나라도 0이면 해당 주사위 항은 0(유효한 Roll 위해 리터럴 '0').
       if (steps !== 0 || addDice !== 0) {
-        formula = formula.replace(/(\d+)\s*[dD]\s*(\d+)/, (m, n, f) => {
-          const count = Math.max(0, Number(n) + addDice);
+        formula = formula.replace(/(\d*)\s*[dD]\s*(\d+)/, (m, n, f) => {
+          const count = Math.max(0, (n === '' ? 1 : Number(n)) + addDice);
           const faces = Math.max(0, Number(f) + 2 * steps);
           if (count === 0 || faces === 0) return '0';
           return `${count}d${faces}`;
         });
+      }
+      // AE 피해 보정치(숫자/식 합산 결과)
+      if (atkType) {
+        const aeBonus = actor._effectAdd(`dmg.${atkType}.bonus`);
+        if (aeBonus) formula = ArchmageUtility._appendBonus(formula, String(aeBonus));
+      }
+      // 서번트(및 영령 취급 마스터/npc) 한정: 피해 가산 능력치 수정치 자동 합산 (룰: 2d(무기)+근력 수정치)
+      const servantLike = actor.type === 'character'
+        || ['three', 'sorcery'].includes(actor.system.details?.masterAsServant?.value);
+      const dmgAbl = sys.damageAbility?.value;
+      if (servantLike && dmgAbl && actor.system.abilities?.[dmgAbl]) {
+        formula = ArchmageUtility._appendBonus(formula, `@${dmgAbl}.mod`);
       }
       formula = ArchmageUtility._appendBonus(formula, opts.extra);
       label = '피해';
@@ -441,6 +461,12 @@ export class ArchmageUtility {
 
   static cleanActiveEffectLabel(label) {
     return label
+      .replace("system.overrides.dmg.melee.step", "근접 피해 단계")
+      .replace("system.overrides.dmg.melee.dice", "근접 피해 개수")
+      .replace("system.overrides.dmg.melee.bonus", "근접 피해 보정")
+      .replace("system.overrides.dmg.ranged.step", "사격 피해 단계")
+      .replace("system.overrides.dmg.ranged.dice", "사격 피해 개수")
+      .replace("system.overrides.dmg.ranged.bonus", "사격 피해 보정")
       .replace("system.overrides.ed.mode", "고조 기준")
       .replace("system.overrides.ed.cap", "고조 상한")
       .replace("system.overrides.ed.bonus", "고조 최종 증감")
