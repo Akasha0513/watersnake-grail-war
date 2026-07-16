@@ -2642,8 +2642,9 @@ a.effect-link,
     padding: 0 40px 0 0;
     text-align: center;
     // 턴 알림(.message-sender h4)과 동일 폰트: 모듈 --mingjo-bold(명조), 없으면 시스템 본문 세리프
+    // 크기는 턴(+2px)보다 살짝 작게(+1px).
     font-family: var(--mingjo-bold, 'Ridibatang', serif);
-    font-size: calc(var(--font-size, 14px) + 2px);
+    font-size: calc(var(--font-size, 14px) + 1px);
     font-weight: 600;
     letter-spacing: 0.02em;
   }
