@@ -401,6 +401,7 @@ export class DiceArchmage {
     rollMode,
     fixedBonus = null,
     critExpand = 0,
+    fumbleExpand = 0,
     extraMods = []
   }) {
     // 수정치 배열로 조립 (통합 RollDialog 모델 §3). base = d20(유리/불리 단계), 나머지는 modifier.
@@ -468,11 +469,12 @@ export class DiceArchmage {
     const roll = new Roll(formula, rd)
     await roll.roll()
 
-    // 대성공 범위 확장: 자연 d20(유리/불리 시 채택된 주사위)이 (20-확장) 이상이면 대성공.
+    // 대성공/대실패 범위 확장: 자연 d20(유리/불리 시 채택된 주사위) 기준.
     const natD20 = roll.dice?.[0]?.total ?? null
     const expand = Math.max(0, Number(critExpand) || 0)
+    const fExpand = Math.max(0, Number(fumbleExpand) || 0)
     const isCrit = natD20 != null && natD20 >= (20 - expand)
-    const isFumble = natD20 === 1
+    const isFumble = natD20 != null && natD20 <= (1 + fExpand)
 
     // SWADE식 항목 박스(formula-list)로 분해
     const formulaParts = game.holygrailwar.ArchmageUtility.rollFormulaParts(roll)

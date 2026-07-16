@@ -19,6 +19,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     this.checkedBg = {};
     this.situational = '';
     this.critExpand = Number(ctx.critExpand) || 0;
+    this.fumbleExpand = Number(ctx.fumbleExpand) || 0;
     this.rollMode = game.settings.get('core', 'rollMode');
     this.modifiers = Array.isArray(ctx.modifiers) ? foundry.utils.duplicate(ctx.modifiers) : [];
     // 영령의 급(@grade)을 토글 가능한 수정치로 추가. 기본 ON. 커스텀 판정(fixedBonus)은 제외.
@@ -89,6 +90,8 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (sit) this.situational = sit.value;
     const ce = root.querySelector('[name="critExpand"]');
     if (ce) this.critExpand = Number(ce.value) || 0;
+    const fe = root.querySelector('[name="fumbleExpand"]');
+    if (fe) this.fumbleExpand = Number(fe.value) || 0;
     const rm = root.querySelector('[name="rollMode"]');
     if (rm) this.rollMode = rm.value;
     for (const bg of (this.ctx.backgrounds || [])) {
@@ -143,6 +146,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       presets: GrailRollDialog.PRESETS,
       situational: this.situational,
       critExpand: this.critExpand,
+      fumbleExpand: this.fumbleExpand,
       rollMode: this.rollMode,
       rollModes: CONFIG.Dice.rollModes,
       formula
@@ -203,6 +207,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       rollMode: this.rollMode,
       fixedBonus: this.ctx.fixedBonus || null,
       critExpand: this.critExpand,
+      fumbleExpand: this.fumbleExpand,
       extraMods
     });
     this._resolve?.(true);
