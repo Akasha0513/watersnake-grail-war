@@ -196,6 +196,10 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       .filter(bg => this.checkedBg[bg.key]?.checked)
       .map(bg => ({ key: bg.key, random: !!this.checkedBg[bg.key]?.random }));
     const extraMods = this.modifiers.filter(m => m.active !== false);
+    // + 버튼을 안 누른 입력 중 커스텀 수정치도 굴림에 포함 (_onAddMod와 동일 규칙)
+    const pendLabel = this.element.querySelector('.new-mod-label')?.value?.trim();
+    const pendValue = this.element.querySelector('.new-mod-value')?.value?.trim();
+    if (pendValue) extraMods.push({ label: pendLabel || '보정', value: pendValue, active: true, source: 'custom' });
 
     this._resolved = true;
     await DiceArchmage._completeBackgroundRoll({
