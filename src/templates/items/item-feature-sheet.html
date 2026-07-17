@@ -16,14 +16,16 @@
                         <option value="system" {{#if (eq system.category.value "system")}}selected{{/if}}>체계</option>
                         <option value="action" {{#if (eq system.category.value "action")}}selected{{/if}}>고급 액션</option>
                         <option value="actionHigh" {{#if (eq system.category.value "actionHigh")}}selected{{/if}}>최고급 액션</option>
+                        <option value="equipInit" {{#if (eq system.category.value "equipInit")}}selected{{/if}}>초기 예장</option>
                         <option value="equip" {{#if (eq system.category.value "equip")}}selected{{/if}}>예장</option>
+                        <option value="classSkill" {{#if (eq system.category.value "classSkill")}}selected{{/if}}>클래스 스킬</option>
                         <option value="skill" {{#if (eq system.category.value "skill")}}selected{{/if}}>스킬</option>
                         <option value="variable" {{#if (eq system.category.value "variable")}}selected{{/if}}>가변 기능</option>
                         <option value="np" {{#if (eq system.category.value "np")}}selected{{/if}}>보구</option>
                         <option value="etc" {{#if (eq system.category.value "etc")}}selected{{/if}}>기타 기능</option>
                     </select>
                 </li>
-                {{#if (or (eq system.category.value "equip") (eq system.category.value "skill") (eq system.category.value "np") (eq system.category.value "etc"))}}
+                {{#if (or (eq system.category.value "equipInit") (eq system.category.value "equip") (eq system.category.value "classSkill") (eq system.category.value "skill") (eq system.category.value "np") (eq system.category.value "etc"))}}
                 <li>
                     <label>랭크</label>
                     <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+"/>
