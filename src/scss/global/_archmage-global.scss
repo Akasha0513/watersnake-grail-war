@@ -2585,6 +2585,33 @@ a.effect-link,
   }
 }
 
+// 판정 대화상자(GrailRollDialog): 배경/수정치가 많아도 굴림 버튼이 잘리지 않게 —
+// 본문(.grd-scroll)만 스크롤, 푸터(굴림 버튼)는 고정. 창 높이는 뷰포트 90% 상한.
+.application.grail-roll-dialog {
+  max-height: 90vh;
+
+  .window-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .grail-roll-dialog-body {
+    flex: 1;
+    min-height: 0;
+  }
+  .grd-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;   // 스크롤바와 내용 간격
+  }
+  footer { flex: 0 0 auto; }
+}
+
 // 라운드 시작 알림 배너 (combatRound 훅에서 채팅으로 출력)
 .grail-round-notice {
   display: flex;
