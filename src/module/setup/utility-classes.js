@@ -91,18 +91,26 @@ export class ArchmageUtility {
       return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, { defaultAbility: sys.rollAbility.value });
     }
 
+    // 롤 모드 셀렉트(공개/GM 귀엣말 등) — 기타/피해 대화상자 공용
+    const defaultRollMode = game.settings.get('core', 'rollMode');
+    const rollModeOptions = Object.entries(CONFIG.Dice.rollModes).map(([k, m]) =>
+      `<option value="${k}"${k === defaultRollMode ? ' selected' : ''}>${game.i18n.localize(m.label ?? m)}</option>`).join('');
+
     // 기타 굴림: 보정치(주사위/고정)를 대화상자로 입력
     if (rollType === 'misc') {
       if (!sys.misc?.value) return;
       return new foundry.applications.api.DialogV2({
         window: { title: `${item.name} — 기타 굴림` },
-        content: `<div class="form-group" style="display:flex;flex-direction:column;gap:4px;">
-            <label>추가 보정치 (선택 · 주사위/고정 가능, 예: 1d4, +2)</label>
-            <input name="extra" type="text" placeholder="예: 1d4, +2" autofocus>
+        content: `<div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="form-group" style="display:flex;flex-direction:column;gap:4px;">
+              <label>추가 보정치 (선택 · 주사위/고정 가능, 예: 1d4, +2)</label>
+              <input name="extra" type="text" placeholder="예: 1d4, +2" autofocus>
+            </div>
+            <div class="form-group"><label>롤 모드</label><select name="rollMode">${rollModeOptions}</select></div>
           </div>`,
         buttons: [
           { action: 'roll', label: '굴림', default: true,
-            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'misc', { extra: b.form.extra.value }) },
+            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'misc', { extra: b.form.extra.value, rollMode: b.form.rollMode.value }) },
           { action: 'cancel', label: '취소' }
         ],
         rejectClose: false
@@ -125,6 +133,7 @@ export class ArchmageUtility {
             <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
             <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
+            <div class="form-group"><label>롤 모드</label><select name="rollMode">${rollModeOptions}</select></div>
           </div>`,
         buttons: [
           { action: 'roll', label: '굴림', default: true,
@@ -133,7 +142,8 @@ export class ArchmageUtility {
               addDice: Number(b.form.addDice.value) || 0,
               extra: b.form.extra.value,
               critical: false,
-              maximize: b.form.maximize.checked
+              maximize: b.form.maximize.checked,
+              rollMode: b.form.rollMode.value
             }) },
           { action: 'raise', label: '대성공',
             callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
@@ -141,7 +151,8 @@ export class ArchmageUtility {
               addDice: Number(b.form.addDice.value) || 0,
               extra: b.form.extra.value,
               critical: true,
-              maximize: b.form.maximize.checked
+              maximize: b.form.maximize.checked,
+              rollMode: b.form.rollMode.value
             }) },
           { action: 'cancel', label: '취소' }
         ],
@@ -300,7 +311,7 @@ export class ArchmageUtility {
       speaker: ArchmageUtility.getSpeaker(actor),
       content: content,
       rolls: [roll]
-    });
+    }, opts.rollMode ? { rollMode: opts.rollMode } : {});
   }
 
   static async show3DDiceForRoll(roll, chatData = null,
