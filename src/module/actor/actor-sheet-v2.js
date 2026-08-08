@@ -219,10 +219,24 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /*  Event Listeners ------------------------------------------------------- */
   /* ------------------------------------------------------------------------ */
 
+  /**
+   * @override 동시 열람 롤백 방지: 이 클라이언트가 폼을 만지지 않았으면 닫기 제출(submitOnClose) 생략.
+   * (A·B가 같은 시트를 열고 B가 수정한 뒤, A가 조작 없이 닫으면 A의 오래된 폼 전체가 제출돼
+   *  B의 변경을 되돌리던 문제. submitOnChange가 실시간 저장하므로 닫기 제출은 만진 경우만 필요.)
+   */
+  async close(options = {}) {
+    if (!this._grailDirty && options.submit === undefined) options = { ...options, submit: false };
+    return super.close(options);
+  }
+
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
     ActorHelpersV2._activatePortraitArtContextMenu(this, html)
+
+    // 더티 추적: 폼 입력을 만지면 표시. 재렌더(외부 변경 반영 포함) 시 리스너 재부착으로 리셋.
+    this._grailDirty = false;
+    html.on('input change', 'input, select, textarea', () => { this._grailDirty = true; });
 
     // Close the mobile menu if open.
     html.on('click', (event) => {
