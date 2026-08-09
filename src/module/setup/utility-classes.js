@@ -215,12 +215,13 @@ export class ArchmageUtility {
           if (r.discarded) cls.push('discarded');
           if (r.result === 1) cls.push('min');
           if (r.result === term.faces) cls.push('max');
+          // 다이스 SVG 배경은 면수 클래스(dN)로 — CSS 한 곳에서 처리(메시지마다 인라인 style 미저장 → 로그 경량화)
+          if (haveSvg.includes(term.faces)) cls.push(`d${term.faces}`);
           parts.push({
             die: true,
             result: r.result,
             hint: term.flavor ? `${term.flavor} (d${term.faces})` : `d${term.faces}`,
-            cls: cls.join(' '),
-            img: haveSvg.includes(term.faces) ? `systems/watersnake-grail-war/assets/dice/d${term.faces}-grey.svg` : ''
+            cls: cls.join(' ')
           });
         }
       } else {

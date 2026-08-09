@@ -1,7 +1,7 @@
 <div class="archmage chat-card feature-roll-card swade-card swade-roll-message"
      data-actor-id="{{actorId}}" data-token-id="{{tokenId}}" data-item-id="{{item._id}}" data-roll-type="{{rollType}}">
   <header class="card-header flexrow">
-    <h3 class="item-name">{{#if ruby}}<ruby>{{item.name}}<rt>{{ruby}}</rt></ruby>{{else}}{{item.name}}{{/if}}&nbsp;—&nbsp;{{label}}{{#if labelSuffix}} <span style="font-size:0.78em;opacity:0.7;font-weight:normal;white-space:nowrap;">{{labelSuffix}}</span>{{/if}}</h3>
+    <h3 class="item-name">{{#if ruby}}<ruby>{{item.name}}<rt>{{ruby}}</rt></ruby>{{else}}{{item.name}}{{/if}}&nbsp;—&nbsp;{{label}}{{#if labelSuffix}} <span class="label-suffix">{{labelSuffix}}</span>{{/if}}</h3>
   </header>
   <div class="card-content">
     <div class="swade-roll">
@@ -9,7 +9,7 @@
         <div class="dice-result">
           <div class="dice-formula">
             <ol class="formula-list">
-              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
+              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
             </ol>
           </div>
           <div class="dice-flavor">굴림 결과</div>

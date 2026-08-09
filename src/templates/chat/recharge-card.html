@@ -24,12 +24,12 @@
           <h4 class="dice-total dice-total--small">{{localize 'ARCHMAGE.CHAT.recharge'}}: {{data.roll.total}}</h4>
       </div>
     </div>
-    <div class="card-row" style="padding-top: 5px;">
+    <div class="card-row card-row--result">
       <div class="card-prop">
         {{#if success}}
-        <span style="color: green;"><b>{{localize 'ARCHMAGE.SAVE.success'}}</b></span>
+        <span class="result-success"><b>{{localize 'ARCHMAGE.SAVE.success'}}</b></span>
         {{else}}
-        <span style="color: red;"><b>{{localize 'ARCHMAGE.SAVE.failure'}}</b></span>
+        <span class="result-fail"><b>{{localize 'ARCHMAGE.SAVE.failure'}}</b></span>
         {{/if}}
       </div>
   </div>

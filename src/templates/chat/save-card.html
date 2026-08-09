@@ -6,7 +6,7 @@
         <div class="dice-result">
           <div class="dice-formula">
             <ol class="formula-list">
-              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" {{#if img}}style="background-image:url('{{img}}');"{{/if}} data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
+              {{#each formulaParts}}{{#if die}}<li class="die {{cls}}" data-tooltip="{{hint}}"><span>{{result}}</span></li>{{else}}<li data-tooltip="{{hint}}">{{result}}</li>{{/if}}{{/each}}
             </ol>
           </div>
           <div class="dice-flavor">굴림 결과</div>

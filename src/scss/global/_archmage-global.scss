@@ -1986,8 +1986,28 @@ option[selected] {
     .formula-list li.die.min span { color: var(--min-color); }
     .formula-list li.die.max span { color: var(--exploded-color); }
     .formula-list li.die.discarded { opacity: 0.4; }
+    // 다이스 SVG 배경 — 면수 클래스(dN)로 CSS 한 곳에서 처리
+    // (이전엔 메시지마다 인라인 background-image가 저장돼 로그가 무거워짐 → v0.3.23에서 클래스화.
+    //  기존 메시지의 인라인 스타일은 저장된 그대로 동작하므로 호환.)
+    @each $n in 4, 6, 8, 10, 12, 20 {
+      .result-list li.die.d#{$n},
+      .formula-list li.die.d#{$n} {
+        background-image: url('/systems/watersnake-grail-war/assets/dice/d#{$n}-grey.svg');
+      }
+    }
   }
 }
+
+// 채팅 카드 공용 소형 클래스 (인라인 스타일 대체 — 로그 경량화)
+.chat-card .card-header .label-suffix {
+  font-size: 0.78em;
+  opacity: 0.7;
+  font-weight: normal;
+  white-space: nowrap;
+}
+.chat-card .card-row--result { padding-top: 5px; }
+.chat-card .result-success { color: green; }
+.chat-card .result-fail { color: red; }
 
 // feature 채팅 카드 본문/푸터 (랭크·종류는 푸터 메타 텍스트)
 .chat-card.feature-card {
