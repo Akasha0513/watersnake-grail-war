@@ -549,7 +549,9 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       { speakerName, featureName: item.name, rank: item.system.rank?.value, portrait }
     );
     await game.holygrailwar.ArchmageUtility.createChatMessage({
-      speaker: speaker,
+      // 병합 차단: fvtt-chat-enhancements의 동일 화자 병합(isFamily: alias+액터+유저 일치 시 .added)이
+      // 배너를 앞뒤 채팅과 이어붙이지 않도록 액터 없는 화자(alias만)로 전송 → 앞뒤가 별개 블록으로 분리(턴처럼).
+      speaker: { alias: speakerName },
       content: content,
       flags: { 'watersnake-grail-war': { featureCall: true } }
     });
