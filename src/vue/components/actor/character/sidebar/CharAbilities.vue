@@ -2,7 +2,10 @@
   <section class="section section--abilities flexcol">
     <div class="list-item-header grid grid-4col">
       <h2 class="unit-title grid-start-3">{{localize('ARCHMAGE.abilities')}}</h2>
-      <a class="ability-config" title="능력치 설정"><i class="fas fa-gear"></i></a>
+      <span class="ability-header-controls">
+        <a class="pure-check-roll" title="순수값 판정 (1d20+직접값)"><i class="fas fa-dice-d20"></i></a>
+        <a class="ability-config" title="능력치 설정"><i class="fas fa-gear"></i></a>
+      </span>
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
@@ -94,10 +97,15 @@ export default {
 </script>
 
 <style>
-/* 능력치 설정 기어 버튼(헤더 오른쪽) */
-.section--abilities .list-item-header .ability-config {
+/* 능력치 설정 기어·순수값 판정 버튼(헤더 오른쪽) */
+.section--abilities .list-item-header .ability-header-controls {
   justify-self: end;
   align-self: center;
+  display: flex;
+  gap: 6px;
+}
+.section--abilities .list-item-header .ability-config,
+.section--abilities .list-item-header .pure-check-roll {
   cursor: pointer;
 }
 /* 직접 입력칸 → 읽기 표시(편집은 설정 대화상자에서) */

@@ -265,6 +265,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
 
+    // 순수값 판정 (1d20+직접값 — 능력치 라디오 없음, 커스텀/상황 보정으로 값 구성)
+    html.on('click', '.pure-check-roll', () =>
+      game.holygrailwar.DiceArchmage.BackgroundRoll(this.actor, { fixedBonus: '0', title: '순수값 판정', abilitySelect: false }));
+
     // 능력치 설정 대화상자.
     html.on('click', '.ability-config', (event) => this._onAbilityConfig(event));
 

@@ -416,8 +416,8 @@ export class DiceArchmage {
     else base = '1d20'                                                              // 일반
 
     const mods = []
-    // feature '판정 직접'(rollCustom) 고정 보정
-    if (fixedBonus) mods.push({ label: '직접', value: String(fixedBonus), source: 'custom' })
+    // feature '판정 직접'(rollCustom) 고정 보정. '0'(시트 순수값 판정 진입점)은 노이즈라 행 생략.
+    if (fixedBonus && String(fixedBonus).trim() !== '0') mods.push({ label: '직접', value: String(fixedBonus), source: 'custom' })
     // 능력치 수정치
     const ability = actor.system.abilities[abilityKey]
     if (ability) mods.push({ label: game.i18n.localize(`ARCHMAGE.${abilityKey}.label`), value: `@${abilityKey}.mod`, source: 'ability' })

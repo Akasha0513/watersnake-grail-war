@@ -29,12 +29,13 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     if (!ctx.fixedBonus && (isServant || gradeVal > 0)) {
       this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
     }
-    // 판정 보정 → 영령의 급 아래로(push) 토글 추가. 커스텀 판정(fixedBonus)은 제외.
-    if (!ctx.fixedBonus) {
-      // ① 단일 "모든 판정 보정"(checkBonus.value)
+    // 판정 보정 → 영령의 급 아래로(push) 토글 추가.
+    // 순수값 판정(fixedBonus)에도 적용(v0.3.26) — 급·고조와 달리 판정 보정 AE는 'custom'/'all' 스코프로 매칭.
+    {
+      // ① 단일 "모든 판정 보정"(checkBonus.value) — 'all' 스코프
       const checkBonusVal = Number(ctx.actor?.system?.attributes?.checkBonus?.value) || 0;
       if (checkBonusVal !== 0) {
-        this.modifiers.push({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus' });
+        this.modifiers.push({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus', scope: 'all' });
       }
       // ② AE 판정 보정 항목(이름별, 다중). 값은 formula 가능(굴림 시 해석).
       // scope = 적용 조건('all'/능력치/'custom'/'melee'/'ranged') — 현재 판정 태그와 일치할 때만 표시·합산(v0.3.25).

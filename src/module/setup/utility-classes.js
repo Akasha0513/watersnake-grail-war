@@ -86,7 +86,9 @@ export class ArchmageUtility {
         return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {
           fixedBonus: custom,
           title: `${item.name} — 판정`,
-          extraTags: atkTags
+          extraTags: atkTags,
+          // 순수값 판정: 능력치 라디오 숨김(직접값과 이중 가산 방지 — v0.3.26)
+          abilitySelect: false
         });
       }
       // 아니면 능력치 선택 → 시트와 동일한 배경 판정 대화상자(해당 능력치 프리셋)
