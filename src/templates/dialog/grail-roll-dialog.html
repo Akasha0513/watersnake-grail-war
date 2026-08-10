@@ -30,8 +30,8 @@
 		<ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;">
 			{{#each modifiers}}
 			<li style="display:flex;align-items:center;gap:6px;">
-				<label style="flex:1;display:flex;align-items:center;gap:5px;"><input type="checkbox" name="mod-{{@index}}" {{#if active}}checked{{/if}}> <span>{{label}}</span> <span style="opacity:0.7;">{{value}}</span></label>
-				<a data-action="removeMod" data-index="{{@index}}" title="삭제"><i class="fas fa-times"></i></a>
+				<label style="flex:1;display:flex;align-items:center;gap:5px;"><input type="checkbox" name="mod-{{idx}}" {{#if active}}checked{{/if}}> <span>{{label}}</span> <span style="opacity:0.7;">{{value}}</span></label>
+				<a data-action="removeMod" data-index="{{idx}}" title="삭제"><i class="fas fa-times"></i></a>
 			</li>
 			{{else}}
 			<li style="opacity:0.5;font-style:italic;">추가 수정치 없음</li>
@@ -52,8 +52,8 @@
 	<fieldset>
 		<legend>옵션</legend>
 		<div class="form-group"><label>상황 보정</label><input type="text" name="situational" value="{{situational}}" placeholder="예: +1d4"></div>
-		<div class="form-group"><label>대성공 범위 확장</label><input type="number" name="critExpand" value="{{critExpand}}" min="0"></div>
-		<div class="form-group"><label>대실패 범위 확장</label><input type="number" name="fumbleExpand" value="{{fumbleExpand}}" min="0"></div>
+		<div class="form-group"><label>대성공 범위 확장</label><input type="number" name="critExpand" value="{{critExpand}}" min="0">{{#if critAeBonus}}<span style="font-size:0.85em;opacity:0.75;white-space:nowrap;">(+AE {{critAeBonus}})</span>{{/if}}</div>
+		<div class="form-group"><label>대실패 범위 확장</label><input type="number" name="fumbleExpand" value="{{fumbleExpand}}" min="0">{{#if fumbleAeBonus}}<span style="font-size:0.85em;opacity:0.75;white-space:nowrap;">(+AE {{fumbleAeBonus}})</span>{{/if}}</div>
 		<div class="form-group"><label>롤 모드</label><select name="rollMode">{{selectOptions rollModes selected=rollMode localize=true}}</select></div>
 		<div class="form-group"><label>공식</label><code style="flex:1;padding:2px 4px;opacity:0.85;word-break:break-all;">{{formula}}</code></div>
 	</fieldset>

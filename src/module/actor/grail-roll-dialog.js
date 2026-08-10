@@ -37,13 +37,40 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         this.modifiers.push({ label: '판정 보정', value: String(checkBonusVal), active: true, source: 'checkBonus' });
       }
       // ② AE 판정 보정 항목(이름별, 다중). 값은 formula 가능(굴림 시 해석).
+      // scope = 적용 조건('all'/능력치/'custom'/'melee'/'ranged') — 현재 판정 태그와 일치할 때만 표시·합산(v0.3.25).
       const cbList = ctx.actor?.system?.attributes?.checkBonusList;
       if (Array.isArray(cbList)) {
         for (const cb of cbList) {
-          this.modifiers.push({ label: cb.label || '판정 보정', value: String(cb.value), active: true, source: 'checkBonus' });
+          this.modifiers.push({ label: cb.label || '판정 보정', value: String(cb.value), active: true, source: 'checkBonus', scope: cb.apply || 'all' });
         }
       }
     }
+  }
+
+  /** 현재 판정의 태그 집합 — 명중 판정은 능력치 판정을 겸함(태그 복수). */
+  get currentTags() {
+    const tags = [];
+    if (this.ctx.fixedBonus) tags.push('custom');
+    if (this.selectedAbility) tags.push(this.selectedAbility);
+    for (const t of (this.ctx.extraTags || [])) tags.push(t);
+    return tags;
+  }
+
+  /** 수정치/확장 항목의 적용 조건이 현재 태그와 일치하는가 ('all'·미지정은 항상). */
+  _scopeMatch(scope) {
+    if (!scope || scope === 'all') return true;
+    return this.currentTags.includes(scope);
+  }
+
+  /** AE 대성공/대실패 범위 확장 합산(조건 일치분만, 값 formula 해석). */
+  _aeExpandSum(list) {
+    let sum = 0;
+    for (const m of (list || [])) {
+      if (!this._scopeMatch(m.apply)) continue;
+      const v = this.ctx.actor?._resolveEffectFormula?.(m.value);
+      if (typeof v === 'number') sum += v;
+    }
+    return sum;
   }
 
   static asPromise(ctx) {
@@ -125,13 +152,18 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       mods.push({ label: b.name?.value || '배경', value: st.random ? `1d${val}` : `${val}` });
     }
     if (ab && ab.bonus) mods.push({ label: '아이템', value: `@${this.selectedAbility}.bonus` });
-    for (const m of this.modifiers) if (m.active !== false) mods.push({ label: m.label, value: m.value });
+    for (const m of this.modifiers) if (m.active !== false && this._scopeMatch(m.scope)) mods.push({ label: m.label, value: m.value });
     if (this.situational) mods.push({ label: '상황', value: String(this.situational) });
     return mods;
   }
 
   async _prepareContext() {
     const formula = game.holygrailwar.ArchmageUtility.reduceModifiers('1d20', this._previewModifiers());
+    // 스코프 불일치 수정치는 숨김(원본 인덱스 idx 보존 — 폼 name/삭제 버튼용).
+    const visibleModifiers = this.modifiers
+      .map((m, idx) => ({ ...m, idx }))
+      .filter(m => this._scopeMatch(m.scope));
+    const attrs = this.ctx.actor?.system?.attributes ?? {};
     return {
       abilitySelect: this.ctx.abilitySelect !== false,
       selectedAbility: this.selectedAbility,
@@ -142,11 +174,13 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         checked: !!this.checkedBg[b.key]?.checked,
         random: !!this.checkedBg[b.key]?.random
       })),
-      modifiers: this.modifiers,
+      modifiers: visibleModifiers,
       presets: GrailRollDialog.PRESETS,
       situational: this.situational,
       critExpand: this.critExpand,
       fumbleExpand: this.fumbleExpand,
+      critAeBonus: this._aeExpandSum(attrs.critModList),
+      fumbleAeBonus: this._aeExpandSum(attrs.fumbleModList),
       rollMode: this.rollMode,
       rollModes: CONFIG.Dice.rollModes,
       formula
@@ -195,11 +229,15 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const backgrounds = (this.ctx.backgrounds || [])
       .filter(bg => this.checkedBg[bg.key]?.checked)
       .map(bg => ({ key: bg.key, random: !!this.checkedBg[bg.key]?.random }));
-    const extraMods = this.modifiers.filter(m => m.active !== false);
+    const extraMods = this.modifiers.filter(m => m.active !== false && this._scopeMatch(m.scope));
     // + 버튼을 안 누른 입력 중 커스텀 수정치도 굴림에 포함 (_onAddMod와 동일 규칙)
     const pendLabel = this.element.querySelector('.new-mod-label')?.value?.trim();
     const pendValue = this.element.querySelector('.new-mod-value')?.value?.trim();
     if (pendValue) extraMods.push({ label: pendLabel || '보정', value: pendValue, active: true, source: 'custom' });
+    // AE 대성공/대실패 범위 확장(조건 일치분) — 입력값에 굴림 시점 가산
+    const attrs = actor?.system?.attributes ?? {};
+    const critExpandBonus = this._aeExpandSum(attrs.critModList);
+    const fumbleExpandBonus = this._aeExpandSum(attrs.fumbleModList);
 
     this._resolved = true;
     await DiceArchmage._completeBackgroundRoll({
@@ -212,6 +250,8 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       fixedBonus: this.ctx.fixedBonus || null,
       critExpand: this.critExpand,
       fumbleExpand: this.fumbleExpand,
+      critExpandBonus,
+      fumbleExpandBonus,
       extraMods
     });
     this._resolve?.(true);

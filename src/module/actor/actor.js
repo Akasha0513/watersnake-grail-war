@@ -507,21 +507,41 @@ export class ActorArchmage extends Actor {
       value: data.attributes.level.value + data.attributes.escalation.value
     };
 
-    // AE의 판정 보정 항목(이름+값) 집계 → 굴림 대화상자에서 항목별 토글로 노출.
+    // AE의 판정 보정 항목(이름+값+적용 조건) 집계 → 굴림 대화상자에서 항목별 토글로 노출.
     // 값은 formula 가능(굴림 시점에 대화상자가 해석). 비활성 효과는 제외.
+    // apply = 적용 조건('all'/능력치 키/'custom'/'melee'/'ranged') — 판정 태그와 매칭(v0.3.25).
     const checkBonusList = [];
+    const critModList = [];
+    const fumbleModList = [];
     for (const e of this.effects) {
       if (e.disabled) continue;
-      const list = e.flags?.['watersnake-grail-war']?.checkBonuses;
-      if (Array.isArray(list)) {
-        for (const cb of list) {
+      const flags = e.flags?.['watersnake-grail-war'] ?? {};
+      if (Array.isArray(flags.checkBonuses)) {
+        for (const cb of flags.checkBonuses) {
           const val = String(cb?.value ?? '').trim();
           if (val === '') continue;
-          checkBonusList.push({ label: (cb.label || e.name || '판정 보정'), value: val });
+          checkBonusList.push({ label: (cb.label || e.name || '판정 보정'), value: val, apply: cb.apply || 'all' });
+        }
+      }
+      // 대성공/대실패 범위 확장 (다중, 조건부)
+      if (Array.isArray(flags.critMods)) {
+        for (const cm of flags.critMods) {
+          const val = String(cm?.value ?? '').trim();
+          if (val === '') continue;
+          critModList.push({ label: e.name, value: val, apply: cm.apply || 'all' });
+        }
+      }
+      if (Array.isArray(flags.fumbleMods)) {
+        for (const fm of flags.fumbleMods) {
+          const val = String(fm?.value ?? '').trim();
+          if (val === '') continue;
+          fumbleModList.push({ label: e.name, value: val, apply: fm.apply || 'all' });
         }
       }
     }
     data.attributes.checkBonusList = checkBonusList;
+    data.attributes.critModList = critModList;
+    data.attributes.fumbleModList = fumbleModList;
 
     this.applyActiveEffects('std')
   }

@@ -77,18 +77,21 @@ export class ArchmageUtility {
 
     // 능력치 판정
     if (rollType === 'trait') {
+      // 공격 타입(근접/사격)이 지정된 feature는 판정 태그에 melee/ranged 추가 → 스코프드 AE 매칭(v0.3.25).
+      const atkTags = ['melee', 'ranged'].includes(sys.attackType?.value) ? [sys.attackType.value] : [];
       // 직접 입력(숫자/변수)이 있으면 일반 능력치 판정과 동일한 대화상자로
       // (능력치=없음 기본, 입력값은 고정 보정으로 합산. 유리/불리·상황보정·롤모드 적용 가능)
       const custom = sys.rollCustom?.value?.trim();
       if (custom) {
         return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {
           fixedBonus: custom,
-          title: `${item.name} — 판정`
+          title: `${item.name} — 판정`,
+          extraTags: atkTags
         });
       }
       // 아니면 능력치 선택 → 시트와 동일한 배경 판정 대화상자(해당 능력치 프리셋)
       if (!sys.rollAbility?.value) return;
-      return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, { defaultAbility: sys.rollAbility.value });
+      return game.holygrailwar.DiceArchmage.BackgroundRoll(actor, { defaultAbility: sys.rollAbility.value, extraTags: atkTags });
     }
 
     // 롤 모드 셀렉트(공개/GM 귀엣말 등) — 기타/피해 대화상자 공용

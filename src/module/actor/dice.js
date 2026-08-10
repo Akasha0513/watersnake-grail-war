@@ -367,7 +367,7 @@ export class DiceArchmage {
 
   static async BackgroundRoll (
     actor,
-    { defaultBackground = null, defaultAbility = null, fixedBonus = null, title = null }
+    { defaultBackground = null, defaultAbility = null, fixedBonus = null, title = null, extraTags = [], abilitySelect = true }
   ) {
     const formatBonus = bonus => (bonus >= 0 ? `+${bonus}` : `${bonus}`)
     const abilities = Object.entries(actor.system.abilities).map(([key, ability]) => ({
@@ -387,7 +387,8 @@ export class DiceArchmage {
       backgrounds,
       defaultAbility,
       fixedBonus,
-      abilitySelect: true,
+      extraTags,
+      abilitySelect,
       title: title ?? game.i18n.localize('ARCHMAGE.checkBackground')
     })
   }
@@ -402,6 +403,8 @@ export class DiceArchmage {
     fixedBonus = null,
     critExpand = 0,
     fumbleExpand = 0,
+    critExpandBonus = 0,
+    fumbleExpandBonus = 0,
     extraMods = []
   }) {
     // 수정치 배열로 조립 (통합 RollDialog 모델 §3). base = d20(유리/불리 단계), 나머지는 modifier.
@@ -470,9 +473,10 @@ export class DiceArchmage {
     await roll.roll()
 
     // 대성공/대실패 범위 확장: 자연 d20(유리/불리 시 채택된 주사위) 기준.
+    // 유효 확장 = 대화상자 입력값 + AE 확장 합산(스코프 일치분 — v0.3.25). 음수 AE로 축소도 가능, 하한 0.
     const natD20 = roll.dice?.[0]?.total ?? null
-    const expand = Math.max(0, Number(critExpand) || 0)
-    const fExpand = Math.max(0, Number(fumbleExpand) || 0)
+    const expand = Math.max(0, (Number(critExpand) || 0) + (Number(critExpandBonus) || 0))
+    const fExpand = Math.max(0, (Number(fumbleExpand) || 0) + (Number(fumbleExpandBonus) || 0))
     const isCrit = natD20 != null && natD20 >= (20 - expand)
     const isFumble = natD20 != null && natD20 <= (1 + fExpand)
 
