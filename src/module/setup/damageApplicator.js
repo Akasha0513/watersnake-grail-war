@@ -189,7 +189,8 @@ export class DamageApplicator {
           };
           const $attackRow = $(element.closest('.card-prop'));
           const targets = Targeting.getTargetsFromRowText(rowText, $attackRow, targetOptions.numTargets, targetOptions.cachedTargets);
-          const hitEvaluationResults = HitEvaluation.processRowText(rowText, targets, $attackRow, actor, false, false);
+          // processRowText는 5인자(critMod) — 재굴림 시 크릿 보정 재평가는 미지원이라 0 전달(잉여 6번째 인자 제거).
+          const hitEvaluationResults = HitEvaluation.processRowText(rowText, targets, $attackRow, actor, 0);
 
           if (hitEvaluationResults.defenses.length > 0) {
             // @todo Re-evaluate rolls here.

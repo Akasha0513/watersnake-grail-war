@@ -1155,7 +1155,9 @@ async function _applyAE(actor, data) {
       img: img,
       origin: data.source,
       flags: {
-        archmage: {
+        // 읽는 쪽(effect-sheet.js·renderChatMessageHTML 등)은 전부 'watersnake-grail-war' 네임스페이스 —
+        // 'archmage'로 쓰면 드래그 생성 지속피해 값이 안 읽히던 버그 수정(v0.3.24).
+        'watersnake-grail-war': {
           ongoingDamage: data.value,
           ongoingDamageType: data.damageType,
           ongoingDamageCrit: false,
@@ -1305,8 +1307,11 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     $(this)[0].dataset.uuid = uuid;
     $(this).off("contextmenu");
 
-    // 성배전쟁: 전체 주사위 카드(판정/세이브 등)엔 'Apply Changes' 우클릭 메뉴 미부착 (인라인 롤만 유지)
-    if ($(this).hasClass('dice-roll--archmage')) return;
+    // 성배전쟁: feature 피해/기타 카드의 굴림 총합엔 적용 메뉴 부착(v0.3.24).
+    // 그 외 전체 주사위 카드(판정/세이브 등)는 미부착 (인라인 롤만 유지).
+    const isGrailDamageCard = $(this).hasClass('dice-roll--archmage')
+      && ['damage', 'misc'].includes($(this).closest('.feature-roll-card')[0]?.dataset?.rollType);
+    if ($(this).hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
 
     const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
     const triggerCastPower = game.i18n.localize("ARCHMAGE.CHAT.castPower") + ":";
@@ -1382,8 +1387,6 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
             <button class="damage-modifier active" type="button" data-mod="1" class="active">1x</button>
             <button class="damage-modifier" type="button" data-mod="1.5">1.5x</button>
             <button class="damage-modifier" type="button" data-mod="2">2x</button>
-            <button class="damage-modifier" type="button" data-mod="3">3x</button>
-            <button class="damage-modifier" type="button" data-mod="4">4x</button>
           </div>`,
         id: 'modifiers',
         icon: '',
@@ -1445,9 +1448,10 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     }
 
     // Add the reroll action regardless of whether or not this is an attack.
+    // (성배전쟁 feature 카드는 제외 — 인라인 롤 전용 재굴림 기계라 카드 총합엔 부적합)
     const allowRerolls = game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false;
     const messageAuthor = options.message?.author ?? options.message?.user;
-    if (game.user.isGM || (allowRerolls && messageAuthor === game.user.id)) {
+    if (!isGrailDamageCard && (game.user.isGM || (allowRerolls && messageAuthor === game.user.id))) {
       menuItems.push({
         name: game.i18n.localize("ARCHMAGE.contextReroll"),
         id: 'reroll',
