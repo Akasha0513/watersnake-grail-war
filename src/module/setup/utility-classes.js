@@ -122,47 +122,96 @@ export class ArchmageUtility {
       }).render({ force: true });
     }
 
-    // 피해 굴림: 면수 강화(단계당 +2)·주사위 개수 추가·추가 보정을 대화상자로 입력
+    // 피해 굴림: AE 항목 토글 + 강화 단계/개수(버튼식+직접 입력) + 추가 보정 대화상자 (v0.3.27)
     if (rollType === 'damage') {
       if (!sys.damage?.value) return;
-      // 강화 단계(면수, 단계당 ±2)·개수 추가(주사위 개수) 모두 -5~10 (0 기본).
-      // 최소값: 개수 0개·면수 0 (그 이하는 해당 주사위 항이 0). 예: d2에서 1단계↓ = 0.
-      const dmgOptions = Array.from({ length: 16 }, (_, i) => {
-        const v = i - 5;
-        return `<option value="${v}"${v === 0 ? ' selected' : ''}>${v}</option>`;
-      }).join('');
-      return new foundry.applications.api.DialogV2({
+      const atkType = ['melee', 'ranged'].includes(sys.attackType?.value) ? sys.attackType.value : null;
+      // AE 피해 보정을 효과별 행으로 수집(단계/개수/보정 — formula는 여기서 숫자화) → 항목별 토글.
+      const aeRows = [];
+      if (atkType) {
+        const ADD = CONST.ACTIVE_EFFECT_MODES.ADD;
+        for (const e of actor.effects) {
+          if (e.disabled) continue;
+          let step = 0, dice = 0, bonus = 0, any = false;
+          for (const c of (e.changes || [])) {
+            if (Number(c.mode) !== ADD) continue;
+            const m = /^system\.overrides\.dmg\.(melee|ranged)\.(step|dice|bonus)$/.exec(c.key);
+            if (!m || m[1] !== atkType) continue;
+            const v = actor._resolveEffectFormula(c.value);
+            if (typeof v !== 'number') continue;
+            any = true;
+            if (m[2] === 'step') step += v;
+            else if (m[2] === 'dice') dice += v;
+            else bonus += v;
+          }
+          if (any) {
+            const sign = n => (n > 0 ? `+${n}` : `${n}`);
+            const descParts = [];
+            if (step) descParts.push(`단계 ${sign(step)}`);
+            if (dice) descParts.push(`개수 ${sign(dice)}`);
+            if (bonus) descParts.push(`보정 ${sign(bonus)}`);
+            aeRows.push({ name: e.name, step, dice, bonus, desc: descParts.join(' · ') });
+          }
+        }
+      }
+      const aeSection = aeRows.length
+        ? `<fieldset style="border:1px solid rgba(128,128,128,0.5);border-radius:4px;padding:4px 8px;margin:0;">
+             <legend style="font-size:0.85em;opacity:0.8;">피해 수정치 (AE — 항목별 토글)</legend>
+             ${aeRows.map((r, i) => `<label style="display:flex;gap:5px;align-items:center;"><input type="checkbox" name="ae-${i}" checked> <span>${r.name}</span> <span style="opacity:0.7;">${r.desc}</span></label>`).join('')}
+           </fieldset>`
+        : '';
+      // 기본 피해 표기(가산 능력치 포함)
+      const servantLike = actor.type === 'character'
+        || ['three', 'sorcery'].includes(actor.system.details?.masterAsServant?.value);
+      const dmgAbl = sys.damageAbility?.value;
+      const ablNote = (servantLike && dmgAbl && actor.system.abilities?.[dmgAbl]) ? ` + @${dmgAbl}.mod` : '';
+      // 강화 단계/개수: 자주 쓰는 값 버튼(-1~+3) + 직접 입력(범위 제한 없음)
+      const quickBtns = (name) => [-1, 0, 1, 2, 3].map(v =>
+        `<button type="button" class="dmg-quick${v === 0 ? ' active' : ''}" data-for="${name}" data-val="${v}">${v > 0 ? '+' + v : v}</button>`).join('');
+      const dlg = new foundry.applications.api.DialogV2({
         window: { title: `${item.name} — 피해 굴림` },
+        classes: ['grail-dmg-dialog'],
         content: `<div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="form-group"><label>강화 단계</label><select name="steps">${dmgOptions}</select></div>
-            <div class="form-group"><label>개수 추가</label><select name="addDice">${dmgOptions}</select></div>
+            ${aeSection}
+            <div class="form-group"><label>강화 단계</label><div style="display:flex;gap:3px;align-items:center;">${quickBtns('steps')}<input name="steps" type="number" value="0" style="width:52px;"></div></div>
+            <div class="form-group"><label>개수 추가</label><div style="display:flex;gap:3px;align-items:center;">${quickBtns('addDice')}<input name="addDice" type="number" value="0" style="width:52px;"></div></div>
             <div class="form-group"><label>추가 보정</label><input name="extra" type="text" placeholder="예: 1d6, +3"></div>
             <div class="form-group"><label>피해 최대화 (모든 주사위 최대)</label><input name="maximize" type="checkbox"></div>
             <div class="form-group"><label>롤 모드</label><select name="rollMode">${rollModeOptions}</select></div>
+            <div style="font-size:0.85em;opacity:0.7;">기본 피해: ${sys.damage.value}${ablNote}</div>
           </div>`,
         buttons: [
-          { action: 'roll', label: '굴림', default: true,
-            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
-              steps: Number(b.form.steps.value) || 0,
-              addDice: Number(b.form.addDice.value) || 0,
-              extra: b.form.extra.value,
-              critical: false,
-              maximize: b.form.maximize.checked,
-              rollMode: b.form.rollMode.value
-            }) },
-          { action: 'raise', label: '대성공',
-            callback: (e, b) => ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
-              steps: Number(b.form.steps.value) || 0,
-              addDice: Number(b.form.addDice.value) || 0,
-              extra: b.form.extra.value,
-              critical: true,
-              maximize: b.form.maximize.checked,
-              rollMode: b.form.rollMode.value
-            }) },
+          { action: 'roll', label: '굴림', default: true, callback: (e, b) => collect(b, false) },
+          { action: 'raise', label: '대성공', callback: (e, b) => collect(b, true) },
           { action: 'cancel', label: '취소' }
         ],
         rejectClose: false
-      }).render({ force: true });
+      });
+      const collect = (b, critical) => {
+        const f = b.form;
+        let aeSteps = 0, aeDice = 0, aeBonus = 0;
+        const aeLabels = [];
+        aeRows.forEach((r, i) => {
+          if (f.elements[`ae-${i}`]?.checked) { aeSteps += r.step; aeDice += r.dice; aeBonus += r.bonus; aeLabels.push(r.name); }
+        });
+        return ArchmageUtility._completeFeatureRoll(actor, item, 'damage', {
+          steps: Number(f.elements.steps.value) || 0,
+          addDice: Number(f.elements.addDice.value) || 0,
+          extra: f.elements.extra.value,
+          critical,
+          maximize: f.elements.maximize.checked,
+          rollMode: f.elements.rollMode.value,
+          aeSteps, aeDice, aeBonus, aeLabels
+        });
+      };
+      await dlg.render({ force: true });
+      // 버튼식 빠른 선택 → 입력칸 값 갱신 + 활성 표시 (직접 입력도 그대로 가능)
+      dlg.element.querySelectorAll('button.dmg-quick').forEach(btn => btn.addEventListener('click', () => {
+        const input = dlg.element.querySelector(`input[name="${btn.dataset.for}"]`);
+        if (input) input.value = btn.dataset.val;
+        dlg.element.querySelectorAll(`button.dmg-quick[data-for="${btn.dataset.for}"]`).forEach(x => x.classList.toggle('active', x === btn));
+      }));
+      return dlg;
     }
   }
 
@@ -266,11 +315,12 @@ export class ArchmageUtility {
       // 대성공: 공격 다이스 1개만 추가(단계/면수는 안 올림)
       if (opts.critical) { addDice += 1; }
       // 공격 타입(근접/사격)이 지정된 feature는 AE 피해 보정(overrides.dmg.*)을 합산.
-      // _effectAdd = 활성 AE ADD 합산(formula 해석, 굴림 시점이라 재귀 없음).
+      // 대화상자 경유 시(v0.3.27) 사용자가 토글로 고른 항목 합(aeSteps/aeDice)을 쓰고,
+      // 직접 호출(매크로 등)은 종전대로 활성 AE 전체 자동 합산(_effectAdd — formula 해석, 재귀 없음).
       const atkType = ['melee', 'ranged'].includes(sys.attackType?.value) ? sys.attackType.value : null;
       if (atkType) {
-        steps += actor._effectAdd(`dmg.${atkType}.step`);
-        addDice += actor._effectAdd(`dmg.${atkType}.dice`);
+        steps += opts.aeSteps !== undefined ? (Number(opts.aeSteps) || 0) : actor._effectAdd(`dmg.${atkType}.step`);
+        addDice += opts.aeDice !== undefined ? (Number(opts.aeDice) || 0) : actor._effectAdd(`dmg.${atkType}.dice`);
       }
       // 첫 주사위 항(NdF)에 개수 추가 / 면수 강화(단계당 ±2) 적용.
       // 개수 없는 표기(d8)도 1개로 취급해 매칭(마스터 무기 표기에서 강화가 무시되던 버그 수정).
@@ -283,9 +333,9 @@ export class ArchmageUtility {
           return `${count}d${faces}`;
         });
       }
-      // AE 피해 보정치(숫자/식 합산 결과)
+      // AE 피해 보정치(숫자/식 합산 결과 — 대화상자 경유 시 선택분)
       if (atkType) {
-        const aeBonus = actor._effectAdd(`dmg.${atkType}.bonus`);
+        const aeBonus = opts.aeBonus !== undefined ? (Number(opts.aeBonus) || 0) : actor._effectAdd(`dmg.${atkType}.bonus`);
         if (aeBonus) formula = ArchmageUtility._appendBonus(formula, String(aeBonus));
       }
       // 서번트(및 영령 취급 마스터/npc) 한정: 피해 가산 능력치 수정치 자동 합산 (룰: 2d(무기)+근력 수정치)
@@ -297,8 +347,13 @@ export class ArchmageUtility {
       }
       formula = ArchmageUtility._appendBonus(formula, opts.extra);
       label = '피해';
+      // 변경 요약: 대성공·강화·개수·선택 AE·최대화 (13A modifiedTooltip 패턴)
       const sfx = [];
       if (opts.critical) sfx.push('(대성공)');
+      if (steps) sfx.push(`강화 ${steps > 0 ? '+' : ''}${steps}`);
+      const extraDice = addDice - (opts.critical ? 1 : 0);
+      if (extraDice) sfx.push(`개수 ${extraDice > 0 ? '+' : ''}${extraDice}`);
+      if (Array.isArray(opts.aeLabels) && opts.aeLabels.length) sfx.push(`AE: ${opts.aeLabels.join('·')}`);
       if (opts.maximize) sfx.push('· 최대화');
       labelSuffix = sfx.join(' ');
     }

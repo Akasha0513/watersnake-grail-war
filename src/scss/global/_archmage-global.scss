@@ -2605,6 +2605,17 @@ a.effect-link,
   }
 }
 
+// 피해 대화상자(v0.3.27): 강화 단계/개수 빠른 선택 버튼
+.grail-dmg-dialog button.dmg-quick {
+  min-width: 34px;
+  flex: 0 0 auto;
+  padding: 1px 6px;
+}
+.grail-dmg-dialog button.dmg-quick.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
 // 판정 대화상자(GrailRollDialog): 배경/수정치가 많아도 굴림 버튼이 잘리지 않게 —
 // 본문(.grd-scroll)만 스크롤, 푸터(굴림 버튼)는 고정. 창 높이는 뷰포트 90% 상한.
 .application.grail-roll-dialog {
