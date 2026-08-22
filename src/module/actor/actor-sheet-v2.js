@@ -191,12 +191,19 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     return this;
   }
 
-  /** @override */
+  /**
+   * @override 닫기: (1) 동시 열람 롤백 방지 — 이 클라이언트가 폼을 만지지 않았으면 닫기 제출(submitOnClose) 생략
+   * (A·B가 같은 시트를 열고 B가 수정한 뒤, A가 조작 없이 닫으면 A의 오래된 폼 전체가 제출돼 B의 변경을
+   *  되돌리던 문제. submitOnChange가 실시간 저장하므로 닫기 제출은 만진 경우만 필요 — v0.3.20)
+   * (2) Vue 앱 해제. ※ 한 클래스에 close()를 두 번 정의하면 뒤가 앞을 덮어 Vue 해제가 사라져
+   *  시트가 다시 안 열리므로 반드시 여기 한 곳에서 처리(v0.3.28 버그픽스).
+   */
   async close(options={}) {
+    if (!this._grailDirty && options.submit === undefined) options = { ...options, submit: false };
     // Run the upstream close method.
     const result = await super.close(options);
     // Unmount and clean up the vue app on close.
-    this.vueApp.unmount();
+    this.vueApp?.unmount();
     this.vueApp = null;
     this.vueRoot = null;
     // Return the close response from earlier.
@@ -218,16 +225,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /* ------------------------------------------------------------------------ */
   /*  Event Listeners ------------------------------------------------------- */
   /* ------------------------------------------------------------------------ */
-
-  /**
-   * @override 동시 열람 롤백 방지: 이 클라이언트가 폼을 만지지 않았으면 닫기 제출(submitOnClose) 생략.
-   * (A·B가 같은 시트를 열고 B가 수정한 뒤, A가 조작 없이 닫으면 A의 오래된 폼 전체가 제출돼
-   *  B의 변경을 되돌리던 문제. submitOnChange가 실시간 저장하므로 닫기 제출은 만진 경우만 필요.)
-   */
-  async close(options = {}) {
-    if (!this._grailDirty && options.submit === undefined) options = { ...options, submit: false };
-    return super.close(options);
-  }
 
   /** @override */
   activateListeners(html) {
