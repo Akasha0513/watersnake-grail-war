@@ -20,46 +20,7 @@
   .journal-entry-content {
     background: url('#{$assets}/paper-v2.webp');
     background-size: cover;
-    // background: url('#{$assets}/book/middle.webp') repeat-y;
-    // background-size: 100% auto;
-    // position: relative;
-    // height: 100%;
-    // padding: 135px 20px 90px;
-  
-    // &::before {
-    //   display: block;
-    //   content: '';
-    //   height: 135px;
-    //   width: 100%;
-    //   background: url('#{$assets}/book/top.webp') no-repeat;
-    //   background-size: 100% 100%;
-    //   position: absolute;
-    //   top: 0;
-    //   left: 0;
-    //   z-index: 1; // @todo verify this doesn't break.
-    // }
-  
-    // &::after {
-    //   display: block;
-    //   content: '';
-    //   height: 90px;
-    //   width: 100%;
-    //   background: url('#{$assets}/book/bottom.webp') no-repeat;
-    //   background-size: 100% 100%;
-    //   position: absolute;
-    //   bottom: 0;
-    //   left: 0;
-    //   z-index: 1;
-    // }
-  
-    // .journal-entry-page {
-    //   .content-wrapper {
-    //     max-width: 800px;
-    //     padding: 0 40px;
-    //     margin: auto;
-    //   }
-    // }
-  
+
     h1,
     h2,
     h3,

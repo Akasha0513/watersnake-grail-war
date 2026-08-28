@@ -57,8 +57,6 @@
   // Journals.
   @import 'components/journals/page';
   @import 'components/journals/callout';
-  @import 'components/journals/author-callout';
-  @import 'components/journals/icon-background';
   @import 'components/journals/quote';
 }
 
@@ -88,4 +86,3 @@
 @import 'theme/colormodes';
 
 // 한국어 폰트 (마지막에 import해 v2 시트 폰트 적용 순서 보장)
-@import '../global/korean-fonts';

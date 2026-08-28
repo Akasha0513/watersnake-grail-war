@@ -692,11 +692,7 @@ Hooks.once('ready', async () => {
     "equipUsages",
     "featUsages",
     "actionTypes",
-    "actionTypesShort",
-    "creatureTypes",
-    "creatureSizes",
-    "creatureStrengths",
-    "creatureRoles"
+    "actionTypesShort"
   ].forEach(s => {
     for (const [k, v] of Object.entries(CONFIG.HOLYGRAILWAR[s])) {
       CONFIG.HOLYGRAILWAR[s][k] = game.i18n.localize(v);

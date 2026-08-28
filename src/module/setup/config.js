@@ -314,53 +314,6 @@ ARCHMAGE.effectDurationTypes = {
   'StartOfEachTurn': 'ARCHMAGE.DURATION.StartOfEachTurn'
 };
 
-ARCHMAGE.creatureTypes = {
-  'aberration': 'ARCHMAGE.CREATURETYPES.aberration',
-  'beast': 'ARCHMAGE.CREATURETYPES.beast',
-  'celestial': 'ARCHMAGE.CREATURETYPES.celestial',
-  'construct': 'ARCHMAGE.CREATURETYPES.construct',
-  'demon': 'ARCHMAGE.CREATURETYPES.demon',
-  'devil': 'ARCHMAGE.CREATURETYPES.devil',
-  'dragon': 'ARCHMAGE.CREATURETYPES.dragon',
-  'elemental': 'ARCHMAGE.CREATURETYPES.elemental',
-  'fey': 'ARCHMAGE.CREATURETYPES.fey',
-  'giant': 'ARCHMAGE.CREATURETYPES.giant',
-  'humanoid': 'ARCHMAGE.CREATURETYPES.humanoid',
-  'monstrosity': 'ARCHMAGE.CREATURETYPES.monstrosity',
-  'ooze': 'ARCHMAGE.CREATURETYPES.ooze',
-  'plant': 'ARCHMAGE.CREATURETYPES.plant',
-  'spirit': 'ARCHMAGE.CREATURETYPES.spirit',
-  'undead': 'ARCHMAGE.CREATURETYPES.undead'
-};
-
-ARCHMAGE.creatureSizes = {
-  'normal': 'ARCHMAGE.CREATURESIZES.normal',
-  'large': 'ARCHMAGE.CREATURESIZES.large',
-  'huge': 'ARCHMAGE.CREATURESIZES.huge',
-  'gargantuan': 'ARCHMAGE.CREATURESIZES.gargantuan',
-  'small': 'ARCHMAGE.CREATURESIZES.small',
-  'tiny': 'ARCHMAGE.CREATURESIZES.tiny',
-};
-
-ARCHMAGE.creatureStrengths = {
-  'normal': 'ARCHMAGE.CREATURESTRENGTHS.normal',
-  'double': 'ARCHMAGE.CREATURESTRENGTHS.double-strength',
-  'triple': 'ARCHMAGE.CREATURESTRENGTHS.triple-strength',
-  'weakling': 'ARCHMAGE.CREATURESTRENGTHS.weakling',
-  'elite': 'ARCHMAGE.CREATURESTRENGTHS.elite',
-};
-
-ARCHMAGE.creatureRoles = {
-  'archer': 'ARCHMAGE.CREATUREROLES.archer',
-  'blocker': 'ARCHMAGE.CREATUREROLES.blocker',
-  'caster': 'ARCHMAGE.CREATUREROLES.caster',
-  'leader': 'ARCHMAGE.CREATUREROLES.leader',
-  'mook': 'ARCHMAGE.CREATUREROLES.mook',
-  'spoiler': 'ARCHMAGE.CREATUREROLES.spoiler',
-  'troop': 'ARCHMAGE.CREATUREROLES.troop',
-  'wrecker': 'ARCHMAGE.CREATUREROLES.wrecker'
-};
-
 ARCHMAGE.chakraSlots = {
   'armor': 'ARCHMAGE.CHAKRA.armor',
   'arrow': 'ARCHMAGE.CHAKRA.arrow',
