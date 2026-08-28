@@ -13,8 +13,7 @@ npm run watch # or `npm run vite:watch` for just vue components
 The main character sheet applications are defined at the top level of the
 `src/vue` directory. Those are currently:
 
-- `ArchmageCharacterSheet.vue`
-- `ArchmageNpcSheet.vue` (todo)
+- `ArchmageCharacterSheet.vue` (character/master/npc 공용)
 
 Within those applications, components are imported and must also be included in
 the `components` property of the app export.
@@ -30,8 +29,6 @@ the character sheets. This is currently subdivided as follows:
 - actor - Components for actors
     - character - Components for characters specifically. Also divided based on
        layout region.
-    - npc - (todo) Components for NPCs specifically. Also divided based on
-      layout region.
 - parts - General purpose components that are intended for re-use (Tabs, Editor,
   and so forth).
 

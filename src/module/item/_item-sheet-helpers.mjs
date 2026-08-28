@@ -118,7 +118,7 @@ export async function wrapRolls(text, replacements = [], diceFormulaMode = 'shor
   return parseMarkdown(clean);
 }
 
-export function replaceEffectAndConditionReferences(text) {
+function replaceEffectAndConditionReferences(text) {
   let conditions = CONFIG.HOLYGRAILWAR.statusEffects.filter(x => x.journal);
   const conditionNames = new Set(conditions.map(x => game.i18n.localize(x.name)));
 
@@ -138,7 +138,7 @@ export function replaceEffectAndConditionReferences(text) {
   return text;
 }
 
-export function replaceActiveEffectLinkReferences(text) {
+function replaceActiveEffectLinkReferences(text) {
   return text.replaceAll(/@UUID\[(.*ActiveEffect.*)\]({.*})*/g, (all, uuid, name) => {
     const effect = fromUuidSync(uuid);
     const parent = effect?.parent?.uuid ? effect.parent : {};
@@ -156,7 +156,7 @@ export function replaceActiveEffectLinkReferences(text) {
  * @param {array} terms Array of roll term objects.
  * @returns {array}
  */
-export function termCondenser(terms) {
+function termCondenser(terms) {
   const last = terms.length - 1;
   // Deal with trailing operators.
   if (terms[last]?.operator) {
@@ -189,7 +189,7 @@ export function termCondenser(terms) {
  * @param {object} roll Roll object to modify.
  * @returns
  */
-export function rollCondenser(roll) {
+function rollCondenser(roll) {
   // Initialize our variables.
   let originalTerms = roll.terms;
   let newTerms = [];

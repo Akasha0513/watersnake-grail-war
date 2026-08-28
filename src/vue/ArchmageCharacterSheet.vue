@@ -22,9 +22,6 @@
           <CharInitiative :actor="actor"/>
           <CharAbilities :actor="actor"/>
           <CharBackgrounds :actor="actor"/>
-          <!-- 성배전쟁: 13th Age 잔재 숨김 -->
-          <!-- <CharOut :actor="actor" :owner="context.owner"/> -->
-          <!-- <CharIncrementals :actor="actor"/> -->
         </section>
       </Tab>
       <!-- /Left sidebar -->
@@ -91,10 +88,7 @@ import {
   CharInitiative,
   CharAbilities,
   CharBackgrounds,
-  CharOut,
-  CharIncrementals,
   CharResources,
-  // CharDetails,
   CharPowers,
   CharInventory,
   CharEffects,
@@ -112,8 +106,6 @@ export default {
     CharInitiative,
     CharAbilities,
     CharBackgrounds,
-    CharOut,
-    CharIncrementals,
     CharResources,
     CharDetails,
     CharFeatures,

@@ -7,15 +7,11 @@ export const preloadHandlebarsTemplates = async function() {
 
   // Define template paths to load
   const templatePaths = [
-    "systems/watersnake-grail-war/templates/active-effects/effect.html",
-
     "systems/watersnake-grail-war/templates/actors/actor-character-sheet-vue.html",
-    "systems/watersnake-grail-war/templates/actors/actor-npc-sheet-vue.html",
 
     "systems/watersnake-grail-war/templates/chat/_chat-effect-part.html",
     "systems/watersnake-grail-war/templates/chat/action-card.html",
     "systems/watersnake-grail-war/templates/chat/command-card.html",
-    "systems/watersnake-grail-war/templates/chat/consumable-card.html",
     "systems/watersnake-grail-war/templates/chat/equipment-card.html",
     "systems/watersnake-grail-war/templates/chat/feat-card.html",
     "systems/watersnake-grail-war/templates/chat/loot-card.html",
@@ -30,12 +26,12 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/chat/save-card.html",
     "systems/watersnake-grail-war/templates/chat/skill-check-card.html",
     "systems/watersnake-grail-war/templates/chat/tool-card.html",
-    "systems/watersnake-grail-war/templates/chat/tool-roll-dialog.html",
     "systems/watersnake-grail-war/templates/chat/trait-card.html",
 
     "systems/watersnake-grail-war/templates/items/_item-effect-part.html",
     "systems/watersnake-grail-war/templates/items/item-action-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-equipment-sheet.html",
+    "systems/watersnake-grail-war/templates/items/item-feature-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-loot-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-nastier-special-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-power-sheet.html",

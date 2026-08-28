@@ -10,7 +10,6 @@ import { ArchmagePowerSheetV2 } from './item/power-sheet-v2.js';
 import { ArchmageEquipmentSheetV2 } from './item/equipment-sheet-v2.js';
 import { ArchmageActionSheetV2 } from './item/action-sheet-v2.js';
 import { wrapRolls } from './item/_item-sheet-helpers.mjs';
-import { ArchmageMacros } from './setup/macros.js';
 import { ArchmageUtility } from './setup/utility-classes.js';
 import { MacroUtils } from './setup/utility-classes.js';
 import { ContextMenu2 } from './setup/contextMenu2.js';
@@ -18,7 +17,6 @@ import { DamageApplicator } from './setup/damageApplicator.js';
 import { DiceArchmage } from './actor/dice.js';
 import { preloadHandlebarsTemplates } from "./setup/templates.js";
 import { ActorHelpersV2 } from './actor/helpers/actor-helpers-v2.js';
-import { EffectArchmageSheet } from "./active-effects/effect-sheet.js";
 import { registerModuleArt } from './setup/register-module-art.js';
 import { TokenArchmage } from './actor/token.js';
 import {combatRound, combatStart, combatTurn, preDeleteCombat} from "./hooks/combat.mjs";
@@ -105,10 +103,8 @@ Hooks.once('init', async function() {
     DiceArchmage,
     ItemArchmage,
     ItemArchmageSheet,
-    EffectArchmageSheet,
     wrapRolls,
     ArchmageActiveEffectSheetV2,
-    ArchmageMacros,
     ArchmageUtility,
     MacroUtils,
     rollItemMacro,
@@ -1696,82 +1692,6 @@ Hooks.once('ready', async function () {
   });
 })
 
-
-// @todo likely deprecated by the revised ContextMenu2 in the render chat message hook.
-// Hooks.on("getChatLogEntryContext", (html, options) => {
-//   let canApply = li => {
-//     const message = game.messages.get(li.data("messageId"));
-//     return message?.isRoll && message?.isContentVisible;
-//   };
-//   let getRoll = li => {
-//     const message = game.messages.get(li.data("messageId"));
-//     const roll = message?.rolls[0];
-//     return roll;
-//   }
-
-//   // @todo figure out a good solution to allow the target application
-//   // to show up here. Maybe render to the chat card directly?
-
-//   options.push(
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyDamage"),
-//       icon: '<i class="fas fa-tint"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asDamage(getRoll(li), 1);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyDamageHalf"),
-//       icon: '<i class="fas fa-tint"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asDamage(getRoll(li), .5);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyDamageDouble"),
-//       icon: '<i class="fas fa-tint"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asDamage(getRoll(li), 2);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyDamageTriple"),
-//       icon: '<i class="fas fa-tint"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asDamage(getRoll(li), 3);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyHealing"),
-//       icon: '<i class="fas fa-medkit"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asHealing(getRoll(li), 1);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyHealingHalf"),
-//       icon: '<i class="fas fa-medkit"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asHealing(getRoll(li), .5);
-//       }
-//     },
-//     {
-//       name: game.i18n.localize("ARCHMAGE.contextApplyTempHealth"),
-//       icon: '<i class="fas fa-heart"></i>',
-//       condition: canApply,
-//       callback: li => {
-//         new DamageApplicator().asTempHealth(getRoll(li));
-//       }
-//     }
-//   );
-//   return options;
-// });
 
 /* ---------------------------------------------- */
 

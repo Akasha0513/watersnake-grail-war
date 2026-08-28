@@ -15,16 +15,12 @@ export { default as InfoBubble } from '@/components/parts/InfoBubble.vue';
 
 export { default as EffectDetails } from '@/components/effects/EffectDetails.vue';
 export { default as EffectAbilities } from '@/components/effects/EffectAbilities.vue';
-export { default as EffectStats } from '@/components/effects/EffectStats.vue';
 export { default as EffectDefenses } from '@/components/effects/EffectDefenses.vue';
 export { default as EffectResources } from '@/components/effects/EffectResources.vue';
 export { default as EffectEscalation } from '@/components/effects/EffectEscalation.vue';
 export { default as EffectDamage } from '@/components/effects/EffectDamage.vue';
 export { default as EffectCheckBonus } from '@/components/effects/EffectCheckBonus.vue';
 export { default as EffectAbilityBonus } from '@/components/effects/EffectAbilityBonus.vue';
-export { default as EffectAttack } from '@/components/effects/EffectAttack.vue';
-export { default as EffectDefense } from '@/components/effects/EffectDefense.vue';
-export { default as EffectOngoing } from '@/components/effects/EffectOngoing.vue';
 
 export { default as PowerAttack } from '@/components/item/power/PowerAttack.vue';
 export { default as PowerDetails } from '@/components/item/power/PowerDetails.vue';
@@ -43,13 +39,10 @@ export { default as CharAttributes } from '@/components/actor/character/top/Char
 export { default as CharAbilities } from '@/components/actor/character/sidebar/CharAbilities.vue';
 export { default as CharBackgrounds } from '@/components/actor/character/sidebar/CharBackgrounds.vue';
 export { default as CharInitiative } from '@/components/actor/character/sidebar/CharInitiative.vue';
-export { default as CharOut } from '@/components/actor/character/sidebar/CharOut.vue';
-export { default as CharIncrementals } from '@/components/actor/character/sidebar/CharIncrementals.vue';
 
 export { default as CharResources } from '@/components/actor/character/main/CharResources.vue';
 export { default as CharDetails } from '@/components/actor/character/main/CharDetails.vue';
 export { default as CharPowers } from '@/components/actor/character/main/CharPowers.vue';
-export { default as CharTriggers } from '@/components/actor/character/main/CharTriggers.vue';
 export { default as CharInventory } from '@/components/actor/character/main/CharInventory.vue';
 export { default as CharEffects } from '@/components/actor/character/main/CharEffects.vue';
 export { default as CharSettings } from '@/components/actor/character/main/CharSettings.vue';
