@@ -1837,12 +1837,6 @@ export class ActorArchmage extends Actor {
       return;
     }
 
-    // Set the default portrait and token image to the system's
-    if (data.img == CONFIG.HOLYGRAILWAR.defaultMonsterTokens['default']) {
-      // Note: in cunjunction with the hook this propagates to the prototype token too
-      await this.update({img: CONFIG.HOLYGRAILWAR.defaultMonsterTokens['default-toolkit']});
-    }
-
     // For characters only, set some defaults
     if (this.type == "character") {
       await this.update({prototypeToken: {
@@ -1874,36 +1868,14 @@ export class ActorArchmage extends Actor {
     const diffData = foundry.utils.diffObject(oldData, newData);
     changes = foundry.utils.expandObject(diffData);
 
-    // Update default images on npc type change
-    if (changes.system?.details?.type?.value
-      && this.type == "npc"
-      && Object.values(CONFIG.HOLYGRAILWAR.defaultMonsterTokens).includes(this.img)
-      && CONFIG.HOLYGRAILWAR.defaultMonsterTokens[data.system.details.type.value]) {
-      data.img = CONFIG.HOLYGRAILWAR.defaultMonsterTokens[data.system.details.type.value];
-      changes.img = data.img;
-    }
-    // Update the prototype token.
-    if (changes.img || changes.name) {
-      let tokenData = {};
-      // Propagate image update to token for default images
-      if (changes.img && Object.values(CONFIG.HOLYGRAILWAR.defaultMonsterTokens).includes(this.img)) {
-        tokenData.texture = {src: data.img};
-        data.prototypeToken = {texture: {src: data.img}};
-      }
-      // Propagate name update to token if same as actor
-      if (changes.name && this.name == this.prototypeToken.name) {
-        data.prototypeToken = {name: data.name};
-      }
-
-      // Update tokens.
+    // Propagate name update to prototype token and active tokens.
+    if (changes.name && this.name == this.prototypeToken.name) {
+      data.prototypeToken = {name: data.name};
       let tokens = this.getActiveTokens();
       tokens.forEach(token => {
-        let updateData = foundry.utils.duplicate(tokenData);
-        // Propagate name update to token if same as actor
-        if (data.name && this.name == token.name) {
-          updateData.name = data.name;
+        if (this.name == token.name) {
+          token.document.update({name: data.name});
         }
-        token.document.update(updateData);
       });
     }
     // Update the prototype token size.

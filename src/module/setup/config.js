@@ -384,46 +384,14 @@ ARCHMAGE.chakraSlots = {
 ARCHMAGE.defaultTokens = {
   'character': 'icons/svg/mystery-man.svg',
   'npc': 'icons/svg/eye.svg',
-  'item': 'systems/watersnake-grail-war/assets/icons/items/backpack.jpg',
-  'power': 'systems/watersnake-grail-war/assets/icons/skills/weapon_27.jpg',
+  'item': 'icons/svg/item-bag.svg',
+  'power': 'icons/svg/sword.svg',
   'trait': 'icons/svg/regen.svg',
   'action': 'icons/svg/target.svg',
   'nastierSpecial': 'icons/svg/poison.svg',
   'tool': 'icons/svg/anchor.svg',
   'loot': 'icons/svg/daze.svg',
-  'equipment': 'systems/watersnake-grail-war/assets/icons/items/inventory/backpack.jpg'
-};
-
-ARCHMAGE.defaultMonsterTokens = {
-  'default': 'icons/svg/mystery-man.svg',
-  'default-toolkit': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/token-neutral.webp',
-  'aberration': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/aberration.webp',
-  'beast': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/beast.webp',
-  'construct': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/construct.webp',
-  'demon': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/demon.webp',
-  'devil': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/devil.webp',
-  'dragon': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon.webp',
-  'dragon-black': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-black.webp',
-  'dragon-blue': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-blue.webp',
-  'dragon-brass': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-brass.webp',
-  'dragon-bronze': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-bronze.webp',
-  'dragon-copper': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-copper.webp',
-  'dragon-gold': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-gold.webp',
-  'dragon-green': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-green.webp',
-  'dragon-red': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-red.webp',
-  'dragon-silver': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-silver.webp',
-  'dragon-white': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/dragon-white.webp',
-  'elemental': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/elemental.webp',
-  'elemental-air': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/elemental-air.webp',
-  'elemental-earth': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/elemental-earth.webp',
-  'elemental-fire': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/elemental-fire.webp',
-  'elemental-water': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/elemental-water.webp',
-  'giant': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/giant.webp',
-  'humanoid': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/humanoid.webp',
-  'ooze': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/ooze.webp',
-  'plant': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/plant.webp',
-  'spirit': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/spirit.webp',
-  'undead': 'systems/watersnake-grail-war/assets/icons/tokens/monsters/undead.webp',
+  'equipment': 'icons/svg/item-bag.svg'
 };
 
 // Explicit multipliers from 13TW
