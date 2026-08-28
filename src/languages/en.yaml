@@ -364,45 +364,6 @@ ARCHMAGE:
     bard: Bard
     cleric: Cleric
     sorcerer: Sorcerer
-  CREATUREROLES:
-    archer: Archer
-    blocker: Blocker
-    caster: Caster
-    leader: Leader
-    mook: Mook
-    spoiler: Spoiler
-    troop: Troop
-    wrecker: Wrecker
-  CREATURESIZES:
-    normal: Normal
-    large: Large
-    huge: Huge
-    gargantuan: Gargantuan
-    small: Small
-    tiny: Tiny
-  CREATURESTRENGTHS:
-    normal: Normal
-    double-strength: Double-strength
-    triple-strength: Triple-strength
-    weakling: Weakling
-    elite: Elite
-  CREATURETYPES:
-    aberration: Aberration
-    beast: Beast
-    celestial: Celestial
-    construct: Construct
-    demon: Demon
-    devil: Devil
-    dragon: Dragon
-    elemental: Elemental
-    fey: Fey
-    giant: Giant
-    humanoid: Humanoid
-    monstrosity: Monstrosity
-    ooze: Ooze
-    plant: Plant
-    spirit: Spirit
-    undead: Undead
   DURATION:
     Infinite: Infinite
     Unknown: Unknown
@@ -516,18 +477,6 @@ ARCHMAGE:
     powerSource: Class/Race/Item
     powerType: Type
     powerUsage: Usage
-  MONKFORMS:
-    aelabel: Monk form AC bonus
-    finishing: finishing
-    flow: flow
-    opening: opening
-  RESTS:
-    full: Refill on Full Heal-Up
-    fullreset: Clear on Full Heal-Up
-    header: On resting
-    none: Do nothing
-    quick: Refill on Quick Rest
-    quickreset: Clear on Quick Rest
   SORTS:
     custom: Custom
     level: Level
