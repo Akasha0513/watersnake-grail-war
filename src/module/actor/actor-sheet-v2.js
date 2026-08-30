@@ -498,7 +498,9 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     );
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
-      content: content
+      content: content,
+      // fvtt-chat-enhancements: 카드끼리/일반 채팅과 병합되지 않는 독립 블록
+      flags: { 'mrkb-chat-enhancements': { standalone: true } }
     }, isPrivate ? { rollMode: 'gmroll' } : {});
   }
 
