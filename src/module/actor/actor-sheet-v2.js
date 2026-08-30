@@ -126,6 +126,11 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
 
   /** @override */
   render(force=false, options={}) {
+    // 최소화 중엔 getData(전체 딥클론) 비용을 지불하지 않고 복원 시점으로 미룬다.
+    if (this._minimized && !force) {
+      this._renderPending = true;
+      return this;
+    }
     this._renderKey++;
     const context = this.getData();
 
@@ -189,6 +194,16 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // Store our app for later.
     this.object.apps[this.appId] = this;
     return this;
+  }
+
+  /** @override 최소화 중 미뤄둔 컨텍스트 갱신을 복원 시 반영. */
+  async maximize() {
+    const result = await super.maximize();
+    if (this._renderPending) {
+      this._renderPending = false;
+      this.render(false);
+    }
+    return result;
   }
 
   /**
@@ -1202,10 +1217,13 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
    * @param {jQuery} html
    */
   _dragHandler(html) {
-    let dragHandler = event => this._onDragStart(event);
+    // 렌더마다 새 클로저를 덧붙이면 같은 요소에 리스너가 누적되므로,
+    // 인스턴스 고정 핸들러로 제거 후 재등록해 중복을 막는다.
+    if (!this._boundDragStart) this._boundDragStart = event => this._onDragStart(event);
     html.find('.item[data-draggable="true"]').each((i, li) => {
       li.setAttribute('draggable', true);
-      li.addEventListener('dragstart', dragHandler, false);
+      li.removeEventListener('dragstart', this._boundDragStart, false);
+      li.addEventListener('dragstart', this._boundDragStart, false);
     });
   }
 

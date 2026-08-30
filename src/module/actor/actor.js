@@ -81,6 +81,11 @@ export class ActorArchmage extends Actor {
     //this.reset();
     this.overrides = {};
 
+    // AE formula 해석용 롤데이터 캐시 — prepare 구간 동안만 활성.
+    // (formula AE마다 getRollData 풀 클론을 반복하던 비용 절감. 구간 밖 호출은 매번 신선한 값.)
+    this._formulaRollDataCache = null;
+    this._formulaCacheActive = true;
+
     // 능력치 상시보정(flatBonus: 서번트 클래스 보정·마스터 패러미터 등)을 _source 수치에 먼저 합산.
     // → 이후 능력치 AE가 그 위에 적용됨: ADD(강화)는 가산, OVERRIDE(빈약 등)는 덮어써서 보정 무시(E(3) 고정).
     if (this.type === 'character' || this.type === 'master' || this.type === 'npc') {
@@ -110,10 +115,15 @@ export class ActorArchmage extends Actor {
 
     // Apply activeEffects in group 1 (most properties).
     this.applyActiveEffects('default');
+    // 기본 준비로 상태가 바뀌었으므로 캐시 무효화 후 파생 계산.
+    this._formulaRollDataCache = null;
     this.prepareDerivedData();
 
     // Apply activeEffects to group 2 (standardBonuses).
     this.applyActiveEffects('post');
+
+    this._formulaCacheActive = false;
+    this._formulaRollDataCache = null;
   }
 
   /** @inheritdoc */
@@ -366,7 +376,9 @@ export class ActorArchmage extends Actor {
     if (s === '') return null;
     if (!isNaN(s)) return Number(s);
     try {
-      const rd = this.getRollData(null, { skipPrepare: true });
+      const rd = this._formulaCacheActive
+        ? (this._formulaRollDataCache ??= this.getRollData(null, { skipPrepare: true }))
+        : this.getRollData(null, { skipPrepare: true });
       const replaced = Roll.replaceFormulaData(s, rd, { missing: 0, warn: false });
       const val = Roll.safeEval(replaced);
       if (typeof val === 'number' && isFinite(val)) return val;

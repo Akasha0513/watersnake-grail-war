@@ -756,8 +756,6 @@ Hooks.once('ready', async () => {
     }
   });
 
-  $('.message').off("contextmenu");
-
   // Build the module art map. See module/setup/register-module-art.js for more details.
   registerModuleArt();
 });
@@ -1290,6 +1288,27 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   const html = $(rawhtml);
 
+  // 메시지×인라인롤마다 반복되던 settings/i18n 조회를 훅 스코프로 호이스트.
+  const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
+  const triggerCastPower = game.i18n.localize("ARCHMAGE.CHAT.castPower") + ":";
+  const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
+  const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
+  let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
+  if (!allowTargeting && targetType !== 'selected') {
+    game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', 'selected');
+    targetType = 'selected';
+  }
+  const allowRerolls = game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false;
+  const messageAuthor = options.message?.author ?? options.message?.user;
+  const labels = {
+    targeted: game.i18n.localize('ARCHMAGE.UI.targeted'),
+    selected: game.i18n.localize('ARCHMAGE.UI.selected'),
+    applyDamage: game.i18n.localize("ARCHMAGE.contextApplyDamage"),
+    applyHealing: game.i18n.localize("ARCHMAGE.contextApplyHealing"),
+    applyTempHealth: game.i18n.localize("ARCHMAGE.contextApplyTempHealth"),
+    reroll: game.i18n.localize("ARCHMAGE.contextReroll")
+  };
+
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
@@ -1305,8 +1324,6 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       && ['damage', 'misc'].includes($(this).closest('.feature-roll-card')[0]?.dataset?.rollType);
     if ($(this).hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
 
-    const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
-    const triggerCastPower = game.i18n.localize("ARCHMAGE.CHAT.castPower") + ":";
     if ($(this).parent()[0].innerText.includes(triggerTarget) &&
         !$(this).parent()[0].innerText.includes(triggerCastPower)) {
       // Ignore if this is a "Target:" line (but not if its "Cast for Power:",
@@ -1314,20 +1331,11 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       return;
     }
 
-    const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
     let isAttack = false;
     if ($(this).parent()[0].innerText.includes(triggerAttack)) {
       // Ignore if this is a "Attack:" line.
       // return;
       isAttack = true;
-    }
-
-    // Determine if applying damage to targets is allowed.
-    const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
-    let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
-    if (!allowTargeting && targetType !== 'selected') {
-      game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', 'selected');
-      targetType = 'selected';
     }
 
     // Build the list of menu items, starting with the target buttons
@@ -1337,8 +1345,8 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       menuItems.push({
         name: `
           <div class="damage-target flex flexrow">
-            <button type="button" data-target="targeted"><i class="fa-solid fa-bullseye"></i> ${game.i18n.localize('ARCHMAGE.UI.targeted')}</button>
-            <button type="button" data-target="selected"><i class="fa-solid fa-expand"></i> ${game.i18n.localize('ARCHMAGE.UI.selected')}</button>
+            <button type="button" data-target="targeted"><i class="fa-solid fa-bullseye"></i> ${labels.targeted}</button>
+            <button type="button" data-target="selected"><i class="fa-solid fa-expand"></i> ${labels.selected}</button>
           </div>`,
         id: 'targets',
         icon: '',
@@ -1404,7 +1412,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       // Add damage application links.
       menuItems.push(
         {
-          name: game.i18n.localize("ARCHMAGE.contextApplyDamage"),
+          name: labels.applyDamage,
           id: 'damage',
           icon: '<i class="fas fa-tint"></i>',
           callback: (inlineRoll, event) => {
@@ -1415,7 +1423,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
           }
         },
         {
-          name: game.i18n.localize("ARCHMAGE.contextApplyHealing"),
+          name: labels.applyHealing,
           id: 'healing',
           icon: '<i class="fas fa-medkit"></i>',
           callback: (inlineRoll, event) => {
@@ -1426,7 +1434,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
           }
         },
         {
-          name: game.i18n.localize("ARCHMAGE.contextApplyTempHealth"),
+          name: labels.applyTempHealth,
           id: 'temp-healing',
           icon: '<i class="fas fa-heart"></i>',
           callback: (inlineRoll, event) => {
@@ -1441,11 +1449,9 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
 
     // Add the reroll action regardless of whether or not this is an attack.
     // (성배전쟁 feature 카드는 제외 — 인라인 롤 전용 재굴림 기계라 카드 총합엔 부적합)
-    const allowRerolls = game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false;
-    const messageAuthor = options.message?.author ?? options.message?.user;
     if (!isGrailDamageCard && (game.user.isGM || (allowRerolls && messageAuthor === game.user.id))) {
       menuItems.push({
-        name: game.i18n.localize("ARCHMAGE.contextReroll"),
+        name: labels.reroll,
         id: 'reroll',
         icon: '<i class="fas fa-rotate-left"></i>',
         callback: (html, event) => {
@@ -1497,7 +1503,6 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       // Execute the roll
       const roll = await new Roll(a.dataset.formula, rollData).roll();
       var message = roll.toMessage({ flavor: a.dataset.flavor }, { rollMode: a.dataset.mode });
-      $('.message').off("contextmenu");
       return message;
     }
 
