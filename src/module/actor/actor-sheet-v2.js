@@ -311,13 +311,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     html.on('click', '.lastgasp-save-attempts input[type="checkbox"]', (event) => this._updateFails(event, "lastGaspFails"));
     html.on('click', '.rest', (event) => this._onRest(event));
 
-    // Item listeners.
-    html.on('click', '.power-uses, .equipment-quantity', (event) => this._updateQuantity(event, true));
-    html.on('contextmenu', '.power-uses, .equipment-quantity', (event) => this._updateQuantity(event, false));
-    html.on('click', '.feat-uses-rollable', (event) => this._updateFeatQuantity(event, true));
-    html.on('contextmenu', '.feat-uses-rollable', (event) => this._updateFeatQuantity(event, false));
-    html.on('click', '.feat-pip', (event) => this._updatePips(event));
-
     // 성배전쟁: 령주(점/±버튼), 배경 추가/삭제
     html.on('click', '.command-seal', (event) => this._updateCommandSeals(event));
     html.on('click', '.command-seal-minus', () => this._stepCommandSeals(-1));
@@ -476,7 +469,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /* ------------------------------------------------------------------------ */
 
   /**
-   * Create items on the actor, such as powers or magic items.
+   * Create items on the actor (feature 등).
    *
    * @param {Event} event
    *   Html event that triggered the method.
@@ -486,19 +479,8 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     let dataset = foundry.utils.duplicate(target.dataset);
 
     // Grab the item type from the dataset and then remove it.
-    let itemType = dataset.itemType ?? 'power';
+    let itemType = dataset.itemType ?? 'feature';
     delete dataset.itemType;
-
-    // Handle the power group.
-    if (dataset?.groupType && dataset?.powerType) {
-      let groupType = dataset.groupType;
-      let model = game.data.model.Item[itemType];
-      if (model[groupType] && groupType !== 'powerType') {
-        dataset[groupType] = foundry.utils.duplicate(dataset.powerType);
-        delete dataset.powerType;
-      }
-      delete dataset.groupType;
-    }
 
     // Default image.
     let img = CONFIG.HOLYGRAILWAR.defaultTokens[itemType] ?? CONFIG.DEFAULT_TOKEN;
@@ -820,9 +802,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     else if (type == 'ability') this._onAbilityRoll(opt);
     else if (type == 'background') this._onBackgroundRoll(opt);
     else if (type == 'command') this._onCommandRoll(opt);
-    else if (type == 'recharge') this._onRechargeRoll(opt);
-    else if (type == 'feat') this._onFeatRoll(opt, opt2);
-    else if (type == 'reroll') this._onRerollRoll(opt);
 
     // Fallback to a plain formula roll.
     else if (opt) await this._onFormulaRoll(opt);
@@ -993,63 +972,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     await actor.update({'system.resources.perCombat.commandPoints.current': Number(pointsOld) + Number(pointsNew)});
   }
 
-  async _onRechargeRoll(itemId) {
-    let item = this.actor.items.get(itemId);
-    if (item) await item.recharge();
-  }
-
-  async _onFeatRoll(itemId, featId) {
-    let item = this.actor.items.get(itemId);
-    if (item) item.rollFeat(featId);
-  }
-
-  async _onRerollRoll(kind) {
-    let res = this.actor.system.resources.spendable.rerolls[kind];
-    if (res.current <= 0) return;
-
-    // We have uses to spend, find source item
-    let prop = "";
-    switch (kind) {
-      case "AC":
-        prop = "rerollAc";
-        break
-      case "save":
-        prop = "rerollSave";
-        break
-    }
-    this.actor.items.forEach(item => {
-      if (item.type === 'equipment' && item.system.isActive && item.system.attributes[prop].current > 0) {
-        // Found source of the bonus, update it
-        let itemOverrideData = {'_id': item.id};
-        itemOverrideData[`system.attributes.${prop}.current`] = res.current - 1;
-        this.actor.updateEmbeddedDocuments('Item', [itemOverrideData]);
-      }
-    });
-
-    // Basic template rendering data
-    const template = `systems/watersnake-grail-war/templates/chat/reroll-card.html`
-    const token = this.actor.token;
-
-    // Basic chat message data
-    const chatData = {
-      user: game.user.id,
-      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
-      title: game.i18n.localize(`ARCHMAGE.CHARACTER.RESOURCES.${prop}`),
-      desc: game.i18n.localize(`ARCHMAGE.CHARACTER.RESOURCES.${prop}Desc`)
-    };
-
-    const templateData = {
-      actor: this.actor,
-      tokenId: token ? `${token.id}` : null,
-      data: chatData
-    };
-
-    // Render the template
-    chatData["content"] = await foundry.applications.handlebars.renderTemplate(template, templateData);
-
-    await game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-
-  }
 
   /* ------------------------------------------------------------------------ */
   /*  Special Listeners ----------------------------------------------------- */
@@ -1068,83 +990,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       let path = `system.attributes.saves.${saveType}.value`;
       updateData[path] = count;
       let update = await this.actor.update(updateData);
-    }
-  }
-
-  async _updateQuantity(event, increase = true) {
-    event.preventDefault();
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-    let itemId = dataset.itemId;
-
-    if (!itemId) return;
-
-    let item = this.actor.items.get(itemId);
-    if (item) {
-      if (item.system?.quantity?.value == null) return;
-      // Update the quantity.
-      let newQuantity = Number(item.system.quantity.value) ?? 0;
-      newQuantity = increase ? newQuantity + 1 : newQuantity - 1;
-
-      // TODO: Refactor the fallback to not be absurdly high after maxQuantity has become regularly used.
-      let maxQuantity = item.system?.maxQuantity?.value ?? 99;
-
-      await item.update({'system.quantity.value': increase ? Math.min(maxQuantity, newQuantity) : Math.max(0, newQuantity)}, {});
-    }
-  }
-
-  async _updateFeatQuantity(event, increase = true) {
-    event.preventDefault();
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-
-    let itemId = dataset.itemId;
-    if (!itemId) return;
-
-    let item = this.actor.items.get(itemId);
-    if (!item) return;
-
-    let featIndex = dataset.itemFeatkey;
-    let feat = item.system.feats[featIndex];
-    if (!feat) return;
-
-    // Update the quantity.
-    let newQuantity = Number(feat.quantity.value) ?? 0;
-    newQuantity = increase ? newQuantity + 1 : newQuantity - 1;
-
-    // TODO: Refactor the fallback to not be absurdly high after maxQuantity has become regularly used.
-    let maxQuantity = feat.maxQuantity.value ?? 99;
-
-    let updateData = {};
-    updateData[`system.feats.${featIndex}.quantity.value`] = increase ? Math.min(maxQuantity, newQuantity) : Math.max(0, newQuantity);
-
-    await item.update(updateData, {});
-  }
-
-  async _updatePips(event) {
-    event.preventDefault();
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-    let itemId = dataset.itemId;
-
-    if (!itemId) return;
-
-    let item = this.actor.items.get(itemId);
-    if (item) {
-      let updateData = {};
-
-      if (item.type == "power") {
-        let tier = dataset.tier ?? null;
-        if (!tier) return;
-        let isActive = item.system.feats[tier].isActive.value;
-        updateData[`system.feats.${tier}.isActive.value`] = !isActive;
-      }
-      else if (item.type == "equipment") {
-        let isActive = item.system.isActive;
-        updateData["system.isActive"] = !isActive;
-      }
-
-      await item.update(updateData, {});
     }
   }
 
@@ -1213,7 +1058,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   }
 
   /**
-   * Apply drag events to items (powers and equipment).
+   * Apply drag events to items.
    * @param {jQuery} html
    */
   _dragHandler(html) {

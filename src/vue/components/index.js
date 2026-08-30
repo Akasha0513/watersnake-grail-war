@@ -1,7 +1,4 @@
-export { default as Power } from '@/components/parts/Power.vue';
 export { default as Rollable } from '@/components/parts/Rollable.vue';
-export { default as Equipment } from '@/components/parts/Equipment.vue';
-export { default as Loot } from '@/components/parts/Loot.vue';
 export { default as Progress } from '@/components/parts/Progress.vue';
 
 export { default as Tabs } from '@/components/parts/Tabs.vue';
@@ -22,14 +19,6 @@ export { default as EffectDamage } from '@/components/effects/EffectDamage.vue';
 export { default as EffectCheckBonus } from '@/components/effects/EffectCheckBonus.vue';
 export { default as EffectAbilityBonus } from '@/components/effects/EffectAbilityBonus.vue';
 
-export { default as PowerAttack } from '@/components/item/power/PowerAttack.vue';
-export { default as PowerDetails } from '@/components/item/power/PowerDetails.vue';
-export { default as PowerSpells } from '@/components/item/power/PowerSpells.vue';
-export { default as PowerFeats } from '@/components/item/power/PowerFeats.vue';
-
-export { default as EquipmentDetails } from '@/components/item/equipment/EquipmentDetails.vue';
-export { default as EquipmentBonuses } from '@/components/item/equipment/EquipmentBonuses.vue';
-
 export { default as ActionDetails } from '@/components/item/action/ActionDetails.vue';
 export { default as ActionAttack } from '@/components/item/action/ActionAttack.vue';
 
@@ -42,7 +31,5 @@ export { default as CharInitiative } from '@/components/actor/character/sidebar/
 
 export { default as CharResources } from '@/components/actor/character/main/CharResources.vue';
 export { default as CharDetails } from '@/components/actor/character/main/CharDetails.vue';
-export { default as CharPowers } from '@/components/actor/character/main/CharPowers.vue';
-export { default as CharInventory } from '@/components/actor/character/main/CharInventory.vue';
 export { default as CharEffects } from '@/components/actor/character/main/CharEffects.vue';
 export { default as CharSettings } from '@/components/actor/character/main/CharSettings.vue';

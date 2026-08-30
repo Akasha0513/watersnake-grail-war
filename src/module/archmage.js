@@ -6,8 +6,6 @@ import { ActorArchmageSheetV2 } from './actor/actor-sheet-v2.js';
 import { ActorArchmageMasterSheetV2 } from './actor/actor-master-sheet-v2.js';
 import { ItemArchmage } from './item/item.js';
 import { ItemArchmageSheet } from './item/item-sheet.js';
-import { ArchmagePowerSheetV2 } from './item/power-sheet-v2.js';
-import { ArchmageEquipmentSheetV2 } from './item/equipment-sheet-v2.js';
 import { ArchmageActionSheetV2 } from './item/action-sheet-v2.js';
 import { wrapRolls } from './item/_item-sheet-helpers.mjs';
 import { ArchmageUtility } from './setup/utility-classes.js';
@@ -52,26 +50,6 @@ Hooks.once('init', async function() {
 
   Handlebars.registerHelper('safeCSSId', (arg) => {
     return `${arg}`.safeCSSId();
-  });
-
-  Handlebars.registerHelper('getPowerClass', (inputString) => {
-    // Get the appropriate usage. TODO: likely needs to be localized?
-    let usage = 'other';
-    let usageString = inputString !== null ? inputString.toLowerCase() : '';
-    if (usageString.includes('will')) {
-      usage = 'at-will';
-    }
-    else if (usageString.includes('recharge')) {
-      usage = 'recharge';
-    }
-    else if (usageString.includes('battle')) {
-      usage = 'once-per-battle';
-    }
-    else if (usageString.includes('daily')) {
-      usage = 'daily';
-    }
-
-    return usage;
   });
 
   Handlebars.registerHelper('concatenate', function() {
@@ -167,21 +145,13 @@ Hooks.once('init', async function() {
 
   // Replace sheets.
   foundry.documents.collections.Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
+  // V1 시트는 V2 시트가 없는 타입 전용 (V2 보유 타입에서 폴백 선택지로 노출하지 않음).
   foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ItemArchmageSheet, {
     label: 'ARCHMAGE.sheetItem',
+    types: ["feature", "tool", "loot"],
     makeDefault: true,
   });
   // AppV2 + Vue based sheets. These will eventually become the default.
-  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmagePowerSheetV2, {
-    label: 'ARCHMAGE.sheetItemV2',
-    types: ["power"],
-    makeDefault: true,
-  });
-  foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmageEquipmentSheetV2, {
-    label: 'ARCHMAGE.sheetItemV2',
-    types: ["equipment"],
-    makeDefault: true,
-  });
   foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ArchmageActionSheetV2, {
     label: 'ARCHMAGE.sheetItemV2',
     types: ["action", "trait", "nastierSpecial"],
@@ -219,9 +189,6 @@ Hooks.once('init', async function() {
   delete FLAGS.characterFlags.grimDetermination;
   // Remove Blessing of Heaven flag
   delete FLAGS.characterFlags.dexToCha;
-
-  // Remove 11th level feat tier
-  delete CONFIG.HOLYGRAILWAR.featTiers.iconic;
 
   // Remove 2e hindered from context menu status effects
   let id = CONFIG.statusEffects.findIndex(e => e.id == "hindered");
@@ -380,15 +347,6 @@ Hooks.once('init', async function() {
     default: false,
     type: Boolean,
     requiresReload: true
-  });
-
-  game.settings.register('watersnake-grail-war', 'rechargeOncePerDay', {
-    name: "ARCHMAGE.SETTINGS.rechargeOncePerDayName",
-    hint: "ARCHMAGE.SETTINGS.rechargeOncePerDayHint",
-    scope: 'world',
-    config: true,
-    default: false,
-    type: Boolean
   });
 
   game.settings.register('watersnake-grail-war', 'optionalBaseCritRange', {
@@ -677,28 +635,6 @@ Hooks.once('ready', async () => {
   $('body').append('<div class="archmage-preload"></div>');
   renderSceneTerrains();
 
-  // Apply localization to CONFIG.HOLYGRAILWAR leaf props
-  // TODO: the following are currently localized on each usage, may need to be hunted down
-  // one by one and moved here
-  // ARCHMAGE.statusEffects
-  // ARCHMAGE.extendedStatusEffects
-  // ARCHMAGE.effectDurationTypes
-  // ARCHMAGE.chakraSlots
-  [
-    "featTiers",
-    "powerSources",
-    "powerTypes",
-    "powerUsages",
-    "equipUsages",
-    "featUsages",
-    "actionTypes",
-    "actionTypesShort"
-  ].forEach(s => {
-    for (const [k, v] of Object.entries(CONFIG.HOLYGRAILWAR[s])) {
-      CONFIG.HOLYGRAILWAR[s][k] = game.i18n.localize(v);
-    }
-  })
-
   // Localize actor flags
   console.log(CONFIG.HOLYGRAILWAR.FLAGS);  // Throws an error is object isn't accessed before loop
   [
@@ -829,7 +765,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
         'roundUpDamageApplication',
         'allowTargetDamageApplication',
         'allowRerolls',
-        'rechargeOncePerDay',
         'optionalBaseCritRange',
         'showPrivateGMAttackRolls',
       ],
@@ -1290,7 +1225,6 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
 
   // 메시지×인라인롤마다 반복되던 settings/i18n 조회를 훅 스코프로 호이스트.
   const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
-  const triggerCastPower = game.i18n.localize("ARCHMAGE.CHAT.castPower") + ":";
   const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
   const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
   let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
@@ -1324,10 +1258,8 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
       && ['damage', 'misc'].includes($(this).closest('.feature-roll-card')[0]?.dataset?.rollType);
     if ($(this).hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
 
-    if ($(this).parent()[0].innerText.includes(triggerTarget) &&
-        !$(this).parent()[0].innerText.includes(triggerCastPower)) {
-      // Ignore if this is a "Target:" line (but not if its "Cast for Power:",
-      // which in some localizations contains "Target:").
+    if ($(this).parent()[0].innerText.includes(triggerTarget)) {
+      // Ignore if this is a "Target:" line.
       return;
     }
 

@@ -12,12 +12,8 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/chat/_chat-effect-part.html",
     "systems/watersnake-grail-war/templates/chat/action-card.html",
     "systems/watersnake-grail-war/templates/chat/command-card.html",
-    "systems/watersnake-grail-war/templates/chat/equipment-card.html",
-    "systems/watersnake-grail-war/templates/chat/feat-card.html",
     "systems/watersnake-grail-war/templates/chat/loot-card.html",
     "systems/watersnake-grail-war/templates/chat/nastierspecial-card.html",
-    "systems/watersnake-grail-war/templates/chat/power-card.html",
-    "systems/watersnake-grail-war/templates/chat/recharge-card.html",
     "systems/watersnake-grail-war/templates/chat/recovery-card.html",
     "systems/watersnake-grail-war/templates/chat/recovery-dialog.html",
     "systems/watersnake-grail-war/templates/chat/rest-full-card.html",
@@ -29,14 +25,9 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/chat/trait-card.html",
 
     "systems/watersnake-grail-war/templates/items/_item-effect-part.html",
-    "systems/watersnake-grail-war/templates/items/item-action-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-equipment-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-feature-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-loot-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-nastier-special-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-power-sheet.html",
     "systems/watersnake-grail-war/templates/items/item-tool-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-trait-sheet.html",
 
 
     "systems/watersnake-grail-war/templates/chat/round-notice-card.html",

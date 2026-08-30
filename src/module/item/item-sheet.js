@@ -10,7 +10,7 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
     return foundry.utils.mergeObject(super.defaultOptions, {
       scrollY: ['.sheet-tabs-content'],
       classes: super.defaultOptions.classes.concat(['archmage', 'item', 'item-sheet']),
-      template: 'systems/watersnake-grail-war/templates/items/item-power-sheet.html',
+      template: 'systems/watersnake-grail-war/templates/items/item-feature-sheet.html',
       height: 550,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-tabs-content", initial: "details" }]
     });
@@ -27,13 +27,8 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
    * Use a type-specific template for each different item type
    */
   get template() {
-    let type = this.item.type;
-    // Special cases.
-    if (type === 'nastierSpecial') {
-      type = 'nastier-special';
-    }
-    // Get template.
-    return `systems/watersnake-grail-war/templates/items/item-${type}-sheet.html`;
+    // V1 시트는 feature/tool/loot 전용.
+    return `systems/watersnake-grail-war/templates/items/item-${this.item.type}-sheet.html`;
   }
 
   /* -------------------------------------------- */
@@ -92,49 +87,6 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
         : false;
       context.effects[index].bonuses = getChanges(effect);
       context.effects[index].img = effect?.img ?? effect?.icon;
-    }
-
-    // Power-specific data
-    if (this.item.type === 'power') {
-      context['powerSources'] = CONFIG.HOLYGRAILWAR.powerSources;
-      context['powerTypes'] = CONFIG.HOLYGRAILWAR.powerTypes;
-      context['powerUsages'] = CONFIG.HOLYGRAILWAR.powerUsages;
-      context['actionTypes'] = CONFIG.HOLYGRAILWAR.actionTypes;
-      context['featTiers'] = CONFIG.HOLYGRAILWAR.featTiers;
-      context['featUsages'] = CONFIG.HOLYGRAILWAR.featUsages;
-    }
-    // Equipment-specific data
-    else if (this.item.type === 'equipment') {
-      context['equipUsages'] = CONFIG.HOLYGRAILWAR.equipUsages;
-      context['tiers'] = CONFIG.HOLYGRAILWAR.featTiers;
-    }
-
-    if (this.actor) {
-      let powerClass = 'monster';
-
-      if (this.actor.type === 'character') {
-        // Pass general character data.
-        powerClass = this.actor.system.details.class.value?.toLowerCase();
-      }
-
-      let powerLevel = this.actor.system.details.level.value;
-      let powerLevelString = '';
-
-      for (let i = 1; i <= powerLevel; i++) {
-        if (powerLevelString.length < 1) {
-          powerLevelString = '' + i;
-        }
-        else {
-          powerLevelString = `${powerLevelString}+${i}`;
-        }
-
-        if (i >= 10) {
-          break;
-        }
-      }
-
-      context['powerClass'] = powerClass;
-      context['powerLevel'] = powerLevelString;
     }
 
     context.system = context.data.system;
@@ -233,111 +185,8 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
       }
     }
 
-    // Feat buttons
-    html.on('click', '.feat-edit', (event) => this._updateFeat(event));
-
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));
-  }
-
-  /**
-   * Add/delete/reorder feats on a power.
-   *
-   * @param {Event} event
-   *   Html event that triggered the method.
-   */
-  async _updateFeat(event) {
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-
-    let item = this.item;
-    if (item.type != "power") return;
-
-    let featIndex = Number(dataset.featkey);
-    let feats = item.system.feats;
-
-    let change = (async () => {return;});
-    switch(dataset.action) {
-      case 'add':
-        if (feats) feats = Object.values(feats);
-        else feats = [];
-        feats.push({
-          "description": {
-            "type": "String",
-            "value": ""
-          },
-          "isActive": {
-            "type": "Boolean",
-            "value": false
-          },
-          "tier": {
-            "type": "String",
-            "value": "adventurer"
-          },
-          "powerUsage": {
-            "type": "String",
-            "value": ""
-          },
-          "quantity": {
-            "type": "Number",
-            "value": null
-          },
-          "maxQuantity": {
-            "type": "Number",
-            "value": null
-          }
-        });
-        await item.update({'system.feats': Object.assign({}, feats)});
-        return;
-      case 'del':
-        change = (async () => {
-          let newFeats = foundry.utils.deepClone(feats);
-          delete newFeats[featIndex];
-          newFeats = Object.assign({}, Object.values(newFeats));  // Re-index from 0
-          let updateData = {'system.feats': newFeats};
-          for (let key of Object.keys(item.system.feats)) {
-            if (!newFeats[key]) updateData[`system.feats.-=${key}`] = null;
-          }
-          await item.update(updateData);
-        });
-        break;
-      case 'up':
-        if (featIndex == 0) return;
-        feats = Object.values(feats);
-        [feats[featIndex], feats[featIndex - 1]] = [feats[featIndex - 1], feats[featIndex]]
-        await item.update({'system.feats': Object.assign({}, feats)});
-        return;
-      case 'down':
-        feats = Object.values(feats);
-        if (featIndex >= feats.length - 1) return;
-        [feats[featIndex + 1], feats[featIndex]] = [feats[featIndex], feats[featIndex + 1]]
-        await item.update({'system.feats': Object.assign({}, feats)});
-        return;
-    }
-
-    let bypass = event.shiftKey ? true : false;
-    if (bypass) {
-      await change();
-      return;
-    }
-    let del = false;
-    new Dialog({
-      title: game.i18n.localize("ARCHMAGE.CHAT.DeleteConfirm"),
-      buttons: {
-        del: {
-          label: game.i18n.localize("ARCHMAGE.CHAT.Delete"),
-          callback: async () => {del = true;}
-        },
-        cancel: {
-          label: game.i18n.localize("ARCHMAGE.CHAT.Cancel"),
-          callback: async () => {}
-        }
-      },
-      default: 'cancel',
-      close: async html => {
-        if (del) await change();
-      }
-    }).render(true);
   }
 
   /* ------------------------------------------------------------------------ */

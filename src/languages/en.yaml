@@ -239,8 +239,6 @@ ARCHMAGE:
     nightmodeName: Night Mode
     compactModeHint: Scales down the character sheets to be smaller.
     compactModeName: Compact Sheet Mode
-    rechargeOncePerDayHint: Attempt to recharge powers on quick rests only once (true) or re-attempt after every quick rest (false)?
-    rechargeOncePerDayName: Recharge once per day only
     RoundUpDamageApplicationHint: When applying damage (or healing) via the right-click context menu, should it round up (true) or round down (false)? Default is true (round up). This will be applied the same way for both characters and NPCs.
     RoundUpDamageApplicationName: Round damage/healing up (true) or down (false)
     allowTargetDamageApplicationHint: Whether or not to allow damage and healing on chat messages to be applied to targeted tokens in addition to selected tokens. Targeting does not require permissions, so this can allow players and GMs to apply damage to ANY token they can see.
@@ -297,11 +295,6 @@ ARCHMAGE:
       momentum: Momentum
       recoveries: Recoveries
       recovery: Recovery
-      rerollAc: Reroll vs. AC
-      rerollAcDesc: Reroll an attack that targeted your AC
-      rerolls: Rerolls
-      rerollSave: Reroll Save
-      rerollSaveDesc: Reroll a save
   CHARACTERFLAGS:
     averageRecoveriesHint: Average results for recovery rolls instead of rolling them.
     averageRecoveriesName: Average Recovery Rolls
@@ -359,11 +352,6 @@ ARCHMAGE:
     settings: Settings
     shield: Shield
     twohanded: Two-handed Weapon
-  CLASSES:
-    # PowerSpells.vue(비술 시트 주문 섹션 제목)가 사용하는 3키만 유지 — 클래스 감지 체인은 제거됨.
-    bard: Bard
-    cleric: Cleric
-    sorcerer: Sorcerer
   DURATION:
     Infinite: Infinite
     Unknown: Unknown
@@ -474,17 +462,10 @@ ARCHMAGE:
   GROUPS:
     actionType: Action
     group: Custom Groups
-    powerSource: Class/Race/Item
-    powerType: Type
-    powerUsage: Usage
   SORTS:
     custom: Custom
     level: Level
     name: Name
-  INVENTORY:
-    equipment: Magic Items
-    loot: Loot
-    tool: Tools
   ITEM:
     acBonus: AC Bonus
     active: Active
@@ -539,55 +520,6 @@ ARCHMAGE:
     usesRemaining: Uses Remaining
     usesRemainingHint: Number of remaining uses, usually the same as Max Uses
     wisBonus: Wisdom checks bonus
-  CHAKRA:
-    armor: Armor, robe, shirt, tunic
-    armorBonus: "Default Bonus: Armor Class"
-    armorLabel: Armor
-    arrow: Arrow, crossbow bolt, slingstone
-    arrowLabel: Arrow
-    belt: Belt, swordbelt, kilt, girdle
-    beltBonus: "Default Bonus: Recoveries"
-    beltLabel: Belt
-    book: Book, scroll, manual, grimoire
-    bookLabel: Book
-    boots: Boots, sandals, slippers, shoes
-    bootsBonus: "Default Bonus: Disengage Checks"
-    bootsLabel: Boots
-    cloak: Cloak, mantle, cape
-    cloakBonus: "Default Bonus: Physical Defense"
-    cloakLabel: Cloak
-    glove: Glove, gauntlet, mitt
-    gloveLabel: Glove
-    helmet: Helmet, circlet, crown, cap
-    helmetBonus: "Default Bonus: Mental Defense"
-    helmetLabel: Helmet
-    melee: Weapon, melee
-    meleeLabel: Melee
-    necklace: Necklace, pendant
-    necklaceBonus: "Default Bonus: Save bonus"
-    necklaceLabel: Neck
-    none: None
-    noneLabel: ""
-    noBonus: No default bonus, depends on the item
-    ranged: Weapon, ranged
-    rangedLabel: Ranged
-    ring: Ring
-    ringLabel: Ring
-    shield: Shield
-    shieldBonus: "Default Bonus: Hit points"
-    shieldLabel: Shield
-    staff: Staff (implement)
-    staffBonus: "Operates as both a Wand and a Symbol"
-    staffLabel: Staff
-    symbol: Symbol, holy relic, sacred sickle (implement)
-    symbolBonus: "Default Bonus: Divine Attack and Damage"
-    symbolLabel: Symbol
-    wand: Wand (implement)
-    wandBonus: "Default Bonus: Arcane Attack and Damage"
-    wandLabel: Wand
-    weaponBonus: "Default Bonus: Attack and Damage"
-    wondrous: Wondrous item
-    wondrousLabel: Wondrous
   CHAT:
     actionType: Action Type
     advantages: Advantages
@@ -687,27 +619,6 @@ ARCHMAGE:
     ongoingSaveEnds: The following Effects <strong>require a Save</strong> to end
     ongoingSelfTriggered: The following Effects <strong>triggered on this</strong> Actor
     hasUnknown: The following Effects with an <strong>unknown duration</strong> are currently active on this Actor
-    powerLevel: Level
-    powerLevelTitle: Adjusting the power level will affect which level effects get sent to chat.
-    powerRollLevel: Level
-    powerRollTitle: Use Power
-    powerRollUse: Use
-    consumeUsage: Consume Usage
-    consumeResources: Consume Resources
-    modified: (modified)
-    modifiedLevel: "Level {level}"
-    modifiedNoUsage: usage not consumed
-    modifiedNoResources: resources not consumed
-    powerSource: Power Source
-    powerSourceName: Source Name
-    powerSourcePlaceholder: Wizard
-    powerSourceTitle: The source this power was gained from (e.g. Wizard).
-    powerSourceTypeTitle: The type of source this power was gained from.
-    powerOriginName: Original Name
-    powerOriginNamePlaceholder: Fireball
-    powerOriginTitle: Original power name when the power's name is customized for any reason (such as the wizard's polysyllabic verbalizations talent).
-    powerType: Power Type
-    powerUsage: Power Usage
     QuickRest: Quick Rest
     QuickRestBody: Regain per-battle powers, roll to recharge spent recharge powers, and roll recoveries to heal above 50% health.
     QuickRestHP: rolled {recoveries} healing {hp} HP
@@ -1031,9 +942,8 @@ TYPES:
     npc: NPC
   Item:
     action: Action
+    feature: 기능
     loot: Loot
-    equipment: Magic Item
     nastierSpecial: Nastier Special
-    power: Power
     tool: Tool (Deprecated)
     trait: Trait

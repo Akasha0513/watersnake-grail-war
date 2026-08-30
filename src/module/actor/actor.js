@@ -653,105 +653,16 @@ export class ActorArchmage extends Actor {
       data.abilities[keyMod.mod2].lvl = Math.min(data.abilities[keyMod.mod1].lvl, data.abilities[keyMod.mod2].lvl);
     }
 
-    // Bonuses
-    var meleeAttackBonus = data.attributes.attack?.melee?.bonus ?? 0;
-    var rangedAttackBonus = data.attributes.attack?.ranged?.bonus ?? 0;
-    var divineAttackBonus = data.attributes.attack?.divine?.bonus ?? 0;
-    var arcaneAttackBonus = data.attributes.attack?.arcane?.bonus ?? 0;
-
-    var acBonus = 0;
-    var mdBonus = 0;
-    var pdBonus = 0;
-
-    var hpBonus = 0;
-    var recoveriesBonus = 0;
-
-    var saveBonus = 0;
-    var disengageBonus = 0;
-
-    var rerollAcCurr = 0;
-    var rerollAcMax = 0;
-    var rerollSaveCurr = 0;
-    var rerollSaveMax = 0;
-
-    var strBonus = 0;
-    var dexBonus = 0;
-    var conBonus = 0;
-    var intBonus = 0;
-    var wisBonus = 0;
-    var chaBonus = 0;
-
-    function getBonusOr0(type) {
-      if (type && type.bonus) return type.bonus;
-      return 0;
-    }
-
-    if (this.items) {
-      this.items.forEach(function(item) {
-        if (item.type === 'equipment' && item.system.isActive) {
-          meleeAttackBonus += getBonusOr0(item.system.attributes.attack.melee);
-          rangedAttackBonus += getBonusOr0(item.system.attributes.attack.ranged);
-          divineAttackBonus += getBonusOr0(item.system.attributes.attack.divine);
-          arcaneAttackBonus += getBonusOr0(item.system.attributes.attack.arcane);
-
-          acBonus += getBonusOr0(item.system.attributes.ac);
-          mdBonus += getBonusOr0(item.system.attributes.md);
-          pdBonus += getBonusOr0(item.system.attributes.pd);
-
-          hpBonus += getBonusOr0(item.system.attributes.hp);
-          recoveriesBonus += getBonusOr0(item.system.attributes.recoveries);
-
-          // Enforce only one of this group
-          if (rerollAcMax == 0) {
-            rerollAcCurr += item.system.attributes.rerollAc.current ? item.system.attributes.rerollAc.current : 0;
-            rerollAcMax += getBonusOr0(item.system.attributes.rerollAc);
-          }
-          if (rerollSaveMax == 0) {
-            rerollSaveCurr += item.system.attributes.rerollSave.current ? item.system.attributes.rerollSave.current : 0;
-            rerollSaveMax += getBonusOr0(item.system.attributes.rerollSave);
-          }
-
-          strBonus += getBonusOr0(item.system.attributes.str);
-          dexBonus += getBonusOr0(item.system.attributes.agi);
-          conBonus += getBonusOr0(item.system.attributes.end);
-          intBonus += getBonusOr0(item.system.attributes.mgi);
-          wisBonus += getBonusOr0(item.system.attributes.ins);
-          chaBonus += getBonusOr0(item.system.attributes.lck);
-
-          if (!item.system.attributes.save.threshold
-            || data.attributes.hp.value <= item.system.attributes.save.threshold) {
-            saveBonus += getBonusOr0(item.system.attributes.save);
-          }
-          disengageBonus += getBonusOr0(item.system.attributes.disengage);
-        }
-      });
-    }
-
+    // Bonuses — 장비(equipment) 타입 제거로 아이템발 보정은 소멸. 하위 계산이 읽는 구조만 유지.
     data.attributes.attack = {
-      melee: { bonus: meleeAttackBonus },
-      ranged: { bonus: rangedAttackBonus },
-      divine: { bonus: divineAttackBonus },
-      arcane: { bonus: arcaneAttackBonus }
+      melee: { bonus: data.attributes.attack?.melee?.bonus ?? 0 },
+      ranged: { bonus: data.attributes.attack?.ranged?.bonus ?? 0 },
+      divine: { bonus: data.attributes.attack?.divine?.bonus ?? 0 },
+      arcane: { bonus: data.attributes.attack?.arcane?.bonus ?? 0 }
     };
-
-    // Saves
-    data.attributes.saves.bonus = saveBonus;
-    data.attributes.saves.disengageBonus = disengageBonus;
-
-    // 2e rerolls
-    data.resources.spendable.rerolls.AC.current = rerollAcCurr;
-    data.resources.spendable.rerolls.AC.max = rerollAcMax;
-    data.resources.spendable.rerolls.save.current = rerollSaveCurr;
-    data.resources.spendable.rerolls.save.max = rerollSaveMax;
-    data.resources.spendable.rerolls.enabled = (rerollAcMax + rerollSaveMax) > 0 ? true : false;
-
-    // Ability score bonuses from items
-    data.abilities.str.bonus = strBonus;
-    data.abilities.agi.bonus = dexBonus;
-    data.abilities.end.bonus = conBonus;
-    data.abilities.mgi.bonus = intBonus;
-    data.abilities.ins.bonus = wisBonus;
-    data.abilities.lck.bonus = chaBonus;
+    data.attributes.saves.bonus = 0;
+    data.attributes.saves.disengageBonus = 0;
+    for (const k of ['str', 'agi', 'end', 'mgi', 'ins', 'lck']) data.abilities[k].bonus = 0;
 
     // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
     const isMaster = this.type === 'master' || this.type === 'npc';
@@ -1012,7 +923,6 @@ export class ActorArchmage extends Actor {
 
     // Animal companion data
     let anLvl = actor.system.attributes.level.value;
-    if (item?.system.powerLevel?.value !== undefined) anLvl = item.system.powerLevel.value;
     data.animalCompanion = {
       'atk': CONFIG.HOLYGRAILWAR.animalCompanion.attack[anLvl],
       'dmg': CONFIG.HOLYGRAILWAR.animalCompanion.damage[anLvl]
@@ -1039,10 +949,6 @@ export class ActorArchmage extends Actor {
           data.rsc[label+"max"] = v.max;
         }
       }
-    }
-
-    if (item?.system.powerLevel?.value) {
-      data.pwrlvl = item.system.powerLevel.value;
     }
 
     return data;
@@ -1341,9 +1247,6 @@ export class ActorArchmage extends Actor {
       newHp = Math.min(this.system.attributes.hp.max, Math.max(0, newHp) + roll.total);
     }
 
-    // Handle desperate recharge
-    if (newRec <= 0 && this.system.attributes.recoveries.value >= 1) this.rechargeDesperate();
-
     await this.update({
       'system.attributes.recoveries.value': newRec,
       'system.attributes.hp.value': newHp
@@ -1417,72 +1320,6 @@ export class ActorArchmage extends Actor {
     if ( !foundry.utils.isEmpty(updateData) ) {
       await this.update(updateData);
     }
-
-    // Items
-    let items = this.items.map(i => i);
-    for (let i = 0; i < items.length; i++) {
-      let item = items[i];
-      let itemUpdateData = {};
-      let maxQuantity = item.system?.maxQuantity?.value ?? 1;
-      if ((item.type == "power" || item.type == "equipment") && maxQuantity) {
-        // Recharge powers.
-        let rechAttempts = maxQuantity - item.system.quantity.value;
-        let rechValue = Number(item.system.recharge.value) || 16;
-        if (game.settings.get('watersnake-grail-war', 'rechargeOncePerDay')) {
-          rechAttempts = Math.max(rechAttempts - item.system.rechargeAttempts.value, 0)
-        }
-        // Per battle powers.
-        if ((item.system.powerUsage?.value == 'once-per-battle'
-          || item.system.powerUsage?.value == 'cyclic'
-          || (item.system.powerUsage?.value == 'at-will'
-          && item.system.quantity.value != null))
-          && item.system.quantity.value < maxQuantity) {
-          itemUpdateData['system.quantity'] = {value: maxQuantity}
-          templateData.items.push({
-            key: item.name,
-            message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${maxQuantity}`
-          });
-        }
-        else if (['recharge', 'recharge-desperate'].includes(item.system.powerUsage?.value) && rechAttempts > 0) {
-          // This captures other as well
-          let successes = 0;
-          for (let j = 0; j < rechAttempts; j++) {
-            let roll = await this.items.get(item.id).recharge({createMessage: false});
-            rollsToAnimate.push(roll.roll);
-            if (roll.total >= rechValue) {
-              successes++;
-              templateData.items.push({
-                key: item.name,
-                message: `${game.i18n.localize("ARCHMAGE.CHAT.RechargeSucc")} (${roll.total} >= ${rechValue})`
-              });
-            } else {
-              templateData.items.push({
-                key: item.name,
-                message: `${game.i18n.localize("ARCHMAGE.CHAT.RechargeFail")} (${roll.total} < ${rechValue})`
-              });
-            }
-          }
-        }
-      }
-      // Feats
-      if (item.type == "power" && item.system.feats) {
-        for (let index of Object.keys(item.system.feats)) {
-          let feat = item.system.feats[index];
-          if (!feat.isActive?.value) continue;
-          let maxQuantity = feat.maxQuantity?.value;
-          if (feat.powerUsage?.value == 'once-per-battle' && maxQuantity && feat.quantity?.value < maxQuantity) {
-            itemUpdateData[`system.feats.${index}.quantity.value`] = maxQuantity;
-            let tier = game.i18n.localize(`ARCHMAGE.CHAT.${feat.tier.value}`);
-            templateData.items.push({
-              key: `${item.name} - ${tier}`,
-              message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${maxQuantity}`
-            });
-          }
-        }
-      }
-      // Update item
-      if ( !foundry.utils.isEmpty(itemUpdateData) ) await item.update(itemUpdateData);
-    };
 
     // Print outcomes to chat
     const template = `systems/watersnake-grail-war/templates/chat/rest-short-card.html`
@@ -1559,69 +1396,9 @@ export class ActorArchmage extends Actor {
       }
     }
 
-    // Reset desperate recharge flag
-    updateData["system.attributes.saves.desperateTriggered"] = false;
-
     // Update actor at this point (items are updated separately)
     if ( !foundry.utils.isEmpty(updateData) ) {
       await this.update(updateData);
-    }
-
-    // Items
-    let items = this.items.map(i => i);
-    for (let i = 0; i < items.length; i++) {
-      let item = items[i];
-
-      if (item.type != 'power' && item.type != 'equipment') continue;
-
-      let itemUpdateData = {};
-      let usageArray = ['once-per-battle','daily','recharge', 'cyclic', 'recharge-desperate', 'daily-desperate'];
-      let fallbackQuantity = item.system.quantity.value !== null ? 1 : null;
-      let maxQuantity = item.system?.maxQuantity?.value ?? fallbackQuantity;
-      if (maxQuantity && usageArray.includes(item.system.powerUsage?.value)
-        && (item.system.quantity.value < maxQuantity || item.system.rechargeAttempts.value > 0)) {
-        itemUpdateData['system.quantity'] = {value: maxQuantity};
-        itemUpdateData['system.rechargeAttempts'] = {value: 0};
-        templateData.items.push({
-          key: item.name,
-          message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${maxQuantity}`
-        });
-      }
-      // Feats
-      if (item.type == "power" && item.system.feats) {
-        for (let index of Object.keys(item.system.feats)) {
-          let feat = item.system.feats[index];
-          if (!feat.isActive?.value) continue;
-          let maxQuantity = feat.maxQuantity?.value;
-          if (maxQuantity && feat.quantity?.value < maxQuantity && usageArray.includes(feat.powerUsage?.value)) {
-            itemUpdateData[`system.feats.${index}.quantity.value`] = maxQuantity;
-            let tier = game.i18n.localize(`ARCHMAGE.CHAT.${feat.tier.value}`);
-            templateData.items.push({
-              key: `${item.name} - ${tier}`,
-              message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${maxQuantity}`
-            });
-          }
-        }
-      }
-      // 2e shields and necklaces
-      if (item.type == 'equipment') {
-        if (item.system.attributes.rerollAc.current != item.system.attributes.rerollAc.bonus) {
-          itemUpdateData['system.attributes.rerollAc.current'] = item.system.attributes.rerollAc.bonus;
-          templateData.items.push({
-            key: game.i18n.localize("ARCHMAGE.CHARACTER.RESOURCES.rerollAc"),
-            message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${item.system.attributes.rerollAc.bonus}`
-          });
-        }
-        if (item.system.attributes.rerollSave.current != item.system.attributes.rerollSave.bonus) {
-          itemUpdateData['system.attributes.rerollSave.current'] = item.system.attributes.rerollSave.bonus;
-          templateData.items.push({
-            key: game.i18n.localize("ARCHMAGE.CHARACTER.RESOURCES.rerollSave"),
-            message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${item.system.attributes.rerollSave.bonus}`
-          });
-        }
-      }
-      // Update item
-      if ( !foundry.utils.isEmpty(itemUpdateData) ) await item.update(itemUpdateData);
     }
 
     // Effects
@@ -1647,57 +1424,6 @@ export class ActorArchmage extends Actor {
     };
     chatData["content"] = await foundry.applications.handlebars.renderTemplate(template, templateData);
     game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-  }
-
-  async rechargeDesperate() {
-    // Only trigger once per full heal up
-    if (this.system.attributes.saves.desperateTriggered) return;
-    else await this.update({"system.attributes.saves.desperateTriggered": true})
-
-    let templateData = {
-      actor: this,
-      items: []
-    };
-
-    // Recharge all desperate recharge items
-    let items = this.items.map(i => i);
-    for (let i = 0; i < items.length; i++) {
-      let item = items[i];
-      if (!['power', 'equipment'].includes(item.type)) continue;
-      let fallbackQuantity = item.system.quantity.value !== null ? 1 : null;
-      let maxQuantity = item.system?.maxQuantity?.value ?? fallbackQuantity;
-      // Re-use rechargeAttempts to store whether we already desperately recharged before
-      let rechAttempts = maxQuantity - item.system.quantity.value;
-      rechAttempts = Math.max(rechAttempts - item.system.rechargeAttempts.value, 0)
-      if (maxQuantity && item.system.quantity.value < maxQuantity
-        && ['recharge-desperate', 'daily-desperate'].includes(item.system.powerUsage?.value)) {
-        if (rechAttempts > 0) {
-          await item.update({
-            'system.quantity.value': item.system.quantity.value + rechAttempts,
-            'system.rechargeAttempts.value': item.system.rechargeAttempts.value + rechAttempts
-            });
-          templateData.items.push({
-            key: item.name,
-            message: `${game.i18n.localize("ARCHMAGE.CHAT.ItemReset")} ${maxQuantity}`
-          });
-        }
-      }
-    }
-
-    // Print outcomes to chat
-    if (templateData.items.length > 0) {
-      const template = `systems/watersnake-grail-war/templates/chat/rest-desperate-card.html`
-      const chatData = {
-        user: game.user.id, speaker: {actor: this.id, token: this.token,
-        alias: this.name, scene: game.user.viewedScene},
-      };
-      let rollMode = game.settings.get("core", "rollMode");
-      ChatMessage.applyRollMode(chatData, rollMode);
-      chatData["content"] = await foundry.applications.handlebars.renderTemplate(template, templateData);
-      await game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-    } else {
-      ui.notifications.info(game.i18n.localize("ARCHMAGE.UI.infoDesperateTriggeredEmpty"));
-    }
   }
 
   /* -------------------------------------------- */

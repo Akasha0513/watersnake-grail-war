@@ -2,10 +2,6 @@ export function localize(key) {
   return game.i18n.localize(key);
 }
 
-export function localizeEquipmentBonus(bonusProp) {
-  return game.holygrailwar.ArchmageUtility.localizeEquipmentBonus(bonusProp);
-}
-
 export function tooltip(...keys) {
   return game.holygrailwar.ArchmageUtility.tooltip(...keys);
 }

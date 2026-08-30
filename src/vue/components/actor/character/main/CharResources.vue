@@ -48,16 +48,6 @@ export default {
       ki: {
         value: 0,
         max: 0
-      },
-      rerolls: {
-        AC: {
-          value: 0,
-          max: 0
-        },
-        save: {
-          value: 0,
-          max: 0
-        }
       }
     }
   },
@@ -73,7 +63,6 @@ export default {
       let count = 0;
       if (this.actor.system.resources.perCombat?.commandPoints?.enabled) count++;
       if (this.actor.system.resources.spendable?.ki?.enabled) count++;
-      if (this.actor.system.resources.spendable?.rerolls?.enabled) count++;
       if (this.actor.system.resources.perCombat?.focus?.enabled) count++;
       if (this.actor.system.resources.perCombat?.momentum?.enabled) count++;
       return count;
@@ -92,7 +81,6 @@ export default {
       this.momentum = this.actor.system.resources.perCombat?.momentum?.current;
       this.focus = this.actor.system.resources.perCombat?.focus?.current;
       this.ki = this.actor.system.resources.spendable?.ki;
-      this.rerolls = this.actor.system.resources.spendable?.rerolls;
     }
   },
   watch: {

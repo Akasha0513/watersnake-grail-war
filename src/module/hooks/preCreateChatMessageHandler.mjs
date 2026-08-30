@@ -129,7 +129,7 @@ export default class preCreateChatMessageHandler {
         let targets = [...game.user.targets.values()]; // needed to checkRowText of npcs
         let numTargets = options.targets ? options.targets : 1;
         let critMod = options.critMod ? options.critMod : 0;
-        let type = options.type ? options.type : 'power';
+        let type = options.type ? options.type : 'feature';
         let actorDocument = data.speaker?.actor ? game.actors.get(data.speaker.actor) : null;
         let tokenDocument = data.speaker?.token ? canvas.tokens.get(data.speaker.token) : null;
 
@@ -140,21 +140,12 @@ export default class preCreateChatMessageHandler {
         let range = "melee";
 
         // Lines containing any of the following need to be skipped:
-        // "Level:", "Recharge:", "Resources:", "Uses Remaining:"
-        // "Special:", "Effect:", "Cast for Broad Effect:", "Cast for Power:"
-        // "Opening and Sustained Effect:", "Final Verse:"
-        // "Chain Spell", "Breath Weapon:"
+        // "Level:", "Resources:", "Uses Remaining:", "Special:", "Effect:"
         let rowsToSkip = [
             game.i18n.localize("ARCHMAGE.level") + ':',
-            game.i18n.localize("ARCHMAGE.recharge") + ':',
             game.i18n.localize("ARCHMAGE.CHAT.resources") + ':',
             game.i18n.localize("ARCHMAGE.ITEM.usesRemaining") + ':',
-            game.i18n.localize("ARCHMAGE.CHAT.special") + ':',
-            // game.i18n.localize("ARCHMAGE.CHAT.effect"),  // Handled separately to avoid overlap with Opening/Sustained Effect
-            game.i18n.localize("ARCHMAGE.CHAT.castBroadEffect") + ':',
-            game.i18n.localize("ARCHMAGE.CHAT.castPower") + ':',
-            game.i18n.localize("ARCHMAGE.CHAT.spellChain") + ':',
-            game.i18n.localize("ARCHMAGE.CHAT.breathWeapon") + ':'
+            game.i18n.localize("ARCHMAGE.CHAT.special") + ':'
         ];
 
         let tokens = canvas?.tokens?.controlled;
@@ -183,8 +174,6 @@ export default class preCreateChatMessageHandler {
         let sequencerFileSelf = options.sequencer?.self;
         let sequencerReversed = options.sequencer?.reversed;
 
-        let highestPowerLevelToHighlight;
-
         if ($rows.length > 0) {
 
             // Iterate through each of the card properties/rows.
@@ -197,13 +186,11 @@ export default class preCreateChatMessageHandler {
                 if (rowsToSkip.filter(x => row_text_clean.startsWith(x)).length > 0) {
                     return;
                 }
-                if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.effect"))
-                  && !row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.sustainedEffect"))) {
+                if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.effect"))) {
                     return;
                 }
 
-                if ((type == "power" && row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.target") + ':')) ||
-                    (type == "action" && row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':'))) {
+                if (type == "action" && row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':')) {
 
                     // targets = Targeting.getTargetsFromRowText(row_text, $row_self, numTargets);
                     // In case of manual rolls we may have more rolls than targets - replicate targets until we have enough.
@@ -272,30 +259,7 @@ export default class preCreateChatMessageHandler {
                     }
                 }
 
-                // Highlight lines for higher level effects
-                for (let x of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]) {
-                    // We'll only find rows up to the power's or actor's level
-                    if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.spellLevel" + x) + ':')) {
-                        highestPowerLevelToHighlight = $row_self;
-                    }
-                    // if (x == options.powerLevel &&
-                        // row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.spellLevel" + x) + ':')) {
-                        // $row_self.addClass("trigger-active");
-                        // highestPowerLevelToHighlight = $row_self;
-                    // }
-                }
-
-                // Highlight sustain / final verse for songs
-                if ((["sustainedEffect", "openingEffect"].includes(options.usageMode)
-                    && row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.sustainedEffect") + ':'))
-                    || (options.usageMode == "finalverse"
-                    && row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.finalVerse") + ':'))) {
-                    $row_self.addClass("trigger-active");
-                }
             });
-
-            // Now highlight highest power level found - in case it's different than the power's one (1e spells in 2e, for example)
-            if (highestPowerLevelToHighlight) highestPowerLevelToHighlight.addClass("trigger-active");
 
             if (game.modules.get("sequencer")?.active && token) {
                 sequence = new Sequence();

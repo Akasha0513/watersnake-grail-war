@@ -1,6 +1,6 @@
 id: watersnake-grail-war
 title: "성배전쟁 ORPG"
-version: "0.3.34"
+version: "0.3.35"
 authors:
   - name: akasha0513
   - name: "원작 룰: watersnake"
@@ -19,13 +19,11 @@ documentTypes:
     character: {}
     npc: {}
   Item:
-    power: {}
     trait: {}
     action: {}
     nastierSpecial: {}
     tool: {}
     loot: {}
-    equipment: {}
     feature: {}
 
 esmodules:

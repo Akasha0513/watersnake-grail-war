@@ -13,50 +13,7 @@ export default class ArchmageRolls {
       nlpMap[i.toString()] = i;
     }
 
-    if (item.type == "power") {
-      let targetLine = item.system.target.value;
-      if (targetLine != null) {
-        let lineToParse = targetLine.toLowerCase();
-        // First cleanup references to target HPs
-        const stringHP = game.i18n.localize("ARCHMAGE.CHAT.HP").toLowerCase();
-        const regexHP = new RegExp("[0-9]+ " + stringHP, "g");
-        const regexHPInline = new RegExp("\\[\\[.+?\\]\\] " + stringHP, "g");
-        lineToParse = lineToParse.replace(regexHP, '');
-        lineToParse = lineToParse.replace(regexHPInline, '');
-        // Then remove negative numbers
-        lineToParse = lineToParse.replace(/-[0-9]+/g, '');
-        // Remove all numbers with at least 2 digits (so 10+)
-        // except for inline rolls (by checking for preceding '[[')
-        lineToParse = lineToParse.replace(/(?<!\[\[)[0-9]{2,}/g, '');
-        rolls = ArchmageRolls.getInlineRolls(lineToParse, actor?.getRollData() ?? {});
-        if (rolls != undefined) {
-          // Roll the targets now
-          await ArchmageRolls.rollAll(rolls, actor);
-          targets = 0;
-          newTargetLine = foundry.utils.duplicate(targetLine);
-          rolls.forEach(r => {
-            targets += r.total;
-            // Save outcomes in target line string
-            newTargetLine = newTargetLine.replace(/(\[\[.+?\]\])/, r.inlineRoll.outerHTML)
-          });
-        } else {
-          // Try NLP to guess targets
-          let keys = Object.keys(nlpMap);
-          for (let x = 0; x < keys.length; x++) {
-            if (lineToParse.includes(keys[x])) targets = nlpMap[keys[x]];
-          }
-          // Handle "each" or "all" or "every" or the Crescendo spell
-          if (targetLine.toLowerCase().includes(game.i18n.localize("ARCHMAGE.TARGETING.each")+" ")
-            || targetLine.toLowerCase().includes(game.i18n.localize("ARCHMAGE.TARGETING.all")+" ")
-            || targetLine.toLowerCase().includes(game.i18n.localize("ARCHMAGE.TARGETING.every")+" ")
-            || item.system?.special?.value?.toLowerCase().includes(game.i18n.localize("ARCHMAGE.TARGETING.crescendoSpecial").toLowerCase())
-            ) {
-            targets = Math.max(game.user.targets.size, 1);
-          }
-        }
-      }
-    }
-    else if (item.type == "action") {
+    if (item.type == "action") {
       // Get text between brackets, that's where targets are stored
       let targetLine = /(\(.*\))/.exec(item.system.attack.value);
       if (targetLine != null) {

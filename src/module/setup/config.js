@@ -221,13 +221,6 @@ ARCHMAGE.extendedStatusEffects = [
   // },
 ];
 
-ARCHMAGE.featTiers = {
-  'adventurer': 'ARCHMAGE.adventurer',
-  'champion': 'ARCHMAGE.champion',
-  'epic': 'ARCHMAGE.epic',
-  'iconic': 'ARCHMAGE.iconic'
-}
-
 ARCHMAGE.numDicePerLevel = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // Goes to 15th to support monsters
@@ -237,65 +230,6 @@ ARCHMAGE.tierMultPerLevel = [0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
 ARCHMAGE.animalCompanion = {
   attack: [5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20],
   damage: ["2d8", "3d8", "4d6", " 4d8", "4d10", "6d10", "40", "50", "66", "80", "100", "130", "160"]
-};
-
-// Power Settings
-ARCHMAGE.powerSources = {
-  'class': 'ARCHMAGE.class',
-  'race': 'ARCHMAGE.race',
-  'item': 'ARCHMAGE.item',
-  'other': 'ARCHMAGE.other'
-};
-
-ARCHMAGE.powerTypes = {
-  'power': 'ARCHMAGE.power',
-  'feature': 'ARCHMAGE.feature',
-  'talent': 'ARCHMAGE.talent',
-  'flexible': 'ARCHMAGE.flexible',
-  'spell': 'ARCHMAGE.spell',
-  'other': 'ARCHMAGE.other'
-};
-
-ARCHMAGE.powerUsages = {
-  'at-will': 'ARCHMAGE.at-will',
-  'once-per-battle': 'ARCHMAGE.once-per-battle',
-  'recharge': 'ARCHMAGE.recharge',
-  'daily': 'ARCHMAGE.daily',
-  'cyclic': 'ARCHMAGE.cyclic',
-  'recharge-desperate': 'ARCHMAGE.recharge-desperate',
-  'daily-desperate': 'ARCHMAGE.daily-desperate',
-  'other': 'ARCHMAGE.other'
-};
-
-ARCHMAGE.equipUsages = {
-  'once-per-battle': 'ARCHMAGE.once-per-battle',
-  'recharge': 'ARCHMAGE.recharge',
-  'daily': 'ARCHMAGE.daily',
-  'recharge-desperate': 'ARCHMAGE.recharge-desperate',
-  'daily-desperate': 'ARCHMAGE.daily-desperate',
-  'other': 'ARCHMAGE.other'
-};
-
-ARCHMAGE.featUsages = {
-  'daily': 'ARCHMAGE.daily',
-  'once-per-battle': 'ARCHMAGE.once-per-battle',
-  'other': 'ARCHMAGE.other'
-};
-
-ARCHMAGE.actionTypes = {
-  'standard': 'ARCHMAGE.standard-short',
-  'move': 'ARCHMAGE.move-short',
-  'quick': 'ARCHMAGE.quick-short',
-  'free': 'ARCHMAGE.free-short',
-  'interrupt': 'ARCHMAGE.interrupt-short'
-};
-
-ARCHMAGE.actionTypesShort = {
-  'standard': 'ARCHMAGE.STD',
-  'move': 'ARCHMAGE.MOV',
-  'quick': 'ARCHMAGE.QCK',
-  'free': 'ARCHMAGE.FREE',
-  'interrupt': 'ARCHMAGE.INT'
 };
 
 ARCHMAGE.effectDurationTypes = {
@@ -314,37 +248,16 @@ ARCHMAGE.effectDurationTypes = {
   'StartOfEachTurn': 'ARCHMAGE.DURATION.StartOfEachTurn'
 };
 
-ARCHMAGE.chakraSlots = {
-  'armor': 'ARCHMAGE.CHAKRA.armor',
-  'arrow': 'ARCHMAGE.CHAKRA.arrow',
-  'belt': 'ARCHMAGE.CHAKRA.belt',
-  'book': 'ARCHMAGE.CHAKRA.book',
-  'boots': 'ARCHMAGE.CHAKRA.boots',
-  'cloak': 'ARCHMAGE.CHAKRA.cloak',
-  'glove': 'ARCHMAGE.CHAKRA.glove',
-  'helmet': 'ARCHMAGE.CHAKRA.helmet',
-  'necklace': 'ARCHMAGE.CHAKRA.necklace',
-  'ring': 'ARCHMAGE.CHAKRA.ring',
-  'shield': 'ARCHMAGE.CHAKRA.shield',
-  'staff': 'ARCHMAGE.CHAKRA.staff',
-  'symbol': 'ARCHMAGE.CHAKRA.symbol',
-  'wand': 'ARCHMAGE.CHAKRA.wand',
-  'melee': 'ARCHMAGE.CHAKRA.melee',
-  'ranged': 'ARCHMAGE.CHAKRA.ranged',
-  'wondrous': 'ARCHMAGE.CHAKRA.wondrous',
-};
-
 ARCHMAGE.defaultTokens = {
   'character': 'icons/svg/mystery-man.svg',
   'npc': 'icons/svg/eye.svg',
   'item': 'icons/svg/item-bag.svg',
-  'power': 'icons/svg/sword.svg',
+  'feature': 'icons/svg/book.svg',
   'trait': 'icons/svg/regen.svg',
   'action': 'icons/svg/target.svg',
   'nastierSpecial': 'icons/svg/poison.svg',
   'tool': 'icons/svg/anchor.svg',
-  'loot': 'icons/svg/daze.svg',
-  'equipment': 'icons/svg/item-bag.svg'
+  'loot': 'icons/svg/daze.svg'
 };
 
 // Explicit multipliers from 13TW

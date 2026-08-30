@@ -40,12 +40,7 @@
     @import 'components/character/abilities';
     @import 'components/character/attributes';
     @import 'components/character/backgrounds';
-    @import 'components/character/out';
-    @import 'components/character/incrementals';
     @import 'components/character/resources';
-    @import 'components/character/powers';
-    @import 'components/character/feats';
-    @import 'components/character/inventory';
     @import 'components/character/effects';
     @import 'components/character/settings';
   }
@@ -68,7 +63,6 @@
 
   // @todo replace this when we make the v2 power sheet.
   .item-sheet {
-    @import 'components/items/power-sheet';
   }
 }
 

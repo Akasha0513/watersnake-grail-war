@@ -620,20 +620,6 @@ export class ArchmageUtility {
     return "fas fa-question";
   }
 
-  static localizeEquipmentBonus(bonusProp) {
-    const keys = [
-      "ARCHMAGE." + bonusProp.toLowerCase() + "Short",
-      "ARCHMAGE." + bonusProp.toLowerCase(),
-      "ARCHMAGE." + bonusProp.toLowerCase() + ".key"
-    ];
-    for (const key of keys) {
-      if (game.i18n.localize(key) !== key) {
-        return game.i18n.localize(key);
-      }
-    }
-    return bonusProp;
-  }
-
   static fixVuePopoutBug() {
     // Workaround for upstream Vue bug:
     // https://gitlab.com/asacolips-projects/foundry-mods/archmage/-/issues/177

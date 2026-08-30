@@ -89,8 +89,6 @@ import {
   CharAbilities,
   CharBackgrounds,
   CharResources,
-  CharPowers,
-  CharInventory,
   CharEffects,
   CharSettings
 } from '@/components';
@@ -109,8 +107,6 @@ export default {
     CharResources,
     CharDetails,
     CharFeatures,
-    CharPowers,
-    CharInventory,
     CharEffects,
     CharSettings,
   },
@@ -134,20 +130,20 @@ export default {
             key: 'powers',
             label: this.actor.type !== 'character' ? '체계' : '스킬',
             active: true,
-            componentClass: markRaw(CharPowers)
+            componentClass: markRaw(CharFeatures)
           },
           oppositePowers: {
             key: 'oppositePowers',
             label: this.actor.type !== 'character' ? '스킬' : '체계',
             active: false,
-            componentClass: markRaw(CharPowers),
+            componentClass: markRaw(CharFeatures),
             hidden: !this.actor.flags?.['watersnake-grail-war']?.showOppositeTab
           },
           inventory: {
             key: 'inventory',
             label: '소지품',
             active: false,
-            componentClass: markRaw(CharInventory)
+            componentClass: markRaw(CharFeatures)
           },
           effects: {
             key: 'effects',
