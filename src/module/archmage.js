@@ -1141,13 +1141,6 @@ Hooks.on("renderJournalSheet", async (app, html, data) => {
 
 /* ---------------------------------------------- */
 
-function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
 
 // 성배전쟁: feature 카드(능력치 판정/피해/기타) 버튼 굴림 + 재굴림 처리
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
@@ -1188,20 +1181,12 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   });
 });
 
-Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
-  const html = $(rawhtml);
-
-  // 메시지×인라인롤마다 반복되던 settings/i18n 조회를 훅 스코프로 호이스트.
-  const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
-  const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
-  const allowTargeting = game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication');
-  let targetType = game.settings.get('watersnake-grail-war', 'userTargetDamageApplicationType');
-  if (!allowTargeting && targetType !== 'selected') {
-    game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', 'selected');
-    targetType = 'selected';
-  }
-  const allowRerolls = game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false;
-  const messageAuthor = options.message?.author ?? options.message?.user;
+/**
+ * 채팅 적용 메뉴 — 메시지×인라인롤마다 ContextMenu2 인스턴스를 만들던 것을
+ * body 위임 인스턴스 1개로 단일화. 대상 자격은 렌더 훅에서 data-grail-menu로 표시하고,
+ * 항목별 노출은 condition(target)으로 판정한다.
+ */
+function _bindGrailChatContextMenu() {
   const labels = {
     targeted: game.i18n.localize('ARCHMAGE.UI.targeted'),
     selected: game.i18n.localize('ARCHMAGE.UI.selected'),
@@ -1211,157 +1196,111 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     reroll: game.i18n.localize("ARCHMAGE.contextReroll")
   };
 
+  const isGrailDamageCard = (t) => t.hasClass('dice-roll--archmage')
+    && ['damage', 'misc'].includes(t.closest('.feature-roll-card')[0]?.dataset?.rollType);
+  const isFull = (t) => t.attr('data-grail-menu') === 'full';
+  const canReroll = (t) => {
+    if (isGrailDamageCard(t)) return false;
+    if (game.user.isGM) return true;
+    if (!(game.settings.get('watersnake-grail-war', 'allowRerolls') ?? false)) return false;
+    const msgId = t.closest('.chat-message')[0]?.dataset?.messageId;
+    const msg = msgId ? game.messages.get(msgId) : null;
+    return (msg?.author?.id ?? msg?.user?.id) === game.user.id;
+  };
+  const getRollFromElement = (element) => element.hasClass('inline-roll--archmage')
+    ? element
+    : element.find('.dice-total');
+  const applyAs = (kind) => (inlineRoll) => {
+    const menu = inlineRoll.find('#context-menu2')?.[0];
+    const targetType = menu?.dataset?.target ?? 'selected';
+    const mod = menu?.dataset?.mod ? Number(menu.dataset.mod) : 1;
+    new DamageApplicator()[kind](getRollFromElement(inlineRoll), mod, targetType);
+  };
+
+  const menuItems = [
+    {
+      name: `
+        <div class="damage-target flex flexrow">
+          <button type="button" data-target="targeted"><i class="fa-solid fa-bullseye"></i> ${labels.targeted}</button>
+          <button type="button" data-target="selected"><i class="fa-solid fa-expand"></i> ${labels.selected}</button>
+        </div>`,
+      id: 'targets',
+      icon: '',
+      preventClose: true,
+      condition: (t) => isFull(t) && game.settings.get('watersnake-grail-war', 'allowTargetDamageApplication'),
+      callback: (inlineRoll, event) => {
+        const button = event?.target ?? event?.currentTarget;
+        if (button?.dataset?.target) {
+          inlineRoll.find('button[data-target].active').removeClass('active');
+          const menu = inlineRoll.find('#context-menu2')[0];
+          if (menu) menu.dataset.target = button.dataset.target;
+          button.classList.add('active');
+          game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', button.dataset.target);
+        }
+      }
+    },
+    {
+      name: `
+        <div class="damage-modifiers flex flexrow">
+          <button class="damage-modifier" type="button" data-mod="0.25">&frac14;x</button>
+          <button class="damage-modifier" type="button" data-mod="0.5">&frac12;x</button>
+          <button class="damage-modifier active" type="button" data-mod="1">1x</button>
+          <button class="damage-modifier" type="button" data-mod="1.5">1.5x</button>
+          <button class="damage-modifier" type="button" data-mod="2">2x</button>
+        </div>`,
+      id: 'modifiers',
+      icon: '',
+      preventClose: true,
+      condition: isFull,
+      callback: (inlineRoll, event) => {
+        const button = event?.target ?? event?.currentTarget;
+        if (button?.dataset?.mod) {
+          inlineRoll.find('button[data-mod].active').removeClass('active');
+          const menu = inlineRoll.find('#context-menu2')[0];
+          if (menu) menu.dataset.mod = button.dataset.mod;
+          button.classList.add('active');
+        }
+      }
+    },
+    { name: labels.applyDamage, id: 'damage', icon: '<i class="fas fa-tint"></i>', condition: isFull, callback: applyAs('asDamage') },
+    { name: labels.applyHealing, id: 'healing', icon: '<i class="fas fa-medkit"></i>', condition: isFull, callback: applyAs('asHealing') },
+    { name: labels.applyTempHealth, id: 'temp-healing', icon: '<i class="fas fa-heart"></i>', condition: isFull, callback: applyAs('asTempHealth') },
+    {
+      name: labels.reroll,
+      id: 'reroll',
+      icon: '<i class="fas fa-rotate-left"></i>',
+      condition: canReroll,
+      callback: (html) => DamageApplicator.rerollDice(html)
+    }
+  ];
+
+  new ContextMenu2($(document.body), '[data-grail-menu]', menuItems);
+}
+Hooks.once('ready', _bindGrailChatContextMenu);
+
+Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
+  const html = $(rawhtml);
+
+  const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
+  const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
+
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
+  // 적용 메뉴 대상 표시만 하고, 메뉴 자체는 body 위임 인스턴스 1개가 처리한다.
   html.find('.inline-roll--archmage, .dice-roll--archmage').each(function() {
-    var uuid = uuidv4();
-    // Add a way to uniquely identify this roll
-    $(this)[0].dataset.uuid = uuid;
-    $(this).off("contextmenu");
-
+    const $el = $(this);
     // 성배전쟁: feature 피해/기타 카드의 굴림 총합엔 적용 메뉴 부착(v0.3.24).
     // 그 외 전체 주사위 카드(판정/세이브 등)는 미부착 (인라인 롤만 유지).
-    const isGrailDamageCard = $(this).hasClass('dice-roll--archmage')
-      && ['damage', 'misc'].includes($(this).closest('.feature-roll-card')[0]?.dataset?.rollType);
-    if ($(this).hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
+    const isGrailDamageCard = $el.hasClass('dice-roll--archmage')
+      && ['damage', 'misc'].includes($el.closest('.feature-roll-card')[0]?.dataset?.rollType);
+    if ($el.hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
 
-    if ($(this).parent()[0].innerText.includes(triggerTarget)) {
-      // Ignore if this is a "Target:" line.
-      return;
-    }
+    const lineText = $el.parent()[0]?.innerText ?? '';
+    if (lineText.includes(triggerTarget)) return;  // "Target:" 행 제외
 
-    let isAttack = false;
-    if ($(this).parent()[0].innerText.includes(triggerAttack)) {
-      // Ignore if this is a "Attack:" line.
-      // return;
-      isAttack = true;
-    }
-
-    // Build the list of menu items, starting with the target buttons
-    // if allowed.
-    let menuItems = [];
-    if (allowTargeting && !isAttack) {
-      menuItems.push({
-        name: `
-          <div class="damage-target flex flexrow">
-            <button type="button" data-target="targeted"><i class="fa-solid fa-bullseye"></i> ${labels.targeted}</button>
-            <button type="button" data-target="selected"><i class="fa-solid fa-expand"></i> ${labels.selected}</button>
-          </div>`,
-        id: 'targets',
-        icon: '',
-        preventClose: true,
-        callback: (inlineRoll, event) => {
-          const button = event?.target ?? event?.currentTarget;
-          if (button?.dataset?.target) {
-            // Deactivate the other target type.
-            const activeButtons = inlineRoll.find('button[data-target].active');
-            activeButtons.removeClass('active');
-            // Set the target type on the menu for later reference.
-            const menu = inlineRoll.find('#context-menu2')[0];
-            if (menu) {
-              menu.dataset.target = button.dataset.target;
-            }
-            // Toggle the active button and update the user setting.
-            button.classList.add('active');
-            game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', button.dataset.target);
-          }
-        }
-      });
-    }
-
-    // Add all of the damage/healing options.
-    if (!isAttack) {
-      function getRollFromElement(element) {
-        return element.hasClass('inline-roll--archmage')
-          ? element
-          : element.find('.dice-total');
-      }
-
-      // Add damage multipliers.
-      menuItems.push({
-        name: `
-          <div class="damage-modifiers flex flexrow">
-            <button class="damage-modifier" type="button" data-mod="0.25">&frac14;x</button>
-            <button class="damage-modifier" type="button" data-mod="0.5">&frac12;x</button>
-            <button class="damage-modifier active" type="button" data-mod="1" class="active">1x</button>
-            <button class="damage-modifier" type="button" data-mod="1.5">1.5x</button>
-            <button class="damage-modifier" type="button" data-mod="2">2x</button>
-          </div>`,
-        id: 'modifiers',
-        icon: '',
-        preventClose: true,
-        callback: (inlineRoll, event) => {
-          const button = event?.target ?? event?.currentTarget;
-          if (button?.dataset?.mod) {
-            // Deactivate the other target type.
-            const activeButtons = inlineRoll.find('button[data-mod].active');
-            activeButtons.removeClass('active');
-            // Set the target type on the menu for later reference.
-            const menu = inlineRoll.find('#context-menu2')[0];
-            if (menu) {
-              menu.dataset.mod = button.dataset.mod;
-            }
-            // Toggle the active button and update the user setting.
-            button.classList.add('active');
-            // game.settings.set('watersnake-grail-war', 'userTargetDamageApplicationType', button.dataset.target);
-          }
-        }
-      });
-
-      // Add damage application links.
-      menuItems.push(
-        {
-          name: labels.applyDamage,
-          id: 'damage',
-          icon: '<i class="fas fa-tint"></i>',
-          callback: (inlineRoll, event) => {
-            const menu = inlineRoll.find('#context-menu2')?.[0];
-            const targetType = menu?.dataset?.target ?? 'selected';
-            const mod = menu?.dataset?.mod ? Number(menu.dataset.mod) : 1;
-            new DamageApplicator().asDamage(getRollFromElement(inlineRoll), mod, targetType);
-          }
-        },
-        {
-          name: labels.applyHealing,
-          id: 'healing',
-          icon: '<i class="fas fa-medkit"></i>',
-          callback: (inlineRoll, event) => {
-            const menu = inlineRoll.find('#context-menu2')?.[0];
-            const targetType = menu?.dataset?.target ?? 'selected';
-            const mod = menu?.dataset?.mod ? Number(menu.dataset.mod) : 1;
-            new DamageApplicator().asHealing(getRollFromElement(inlineRoll), mod, targetType);
-          }
-        },
-        {
-          name: labels.applyTempHealth,
-          id: 'temp-healing',
-          icon: '<i class="fas fa-heart"></i>',
-          callback: (inlineRoll, event) => {
-            const menu = inlineRoll.find('#context-menu2')?.[0];
-            const targetType = menu?.dataset?.target ?? 'selected';
-            const mod = menu?.dataset?.mod ? Number(menu.dataset.mod) : 1;
-            new DamageApplicator().asTempHealth(getRollFromElement(inlineRoll), mod, targetType);
-          }
-        }
-      );
-    }
-
-    // Add the reroll action regardless of whether or not this is an attack.
-    // (성배전쟁 feature 카드는 제외 — 인라인 롤 전용 재굴림 기계라 카드 총합엔 부적합)
-    if (!isGrailDamageCard && (game.user.isGM || (allowRerolls && messageAuthor === game.user.id))) {
-      menuItems.push({
-        name: labels.reroll,
-        id: 'reroll',
-        icon: '<i class="fas fa-rotate-left"></i>',
-        callback: (html, event) => {
-          DamageApplicator.rerollDice(html);
-        }
-      });
-    }
-
-    // Bind the context menu to the event.
-    new ContextMenu2($(this).parent(), `[data-uuid=${uuid}]`, menuItems);
+    // attack 행은 재굴림만, 그 외는 전체 항목.
+    this.dataset.grailMenu = lineText.includes(triggerAttack) ? 'attack' : 'full';
   });
   html.find('a.inline-roll--archmage').on('click', async event => {
     event.preventDefault();

@@ -170,13 +170,16 @@ export class ActorArchmage extends Actor {
     }
     const changes = this.effects.reduce((changes, e) => {
       if ( e.disabled ) return changes;
-      return changes.concat(e.changes.map(c => {
-        c = foundry.utils.duplicate(c);
-        c.effect = e;
-        c.name = e?.name;
-        c.priority = c.priority ?? (c.mode * 10);
-        return c;
-      })).filter(c => relevant(c) && !String(c.key).startsWith('system.overrides.'));
+      return changes.concat(e.changes.map(src => ({
+        // 원본 change 보호용 사본 — 이후 단계에서 value/numeric을 변이하므로.
+        // (JSON 왕복 duplicate는 패스×이펙트×체인지마다 돌기엔 비싸 얕은 복사로 대체)
+        key: src.key,
+        value: src.value,
+        mode: src.mode,
+        priority: src.priority ?? (src.mode * 10),
+        effect: e,
+        name: e?.name
+      }))).filter(c => relevant(c) && !String(c.key).startsWith('system.overrides.'));
     }, []);
 
     // Apply stacking rules:
@@ -1156,12 +1159,13 @@ export class ActorArchmage extends Actor {
 
     // Foundry v12 no longer has diffed data during _preUpdate, so we need
     // to compute it ourselves.
-    // Retrieve a copy of the existing actor data.
-    let newData = foundry.utils.flattenObject(data);
-    let oldData = foundry.utils.flattenObject(this);
-
-    // Limit data to just the new data.
-    const diffData = foundry.utils.diffObject(oldData, newData);
+    // 업데이트 페이로드(부분)만 순회해 현재값과 비교 — 문서 전체 flatten(아이템·효과 포함)은
+    // 매 업데이트마다 돌기엔 비싸다. 객체/배열 값은 보수적으로 '변경'으로 취급(무해).
+    const newData = foundry.utils.flattenObject(data);
+    const diffData = {};
+    for (const [k, v] of Object.entries(newData)) {
+      if (foundry.utils.getProperty(this, k) !== v) diffData[k] = v;
+    }
     changes = foundry.utils.expandObject(diffData);
 
     // Propagate name update to prototype token and active tokens.
