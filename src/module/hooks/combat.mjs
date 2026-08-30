@@ -38,7 +38,11 @@ async function handleRoundNotice(combat, override = null) {
     // roundNotice 플래그 → 렌더 훅에서 헤더/포트레이트 숨김.
     await ChatMessage.create({
         content,
-        flags: { 'watersnake-grail-war': { roundNotice: true } }
+        flags: {
+            'watersnake-grail-war': { roundNotice: true },
+            // fvtt-chat-enhancements: 앞뒤 어느 쪽과도 병합하지 않는 독립 블록으로 표시
+            'mrkb-chat-enhancements': { standalone: true }
+        }
     });
     await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
 }

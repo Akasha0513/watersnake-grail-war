@@ -2723,6 +2723,15 @@ a.effect-link,
   .message-content { padding: 0; margin: 0; }
   .grail-feature-call { margin: 0; }
 }
+// 우클릭 컨텍스트 메뉴가 열리면 배너의 overflow:hidden(둥근 모서리용)을 풀어
+// 메뉴가 메시지 경계에서 잘리지 않게 한다. (아래 메시지에 가려 보이던 문제)
+.chat-message.grail-feature-call-message:has(#context-menu),
+.chat-message.grail-round-notice-message:has(#context-menu) {
+  overflow: visible !important;
+  position: relative;
+  z-index: 10;
+}
+
 // 앞뒤 이웃 메시지의 인접 모서리도 라운드 → 배너가 깔끔히 끊겨 보이게(턴처럼)
 .chat-message.message:has(+ .grail-feature-call-message) {
   border-bottom-left-radius: 6px !important;

@@ -137,23 +137,4 @@
     }
   }
 
-  .unit--death {
-    .last-gasp-saves {
-      margin-top: $padding-md;
-      padding-top: $padding-md;
-      border-top: 2px solid $ct-border;
-    }
-
-    .attempts {
-      justify-content: space-between;
-
-      input[type="checkbox"] {
-        flex: 0 0 $font-sm;
-        width: $font-sm;
-        height: $font-sm;
-        margin: 3px 0;
-      }
-    }
-  }
-
 }

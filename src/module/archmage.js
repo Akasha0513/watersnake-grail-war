@@ -15,7 +15,6 @@ import { DamageApplicator } from './setup/damageApplicator.js';
 import { DiceArchmage } from './actor/dice.js';
 import { preloadHandlebarsTemplates } from "./setup/templates.js";
 import { ActorHelpersV2 } from './actor/helpers/actor-helpers-v2.js';
-import { registerModuleArt } from './setup/register-module-art.js';
 import { TokenArchmage } from './actor/token.js';
 import {combatRound, combatStart, combatTurn, preDeleteCombat} from "./hooks/combat.mjs";
 import { ArchmageActiveEffectSheetV2 } from './active-effects/effect-sheet-v2.js';
@@ -48,10 +47,6 @@ Hooks.once('init', async function() {
     ).replace(/%[0-9A-F]{2}/gi, '-');
   }
 
-  Handlebars.registerHelper('safeCSSId', (arg) => {
-    return `${arg}`.safeCSSId();
-  });
-
   Handlebars.registerHelper('concatenate', function() {
     var outStr = '';
     for (var arg in arguments) {
@@ -60,15 +55,6 @@ Hooks.once('init', async function() {
       }
     }
     return outStr;
-  });
-
-  Handlebars.registerHelper('iconSymbol', (iconKey) => {
-      let symbols = {
-        'Positive': '+',
-        'Negative': '-',
-        'Conflicted': '~'
-      };
-      return symbols[iconKey];
   });
 
   // Preload template partials.
@@ -88,12 +74,6 @@ Hooks.once('init', async function() {
     rollItemMacro,
     ActorHelpersV2,
     isSocketGM: () => game.users.activeGM.id === game.user.id,
-    system: {
-      moduleArt: {
-        map: new Map(),
-        refresh: registerModuleArt
-      }
-    },
     terrains: [
       {
         id: "none",
@@ -692,8 +672,6 @@ Hooks.once('ready', async () => {
     }
   });
 
-  // Build the module art map. See module/setup/register-module-art.js for more details.
-  registerModuleArt();
 });
 
 /* ---------------------------------------------- */

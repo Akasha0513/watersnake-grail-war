@@ -306,11 +306,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // Roll listeners.
     html.on('click', '.rollable', (event) => this._onRollable(event));
 
-    // Other listeners.
-    html.on('click', '.death-save-attempts input[type="checkbox"]', (event) => this._updateFails(event, "deathFails"));
-    html.on('click', '.lastgasp-save-attempts input[type="checkbox"]', (event) => this._updateFails(event, "lastGaspFails"));
-    html.on('click', '.rest', (event) => this._onRest(event));
-
     // 성배전쟁: 령주(점/±버튼), 배경 추가/삭제
     html.on('click', '.command-seal', (event) => this._updateCommandSeals(event));
     html.on('click', '.command-seal-minus', () => this._stepCommandSeals(-1));
@@ -547,11 +542,13 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       { speakerName, featureName: item.name, rank: item.system.rank?.value, portrait }
     );
     await game.holygrailwar.ArchmageUtility.createChatMessage({
-      // 병합 차단: fvtt-chat-enhancements의 동일 화자 병합(isFamily: alias+액터+유저 일치 시 .added)이
-      // 배너를 앞뒤 채팅과 이어붙이지 않도록 액터 없는 화자(alias만)로 전송 → 앞뒤가 별개 블록으로 분리(턴처럼).
       speaker: { alias: speakerName },
       content: content,
-      flags: { 'watersnake-grail-war': { featureCall: true } }
+      flags: {
+        'watersnake-grail-war': { featureCall: true },
+        // fvtt-chat-enhancements: 앞뒤 어느 쪽과도 병합하지 않는 독립 블록으로 표시
+        'mrkb-chat-enhancements': { standalone: true }
+      }
     });
   }
 
@@ -795,7 +792,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     let opt2 = dataset.rollOpt2 ?? null;
 
     if (type == 'item' && opt) this._onItemRoll(opt);
-    else if (type == 'recovery') this._onRecoveryRoll(event);
     else if (type == 'save') this._onSaveRoll();
     else if (type == 'disengage') this._onDisengageRoll(opt);
     else if (type == 'init') this._onInitRoll();
@@ -827,14 +823,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     let item = this.actor.items.get(id);
     if (item) item.roll();
   }
-
-  /**
-   * Roll a recovery for the actor.
-   */
-  async _onRecoveryRoll(event) {
-    this.actor.rollRecoveryDialog(event);
-  }
-
 
   /**
    * 상태이상 저항 굴림 (1d20 순수 11+).
@@ -976,86 +964,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   /* ------------------------------------------------------------------------ */
   /*  Special Listeners ----------------------------------------------------- */
   /* ------------------------------------------------------------------------ */
-  async _updateFails(event, saveType) {
-    event.preventDefault();
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-
-    if (dataset.opt) {
-      let count = Number(dataset.opt);
-      if (count == this.actor.system.attributes.saves[saveType].value) {
-        count = Math.max(0, count - 1);
-      }
-      let updateData = {};
-      let path = `system.attributes.saves.${saveType}.value`;
-      updateData[path] = count;
-      let update = await this.actor.update(updateData);
-    }
-  }
-
-  /**
-   * Handle rests.
-   */
-   _onRest(event) {
-    event.preventDefault;
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-
-    // Get the roll type and roll options.
-    let type = dataset.restType ?? null;
-
-    // Exit if type is invalid;
-    if (type !== 'quick' && type !== 'full') return;
-
-    // Determine if we need to skip confirmation.
-    let bypass = event.shiftKey ? true : false;
-    if (bypass) {
-      if (type == 'quick') this.actor.restQuick();
-      else if (type == 'full') this.actor.restFull();
-    }
-    // Otherwise, we need to make a dialog.
-    else {
-      let options = {
-        title: null,
-        confirmLabel: 'ARCHMAGE.CHAT.Rest',
-        cancelLabel: 'ARCHMAGE.CHAT.Cancel',
-        default: 'rest',
-      };
-
-      if (type == 'quick') {
-        options.title = 'ARCHMAGE.CHAT.QuickRest';
-        options.content = 'ARCHMAGE.CHAT.QuickRestBody';
-      }
-      else if (type == 'full') {
-        options.title = 'ARCHMAGE.CHAT.FullHeal';
-        options.content = 'ARCHMAGE.CHAT.FullHealBody';
-      }
-
-      // Render the rest dialog.
-      let doRest = false;
-      new Dialog({
-        title: game.i18n.localize(options.title),
-        content: game.i18n.localize(options.content),
-        buttons: {
-          rest: {
-            label: game.i18n.localize(options.confirmLabel),
-            callback: () => {doRest = true;}
-          },
-          cancel: {
-            label: game.i18n.localize(options.cancelLabel),
-            callback: () => {}
-          }
-        },
-        default: 'rest',
-        close: html => {
-          if (doRest) {
-            if (type == 'quick') this.actor.restQuick();
-            else if (type == 'full') this.actor.restFull();
-          }
-        }
-      }).render(true);
-    }
-  }
 
   /**
    * Apply drag events to items.
