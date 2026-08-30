@@ -674,7 +674,11 @@ export class ArchmageUtility {
     }
 
     for (const key of keys) {
-      var val = game.i18n.format(keyPrefix + key, format);
+      const fullKey = keyPrefix + key;
+      // 동적 조립 키(예: 'pcAbility'+능력치키)는 부재할 수 있음 — 부재 시 raw 키가
+      // 그대로 노출되므로 건너뛴다.
+      if (!game.i18n.has(fullKey)) continue;
+      var val = game.i18n.format(fullKey, format);
 
       out += "\n" + val.trim();
     }

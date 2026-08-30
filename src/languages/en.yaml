@@ -1,178 +1,52 @@
 ARCHMAGE:
   abilities: 능력치
-  abilityName: Ability Name
   abilityScore: Ability Score
-  act: Act.
   action: Action
-  actions: Actions
   activeEffects: Active Effects
-  add: Add
-  adventurer: Adventurer
   at-will: At-Will
   attack: Attack
-  attackMod: Attack Modifier
   attributes: Attributes
-  arcane: Arcane
   avatarAlt: Character profile image
   background: Background
   backgrounds: 배경
-  baseAC: Base AC
-  baseHP: Base HP
-  baseMD: Base MD
-  basePD: Base PD
-  baseRecoveries: Base Recoveries
-  biography: Biography
   bonus: Bonus
-  bonuses: Bonuses
-  byAction: Group by if the Power has an Action or Not
-  byGroup: Group by manual Power Group value entry
-  byType: Group by Power Type
-  calculateHP: Calculate Max HP?
-  calculateRecoveries: Calculate Max Recoveries?
-  chakra: Chakra
-  champion: Champion
   checkBackground: Background Check
   checkBackgroundFormat: "{name} Background Check"
   checkSkill: Skill Check
   checkSkillFormat: "{name} Skill Check"
-  class: Class
-  classFeat: Class Feat
   combat: Combat
-  Conflicted: Conflicted
   contextReroll: Reroll
   contextApplyDamage: Apply as Damage
-  contextApplyDamageHalf: Apply as Half Damage
-  contextApplyDamageDouble: Apply as Double Damage
-  contextApplyDamageTriple: Apply as Triple Damage
   contextApplyHealing: Apply as Healing
-  contextApplyHealingHalf: Apply as Half Healing
   contextApplyTempHealth: Apply as Temp Health
-  critModAtk: Crit Modifier (Attack)
-  critModDef: Crit Modifier (Defense)
-  cyclic: Cyclic
   daily: Daily
-  daily-desperate: Daily/Desperate
-  defense: Defense
   defenses: 방어
   damage: Damage
   description: Description
   details: Details
-  disengage: Disengage
-  disengageShort: Disengage
-  disengageAdjustment: Disengage Adjustment
-  divine: Divine
-  edit: Edit
   effects: Effects
-  epic: Epic
-  equipment: Equipment
-  equipmentName: Equipment Name
   escalationDieLabel: 전투고조
-  feat: Feat
-  feats: Feats
   feature: Feature
-  features: Features
-  filter: Filter
-  filterName: Filter by name
-  flavor: Flavor
-  flexible: Flexible Attack
-  flexibles: Flexible Attacks
-  free: Free Action
-  FREE: FREE
-  free-short: Free
-  groupBy: Group by
   health: Health
   helpCompact: '<p><a href="javascript:void(0)" click="preventDefault" role="button" tabindex="-1" class="archmage-rolls-reference">Inline rolls</a> allowed here.</p>'
   helpDetailed: '<p class="hint">Use <a href="javascript:void(0)" click="preventDefault" role="button" tabindex="-1" class="archmage-rolls-reference">inline rolls</a> such as <strong>[[d20+@str.mod+@std+@atk.a.bonus]] vs AC</strong> to insert dice rolls wherever you need them. Any roll formula will work!</p>'
-  hit: Hit
   hitPoints: HP
-  hpAdjustment: Hit Points Adjustment
-  icon: Icon
-  iconic: Zenith
-  iconRelationships: Icon Relationships
-  incrementalAdvances: Incremental Advances
-  initAdjustment: Initiative Adjustment
-  initBonus: Optional Initiative Bonus
   initiative: Initiative
-  INT: INT
-  interrupt: Interrupt Action
-  interrupt-short: Interrupt
-  inventory: Inventory
-  item: Item
-  jabWeaponDice: JAB Weapon Dice
-  keyMod: Key Modifier
   keyReduced: Reduced to {mod} due to {kmod1}/{kmod2} key modifier
-  kickWeaponDice: KICK Weapon Dice
-  kin: Kin
   level: Level
   levelFormat: "{level} level"
-  location: Location
-  loot: Loot
-  lvl: Lvl
-  magicItems: Magic Items
-  maneuver: Maneuver
-  maneuvers: Maneuvers
-  maxSkulls: Max Death Saves/Skulls
   melee: Melee
-  meleeWeaponDice: Melee Weapon Dice
-  misc: Misc.
-  miscellaneous: Miscellaneous
-  miss: Miss
-  mod: Mod
-  modifyLevel: Adjust
-  MOV: MOV
-  move: Move Action
-  move-short: Move
   name: Name
   nastierSpecial: Nastier Special
-  nastierSpecials: Nastier Specials
-  Negative: Negative
   newItem: New {item}
   noneOption: "- None -"
-  normal: Normal
   once-per-battle: Per Battle
-  oneUniqueThing: One Unique Thing
   ongoing: Ongoing
   other: Other
-  others: Other
-  Positive: Positive
-  power: Power
-  powerName: Power Name
-  powers: Powers
-  preview: Preview
-  punchWeaponDice: PUNCH Weapon Dice
-  QCK: QCK
-  quantity: Quantity
-  quick: Quick Action
-  quick-short: Quick
-  race: Race
   ranged: Ranged
-  rangedWeaponDice: Ranged Weapon Dice
-  rchg: Rchg.
   recharge: Recharge
-  recharge-desperate: Recharge/Desperate
   recoveries: Recoveries
-  recovery: Recovery
-  recoveryAdventurer: Potion (Adv.)
-  recoveryAdventurerFull: Adventurer Potion
-  recoveryApplyHealingLabel: Apply healing?
-  recoveryBonusLabel: Recovery bonus?
-  recoveryChampion: Potion (Cha.)
-  recoveryChampionFull: Champion Potion
-  recoveryChatTitle: "{recovery} Recovery"
-  recoveryChatTitleHalf: "{recovery} (Half)"
-  recoveryDice: Recovery Dice
-  recoveryEpic: Potion (Epic)
-  recoveryEpicFull: Epic Potion
-  recoveryFree: Free
-  recoveryFreeChat: Free
-  recoveryIconic: Potion (Iconic)
-  recoveryIconicFull: Iconic Potion
-  recoveryNormal: Normal
-  recoveryRoll: Recovery Roll
-  resistance: Resistance
-  role: Role
   rollAdvantageShort: Adv.
-  rollAverageLabel: Average roll?
   rollBonus: Situational Bonus?
   rollBonusPlaceholder: e.g. +1d4
   rollDisadvantageShort: Dis.
@@ -180,7 +54,6 @@ ARCHMAGE:
   rollMode: Roll Mode
   rollNormal: Normal
   save: Save
-  saves: Saves
   sharePlayers: Show Players
   sheetActiveEffect: 13th Age Active Effect Sheet
   sheetCharacter: Character Sheet
@@ -188,27 +61,9 @@ ARCHMAGE:
   sheetItem: Item Sheet
   sheetItemV2: Item Sheet V2
   sheetNPC: NPC Sheet
-  size: Size
-  sort: Sort
-  source: Source
-  special: Special
-  spell: Spell
-  spells: Spells
-  standard: Standard Action
-  standard-short: Standard
-  STD: STD
-  strength: Strength
-  talent: Talent
-  talents: Talents
   terrains: Terrains
   tempHp: 임시 HP
-  tool: Tool
   trait: Trait
-  traits: Traits
-  triggers: Triggers
-  type: Type
-  uses: Uses
-  vulnerability: Vulnerability
   # Settings
   SETTINGS:
     newSetting: New!
@@ -245,8 +100,6 @@ ARCHMAGE:
     allowRerollsName: Allow dice rerolls
     optionalBaseCritRangeName: Crit 18+
     optionalBaseCritRangeHint: Optional rule expanding everyone's base crit range to 18+ instead of 20.
-    ShowDebugLogsHint: Turn this on for bug reports
-    ShowDebugLogsName: Show debug logs?
     showDefensesInChatHint: Enable this to display a list of targeted defenses in the attack line of chat power cards.
     showDefensesInChatName: Show target(s) defense(s) in chat
     showNaturalRollsHint: Enable this to display natural dice results for d20 rolls in chat power cards.
@@ -264,10 +117,6 @@ ARCHMAGE:
       hint: <p>These macros will run on this character's owner's client. If that player is not logged in, they will not be executed.</p><p>In the body, available arguments are <code>this</code>, <code>speaker</code>, <code>actor</code>, and <code>archmage</code>.</p>
       startOfTurn: Start of Turn
       endOfTurn: End of Turn
-  AUTOLEVEL:
-    confirm: Confirm (create duplicate)
-    help: Use this form to create a copy of this actor with its stats (including attacks) adjusted to the new level.
-    newLevel: New Level
   # Characters
   CHARACTER:
     showPortrait: 'Show Portrait'
@@ -310,24 +159,7 @@ ARCHMAGE:
     showTriggersTabHint: Show the trigger-centric powers tab.
     showTriggersTabName: Show Triggers tab
   CHARACTERSETTINGS:
-    bg1: Background 1
-    bg2: Background 2
-    bg3: Background 3
-    bg4: Background 4
-    bg5: Background 5
-    bg6: Background 6
-    bg7: Background 7
-    bg8: Background 8
-    dualwield: Dual-Wielding
-    i1: Icon 1
-    i2: Icon 2
-    i3: Icon 3
-    i4: Icon 4
-    i5: Icon 5
-    publicationSource: 'Publication Source:'
     settings: Settings
-    shield: Shield
-    twohanded: Two-handed Weapon
   DURATION:
     Infinite: Infinite
     Unknown: Unknown
@@ -351,196 +183,58 @@ ARCHMAGE:
     EndOfRound: End of Current Round
     EndOfRoundWarning: No active combat, cannot determine end of round; assuming first round.
     NextTurnFilter: until the \w* of \w* next turn
-  INCREMENTALS:
-    abilityScoreBonusHint: +1 to 3 abilities (3rd/6th/9th Level)
-    abilityScoreBonusName: Ability Score Bonus
-    classFeatureHint: If you have a class feature that improves every level, bump up its effective level by one
-    classFeatureName: Class Feature
-    extraMagicItemHint: Carry an extra Magic Item without becoming overwhelmed by Quirks
-    extraMagicItemName: Magic Item
-    featHint: Choose one feat as if you were the next level
-    featName: Feat
-    featureHint: Choose one class feature as if you were the next level
-    featureName: Feature
-    hpHint: Increase your HP as if you were the next level
-    hpName: Hit Points
-    iconRelationshipPointHint: Gain an extra Icon relationship point (4th/7th Level)
-    iconRelationshipPointName: Icon Relationship Point
-    mdHint: Increase your MD by one, as if you were one level higher
-    mdName: Mental Defense
-    pdHint: Increase your PD by one, as if you were one level higher
-    pdName: Physical Defense
-    powerSpell1Hint: Choose a power / spell as if you were the next level
-    powerSpell1Name: Power / Spell
-    powerSpell2Hint: Choose a power / spell as if you were the next level
-    powerSpell2Name: Power / Spell
-    powerSpell3Hint: Choose a power / spell as if you were the next level
-    powerSpell3Name: Power / Spell
-    powerSpell4Hint: Choose a power / spell as if you were the next level
-    powerSpell4Name: Power / Spell
-    powerSpellHint: Choose a power / spell as if you were the next level
-    powerSpellName: Power / Spell
-    skillsHint: Add +1 to all skill rolls
-    skillsName: Skills
-    talentHint: Choose one talent as if you were the next level
-    talentName: Talent
     # 2E
-    recoveryName: Recovery
-    recoveryHint: Gain extra recovery dice as if you were the next level
-    skillInitiativeName: Skills & Initiative
-    skillInitiativeHint: Add +1 to all skill and initiative checks
-    abilMultiplierName: Ability Multiplier
-    abilMultiplierHint: Double/quadruple the ability modifier contribution to damage and healing (4th/7th level)
-  COINS:
-    copper: Copper
-    copperHint: 10 Copper = 1 Silver
-    gold: Gold
-    goldHint: 1 Gold = 10 Silver
-    platinum: Platinum
-    platinumHint: 1 Platinum = 10 Gold
-    silver: Silver
-    silverHint: 1 Silver = 10 Copper
   COMPENDIUMBROWSER:
     buttons:
       baselineMonster: 'Create Baseline Monster'
 # Ability Scores
   str:
-    key: 근력
     label: 근력
   agi:
-    key: 민첩
     label: 민첩
   end:
-    key: 내구
     label: 내구
   mgi:
-    key: 마력
     label: 마력
   ins:
-    key: 통찰
     label: 통찰
   lck:
-    key: 행운
     label: 행운
   # Defenses
   ac:
     key: 방어
     label: 방어도
-    stats: Con/Dex/Wis
   pd:
     key: 신방
     label: 신체방어
-    stats: Str/Con/Dex
   md:
     key: 정방
     label: 정신방어
-    stats: Int/Wis/Cha
-  GROUPS:
-    actionType: Action
-    group: Custom Groups
-  SORTS:
-    custom: Custom
-    level: Level
-    name: Name
   ITEM:
-    acBonus: AC Bonus
-    active: Active
-    arcaneBonus: Arcane Spell / Arcane Attack Bonus
-    attackBonuses: Attack Bonuses
-    chaBonus: Charisma checks bonus
-    chakraSlot: Chakra Slot
-    conBonus: Constitution checks bonus
-    critDefBonus: Critical Hit Defense Bonus
-    critDefBonusHint: +1 means something that would crit you on 20 crits you on 19+, etc.
-    critModBonus: Critical Hit Modifier Bonus
-    critModBonusHint: +1 means you would crit on 19+, etc.
-    damageType: Damage Type
-    damageTypeHint: Poison
-    defenseBonuses: Defense Bonuses
-    dexBonus: Dexterity checks bonus
-    diceExpressionHint: A dice expression, e.g. +2d10
     disengageBonus: Disengage Bonus
-    disengageInitBonus: Disengage and Initiative Bonus
-    divineBonus: Divine Spell / Divine Attack Bonus
-    escalationBlocked: Block ED
-    escalationBlockedHint: Denies usage of Escalation Die
-    group: Things with the same group will be grouped together
-    hpBonus: HP Bonus
-    icons: Associated Icon(s)
-    iconPlaceholder: Archmage, Elf Queen
-    initBonus: Initiative Bonus
-    intBonus: Intelligence checks bonus
-    mdBonus: MD Bonus
-    meleeBonus: Melee Attack Bonus
-    meleeWeaponDamageBonus: Melee Weapon Damage Bonus
     ongoingDamage: Ongoing Damage
-    ongoingDamageCrit: Ongoing Damage is from a critical hit
-    otherBonuses: Other Bonuses
-    pdBonus: PD Bonus
-    price: Price
-    pricePlaceholder: 1,000gp
-    quantity: Quantity
-    rangedBonus: Ranged Attack Bonus
-    rangedWeaponDamageBonus: Ranged Weapon Damage Bonus
-    recoveriesBonus: Recoveries Bonus
-    rerollAcBonus: Force reroll attack vs. AC
-    rerollSaveBonus: Reroll Save
-    strBonus: Strength checks bonus
-    toHitBonus: To-Hit Bonus
-    saveBonus: Save Bonus
-    saveBonusHPTreshold: Save Bonus HP Threshold
-    stackingBehavior: Stacking Behavior
-    stacksAlways: Always stacks
     usesMax: Maximum Uses
     usesMaxHint: Number of uses per battle/day, usually 1
     usesRemaining: Uses Remaining
     usesRemainingHint: Number of remaining uses, usually the same as Max Uses
-    wisBonus: Wisdom checks bonus
   CHAT:
-    actionType: Action Type
-    advantages: Advantages
-    adventurer: Adventurer Feat
-    always: Always
-    alwaysPlaceholder: Some effect that always happens
-    alwaysTitle: Effects that always happen, regardless of circumstances or rolls
     attack: Attack
     attackPlaceholder: "[[d20+@str.mod+@std]] vs. AC"
     attackTitle: Attack formula, such as "[[d20+@str.mod+@std]] vs. AC"
     attacks: Attacks
     Apply: Apply
     applyAETitle: Apply Active Effect?
-    applyDamage: Apply Damage
-    breathWeapon: Breath Weapon
-    breath: 'Breath'
     Cancel: Cancel
-    castBroadEffect: Cast for Broad Effect
-    castPower: Cast for Power
-    champion: Champion Feat
-    CmdPtsReset: reset to 1
-    complicatedAdvantages: Complicated Advantages
-    crit: Crit
     critMod: Critical Range Modifier
     critModPlaceholder: "+[[@ed]]"
     critModTitle: Critical hit range modifier, such as "3" or "[[@ed]]"
-    critPlaceholder: Additional effects on a crit
     Delete: Delete
     DeleteConfirm: Are you sure you want to delete this?
     DeleteConfirmTitle: Confirm deletion
-    desperateRecharge: Desperate Recharge
-    disengage: Disengage Check
     duration: Duration
     effect: Effect
-    effectRemoved: temporary effect removed
-    effectTitle: General effect of a spell or power when it's used.
-    epic: Epic Feat
-    even: even
-    finalVerse: Final Verse
-    FullHeal: Full Heal-Up
-    FullHealBody: Regain all health, recoveries, and power uses.
-    FullHealHP: reset to maximum
     group: Group
     groupTitle: Custom group used to organize this on character sheets.
-    higherLevels: Higher Levels
     hit: Hit
     hitPlaceholder: "[[@wpn.m.dice+@str.dmg]] damage"
     hitTitle: Effects on successful hit, for example "[[@wpn.m.dice+@str.dmg]] damage"
@@ -559,62 +253,16 @@ ARCHMAGE:
     hit5: Special Roll (5)
     hit5NamePlaceholder: "Natural odd miss"
     hit5ValuePlaceholder: "Deal [[8]] miss damage"
-    hitEven: Even Hit
-    hitEvenTitle: Effects that happen on even hits
-    hitOdd: Odd Hit
-    hitOddTitle: Effects that happen on odd hits
-    hitSlashMiss: Hit / Miss
-    HP: HP
-    iconic: Zenith Feat
-    ItemReset: uses restored to
-    KiReset: reset to
     embeddedMacro: Embedded Macro
-    embeddedMacroSummary: Edit the embedded macro that will be run on use.
-    embeddedMacroSummaryTooltip: The macro will be run if the item is used/rolled. Context is passed as arguments.
     embeddedMacroPermissionError: Cannot execute embedded macro - request permission for this user to your GM!
     miss: Miss
     missPlaceholder: Damage equal to your level ([[@lvl]])
     missTitle: Effects that happen on a miss, such as "Damage equal to your level ([[@lvl]])"
-    missEven: Even Miss
-    missEvenPlaceholder: Effects that happen on even misses
-    missOdd: Odd Miss
-    missOddPlaceholder: Effects that happen on odd misses
     modifiers: Modifiers
-    MomentReset: lost
-    natural: natural
     NaturalRoll: 'Natural {naturalRolls}'
     NoResources: Not enough resources
-    NoUses: No uses left
-    NoUsesMsg: No uses left, do you want to use this anyway?
     numbersOnly: Numbers only, such as '16'
-    odd: odd
-    ongoingDamageTooltip: '{damage} ongoing {type} damage'
-    ongoingDamage: '{target} takes [[{damage}]] ongoing {type}damage due to {source}'
-    ongoingSelfEnded: The following Effects <strong>have ended on this</strong> Actor
-    ongoingOtherEnded: The following Effects <strong>have ended on another</strong> Actor
-    ongoingSaveEnds: The following Effects <strong>require a Save</strong> to end
-    ongoingSelfTriggered: The following Effects <strong>triggered on this</strong> Actor
-    hasUnknown: The following Effects with an <strong>unknown duration</strong> are currently active on this Actor
-    QuickRest: Quick Rest
-    QuickRestBody: Regain per-battle powers, roll to recharge spent recharge powers, and roll recoveries to heal above 50% health.
-    QuickRestHP: rolled {recoveries} healing {hp} HP
-    range: Range
-    rangePlaceholder: Melee attack or Ranged spell
-    rangeTitle: Range of the power, such as 'Meele attack' or 'Ranged spell'
-    recharge: Recharge
-    rechargeHint: Numbers only, such as '16' (recharges on a roll of 16+)
-    reuseBreath: Reuse {power} on 16+
-    rollD20: Roll d20
-    RechargeFail: recharge failed
-    RechargeLabel: Rolling recharge
-    RechargeRoll: Recharge Roll
-    RechargeSucc: recharged
     resources: Resources
-    resourcesPlaceholder: -2 command points
-    resourcesTitle: Enter a positive or negative number and a resource name that matches one of the resources on your character sheet, such as "-2 command points"
-    removeEffect: Remove Effect
-    Rest: Rest
-    Rests: Rests
     sequencer: Sequencer
     sequencerDesc: Configure a sequencer animation.
     sequencerTarget: Sequencer File (Target)
@@ -623,53 +271,13 @@ ARCHMAGE:
     sequencerReverse: Reverse Sequence
     source: Source
     special: Special
-    specialTitle: Special conditions to use the power.
-    spellChain: Chain Spell
-    hideSpellFromChat: Hide spell level {level} from chat.
-    spellLevel1: 1st Level
-    spellLevel2: 2nd Level
-    spellLevel2Placeholder: "[[2d6]] damage"
-    spellLevel3: 3rd Level
-    spellLevel3Placeholder: "[[3d6]] damage"
-    spellLevel4: 4th Level
-    spellLevel4Placeholder: "[[4d6]] damage"
-    spellLevel5: 5th Level
-    spellLevel5Placeholder: "[[5d6]] damage"
-    spellLevel6: 6th Level
-    spellLevel6Placeholder: "[[6d6]] damage"
-    spellLevel7: 7th Level
-    spellLevel7Placeholder: "[[7d6]] damage"
-    spellLevel8: 8th Level
-    spellLevel8Placeholder: "[[8d6]] damage"
-    spellLevel9: 9th Level
-    spellLevel9Placeholder: "[[9d6]] damage"
-    spellLevel10: 10th Level
-    spellLevel10Placeholder: "[[10d6]] damage"
-    spellLevel11: 11th Level
-    spellLevel11Placeholder: "[[11d6]] damage"
     spellLevelTrigger: Level
-    sustainedOrFinal: "Do you want to use the Final Verse instead of the Sustained Effect?"
-    sustainedOrFinalTitle: "Use Final Verse"
-    sustainPower: "Sustain {power} on {target}+"
-    rollTable: RollTable
-    rollTablePlaceholder: Sneak Attack Damage
-    rollTableTitle: Name of a roll table to roll on use (only text supported)
-    sustainedEffect: Opening and Sustained Effect
-    sustainOn: Sustain On
-    sustainOnTitle: Numbers only, such as '16' (is sustained on a roll of 16+)
     target: Target
-    targetPlaceholder: "[[1d3]] nearby enemies"
-    targetTitle: Targets for this power, such as "[[1d3]] nearby enemies", determines how many attacks are rolled
-    tier: Tier
     trigger: Trigger
-    triggerPlaceholder: Natural even miss
     triggerTitle: Trigger for this power, such as 'Natural even miss'
     triggerVsRegex: "(\\[\\[.+?\\]\\]).*(vs.*)"
-    unambiguousAdvantages: Unambiguous Advantages
-    Use: Use
     vulnerable: Vulnerability to {vulns}
     vulnerableTooltip: The &ldquo;vulnerable&rdquo; condition is present but a type is not specified.
-    vulnerableCondition: condition
     vulnerableText1e: "crit range may be expanded"
   TERRAINS:
     label: Terrains Present
@@ -697,17 +305,8 @@ ARCHMAGE:
     every: every
     random: random
   SAVE:
-    death: Death Save
-    disengage: 물러서기
-    easy: Easy Save
-    easyShort: Easy
     failure: 실패
-    hard: Hard Save
-    hardShort: Hard
-    normal: Normal Save
-    normalShort: Normal
     success: 성공
-    rollSave: Roll Save
   EFFECT:
     AE:
       arcane: Arcane
@@ -724,21 +323,12 @@ ARCHMAGE:
     StatusBonusDefenses: Bonus Defenses
     StatusBuffed: Buffed
     StatusBlind: Blind
-    StatusCharmed: Charmed
-    StatusConfused: Confused
     StatusCursed: Cursed
-    StatusDazed: Dazed
     StatusDead: Dead
     StatusDebuffed: Debuffed
     StatusEmpowered: Empowered
-    StatusFear: Fear
-    StatusFrenzied: Frenzied
     StatusFireShield: Fire Shield
     StatusFlying: Flying
-    StatusGrabbed: Grabbed
-    StatusHampered: Hampered
-    StatusHindered: Hindered
-    StatusHelpless: Helpless
     StatusHidden: Hidden
     StatusHolyShield: Holy Shield
     StatusIceShield: Ice Shield
@@ -747,19 +337,12 @@ ARCHMAGE:
     StatusOngoingDamage: Ongoing Damage
     StatusReducedDefenses: Reduced Defenses
     StatusRegen: Regeneration
-    StatusShining: Radiating Light
-    StatusShocked: Shocked
     StatusSilenced: Silenced
-    StatusStaggered: Staggered
-    StatusStuck: Stuck
-    StatusStunned: Stunned
-    StatusUnconscious: Unconscious
-    StatusVulnerable: Vulnerable
-    StatusWeakened: Weakened
   UI:
     applyChanges: Apply changes
     targeted: Targeted
     selected: Selected
+    errNotTable: 지정한 항목이 롤테이블이 아닙니다.
     errMacroSyntax: There was an error in your macro syntax. See the console (F12) for details.
     errNotEnoughCP: You don't have enough Command Points to use this command. Use anyway?
     errNotEnoughKi: You don't have enough Ki to use this power. Use anyway?
@@ -767,10 +350,8 @@ ARCHMAGE:
     errNoFocus: You need Focus to use this power. Use anyway?
     errNoRecoveries: You don't have any recoveries left. Use anyway?
     errNoCustomResource: "You don't have enough {res}. Use anyway?"
-    errNotInteger: must be an integer number
     errNoInitiativeOutsideCombat: Can't roll initiative without an encounter in the combat tracker.
     errOnlyTextRolltables: Only text Roll Tables are supported for now.
-    infoDesperateTriggeredEmpty: You triggered your desperate recharge for this arc, but there was nothing to recharge.
     warnStatusEffect: Effect data empty, can't apply this effect.
     warnMacroOnlyOwnedItems: You can only create macro buttons for owned Items.
     warnMacroItemNotFound: Could not find item {item}. You may need to delete and recreate this macro.
@@ -806,14 +387,10 @@ ARCHMAGE:
         <li><strong>token</strong>: Active token for the actor that owns the item.</li>
         <li><strong>archmage</strong>: System-specifc data you can modify to implement custom automation that overrides the system's own.</li>
       </ul>
-    firstLevelHint: |
-      See the <strong>Hit</strong> and <strong>Effect</strong> fields in the <strong>Attack</strong> tab.
     activeEffectsItemHint: |
       Active Effects will not be applied directly to this item's parent actor, but they will show up as draggable effects on power cards in chat messages.
     actionAttackHint: |
       For ranged attacks, include either "R:" or "C:" in the action's name, above. For targeting, include possible targets in parentheses at the end of the attack line, such as "[[d20+9]] vs AC ([[d3]] nearby enemies)".
-    actionSpecialHint: |
-      Enter special attacks here. Use the top row of each field to specify the conditions (such as "Natural 16+") and the bottom row of each field to specify the effect (such as "[[20]] damage and 7 ongoing damage").
 TYPES:
   Actor:
     character: 서번트
