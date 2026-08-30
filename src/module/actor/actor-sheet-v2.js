@@ -877,7 +877,9 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       await combat.rollInitiative([combatant.id], { formula });
     } catch (err) {
       console.error("성배전쟁 이니셔티브 오류:", err);
-      ui.notifications.error("이니셔티브 오류: " + (err?.message ?? err));
+      // 재발 시 원인 식별용으로 사용된 formula를 함께 노출.
+      const f = this.actor?.getInitiativeFormula?.() ?? '?';
+      ui.notifications.error(`이니셔티브 오류 [${f}]: ` + (err?.message ?? err));
     }
   }
 

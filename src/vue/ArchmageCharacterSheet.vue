@@ -217,7 +217,24 @@ export default {
       return foundry.utils.mergeObject(baseFlags, flags);
     }
   },
-  watch: {},
+  watch: {
+    // 시트 설정의 탭 표시 토글(체계/스킬·설정 탭)을 재열기 없이 즉시 반영.
+    'actor.flags.watersnake-grail-war': {
+      deep: true,
+      handler(flags) {
+        const primary = this.tabs.primary;
+        primary.oppositePowers.hidden = !flags?.showOppositeTab;
+        primary.settings.hidden = (flags?.hideSettingsTab === true && !game.user.isGM);
+        // 활성 탭이 방금 숨겨졌으면 기본 탭(powers)으로 폴백.
+        for (const tab of Object.values(primary)) {
+          if (tab.hidden && tab.active) {
+            tab.active = false;
+            primary.powers.active = true;
+          }
+        }
+      }
+    }
+  },
   async created() {
     console.log("Creating Sheet");
   },

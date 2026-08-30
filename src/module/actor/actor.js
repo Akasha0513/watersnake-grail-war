@@ -465,13 +465,15 @@ export class ActorArchmage extends Actor {
     // Initiative
     // npc(일반인·마술사)는 마스터와 동일 취급.
     if (actorData.type === 'character' || actorData.type === 'master' || actorData.type === 'npc') {
-      let incrInit = 0;
-      let statInit = data.abilities?.agi?.nonKey?.mod || 0;
       // 성배전쟁 이니셔티브: 1d20 + 민첩 수정치 + 영령의 급(서번트, 또는 영령 취급 마스터/npc)
+      // 각 항을 숫자로 강제 캐스팅 — 문자열이 섞이면 연결("3"+4="34")로 오염되고,
+      // NaN이면 formula 무효로 이니셔티브가 조용히 실패한다.
+      const statInit = Number(data.abilities?.agi?.nonKey?.mod) || 0;
+      const miscInit = Number(data.attributes.init.value) || 0;
       const _isMasterLike = actorData.type === 'master' || actorData.type === 'npc';
       const _masterAsServant = _isMasterLike && ['three', 'sorcery'].includes(data.details?.masterAsServant?.value);
-      let gradeInit = (!_isMasterLike || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
-      data.attributes.init.mod = statInit + data.attributes.init.value + gradeInit + incrInit;
+      const gradeInit = (!_isMasterLike || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
+      data.attributes.init.mod = statInit + miscInit + gradeInit;
     }
 
     // Get the escalation die value.
@@ -882,8 +884,10 @@ export class ActorArchmage extends Actor {
   }
 
   getInitiativeFormula() {
-    const init = this.system.attributes.init.mod;
-    // Init mod includes dex + level + misc bonuses.
+    // 비유한값(NaN/undefined)이 섞이면 Roll이 formula를 거부해 이니셔티브가 통째로 실패하므로 정규화.
+    let init = Number(this.system.attributes.init.mod);
+    if (!Number.isFinite(init)) init = 0;
+    // Init mod includes dex + misc bonuses + grade.
     const parts = ["1d20", init];
     if (this.getFlag("watersnake-grail-war", "initiativeAdv")) parts[0] = "2d20kh";
     if (game.settings.get("watersnake-grail-war", "initiativeStaticNpc") &&  this.type == 'npc') parts[0] = "10";

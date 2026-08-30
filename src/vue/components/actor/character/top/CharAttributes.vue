@@ -67,18 +67,19 @@
             <h3 class="unit-subtitle">{{localize('ARCHMAGE.md.key')}}</h3>
           </div>
         </div>
-        <!-- 영령의 급(서번트): 舊 물러서기 버튼 자리 -->
-        <div v-if="actor.type === 'character'" class="labeled-input flexrow" style="justify-content: center; gap: 4px;">
-          <label class="unit-subtitle" style="flex: 0 0 auto;">급</label>
+      </div>
+      <!-- 영령의 급(서번트) / 레벨+경험치(마스터) -->
+      <div v-if="actor.type === 'character'" class="unit unit--grade flexcol">
+        <h2 class="unit-title">영령의 급</h2>
+        <div class="resource flexrow">
           <input type="text" name="system.details.gradeName.value" class="resource-current grade-name" style="flex: 2; text-align: center;" v-model="actor.system.details.gradeName.value" placeholder="대영웅">
           <input type="number" name="system.attributes.grade.value" class="resource-current grade-num" style="flex: 1; max-width: 3.2em; text-align: center;" v-model="actor.system.attributes.grade.value">
         </div>
-      </div>
-      <!-- 속성(서번트) / 레벨+경험치(마스터) -->
-      <div v-if="actor.type === 'character'" class="unit unit--grade flexcol">
-        <h2 class="unit-title">속성</h2>
-        <div class="resource flexrow">
-          <input type="text" name="system.details.element.value" class="resource-current" style="text-align: center;" v-model="actor.system.details.element.value">
+        <div class="labeled-input flexcol" style="align-items: center;">
+          <label class="unit-subtitle">속성</label>
+          <div class="resource flexrow">
+            <input type="text" name="system.details.element.value" class="resource-current" style="text-align: center;" v-model="actor.system.details.element.value">
+          </div>
         </div>
       </div>
       <!-- 레벨+경험치: 마스터 전용 (npc 제외) -->
