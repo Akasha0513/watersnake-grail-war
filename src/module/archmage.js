@@ -284,15 +284,6 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("watersnake-grail-war", "hideInsteadOfOpaque", {
-    name: "ARCHMAGE.SETTINGS.hideInsteadOfOpaqueName",
-    hint: "ARCHMAGE.SETTINGS.hideInsteadOfOpaqueHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true
-  });
-
   game.settings.register('watersnake-grail-war', 'roundUpDamageApplication', {
     name: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationName",
     hint: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationHint",
@@ -739,7 +730,6 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
         'hideExtraRolls',
         'showDefensesInChat',
         'showVulnsInChat',
-        'hideInsteadOfOpaque',
         'roundUpDamageApplication',
         'allowTargetDamageApplication',
         'allowRerolls',

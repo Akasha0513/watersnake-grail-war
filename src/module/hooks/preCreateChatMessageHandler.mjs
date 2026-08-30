@@ -1,6 +1,5 @@
 import HitEvaluation from "../rolls/HitEvaluation.mjs";
 import Targeting from "../rolls/Targeting.mjs";
-import Triggers from "../Triggers/Triggers.mjs";
 
 
 export default class preCreateChatMessageHandler {
@@ -230,32 +229,6 @@ export default class preCreateChatMessageHandler {
                     if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':') && hitEvaluationResults.defenses.length > 0
                         && game.settings.get("watersnake-grail-war", "showDefensesInChat")) {
                         $row_self.append("<span class='dc-target'> (" + hitEvaluationResults.defenses.join(", ") + ") </span>")
-                    }
-                }
-
-                // Determine if this line is a "Trigger" - something like "Natural 16+:" or "Even Miss:"
-                var triggerText = row_text.toLowerCase();
-                if (triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.natural").toLowerCase()) ||
-                    triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.miss").toLowerCase() + ':') ||
-                    triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.hit").toLowerCase() + ':') ||
-                    triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.crit").toLowerCase() + ':') ||
-                    triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.hitEven").toLowerCase() + ':') ||
-                    triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.hitOdd").toLowerCase() + ':')) {
-                    let triggers = new Triggers();
-                    let active = triggers.evaluateRow(row_text, $rolls, hitEvaluationResults);
-
-                    if (active == undefined) {
-                        $row_self.addClass("trigger-unknown");
-                    } else if (active) {
-                        $row_self.addClass("trigger-active");
-                        if (triggerText.includes(game.i18n.localize("ARCHMAGE.CHAT.miss").toLowerCase() + ':')) {
-                            $row_self.addClass("trigger-miss");
-                        }
-                    } else {
-                        $row_self.addClass("trigger-inactive");
-                        if (game.settings.get("watersnake-grail-war", "hideInsteadOfOpaque")) {
-                            $row_self.addClass("hide");
-                        }
                     }
                 }
 
