@@ -1001,8 +1001,6 @@ Item:
     - trait
     - action
     - nastierSpecial
-    - tool
-    - loot
     - feature
   templates:
     standard:
@@ -1013,15 +1011,6 @@ Item:
         type: String
         label: Description
         value: ''
-    spendable:
-      quantity:
-        type: Number
-        label: Quantity
-        value: 0
-      price:
-        type: Number
-        label: Price
-        value: 0
     supportsMacro:
       embeddedMacro:
         type: String
@@ -1128,11 +1117,3 @@ Item:
       type: String
       label: Group
       value: ''
-  tool:
-    templates:
-      - standard
-      - spendable
-  loot:
-    templates:
-      - standard
-      - spendable

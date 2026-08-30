@@ -822,7 +822,5 @@ TYPES:
   Item:
     action: Action
     feature: 기능
-    loot: Loot
     nastierSpecial: Nastier Special
-    tool: Tool (Deprecated)
     trait: Trait

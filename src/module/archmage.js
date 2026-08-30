@@ -128,7 +128,7 @@ Hooks.once('init', async function() {
   // V1 시트는 V2 시트가 없는 타입 전용 (V2 보유 타입에서 폴백 선택지로 노출하지 않음).
   foundry.documents.collections.Items.registerSheet("watersnake-grail-war", ItemArchmageSheet, {
     label: 'ARCHMAGE.sheetItem',
-    types: ["feature", "tool", "loot"],
+    types: ["feature"],
     makeDefault: true,
   });
   // AppV2 + Vue based sheets. These will eventually become the default.

@@ -12,19 +12,14 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/chat/_chat-effect-part.html",
     "systems/watersnake-grail-war/templates/chat/action-card.html",
     "systems/watersnake-grail-war/templates/chat/command-card.html",
-    "systems/watersnake-grail-war/templates/chat/loot-card.html",
     "systems/watersnake-grail-war/templates/chat/nastierspecial-card.html",
     "systems/watersnake-grail-war/templates/chat/roll-dialog.html",
     "systems/watersnake-grail-war/templates/chat/save-card.html",
     "systems/watersnake-grail-war/templates/chat/skill-check-card.html",
-    "systems/watersnake-grail-war/templates/chat/tool-card.html",
     "systems/watersnake-grail-war/templates/chat/trait-card.html",
 
     "systems/watersnake-grail-war/templates/items/_item-effect-part.html",
     "systems/watersnake-grail-war/templates/items/item-feature-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-loot-sheet.html",
-    "systems/watersnake-grail-war/templates/items/item-tool-sheet.html",
-
 
     "systems/watersnake-grail-war/templates/chat/round-notice-card.html",
 

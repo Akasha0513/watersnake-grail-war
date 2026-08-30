@@ -255,9 +255,7 @@ ARCHMAGE.defaultTokens = {
   'feature': 'icons/svg/book.svg',
   'trait': 'icons/svg/regen.svg',
   'action': 'icons/svg/target.svg',
-  'nastierSpecial': 'icons/svg/poison.svg',
-  'tool': 'icons/svg/anchor.svg',
-  'loot': 'icons/svg/daze.svg'
+  'nastierSpecial': 'icons/svg/poison.svg'
 };
 
 // Explicit multipliers from 13TW

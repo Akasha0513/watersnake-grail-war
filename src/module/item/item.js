@@ -25,10 +25,6 @@ export class ItemArchmage extends Item {
       }
     }
 
-    if (this.type == 'loot' || this.type == 'tool') {
-      let model = game.data.model.Item[this.type];
-      if (!this.system.quantity) this.system.quantity = model.quantity;
-    }
   }
 
   /**
@@ -41,15 +37,11 @@ export class ItemArchmage extends Item {
 
     const usageMode = "";
 
-    // Check remaining uses.
-    let early_exit = await this._rollUsesCheck(itemUpdateData, usageMode, true);
-    if (early_exit) return;
-
     // Make an ephemeral clone of the item which we can dirty during processing.
     let itemToRender = this.clone({}, {"save": false, "keepId": true});
 
     // Then check resources.
-    early_exit = await this._rollResourceCheck(itemUpdateData, actorUpdateData, itemToRender, undefined, true);
+    let early_exit = await this._rollResourceCheck(itemUpdateData, actorUpdateData, itemToRender, undefined, true);
     if (early_exit) return;
 
     // Handle crit modifier
@@ -116,31 +108,6 @@ export class ItemArchmage extends Item {
     };
 
     return await game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-  }
-
-  async _rollUsesCheck(updateData, usageMode, consumeUsage = true) {
-    // If we have a special usage mode skip this check
-    if (!["", "openingEffect"].includes(usageMode)) return false;
-    // Only check uses on owned items.
-    if (!this.actor) return false;
-    // Respect the consume-usage choice from the power roll dialog.
-    if (!consumeUsage) return false;
-    // Update uses left
-    let uses = this.system.quantity?.value;
-    if (uses == null) return false;
-    updateData["system.quantity.value"] = Math.max(uses - 1, 0);
-    if (uses == 0 && !event.shiftKey && ["loot", "tool"].includes(this.type)) {
-      let use = false;
-      await Dialog.confirm({
-        title: game.i18n.localize("ARCHMAGE.CHAT.NoUses"),
-        content: game.i18n.localize("ARCHMAGE.CHAT.NoUsesMsg"),
-        yes: () => {use = true;},
-        no: () => {},
-        defaultYes: false
-      });
-      return !use;
-    }
-    return false;
   }
 
   async _rollResourceCheck(itemUpdateData, actorUpdateData, itemToRender, usageMode, consumeResources = true) {
@@ -587,18 +554,6 @@ export class ItemArchmage extends Item {
   }
 
   _nastierSpecialChatData() {
-    const data = foundry.utils.duplicate(this.system);
-    this._prepareActiveEffectsData(data);
-    return data;
-  }
-
-  _toolChatData() {
-    const data = foundry.utils.duplicate(this.system);
-    this._prepareActiveEffectsData(data);
-    return data;
-  }
-
-  _lootChatData() {
     const data = foundry.utils.duplicate(this.system);
     this._prepareActiveEffectsData(data);
     return data;
