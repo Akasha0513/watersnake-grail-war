@@ -39,7 +39,7 @@
             <p class="hint" v-html="game.i18n.localize('ARCHMAGE.TOOLTIP.activeEffectsItemHint')"></p>
             <div class="archmage-v2 sheet">
               <section class="section--effects">
-                <CharEffects :actor="context.item" :key="context._renderKey"/>
+                <CharEffects :actor="context.item"/>
               </section>
             </div>
           </fieldset>

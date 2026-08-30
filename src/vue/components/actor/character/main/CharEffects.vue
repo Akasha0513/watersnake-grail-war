@@ -68,19 +68,18 @@ import { reactive, computed, toRefs } from 'vue';
 export default {
   name: 'CharEffects',
   props: ['actor'],
-  setup() {
+  setup(props) {
     // Equivalent to data: and computed:
     const componentData = reactive({
-      effects: [],
       activeEffects: {},
       classes: computed(() => `section section--effects flexcol`)
     });
-    // Define methods.
-    function getEffects() {
-      let effects = this.actor.effects;
-      this.effects = effects.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    };
-    function getChanges(effect) {
+    // 정렬된 효과 목록 — 원본을 복사해 정렬(반응형 배열 in-place sort는 워처 재귀 유발).
+    // actor 컨텍스트가 갱신되면(다른 클라이언트발 포함) 자동 재계산되므로 수동 워처가 필요 없다.
+    const effects = computed(() =>
+      [...(props.actor.effects ?? [])].sort((a, b) => (a.sort || 0) - (b.sort || 0))
+    );
+    function buildChanges(effect) {
       let changes = [];
       let modes = [
         'question',
@@ -109,6 +108,15 @@ export default {
       })
       return changes;
     }
+    // effect별 변경 요약 캐시 — 렌더마다 재계산하지 않도록 effects 변경 시에만 갱신.
+    const changesById = computed(() => {
+      const map = {};
+      for (const effect of effects.value) map[effect._id] = buildChanges(effect);
+      return map;
+    });
+    function getChanges(effect) {
+      return changesById.value[effect._id] ?? [];
+    }
 
     function getDuration(effect) {
       return game.i18n.localize(CONFIG.HOLYGRAILWAR.effectDurationTypes[effect.flags['watersnake-grail-war'].duration]);
@@ -121,10 +129,10 @@ export default {
     // Return our custom data, methods, and any imported methods.
     return {
       ...toRefs(componentData),
+      effects,
       concat,
       localize,
       numberFormat,
-      getEffects,
       getChanges,
       getDuration,
       getOngoingDamage
@@ -150,19 +158,6 @@ export default {
       }
       const element = this.$el.querySelector(`.effect-${id} > .effect-detail--description`);
     }
-  },
-  watch: {
-    // 효과 추가/삭제/토글(disabled) 시 목록 즉시 갱신 (아이콘·활성 상태 반영).
-    'actor.effects': {
-      deep: true,
-      handler() {
-        this.getEffects();
-      }
-    }
-  },
-  // Execute getEffects as soon as we're mounted.
-  async mounted() {
-    this.getEffects();
   }
 }
 </script>

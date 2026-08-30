@@ -1641,7 +1641,7 @@ function _handleApplyDamageHealing(data) {
 
 function _handleActorLifecycleHook({actorId, hookName}) {
   const actor = game.actors.get(actorId);
-  if (!actor || game.user.character.id !== actor.id) return;
+  if (!actor || game.user.character?.id !== actor.id) return;
 
   // Can't run if you can't run
   if (!game.user.hasPermission("MACRO_SCRIPT")) return;
@@ -1693,8 +1693,17 @@ Hooks.once('ready', async function () {
 
 // Update the escalation die tracker. Character values for the escalation die
 // are updated in their prepareData() and getRollData() functions.
+// 트래커는 HP 변경·이니셔티브·턴마다 재렌더되므로, 열린 시트 전체 재렌더는 디바운스로 묶는다.
+const _refreshOpenActorSheets = foundry.utils.debounce(() => {
+  for (let app of Object.values(ui.windows)) {
+    const appType = app?.object?.type ?? null;
+    if (appType == 'character' || appType == 'npc' || appType == 'master') {
+      app.render();
+    }
+  }
+}, 100);
+
 Hooks.on('renderCombatTracker', async (_combatTracker, _html, {combat}) => {
-  // await new Promise(r => setTimeout(r, 250));
   // Handle non-gm users.
   if (combat?.current === undefined) {
     combat = game.combat;
@@ -1708,14 +1717,8 @@ Hooks.on('renderCombatTracker', async (_combatTracker, _html, {combat}) => {
   $escalationDiv.find('.ed-number h1').text(escalation);
   $escalationDiv.find('.ed-round').text(`${gameRound} 라운드`);
 
-  // Update open sheets.
-  for (let app of Object.values(ui.windows)) {
-    const appType = app?.object?.type ?? null;
-    if (appType == 'character' || appType == 'npc') {
-      app.render();
-    }
-
-  }
+  // Update open sheets (debounced).
+  _refreshOpenActorSheets();
 });
 
 /* -------------------------------------------- */

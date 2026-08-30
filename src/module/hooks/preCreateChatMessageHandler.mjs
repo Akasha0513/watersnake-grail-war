@@ -208,7 +208,8 @@ export default class preCreateChatMessageHandler {
                     // targets = Targeting.getTargetsFromRowText(row_text, $row_self, numTargets);
                     // In case of manual rolls we may have more rolls than targets - replicate targets until we have enough.
                     var min_targets = Targeting.getTargetsFromRowText(row_text, $row_self, numTargets);
-                    if (targets.length > 0) {
+                    // min_targets가 비어 있으면 concat이 영원히 자라지 않아 무한루프가 되므로 반드시 가드.
+                    if (targets.length > 0 && min_targets.length > 0) {
                       while (min_targets.length < numTargets) min_targets = min_targets.concat(min_targets);
                     }
                     targets = min_targets.slice(0, numTargets);

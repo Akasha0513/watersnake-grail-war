@@ -571,8 +571,8 @@ export class ItemArchmage extends Item {
       }
       if (!table) {
         // If not present in world, load system's from compendium
-        let pack = await game.packs.get("watersnake-grail-war.system-rolltables").getDocuments();
-        table = pack.find(t => t.name === this.system.rollTable.value);
+        let pack = await game.packs.get("watersnake-grail-war.system-rolltables")?.getDocuments();
+        table = pack?.find(t => t.name === this.system.rollTable.value);
       }
       if (table) {
         // If we do have a table, roll on it
