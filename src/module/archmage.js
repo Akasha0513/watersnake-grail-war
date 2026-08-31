@@ -1288,11 +1288,31 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
 
-  // /r 굴림 카드: 주사위 내역(dice-tooltip)을 기본 펼침 상태로.
-  // (코어 버전에 따라 expanded 클래스가 .dice-roll 또는 .dice-tooltip에 붙으므로 양쪽 모두 —
-  //  클릭 접기 토글은 코어 동작 그대로 유지된다.)
-  html.find('.dice-roll:has(.dice-tooltip)').addClass('expanded')
-    .find('.dice-tooltip').addClass('expanded');
+  // /r 등 코어 굴림 블록을 시트 굴림(feature-roll-card)과 동일한 SWADE식 박스 서식으로 재렌더.
+  // 렌더 시 변환만 — 저장된 content는 불변. 우리 카드(.swade-roll) 내부 블록은 제외.
+  const rolls = chatMessage.rolls ?? [];
+  if (rolls.length) {
+    const esc = Handlebars.escapeExpression;
+    html.find('.dice-roll:has(.dice-tooltip)').each(function(i) {
+      if (this.closest('.swade-roll')) return;
+      const roll = rolls[i];
+      if (!roll) return;
+      const parts = ArchmageUtility.rollFormulaParts(roll);
+      const boxes = parts.map(p => p.die
+        ? `<li class="die ${p.cls}" data-tooltip="${esc(p.hint ?? '')}"><span>${esc(String(p.result))}</span></li>`
+        : `<li${p.hint ? ` data-tooltip="${esc(p.hint)}"` : ''}>${esc(String(p.result))}</li>`
+      ).join('');
+      const card = document.createElement('div');
+      card.className = 'archmage chat-card swade-card swade-roll-message';
+      card.innerHTML = `<div class="card-content"><div class="swade-roll">`
+        + `<div class="dice-roll dice-roll--archmage"><div class="dice-result">`
+        + `<div class="dice-formula"><ol class="formula-list">${boxes}</ol></div>`
+        + `<div class="dice-flavor">굴림 결과</div>`
+        + `<div class="dice-total">${esc(String(roll.total))}</div>`
+        + `</div></div></div></div>`;
+      this.replaceWith(card);
+    });
+  }
 
   // 비표준 면수 주사위(d16 등)는 코어 아이콘이 없어 밋밋하게 나옴 →
   // 가장 가까운 다면체 아이콘 클래스를 추가 (1~4=d4 … 13+=d20). 표준 면수는 무변경.
