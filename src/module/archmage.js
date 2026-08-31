@@ -1309,19 +1309,29 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         + `<div class="swade-roll">`
         + `<div class="dice-roll dice-roll--archmage"><div class="dice-result">`
         + `<div class="dice-formula"><ol class="formula-list">${boxes}</ol></div>`
+        // SWADE식: 공식 박스 클릭 시 여기(공식과 총합 사이)에 항별 브레이크다운이 펼쳐짐.
+        + ArchmageUtility.rollBreakdownHTML(roll)
         + `<div class="dice-flavor">굴림 결과</div>`
         + `<div class="dice-total">${esc(String(roll.total))}</div>`
         + `</div></div></div>`
-        + `<details class="dice-breakdown"><summary>상세 내역</summary></details>`
         + `</div>`;
-      // 코어의 항별 브레이크다운(개별 주사위 눈)을 버리지 않고 접이식으로 이식.
-      const tooltip = this.querySelector('.dice-tooltip');
-      const breakdown = card.querySelector('.dice-breakdown');
-      if (tooltip) breakdown.append(tooltip);
-      else breakdown.remove();
       this.replaceWith(card);
     });
+
+    // 시트 판정 카드(ability-card — 능력치/배경/순수값)에도 동일한 브레이크다운 주입.
+    html.find('.ability-card .swade-roll .dice-formula').each(function(i) {
+      if (this.nextElementSibling?.classList?.contains('roll-breakdown')) return;
+      const roll = rolls[i] ?? rolls[0];
+      if (!roll) return;
+      this.insertAdjacentHTML('afterend', ArchmageUtility.rollBreakdownHTML(roll));
+    });
   }
+
+  // SWADE식 펼침 토글: 브레이크다운이 있는 카드의 공식 박스 클릭 → 펼침/접힘.
+  html.find('.swade-roll .dice-formula').on('click', function() {
+    if (!this.nextElementSibling?.classList?.contains('roll-breakdown')) return;
+    $(this).closest('.swade-roll').toggleClass('expanded');
+  });
 
   // 비표준 면수 주사위(d16 등)는 코어 아이콘이 없어 밋밋하게 나옴 →
   // 가장 가까운 다면체 아이콘 클래스를 추가 (1~4=d4 … 13+=d20). 표준 면수는 무변경.

@@ -1995,6 +1995,33 @@ option[selected] {
         background-image: url('/systems/watersnake-grail-war/assets/dice/d#{$n}-grey.svg');
       }
     }
+
+    // SWADE식 클릭 펼침 브레이크다운 — 공식 박스와 '굴림 결과' 사이에 항별 상세(개별 눈) 표시
+    .dice-formula:has(+ .roll-breakdown) { cursor: pointer; }
+    .roll-breakdown {
+      display: none;
+      margin: 2px 0;
+
+      .breakdown-part { margin: 4px 0; }
+      .part-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0.85;
+
+        .part-total {
+          min-width: 24px;
+          text-align: center;
+          border: 1px solid rgba(0, 0, 0, 0.3);
+          border-radius: 3px;
+          padding: 0 4px;
+        }
+      }
+      .formula-list { justify-content: flex-start; }
+    }
+    &.expanded .roll-breakdown { display: block; }
   }
 }
 
@@ -2723,21 +2750,6 @@ a.effect-link,
   .message-content { padding: 0; margin: 0; }
   .grail-feature-call { margin: 0; }
 }
-// /r 카드 '상세 내역' — 이식된 코어 dice-tooltip을 접이식으로 표시
-.swade-roll-message .dice-breakdown {
-  margin-top: 4px;
-
-  > summary {
-    cursor: pointer;
-    font-size: 12px;
-    opacity: 0.75;
-  }
-
-  .dice-tooltip {
-    display: block;   // 코어 CSS의 기본 숨김 해제 (details가 접힘을 담당)
-  }
-}
-
 // 우클릭 컨텍스트 메뉴가 열리면 배너의 overflow:hidden(둥근 모서리용)을 풀어
 // 메뉴가 메시지 경계에서 잘리지 않게 한다. (아래 메시지에 가려 보이던 문제)
 .chat-message.grail-feature-call-message:has(#context-menu),
