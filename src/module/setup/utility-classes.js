@@ -254,9 +254,19 @@ export class ArchmageUtility {
    * 각 항(주사위 결과/숫자/연산자)을 박스로 — 주사위는 SVG배경+min/max마커, hover=flavor 라벨.
    * @return {Array} formulaParts [{op|die|num, result, hint, cls, img}]
    */
+  /** 면수 → 가장 가까운 다면체 아이콘 클래스 (1~4=d4, 5~6=d6, 7~8=d8, 9~10=d10, 11~12=d12, 13+=d20) */
+  static _nearestDieCls(faces) {
+    const f = Number(faces) || 0;
+    if (f <= 4) return 'd4';
+    if (f <= 6) return 'd6';
+    if (f <= 8) return 'd8';
+    if (f <= 10) return 'd10';
+    if (f <= 12) return 'd12';
+    return 'd20';
+  }
+
   static rollFormulaParts(roll) {
     const T = foundry.dice.terms;
-    const haveSvg = [4, 6, 8, 10, 12, 20];
     const parts = [];
     for (const term of (roll?.terms || [])) {
       if (term instanceof T.OperatorTerm) {
@@ -270,7 +280,8 @@ export class ArchmageUtility {
           if (r.result === 1) cls.push('min');
           if (r.result === term.faces) cls.push('max');
           // 다이스 SVG 배경은 면수 클래스(dN)로 — CSS 한 곳에서 처리(메시지마다 인라인 style 미저장 → 로그 경량화)
-          if (haveSvg.includes(term.faces)) cls.push(`d${term.faces}`);
+          // 비표준 면수(d16 등)는 가장 가까운 다면체 아이콘으로 매핑. hint에는 실제 면수 유지.
+          cls.push(ArchmageUtility._nearestDieCls(term.faces));
           parts.push({
             die: true,
             result: r.result,

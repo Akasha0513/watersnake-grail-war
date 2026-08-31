@@ -1287,6 +1287,27 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
+
+  // /r 굴림 카드: 주사위 내역(dice-tooltip)을 기본 펼침 상태로.
+  // (코어 버전에 따라 expanded 클래스가 .dice-roll 또는 .dice-tooltip에 붙으므로 양쪽 모두 —
+  //  클릭 접기 토글은 코어 동작 그대로 유지된다.)
+  html.find('.dice-roll:has(.dice-tooltip)').addClass('expanded')
+    .find('.dice-tooltip').addClass('expanded');
+
+  // 비표준 면수 주사위(d16 등)는 코어 아이콘이 없어 밋밋하게 나옴 →
+  // 가장 가까운 다면체 아이콘 클래스를 추가 (1~4=d4 … 13+=d20). 표준 면수는 무변경.
+  const STD_DIE_FACES = [4, 6, 8, 10, 12, 20, 100];
+  html.find('.dice-rolls .roll.die').each(function() {
+    for (const c of this.classList) {
+      const m = /^d(\d+)$/.exec(c);
+      if (!m) continue;
+      const faces = Number(m[1]);
+      if (!STD_DIE_FACES.includes(faces)) {
+        this.classList.add(ArchmageUtility._nearestDieCls(faces));
+      }
+      break;
+    }
+  });
   // 적용 메뉴 대상 표시만 하고, 메뉴 자체는 body 위임 인스턴스 1개가 처리한다.
   html.find('.inline-roll--archmage, .dice-roll--archmage').each(function() {
     const $el = $(this);
