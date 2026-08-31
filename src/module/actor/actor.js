@@ -470,9 +470,8 @@ export class ActorArchmage extends Actor {
       // NaN이면 formula 무효로 이니셔티브가 조용히 실패한다.
       const statInit = Number(data.abilities?.agi?.nonKey?.mod) || 0;
       const miscInit = Number(data.attributes.init.value) || 0;
-      const _isMasterLike = actorData.type === 'master' || actorData.type === 'npc';
-      const _masterAsServant = _isMasterLike && ['three', 'sorcery'].includes(data.details?.masterAsServant?.value);
-      const gradeInit = (!_isMasterLike || _masterAsServant) ? (Number(data.attributes.grade?.value) || 0) : 0;
+      // 급은 유형·영령 취급과 무관하게 항상 이니셔티브에 가산 (룰 확정 — 마스터·npc 포함)
+      const gradeInit = Number(data.attributes.grade?.value) || 0;
       data.attributes.init.mod = statInit + miscInit + gradeInit;
     }
 

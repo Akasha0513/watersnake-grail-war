@@ -834,6 +834,14 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       // ⚠️ 여기서 this는 '시트'다. 액터 메서드는 반드시 this.actor 로 호출.
       const actor = this.actor;
       const formula = actor.getInitiativeFormula();
+      // 진단: '+0으로 굴려짐' 신고 추적용 분해값 (원인 확정 후 제거 가능)
+      console.log(`[성배전쟁] 이니셔티브 ${actor.name}:`, {
+        formula,
+        agiNonKeyMod: actor.system.abilities?.agi?.nonKey?.mod,
+        initValue: actor.system.attributes.init.value,
+        grade: actor.system.attributes.grade?.value,
+        initMod: actor.system.attributes.init.mod
+      });
 
       // 토큰 확보: 선택된 토큰 > 씬의 활성 토큰 > (토큰 액터면) 자신.
       let tokenDoc = null;
