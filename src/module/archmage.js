@@ -1359,9 +1359,24 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         wrap.innerHTML = tt;
         formulaEl.after(wrap);
         mapDieIcons(wrap);  // 비동기 삽입분에도 면수 매핑 적용
+        _bindRollExpand(formulaEl.closest('.dice-roll'));
       });
     });
   }
+
+  // SWADE식 펼침: collapser를 가진 우리 카드의 .dice-roll 클릭 → expanded 토글.
+  // (코어 v13 리스너는 코어 템플릿의 액션 속성 기준이라 재조립한 요소엔 반응하지 않음 → 자체 바인딩)
+  function _bindRollExpand(el) {
+    if (!el || el.dataset.grailExpandBound) return;
+    el.dataset.grailExpandBound = '1';
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('a, button')) return;   // 링크/버튼 클릭은 통과
+      el.classList.toggle('expanded');
+    });
+  }
+  html.find('.swade-roll .dice-roll:has(.dice-tooltip-collapser)').each(function() {
+    _bindRollExpand(this);
+  });
 
   mapDieIcons(rawhtml);
   // 적용 메뉴 대상 표시만 하고, 메뉴 자체는 body 위임 인스턴스 1개가 처리한다.
