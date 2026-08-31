@@ -31,11 +31,14 @@
                     <input type="text" name="system.rank.value" value="{{system.rank.value}}" placeholder="예: A, B+"/>
                 </li>
                 {{/if}}
-                {{#if (eq system.category.value "np")}}
+                {{!-- 루비: 클래스 스킬/스킬 외 전 분류에서 입력 가능 --}}
+                {{#unless (or (eq system.category.value "classSkill") (eq system.category.value "skill"))}}
                 <li>
                     <label>루비</label>
                     <input type="text" name="system.ruby.value" value="{{system.ruby.value}}" placeholder="이름 위 표기"/>
                 </li>
+                {{/unless}}
+                {{#if (eq system.category.value "np")}}
                 <li>
                     <label>종류</label>
                     <input type="text" name="system.kind.value" value="{{system.kind.value}}" placeholder="예: 대인보구"/>
