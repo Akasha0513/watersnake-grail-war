@@ -9,10 +9,10 @@
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
-        <div class="ability-lvl" :style="concat('color:', modColor(item))">{{rank(item.value)}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
+        <div class="ability-lvl">{{rank(item.value)}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
         <div class="ability-score ability-score--display">{{item.value}}</div>
         <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}</a>
-        <div class="ability-mod" :style="concat('color:', modColor(item))" :title="modTitle(item, actor)">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
+        <div class="ability-mod">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
       </li>
       <!-- 보구(서번트) / 예장(마스터) -->
       <li class="list-item list-item--abilities ability grid grid-4col">
@@ -60,26 +60,6 @@ export default {
     }
   },
   methods: {
-    modColor(abil) {
-      if (!isNaN(abil.mod) && !isNaN(abil.nonKey.mod)) {
-        if (abil.mod < abil.nonKey.mod) {
-          return '#E01616';
-        }
-      }
-      return 'inherit';
-    },
-    modTitle(abil, actor) {
-      if (!isNaN(abil.mod) && !isNaN(abil.nonKey.mod)) {
-        if (abil.mod < abil.nonKey.mod) {
-          return game.i18n.format('ARCHMAGE.keyReduced', {
-            mod: numberFormat(abil.mod, 0, true),
-            kmod1: actor.system.attributes.keyModifier.mod1,
-            kmod2: actor.system.attributes.keyModifier.mod2
-          });
-        }
-      }
-      return '';
-    },
     rank(value) {
       const v = Number(value) || 0;
       if (v >= 21) return 'EX';

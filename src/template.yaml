@@ -74,7 +74,7 @@ Actor:
           label: Spirit Rank
           value: 0
           min: 0
-          max: 6
+          max: 7
         np:
           type: Number
           label: Noble Phantasm
@@ -270,9 +270,6 @@ Actor:
         rerollUsed: 0
         flatBonus: 0
     attributes:
-      keyModifier:
-        mod1: str
-        mod2: str
       recoveries:
         type: Number
         label: Recoveries
@@ -532,9 +529,6 @@ Actor:
         rerollUsed: 0
         flatBonus: 0
     attributes:
-      keyModifier:
-        mod1: str
-        mod2: str
       recoveries:
         type: Number
         label: Recoveries
@@ -794,9 +788,6 @@ Actor:
         rerollUsed: 0
         flatBonus: 0
     attributes:
-      keyModifier:
-        mod1: str
-        mod2: str
       recoveries:
         type: Number
         label: Recoveries

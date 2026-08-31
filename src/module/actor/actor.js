@@ -586,8 +586,6 @@ export class ActorArchmage extends Actor {
     }
     // Saves
     if (!data.attributes.saves) data.attributes.saves = model.attributes.saves;
-    // Key Modifiers
-    if (!data.attributes.keyModifier) data.attributes.keyModifier = model.attributes.keyModifier;
     if (!data.attributes.saves.bonus) data.attributes.saves.bonus = model.attributes.saves.bonus;
     if (!data.attributes.saves.disengageBonus) data.attributes.saves.disengageBonus = model.attributes.saves.disengageBonus;
     // Incrementals
@@ -604,15 +602,6 @@ export class ActorArchmage extends Actor {
       abl.lvl = abl.mod + data.attributes.level.value;
       abl.nonKey = {mod: foundry.utils.duplicate(abl.mod), lvlmod: foundry.utils.duplicate(abl.lvl)};
     }
-    // Non nonKey modifiers are affected by the Key Modifier
-    let keyMod = data.attributes.keyModifier;
-    if (keyMod.mod1 && keyMod.mod2) {
-      data.abilities[keyMod.mod1].mod = Math.min(data.abilities[keyMod.mod1].mod, data.abilities[keyMod.mod2].mod);
-      data.abilities[keyMod.mod2].mod = Math.min(data.abilities[keyMod.mod1].mod, data.abilities[keyMod.mod2].mod);
-      data.abilities[keyMod.mod1].lvl = Math.min(data.abilities[keyMod.mod1].lvl, data.abilities[keyMod.mod2].lvl);
-      data.abilities[keyMod.mod2].lvl = Math.min(data.abilities[keyMod.mod1].lvl, data.abilities[keyMod.mod2].lvl);
-    }
-
     // Bonuses — 장비(equipment) 타입 제거로 아이템발 보정은 소멸. 하위 계산이 읽는 구조만 유지.
     data.attributes.attack = {
       melee: { bonus: data.attributes.attack?.melee?.bonus ?? 0 },
@@ -1583,19 +1572,6 @@ export class ActorArchmage extends Actor {
     return actor;
   }
 
-  /**
-   * Helper method to determine if a character actor is multiclassed
-   *
-   * @return boolean
-   */
-  isMulticlass() {
-    // If not a character can't be MC
-    if (this.type != "character") return false;
-    // If the KM is configured, is MC - catches 3pp classes
-    if (this.system.attributes.keyModifier.mod1 != this.system.attributes.keyModifier.mod2) return true;
-    // Is not MC
-    return false;
-  }
 }
 
 function _scaleDice(exp, mul) {
