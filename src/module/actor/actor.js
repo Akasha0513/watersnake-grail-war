@@ -668,7 +668,7 @@ export class ActorArchmage extends Actor {
       const pdBaseOv = this._effectOverride('pd.base'); if (pdBaseOv !== null) pdBase = pdBaseOv;   // 순수 기반(10/12/14)만 대체
       let pdMod = pdAblMod;
       const pdModOv = this._effectOverride('pd.mod'); if (pdModOv !== null) pdMod = pdModOv;          // 수정치 대체
-      data.attributes.pd.value = pdBase + pdGrade + pdMod + Number(pdBonus);
+      data.attributes.pd.value = pdBase + pdGrade + pdMod;
     }
     // 정방 (자동 시): 서번트/마스터영령취급 = (삼기사10/사술사12) + 통찰 / 일반 마스터 = 8 + 통찰
     if (data.attributes.md.automatic ?? true) {
@@ -679,10 +679,10 @@ export class ActorArchmage extends Actor {
       const mdBaseOv = this._effectOverride('md.base'); if (mdBaseOv !== null) mdBase = mdBaseOv;   // 기반 대체(후 강화 누적)
       let mdMod = sm('ins');
       const mdModOv = this._effectOverride('md.mod'); if (mdModOv !== null) mdMod = mdModOv;          // 수정치 대체
-      data.attributes.md.value = mdBase + mdMod + Number(mdBonus);
+      data.attributes.md.value = mdBase + mdMod;
     }
     // AC는 성배전쟁에서 미사용 (호환용으로 base 유지)
-    data.attributes.ac.value = Number(data.attributes.ac.base) + Number(acBonus);
+    data.attributes.ac.value = Number(data.attributes.ac.base);
 
     // Damage Modifiers
     data.tier = 1;
@@ -698,7 +698,7 @@ export class ActorArchmage extends Actor {
       let hpBaseVal = sv('str') + sv('end') * 3;
       if (isMaster && !masterAsServant) hpBaseVal = Math.floor(hpBaseVal / 2);
       const hpBaseOv = this._effectOverride('hp.base'); if (hpBaseOv !== null) hpBaseVal = hpBaseOv;  // 기반 대체(후 강화 누적)
-      data.attributes.hp.max = hpBaseVal + Number(hpBonus) + Number(data.attributes.hp.extra);
+      data.attributes.hp.max = hpBaseVal + Number(data.attributes.hp.extra);
     }
 
     // MP (성배전쟁): 마력<12 = 12+마력(서)/6+마력(마) / 마력≥12 = 마력×2(서)/마력×1.5(마)
