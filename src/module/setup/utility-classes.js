@@ -265,31 +265,6 @@ export class ArchmageUtility {
     return 'd20';
   }
 
-  /**
-   * Roll의 항별 브레이크다운(주사위 항마다 표기+합계+개별 눈) HTML.
-   * SWADE식 클릭 펼침용 — 공식 박스와 총합 사이에 접혀 있다가 .expanded 시 표시.
-   */
-  static rollBreakdownHTML(roll) {
-    const T = foundry.dice.terms;
-    const esc = Handlebars.escapeExpression;
-    let out = '';
-    for (const term of (roll?.terms || [])) {
-      if (!(term instanceof T.DiceTerm)) continue;
-      const dice = (term.results || []).map(r => {
-        const cls = ['die', ArchmageUtility._nearestDieCls(term.faces)];
-        if (r.discarded || r.rerolled) cls.push('discarded');
-        if (r.result === 1) cls.push('min');
-        if (r.result === term.faces) cls.push('max');
-        return `<li class="${cls.join(' ')}" data-tooltip="d${term.faces}"><span>${r.result}</span></li>`;
-      }).join('');
-      out += `<section class="breakdown-part">`
-        + `<header class="part-header"><span class="part-formula">${esc(term.expression)}</span><span class="part-total">${esc(String(term.total))}</span></header>`
-        + `<ol class="formula-list">${dice}</ol>`
-        + `</section>`;
-    }
-    return out ? `<div class="roll-breakdown">${out}</div>` : '';
-  }
-
   static rollFormulaParts(roll) {
     const T = foundry.dice.terms;
     const parts = [];

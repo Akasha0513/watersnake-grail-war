@@ -1996,32 +1996,20 @@ option[selected] {
       }
     }
 
-    // SWADE식 클릭 펼침 브레이크다운 — 공식 박스와 '굴림 결과' 사이에 항별 상세(개별 눈) 표시
-    .dice-formula:has(+ .roll-breakdown) { cursor: pointer; }
-    .roll-breakdown {
-      display: none;
-      margin: 2px 0;
+    // SWADE식: 코어 툴팁(항별 브레이크다운)을 공식과 총합 사이에 이식 —
+    // 펼침은 코어의 .dice-roll 클릭(expanded 토글)에 맡기고, 전환만 SWADE와 동일하게 처리.
+    .dice-roll { cursor: pointer; }
+    .dice-tooltip-collapser {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 250ms ease;
 
-      .breakdown-part { margin: 4px 0; }
-      .part-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12px;
-        font-weight: bold;
-        opacity: 0.85;
-
-        .part-total {
-          min-width: 24px;
-          text-align: center;
-          border: 1px solid rgba(0, 0, 0, 0.3);
-          border-radius: 3px;
-          padding: 0 4px;
-        }
+      > .dice-tooltip {
+        display: block;    // 구버전 코어의 display:none 무력화 (접힘은 collapser가 담당)
+        overflow: hidden;
       }
-      .formula-list { justify-content: flex-start; }
     }
-    &.expanded .roll-breakdown { display: block; }
+    .dice-roll.expanded .dice-tooltip-collapser { grid-template-rows: 1fr; }
   }
 }
 

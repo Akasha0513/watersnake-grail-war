@@ -1288,7 +1288,24 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
   html.find('.dice-roll').addClass('dice-roll--archmage');
 
-  // /r 등 코어 굴림 블록을 시트 굴림(feature-roll-card)과 동일한 SWADE식 박스 서식으로 재렌더.
+  // 비표준 면수 주사위(d16 등)는 코어 아이콘이 없어 밋밋하게 나옴 →
+  // 가장 가까운 다면체 아이콘 클래스를 추가 (1~4=d4 … 13+=d20). 표준 면수는 무변경.
+  const STD_DIE_FACES = [4, 6, 8, 10, 12, 20, 100];
+  const mapDieIcons = (rootEl) => {
+    for (const el of rootEl.querySelectorAll('.dice-rolls .roll.die')) {
+      for (const c of el.classList) {
+        const m = /^d(\d+)$/.exec(c);
+        if (!m) continue;
+        const faces = Number(m[1]);
+        if (!STD_DIE_FACES.includes(faces)) el.classList.add(ArchmageUtility._nearestDieCls(faces));
+        break;
+      }
+    }
+  };
+
+  // /r 등 코어 굴림 블록을 시트 굴림 카드와 동일한 SWADE식 서식으로 재렌더.
+  // SWADE 방식 그대로: 코어 툴팁(항별 브레이크다운)을 공식과 총합 사이에 이식하고,
+  // 펼침/접힘은 코어의 .dice-roll 클릭 토글(expanded + collapser 애니메이션)에 맡긴다.
   // 렌더 시 변환만 — 저장된 content는 불변. 우리 카드(.swade-roll) 내부 블록은 제외.
   const rolls = chatMessage.rolls ?? [];
   if (rolls.length) {
@@ -1309,44 +1326,44 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         + `<div class="swade-roll">`
         + `<div class="dice-roll dice-roll--archmage"><div class="dice-result">`
         + `<div class="dice-formula"><ol class="formula-list">${boxes}</ol></div>`
-        // SWADE식: 공식 박스 클릭 시 여기(공식과 총합 사이)에 항별 브레이크다운이 펼쳐짐.
-        + ArchmageUtility.rollBreakdownHTML(roll)
         + `<div class="dice-flavor">굴림 결과</div>`
         + `<div class="dice-total">${esc(String(roll.total))}</div>`
         + `</div></div></div>`
         + `</div>`;
+      // 코어 툴팁 이식 — collapser 포함(없으면 감싸서) 공식 바로 뒤에.
+      const collapser = this.querySelector('.dice-tooltip-collapser');
+      let tooltipWrap = collapser;
+      if (!tooltipWrap) {
+        const tooltip = this.querySelector('.dice-tooltip');
+        if (tooltip) {
+          tooltipWrap = document.createElement('div');
+          tooltipWrap.className = 'dice-tooltip-collapser';
+          tooltipWrap.append(tooltip);
+        }
+      }
+      if (tooltipWrap) card.querySelector('.dice-formula').after(tooltipWrap);
       this.replaceWith(card);
     });
 
-    // 시트 판정 카드(ability-card — 능력치/배경/순수값)에도 동일한 브레이크다운 주입.
+    // 시트 판정 카드(ability-card — 능력치/배경/순수값)에도 코어 툴팁을 생성해 동일 이식.
     html.find('.ability-card .swade-roll .dice-formula').each(function(i) {
-      if (this.nextElementSibling?.classList?.contains('roll-breakdown')) return;
+      const formulaEl = this;
+      const result = formulaEl.closest('.dice-result');
+      if (!result || result.querySelector('.dice-tooltip')) return;  // 중복 가드
       const roll = rolls[i] ?? rolls[0];
       if (!roll) return;
-      this.insertAdjacentHTML('afterend', ArchmageUtility.rollBreakdownHTML(roll));
+      roll.getTooltip().then(tt => {
+        if (result.querySelector('.dice-tooltip')) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'dice-tooltip-collapser';
+        wrap.innerHTML = tt;
+        formulaEl.after(wrap);
+        mapDieIcons(wrap);  // 비동기 삽입분에도 면수 매핑 적용
+      });
     });
   }
 
-  // SWADE식 펼침 토글: 브레이크다운이 있는 카드의 공식 박스 클릭 → 펼침/접힘.
-  html.find('.swade-roll .dice-formula').on('click', function() {
-    if (!this.nextElementSibling?.classList?.contains('roll-breakdown')) return;
-    $(this).closest('.swade-roll').toggleClass('expanded');
-  });
-
-  // 비표준 면수 주사위(d16 등)는 코어 아이콘이 없어 밋밋하게 나옴 →
-  // 가장 가까운 다면체 아이콘 클래스를 추가 (1~4=d4 … 13+=d20). 표준 면수는 무변경.
-  const STD_DIE_FACES = [4, 6, 8, 10, 12, 20, 100];
-  html.find('.dice-rolls .roll.die').each(function() {
-    for (const c of this.classList) {
-      const m = /^d(\d+)$/.exec(c);
-      if (!m) continue;
-      const faces = Number(m[1]);
-      if (!STD_DIE_FACES.includes(faces)) {
-        this.classList.add(ArchmageUtility._nearestDieCls(faces));
-      }
-      break;
-    }
-  });
+  mapDieIcons(rawhtml);
   // 적용 메뉴 대상 표시만 하고, 메뉴 자체는 body 위임 인스턴스 1개가 처리한다.
   html.find('.inline-roll--archmage, .dice-roll--archmage').each(function() {
     const $el = $(this);
