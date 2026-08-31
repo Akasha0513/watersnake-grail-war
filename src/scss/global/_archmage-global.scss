@@ -2723,6 +2723,21 @@ a.effect-link,
   .message-content { padding: 0; margin: 0; }
   .grail-feature-call { margin: 0; }
 }
+// /r 카드 '상세 내역' — 이식된 코어 dice-tooltip을 접이식으로 표시
+.swade-roll-message .dice-breakdown {
+  margin-top: 4px;
+
+  > summary {
+    cursor: pointer;
+    font-size: 12px;
+    opacity: 0.75;
+  }
+
+  .dice-tooltip {
+    display: block;   // 코어 CSS의 기본 숨김 해제 (details가 접힘을 담당)
+  }
+}
+
 // 우클릭 컨텍스트 메뉴가 열리면 배너의 overflow:hidden(둥근 모서리용)을 풀어
 // 메뉴가 메시지 경계에서 잘리지 않게 한다. (아래 메시지에 가려 보이던 문제)
 .chat-message.grail-feature-call-message:has(#context-menu),

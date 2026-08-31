@@ -1303,13 +1303,22 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
         : `<li${p.hint ? ` data-tooltip="${esc(p.hint)}"` : ''}>${esc(String(p.result))}</li>`
       ).join('');
       const card = document.createElement('div');
-      card.className = 'archmage chat-card swade-card swade-roll-message';
-      card.innerHTML = `<div class="card-content"><div class="swade-roll">`
+      card.className = 'archmage chat-card swade-card swade-roll-message ability-card';
+      card.innerHTML = `<div class="card-content">`
+        + `<div class="roll-flavor">${esc(chatMessage.flavor || '굴림')}</div>`
+        + `<div class="swade-roll">`
         + `<div class="dice-roll dice-roll--archmage"><div class="dice-result">`
         + `<div class="dice-formula"><ol class="formula-list">${boxes}</ol></div>`
         + `<div class="dice-flavor">굴림 결과</div>`
         + `<div class="dice-total">${esc(String(roll.total))}</div>`
-        + `</div></div></div></div>`;
+        + `</div></div></div>`
+        + `<details class="dice-breakdown"><summary>상세 내역</summary></details>`
+        + `</div>`;
+      // 코어의 항별 브레이크다운(개별 주사위 눈)을 버리지 않고 접이식으로 이식.
+      const tooltip = this.querySelector('.dice-tooltip');
+      const breakdown = card.querySelector('.dice-breakdown');
+      if (tooltip) breakdown.append(tooltip);
+      else breakdown.remove();
       this.replaceWith(card);
     });
   }
