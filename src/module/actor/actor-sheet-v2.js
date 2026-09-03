@@ -516,7 +516,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     const portrait = token?.texture?.src || this.actor.img;
     const content = await foundry.applications.handlebars.renderTemplate(
       'systems/watersnake-grail-war/templates/chat/feature-call-card.html',
-      { speakerName, featureName: item.name, rank: item.system.rank?.value, portrait }
+      { speakerName, featureName: item.name, ruby: item.system.ruby?.value, rank: item.system.rank?.value, portrait }
     );
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: { alias: speakerName },
