@@ -1141,6 +1141,12 @@ Hooks.on("renderJournalSheet", async (app, html, data) => {
 
 /* ---------------------------------------------- */
 
+// 롤이 포함된 메시지(코어 /r 등)를 독립 블록으로 출력
+Hooks.on('preCreateChatMessage', (doc) => {
+  if (doc.rolls?.length && !doc.getFlag('mrkb-chat-enhancements', 'standalone')) {
+    doc.updateSource({ 'flags.mrkb-chat-enhancements.standalone': true });
+  }
+});
 
 // 성배전쟁: feature 카드(능력치 판정/피해/기타) 버튼 굴림 + 재굴림 처리
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {

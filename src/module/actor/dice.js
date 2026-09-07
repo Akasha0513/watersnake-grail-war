@@ -98,7 +98,8 @@ export class DiceArchmage {
         user: game.user.id,
         roll: roll,  // TODO: fix template to use rolls prop
         rolls: [roll],
-        speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor)
+        speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor),
+        flags: { 'mrkb-chat-enhancements': { standalone: true } }
       };
 
       // Foundry 기본 굴림 렌더링 (주사위 아이콘 + 접이식 툴팁)
@@ -377,7 +378,8 @@ export class DiceArchmage {
       user: game.user.id,
       roll: roll, // this is here for the content template, but deprecated
       rolls: [roll],
-      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor)
+      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor),
+      flags: { 'mrkb-chat-enhancements': { standalone: true } }
     }
 
     chatData.content = await foundry.applications.handlebars.renderTemplate(
