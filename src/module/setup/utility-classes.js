@@ -227,7 +227,8 @@ export class ArchmageUtility {
     return ArchmageUtility.createChatMessage({
       speaker: ArchmageUtility.getSpeaker(actor),
       content: content,
-      rolls: [roll]
+      rolls: [roll],
+      flags: { 'mrkb-chat-enhancements': { standalone: true } }
     });
   }
 
@@ -382,7 +383,8 @@ export class ArchmageUtility {
     return ArchmageUtility.createChatMessage({
       speaker: ArchmageUtility.getSpeaker(actor),
       content: content,
-      rolls: [roll]
+      rolls: [roll],
+      flags: { 'mrkb-chat-enhancements': { standalone: true } }
     }, opts.rollMode ? { rollMode: opts.rollMode } : {});
   }
 
