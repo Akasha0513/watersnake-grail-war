@@ -1149,13 +1149,17 @@ Hooks.on('preCreateChatMessage', (doc) => {
 });
 
 // 정보 은폐(정보말소/영등롱) 연출: 텍스트 노드를 같은 길이의 무작위 글리프로 치환.
-// 실제 텍스트는 되살릴 필요가 없으므로 원본을 보관하지 않는다(길이만 유지되면 티커가 계속 덮어씀).
-const CONCEAL_GLYPHS = '▓▒░█▚▞▙▟ΞΨΩΔΣΦ0123456789ABCDEFXYZ#%&@*+=?§¶†‡アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-const CONCEAL_HANGUL_BASE = 0xAC00, CONCEAL_HANGUL_COUNT = 11172;
-function _concealGlyph() {
-  return Math.random() < 0.35
-    ? String.fromCharCode(CONCEAL_HANGUL_BASE + Math.floor(Math.random() * CONCEAL_HANGUL_COUNT))
-    : CONCEAL_GLYPHS[Math.floor(Math.random() * CONCEAL_GLYPHS.length)];
+// 실제 텍스트는 되살릴 필요가 없으므로 원본을 보관하지 않는다.
+// 글자의 폭 등급(전각/반각)을 보존해 치환해야 줄바꿈이 흔들리지 않는다 — 폭 불확정 글리프(▓▒░, 그리스 문자 등)는 쓰지 않음.
+const CONCEAL_WIDE_RE = /[가-힣ᄀ-ᇿ㄰-㆏㐀-鿿豈-﫿぀-ヿ　-〿＀-｠￠-￦]/;
+const CONCEAL_NARROW = '0123456789ABCDEFXYZ#*+=';
+const CONCEAL_HANJA = '無明滅影闇秘封印虛空幻夢魔靈眞名消去隱蔽';
+function _concealGlyph(ch) {
+  if (!CONCEAL_WIDE_RE.test(ch)) return CONCEAL_NARROW[Math.floor(Math.random() * CONCEAL_NARROW.length)];
+  const r = Math.random();
+  if (r < 0.6) return String.fromCharCode(0xAC00 + Math.floor(Math.random() * 11172));
+  if (r < 0.85) return String.fromCharCode(0x30A2 + Math.floor(Math.random() * (0x30F3 - 0x30A2 + 1)));
+  return CONCEAL_HANJA[Math.floor(Math.random() * CONCEAL_HANJA.length)];
 }
 function _scrambleText(el) {
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -1164,13 +1168,23 @@ function _scrambleText(el) {
     const src = node.nodeValue;
     if (!src || !src.trim()) continue;
     let out = '';
-    for (const ch of src) out += /\s/.test(ch) ? ch : _concealGlyph();
+    for (const ch of src) out += /\s/.test(ch) ? ch : _concealGlyph(ch);
     node.nodeValue = out;
   }
 }
+// 블록 요소는 DOM에 붙은 뒤 첫 측정 높이로 고정해 드문 줄 수 변동에도 카드 높이가 불변하게 한다.
+function _lockConcealedHeight(el) {
+  if (el.dataset.grailLocked || !el.isConnected) return;
+  if (getComputedStyle(el).display === 'inline') { el.dataset.grailLocked = '1'; return; }
+  const h = el.getBoundingClientRect().height;
+  if (!h) return;
+  el.style.height = `${h}px`;
+  el.style.overflow = 'hidden';
+  el.dataset.grailLocked = '1';
+}
 Hooks.once('ready', () => {
   setInterval(() => {
-    document.querySelectorAll('.grail-concealed').forEach(_scrambleText);
+    document.querySelectorAll('.grail-concealed').forEach(el => { _lockConcealedHeight(el); _scrambleText(el); });
   }, 120);
 });
 

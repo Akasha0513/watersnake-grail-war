@@ -2741,6 +2741,7 @@ a.effect-link,
 // 정보 은폐(정보말소/영등롱) 연출: 글자는 JS 티커가 계속 치환, CSS는 글리치 잔상만.
 .grail-concealed {
   animation: grail-glitch 0.5s steps(2) infinite;
+  font-variant-numeric: tabular-nums;
 }
 @keyframes grail-glitch {
   0%   { text-shadow: 1px 0 rgba(0, 255, 255, 0.55), -1px 0 rgba(255, 0, 128, 0.55); opacity: 1; }
