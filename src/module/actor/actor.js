@@ -531,6 +531,7 @@ export class ActorArchmage extends Actor {
     data.attributes.checkBonusList = checkBonusList;
     data.attributes.critModList = critModList;
     data.attributes.fumbleModList = fumbleModList;
+    data.attributes.concealed = this.effects.some(e => !e.disabled && e.flags?.['watersnake-grail-war']?.conceal);
 
     this.applyActiveEffects('std')
   }

@@ -17,6 +17,11 @@
 	</div>
 
 	<div class="form-group">
+		<label>정보 은폐 (정보말소/영등롱)</label>
+		<input type="checkbox" v-model="viewModel.conceal" />
+	</div>
+
+	<div class="form-group">
 		<label>지속시간</label>
 		<div class="form-fields">
 			<select name="duration" v-model="viewModel.duration">
@@ -45,6 +50,7 @@ const viewModel = reactive({
 	origin: effect.origin,
 	disabled: effect.disabled,
 	stacksAlways: effect.flags['watersnake-grail-war']?.stacksAlways ?? false,
+	conceal: effect.flags['watersnake-grail-war']?.conceal ?? false,
 	duration: effect.flags['watersnake-grail-war']?.duration ?? null,
 });
 watch(viewModel, (newValue) => {
@@ -54,6 +60,7 @@ watch(viewModel, (newValue) => {
 	})
 
 	foundryEffect.setFlag('watersnake-grail-war', 'stacksAlways', newValue.stacksAlways);
+	foundryEffect.setFlag('watersnake-grail-war', 'conceal', newValue.conceal);
 	foundryEffect.setFlag('watersnake-grail-war', 'duration', newValue.duration);
 }, { deep: true });
 </script>

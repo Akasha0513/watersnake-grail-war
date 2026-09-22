@@ -500,7 +500,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content,
       // fvtt-chat-enhancements: 카드끼리/일반 채팅과 병합되지 않는 독립 블록
-      flags: { 'mrkb-chat-enhancements': { standalone: true } }
+      flags: {
+        'mrkb-chat-enhancements': { standalone: true },
+        'watersnake-grail-war': game.holygrailwar.ArchmageUtility.concealFlags(this.actor)
+      }
     }, isPrivate ? { rollMode: 'gmroll' } : {});
   }
 
@@ -522,7 +525,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       speaker: { alias: speakerName },
       content: content,
       flags: {
-        'watersnake-grail-war': { featureCall: true },
+        'watersnake-grail-war': { featureCall: true, ...game.holygrailwar.ArchmageUtility.concealFlags(this.actor) },
         // fvtt-chat-enhancements: 앞뒤 어느 쪽과도 병합하지 않는 독립 블록으로 표시
         'mrkb-chat-enhancements': { standalone: true }
       }

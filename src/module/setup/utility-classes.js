@@ -215,6 +215,11 @@ export class ArchmageUtility {
     }
   }
 
+  /** 정보 은폐 효과 활성 시 카드 메시지에 붙일 시스템 플래그 (렌더 훅이 비소유 뷰어에게 스크램블) */
+  static concealFlags(actor) {
+    return actor?.system?.attributes?.concealed ? { concealed: true, actorUuid: actor.uuid } : {};
+  }
+
   /** 굴림 결과를 feature-roll-card로 출력 (공통) */
   static async _postFeatureRollResult(actor, item, label, rollType, formula) {
     const roll = await new Roll(formula, actor.getRollData()).roll();
@@ -228,7 +233,7 @@ export class ArchmageUtility {
       speaker: ArchmageUtility.getSpeaker(actor),
       content: content,
       rolls: [roll],
-      flags: { 'mrkb-chat-enhancements': { standalone: true } }
+      flags: { 'mrkb-chat-enhancements': { standalone: true }, 'watersnake-grail-war': ArchmageUtility.concealFlags(actor) }
     });
   }
 
@@ -384,7 +389,7 @@ export class ArchmageUtility {
       speaker: ArchmageUtility.getSpeaker(actor),
       content: content,
       rolls: [roll],
-      flags: { 'mrkb-chat-enhancements': { standalone: true } }
+      flags: { 'mrkb-chat-enhancements': { standalone: true }, 'watersnake-grail-war': ArchmageUtility.concealFlags(actor) }
     }, opts.rollMode ? { rollMode: opts.rollMode } : {});
   }
 

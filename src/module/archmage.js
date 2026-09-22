@@ -1148,6 +1148,32 @@ Hooks.on('preCreateChatMessage', (doc) => {
   }
 });
 
+// 정보 은폐(정보말소/영등롱) 연출: 텍스트 노드를 같은 길이의 무작위 글리프로 치환.
+// 실제 텍스트는 되살릴 필요가 없으므로 원본을 보관하지 않는다(길이만 유지되면 티커가 계속 덮어씀).
+const CONCEAL_GLYPHS = '▓▒░█▚▞▙▟ΞΨΩΔΣΦ0123456789ABCDEFXYZ#%&@*+=?§¶†‡アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+const CONCEAL_HANGUL_BASE = 0xAC00, CONCEAL_HANGUL_COUNT = 11172;
+function _concealGlyph() {
+  return Math.random() < 0.35
+    ? String.fromCharCode(CONCEAL_HANGUL_BASE + Math.floor(Math.random() * CONCEAL_HANGUL_COUNT))
+    : CONCEAL_GLYPHS[Math.floor(Math.random() * CONCEAL_GLYPHS.length)];
+}
+function _scrambleText(el) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  let node;
+  while ((node = walker.nextNode())) {
+    const src = node.nodeValue;
+    if (!src || !src.trim()) continue;
+    let out = '';
+    for (const ch of src) out += /\s/.test(ch) ? ch : _concealGlyph();
+    node.nodeValue = out;
+  }
+}
+Hooks.once('ready', () => {
+  setInterval(() => {
+    document.querySelectorAll('.grail-concealed').forEach(_scrambleText);
+  }, 120);
+});
+
 // 성배전쟁: feature 카드(능력치 판정/피해/기타) 버튼 굴림 + 재굴림 처리
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   const html = $(rawhtml);
@@ -1158,6 +1184,17 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   // feature 선언 배너: 헤더/포트레이트 숨기고 배너만 표시 (CSS에서 처리).
   if (chatMessage.getFlag('watersnake-grail-war', 'featureCall')) {
     rawhtml.classList?.add('grail-feature-call-message');
+  }
+  // 정보 은폐: 소유자·GM·작성자 외 뷰어에게는 이름/루비/랭크/설명/종류를 스크램블
+  if (chatMessage.getFlag('watersnake-grail-war', 'concealed')) {
+    const actor = fromUuidSync(chatMessage.getFlag('watersnake-grail-war', 'actorUuid') ?? '');
+    const canSee = game.user.isGM || chatMessage.isAuthor || !!actor?.isOwner;
+    if (!canSee) {
+      rawhtml.querySelectorAll(
+        '.feature-card .item-name, .feature-card .card-content .container, .feature-card .card-footer span, ' +
+        '.feature-roll-card .feature-name, .grail-feature-call .gfc-feature-name'
+      ).forEach(el => { el.classList.add('grail-concealed'); _scrambleText(el); });
+    }
   }
   const resolveActor = (card) => {
     const tokenId = card.dataset.tokenId;
