@@ -81,23 +81,23 @@ export async function preDeleteCombat(combat, context, options) {
 /* -------------------------------------------- */
 
 async function executeLifecycleMacro(combatant, hookName) {
+    const combatantActor = combatant?.actor;
+    if (!combatantActor) return;
+    const hookBody = combatantActor.system?.lifecycleHooks?.[hookName]?.trim();
+    if (!hookBody) return;
+
     // If this isn't the actor's player, emit a socket request for that player to execute the hook
-    if (game.user?.character?.id !== combatant.actor.id) {
-        return game.socket.emit('system.archmage', {
+    if (game.user?.character?.id !== combatantActor.id) {
+        return game.socket.emit('system.watersnake-grail-war', {
             type: 'actorLifecycleHook',
-            actorId: combatant.actor.id,
+            actorId: combatantActor.id,
             hookName
         });
     }
 
     const speaker = ChatMessage.implementation.getSpeaker();
     const actor = game.user.character;
-    const macroData = {
-        // TODO: ???
-    };
-
-    const hookBody = combatant?.actor?.system?.lifecycleHooks?.[hookName]?.trim();
-    if (!hookBody) return;
+    const macroData = {};
 
     // Can't run if you can't run
     if (!game.user.hasPermission("MACRO_SCRIPT")) return;
@@ -109,7 +109,7 @@ async function executeLifecycleMacro(combatant, hookName) {
         await fn.call(this, speaker, actor, macroData);
     } catch (ex) {
         ui.notifications.error(game.i18n.localize('ARCHMAGE.UI.errMacroSyntax'));
-        console.error(`Lifecycle hook '${combatant.actor.name}' / ${hookName} failed with: ${ex}`, ex);
+        console.error(`Lifecycle hook '${combatantActor.name}' / ${hookName} failed with: ${ex}`, ex);
     }
 }
 

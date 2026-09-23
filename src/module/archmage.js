@@ -62,7 +62,7 @@ Hooks.once('init', async function() {
     MacroUtils,
     rollItemMacro,
     ActorHelpersV2,
-    isSocketGM: () => game.users.activeGM.id === game.user.id,
+    isSocketGM: () => game.users.activeGM?.id === game.user.id,
   };
 
   // Replace sheets.
@@ -960,7 +960,7 @@ function _handleActorLifecycleHook({actorId, hookName}) {
 }
 
 Hooks.once('ready', async function () {
-  game.socket.on("system.archmage", (data) => {
+  game.socket.on("system.watersnake-grail-war", (data) => {
     switch (data.type) {
       case 'applyDamageHealing':
         _handleApplyDamageHealing(data);

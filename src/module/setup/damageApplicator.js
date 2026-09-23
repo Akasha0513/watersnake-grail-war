@@ -52,7 +52,7 @@ export class DamageApplicator {
     }
     // Otherwise, emit a socket so that a GM user can apply it.
     else {
-      game.socket.emit('system.archmage', {
+      game.socket.emit('system.watersnake-grail-war', {
         type: 'applyDamageHealing',
         uuids: targets.map(t => t.document.uuid),
         attr: 'system.attributes.hp.value',
@@ -84,7 +84,7 @@ export class DamageApplicator {
     }
     // Otherwise, emit a socket so that a GM user can apply it.
     else {
-      game.socket.emit('system.archmage', {
+      game.socket.emit('system.watersnake-grail-war', {
         type: 'applyDamageHealing',
         uuids: targets.map(t => t.document.uuid),
         attr: 'system.attributes.hp.value',
@@ -116,7 +116,7 @@ export class DamageApplicator {
     }
     // Otherwise, emit a socket so that a GM user can apply it.
     else {
-      game.socket.emit('system.archmage', {
+      game.socket.emit('system.watersnake-grail-war', {
         type: 'applyDamageHealing',
         uuids: targets.map(t => t.document.uuid),
         attr: 'system.attributes.hp.temp',
