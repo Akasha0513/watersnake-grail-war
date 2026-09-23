@@ -19,6 +19,7 @@ export async function combatStart(updateData) {
  */
 async function handleRoundNotice(combat, override = null) {
     if (!combat || !game.user?.isActiveGM) return;
+    if (!game.settings.get('watersnake-grail-war', 'roundNotice')) return;
     const Util = game.holygrailwar?.ArchmageUtility;
     if (!Util) return;
 

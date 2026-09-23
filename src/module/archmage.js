@@ -145,22 +145,7 @@ Hooks.once('init', async function() {
 
   CONFIG.HOLYGRAILWAR = ARCHMAGE;
 
-  // Update status effects.
-  function _setArchmageStatusEffects(extended) {
-    if (extended) CONFIG.statusEffects = ARCHMAGE.statusEffects.concat(ARCHMAGE.extendedStatusEffects)
-    else CONFIG.statusEffects = foundry.utils.duplicate(ARCHMAGE.statusEffects);
-  }
-  game.settings.register('watersnake-grail-war', 'extendedStatusEffects', {
-    name: "ARCHMAGE.SETTINGS.extendedStatusEffectsName",
-    hint: "ARCHMAGE.SETTINGS.extendedStatusEffectsHint",
-    scope: 'world',
-    config: true,
-    default: false,
-    type: Boolean,
-    requiresReload: true,
-    onChange: enable => _setArchmageStatusEffects(enable)
-  });
-  _setArchmageStatusEffects(game.settings.get('watersnake-grail-war', 'extendedStatusEffects'));
+  CONFIG.statusEffects = foundry.utils.duplicate(ARCHMAGE.statusEffects);
 
   // 2e 제거 이후 1e 경로 고정: 2e 전용 플래그·피트 티어·상태이상 정리.
   // Remove Mental Phenomenon flag
@@ -248,42 +233,6 @@ Hooks.once('init', async function() {
     config: true
   });
 
-  game.settings.register("watersnake-grail-war", "multiTargetAttackRolls", {
-    name: "ARCHMAGE.SETTINGS.multiTargetAttackRollsName",
-    hint: "ARCHMAGE.SETTINGS.multiTargetAttackRollsHint",
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true
-  });
-
-  game.settings.register("watersnake-grail-war", "hideExtraRolls", {
-    name: "ARCHMAGE.SETTINGS.hideExtraRollsName",
-    hint: "ARCHMAGE.SETTINGS.hideExtraRollsHint",
-    scope: "world",
-    type: Boolean,
-    default: true,
-    config: true
-  });
-
-  game.settings.register("watersnake-grail-war", "showDefensesInChat", {
-    name: "ARCHMAGE.SETTINGS.showDefensesInChatName",
-    hint: "ARCHMAGE.SETTINGS.showDefensesInChatHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true
-  });
-
-  game.settings.register("watersnake-grail-war", "showVulnsInChat", {
-    name: "ARCHMAGE.SETTINGS.showVulnsInChatName",
-    hint: "ARCHMAGE.SETTINGS.showVulnsInChatHint",
-    scope: "world",
-    type: Boolean,
-    default: false,
-    config: true
-  });
-
   game.settings.register('watersnake-grail-war', 'roundUpDamageApplication', {
     name: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationName",
     hint: "ARCHMAGE.SETTINGS.RoundUpDamageApplicationHint",
@@ -320,19 +269,37 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  game.settings.register('watersnake-grail-war', 'optionalBaseCritRange', {
-    name: "ARCHMAGE.SETTINGS.optionalBaseCritRangeName",
-    hint: "ARCHMAGE.SETTINGS.optionalBaseCritRangeHint",
+  game.settings.register('watersnake-grail-war', 'gradeCheckDefault', {
+    name: "ARCHMAGE.SETTINGS.gradeCheckDefaultName",
+    hint: "ARCHMAGE.SETTINGS.gradeCheckDefaultHint",
     scope: 'world',
     config: true,
-    default: false,
+    default: true,
     type: Boolean
   });
 
-  game.settings.register('watersnake-grail-war', 'unboundEscDie', {
-    name: "ARCHMAGE.SETTINGS.UnboundEscDieName",
-    hint: "ARCHMAGE.SETTINGS.UnboundEscDieHint",
+  game.settings.register('watersnake-grail-war', 'roundNotice', {
+    name: "ARCHMAGE.SETTINGS.roundNoticeName",
+    hint: "ARCHMAGE.SETTINGS.roundNoticeHint",
     scope: 'world',
+    config: true,
+    default: true,
+    type: Boolean
+  });
+
+  game.settings.register('watersnake-grail-war', 'concealAnimation', {
+    name: "ARCHMAGE.SETTINGS.concealAnimationName",
+    hint: "ARCHMAGE.SETTINGS.concealAnimationHint",
+    scope: 'client',
+    config: true,
+    default: true,
+    type: Boolean
+  });
+
+  game.settings.register('watersnake-grail-war', 'rollBreakdownExpanded', {
+    name: "ARCHMAGE.SETTINGS.rollBreakdownExpandedName",
+    hint: "ARCHMAGE.SETTINGS.rollBreakdownExpandedHint",
+    scope: 'client',
     config: true,
     default: false,
     type: Boolean
@@ -342,15 +309,6 @@ Hooks.once('init', async function() {
     name: "ARCHMAGE.SETTINGS.sheetTooltipsName",
     hint: "ARCHMAGE.SETTINGS.sheetTooltipsHint",
     scope: 'client',
-    config: true,
-    default: false,
-    type: Boolean
-  });
-
-  game.settings.register('watersnake-grail-war', 'showPrivateGMAttackRolls', {
-    name: "ARCHMAGE.SETTINGS.showPrivateGMAttackRollsName",
-    hint: "ARCHMAGE.SETTINGS.showPrivateGMAttackRollsHint",
-    scope: 'world',
     config: true,
     default: false,
     type: Boolean
@@ -374,39 +332,6 @@ Hooks.once('init', async function() {
     type: Boolean,
     requiresReload: true
   });
-
-  game.settings.register('watersnake-grail-war', 'showNaturalRolls', {
-    name: "ARCHMAGE.SETTINGS.showNaturalRollsName",
-    hint: "ARCHMAGE.SETTINGS.showNaturalRollsHint",
-    scope: 'client',
-    config: true,
-    default: true,
-    type: Boolean,
-    requiresReload: false,
-    onChange: newValue => {
-      $('#chat').toggleClass('show-natural-rolls', newValue)
-      $('#chat-notifications').toggleClass('show-natural-rolls', newValue);}
-  });
-
-  game.settings.register('watersnake-grail-war', 'colorBlindMode', {
-    name: "ARCHMAGE.SETTINGS.ColorblindName",
-    hint: "ARCHMAGE.SETTINGS.ColorblindHint",
-    scope: 'client',
-    config: true,
-    default: 'default',
-    type: String,
-    choices: {
-      default: "ARCHMAGE.SETTINGS.ColorblindOptionDefault",
-      colorBlindRG: "ARCHMAGE.SETTINGS.ColorblindOptioncolorBlindRG",
-      colorBlindBY: "ARCHMAGE.SETTINGS.ColorblindOptioncolorBlindBY",
-      // custom: "ARCHMAGE.SETTINGS.Custom",
-    },
-    onChange: () => {
-      $('body').removeClass(['default', 'colorBlindRG', 'colorBlindBY', 'custom']).addClass(game.settings.get('watersnake-grail-war', 'colorBlindMode'));
-    }
-  });
-  //Adding the colorblind mode class at startup
-  $('body').addClass(game.settings.get('watersnake-grail-war', 'colorBlindMode'));
 
   // Track whether we overrode DsN's default inline roll parsing
   game.settings.register("watersnake-grail-war", "DsNInlineOverride", {
@@ -579,9 +504,6 @@ async function addEscalationDie() {
 
     return doc.sheet.render(true);
   });
-
-  $('#chat').toggleClass('show-natural-rolls', game.settings.get('watersnake-grail-war', 'showNaturalRolls'));
-  $('#chat-notifications').toggleClass('show-natural-rolls', game.settings.get('watersnake-grail-war', 'showNaturalRolls'));
 }
 
 /* -------------------------------------------- */
@@ -717,127 +639,6 @@ function renderSceneTerrains() {
 
 Hooks.on('canvasReady', (canvas) => {
   renderSceneTerrains();
-});
-
-Hooks.on('renderSettingsConfig', (app, html, data) => {
-  html = $(html);
-  // Define groups for organization.
-  const groups = [
-    {
-      label: 'ARCHMAGE.SETTINGS.groups.automation',
-      settings: [
-        'multiTargetAttackRolls',
-        'hideExtraRolls',
-        'showDefensesInChat',
-        'showVulnsInChat',
-        'roundUpDamageApplication',
-        'allowTargetDamageApplication',
-        'allowRerolls',
-        'optionalBaseCritRange',
-        'showPrivateGMAttackRolls',
-      ],
-      highlights: [
-      ],
-    },
-    {
-      label: 'ARCHMAGE.SETTINGS.groups.appearance',
-      settings: [
-        'nightmode',
-        'compactMode',
-        'showNaturalRolls',
-        'sheetTooltips',
-      ],
-      highlights: [
-      ],
-    },
-    {
-      label: 'ARCHMAGE.SETTINGS.groups.accessibility',
-      settings: [
-        'colorBlindMode'
-      ],
-      highlights: [],
-    },
-    {
-      label: 'ARCHMAGE.SETTINGS.groups.general',
-      settings: [
-        'extendedStatusEffects',
-        'initiativeDexTiebreaker',
-        'initiativeStaticNpc',
-        'unboundEscDie',
-      ],
-      highlights: [
-      ],
-    }
-  ];
-
-  // Find the parent category element.
-  const settingsElements = html.find('section[data-category="system"] .form-group');
-  const parent = settingsElements.closest('section');
-  parent.addClass('archmage-settings');
-
-  // Iterate through our groups and move all of their settings into the matching element.
-  for (let group of groups) {
-    const details = $(`<details><summary>${game.i18n.localize(group.label)}</summary><span class="slot"></span></details>`);
-    let settingsCount = 0;
-
-    for (let setting of group.settings) {
-      const element = html.find(`label[for="settings-config-archmage.${setting}"]`).parent();
-      if (element.length < 1) continue;
-
-      // Add a highlight if necessary.
-      if (group.highlights.includes(setting)) {
-        element.addClass('highlight');
-        element.find('label').append(`<span class="new-setting"> (${game.i18n.localize('ARCHMAGE.SETTINGS.newSetting')})</span>`);
-      }
-
-      // Move the element.
-      element.detach();
-      details.append(element);
-      settingsCount++;
-
-      // Add listener for the colorblind selector.
-      if (setting === 'colorBlindMode') {
-        element.find('select').on('change', changeColorBlindPreview);
-      }
-    }
-
-    // Add special template for the a11y section.
-    if (settingsCount > 0) {
-      if (group.label.includes('accessibility')) {
-        foundry.applications.handlebars.renderTemplate("systems/watersnake-grail-war/templates/sidebar/apps/a11y-preview.html", {}).then(tpl => {
-          details.append(tpl);
-        });
-      }
-      parent.append(details);
-    }
-  }
-
-  // Event listener for the color blind selector.
-  function changeColorBlindPreview(event) {
-    const element = event.currentTarget;
-    const parent = element.closest('details');
-    const preview = parent?.querySelector('.archmage-settings-preview');
-    const value = element.value;
-
-    if (!preview) return;
-
-    switch (value) {
-      case 'colorBlindRG':
-        preview.classList.remove('colorBlindBY');
-        preview.classList.add('colorBlindRG');
-        break;
-
-      case 'colorBlindBY':
-        preview.classList.remove('colorBlindRG');
-        preview.classList.add('colorBlindBY');
-        break;
-
-      default:
-        preview.classList.remove('colorBlindBY');
-        preview.classList.remove('colorBlindRG');
-        break;
-    }
-  };
 });
 
 /* -------------------------------------------- */
@@ -1204,10 +1005,14 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
     const actor = fromUuidSync(chatMessage.getFlag('watersnake-grail-war', 'actorUuid') ?? '');
     const canSee = game.user.isGM || chatMessage.isAuthor || !!actor?.isOwner;
     if (!canSee) {
+      const animate = game.settings.get('watersnake-grail-war', 'concealAnimation');
       rawhtml.querySelectorAll(
         '.feature-card .item-name, .feature-card .card-content .container, .feature-card .card-footer span, ' +
         '.feature-roll-card .feature-name, .grail-feature-call .gfc-feature-name'
-      ).forEach(el => { el.classList.add('grail-concealed'); _scrambleText(el); });
+      ).forEach(el => {
+        if (animate) el.classList.add('grail-concealed');   // 티커 대상 + 글리치 애니메이션
+        _scrambleText(el);
+      });
     }
   }
   const resolveActor = (card) => {
@@ -1426,6 +1231,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   function _bindRollExpand(el) {
     if (!el || el.dataset.grailExpandBound) return;
     el.dataset.grailExpandBound = '1';
+    if (game.settings.get('watersnake-grail-war', 'rollBreakdownExpanded')) el.classList.add('expanded');
     el.addEventListener('click', (e) => {
       if (e.target.closest('a, button')) return;   // 링크/버튼 클릭은 통과
       el.classList.toggle('expanded');

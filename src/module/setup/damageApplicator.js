@@ -214,11 +214,6 @@ export class DamageApplicator {
                   hitEvaluationResults.targetsMissed,
                   hitEvaluationResults.targetsFumbled) + ") </span>")
               }
-              // Append target defenses to text
-              if (rowCleanText.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':') && hitEvaluationResults.defenses.length > 0
-                && game.settings.get("watersnake-grail-war", "showDefensesInChat")) {
-                $rowSelf.append("<span class='dc-target'> (" + hitEvaluationResults.defenses.join(", ") + ") </span>")
-              }
 
             });
           }

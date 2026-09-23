@@ -402,11 +402,7 @@ export class ArchmageUtility {
       user = game.user;
     }
     var hide = chatData?.whisper?.length ? chatData.whisper : null;
-    if (hide && game.user.isGM &&
-        game.settings.get("watersnake-grail-war", "showPrivateGMAttackRolls") &&
-        game.settings.get("core", "rollMode") === "gmroll") {
-      hide = null;
-    } else if (hide && game.user.isGM && game.settings.get("dice-so-nice", "showGhostDice")) {
+    if (hide && game.user.isGM && game.settings.get("dice-so-nice", "showGhostDice")) {
       hide = null;
       roll.ghost = true;
     }

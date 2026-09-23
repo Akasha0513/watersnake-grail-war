@@ -27,7 +27,7 @@ export class GrailRollDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     const isServant = ctx.actor?.type !== 'master';
     const gradeVal = Number(ctx.actor?.system?.attributes?.grade?.value) || 0;
     if (!ctx.fixedBonus && (isServant || gradeVal > 0)) {
-      this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: true, source: 'grade' });
+      this.modifiers.unshift({ label: '영령의 급', value: '@grade', active: game.settings.get('watersnake-grail-war', 'gradeCheckDefault'), source: 'grade' });
     }
     // 판정 보정 → 영령의 급 아래로(push) 토글 추가.
     // 순수값 판정(fixedBonus)에도 적용(v0.3.26) — 급·고조와 달리 판정 보정 AE는 'custom'/'all' 스코프로 매칭.

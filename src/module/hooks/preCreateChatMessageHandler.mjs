@@ -101,25 +101,6 @@ export default class preCreateChatMessageHandler {
         }
     }
 
-    static maybeMentionVulnerability($content, hitEvaluationResults, actor) {
-        if (!game.settings.get("watersnake-grail-war", "showVulnsInChat")) return
-        if (hitEvaluationResults?.vulnerabilities === undefined) return
-        if (hitEvaluationResults?.vulnerabilities?.length <= 0) return
-
-        let effectStr = game.i18n.localize("ARCHMAGE.CHAT.vulnerableText1e");
-
-        const vulns = hitEvaluationResults.vulnerabilities.map(v => {
-            if (v === "vulnerable") return `<abbr data-tooltip="${game.i18n.localize("ARCHMAGE.CHAT.vulnerableTooltip")}">???</abbr>`
-            return v
-        }).join(", ");
-        const vulnRow = `
-            <div class="card-prop">
-                <strong>${game.i18n.format("ARCHMAGE.CHAT.vulnerable", {vulns})}:</strong>
-                ${effectStr}
-            </div>`.replace(' ()', '');
-        $content.find('.card-prop').last().after(vulnRow);
-    }
-
     static handle(data, options, userId) {
         let $content = $(`<div class="wrapper">${data.content}</div>`);
         let $rolls = $content.find('.inline-result');
@@ -225,11 +206,6 @@ export default class preCreateChatMessageHandler {
                             hitEvaluationResults.targetsMissed,
                             hitEvaluationResults.targetsFumbled) + ") </span>")
                     }
-                    // Append target defenses to text
-                    if (row_text_clean.startsWith(game.i18n.localize("ARCHMAGE.CHAT.attack") + ':') && hitEvaluationResults.defenses.length > 0
-                        && game.settings.get("watersnake-grail-war", "showDefensesInChat")) {
-                        $row_self.append("<span class='dc-target'> (" + hitEvaluationResults.defenses.join(", ") + ") </span>")
-                    }
                 }
 
             });
@@ -300,9 +276,6 @@ export default class preCreateChatMessageHandler {
 
             // Update the content
             $content.find('.card-prop').replaceWith($rows);
-
-            // Add a row for vulnerabilities if any (2e only)
-            preCreateChatMessageHandler.maybeMentionVulnerability($content, hitEvaluationResults, actor);
         }
 
         updated_content = $content.html();

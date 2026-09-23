@@ -13,13 +13,7 @@ export default class Targeting {
 
         // If there are 3 targets selected but the attack only can hit 2 (ex: result of 1d3 nearby targets), then we slice to that amount, in order of selection (unless randomized)
 
-        // This regex just finds any numbers in the string, and we use the first one
-        let numberOfTargets = 0;
-        if (!game.settings.get("watersnake-grail-war", "multiTargetAttackRolls")) {
-          let regex = new RegExp("\\d+");
-          numberOfTargets = regex.exec($row_self[0].innerText);
-        }
-        else numberOfTargets = [numTargets];
+        let numberOfTargets = [numTargets];
 
         if (numberOfTargets && numberOfTargets.length == 1) {
             let maxTargets = parseInt(numberOfTargets[0]);

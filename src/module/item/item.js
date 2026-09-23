@@ -314,13 +314,11 @@ export class ItemArchmage extends Item {
   if (["action"].includes(itemToRender.type)) {
       let atk = ArchmageRolls.addAttackMod(itemToRender);
       itemToRender.system.attack.value = atk.attackLine;
-      if (game.settings.get("watersnake-grail-war", "multiTargetAttackRolls")){
-        numTargets = await ArchmageRolls.rollItemTargets(itemToRender);
-        let adj = ArchmageRolls.rollItemAdjustAttacks(itemToRender, atk.attackLine, numTargets, atk.numManualAttacks);
-        itemToRender.system.attack.value = adj.line;
-        numTargets.targets = adj.atks;
-        if (numTargets.targetLine) itemToRender.system.target.value = numTargets.targetLine;
-      }
+      numTargets = await ArchmageRolls.rollItemTargets(itemToRender);
+      let adj = ArchmageRolls.rollItemAdjustAttacks(itemToRender, atk.attackLine, numTargets, atk.numManualAttacks);
+      itemToRender.system.attack.value = adj.line;
+      numTargets.targets = adj.atks;
+      if (numTargets.targetLine) itemToRender.system.target.value = numTargets.targetLine;
     }
     return numTargets.targets;
   }

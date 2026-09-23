@@ -15,7 +15,7 @@ export default class HitEvaluation {
         let hasMissed = undefined;
 
         let defense = HitEvaluation._getTargetDefense(row_text);
-        const baseCritrange = game.settings.get("watersnake-grail-war", "optionalBaseCritRange") ? 18 : 20;
+        const baseCritrange = 20;
         let critRangeMin = baseCritrange - attacker?.system?.attributes.critMod.atk.value - critMod;
 
         let $rolls = $row_self.find('.inline-result');

@@ -65,52 +65,33 @@ ARCHMAGE:
   trait: Trait
   # Settings
   SETTINGS:
-    newSetting: New!
     groups:
       automation: Automation
-      appearance: Appearance
-      accessibility: Accessibility
       general: General
-    ColorblindHint: Change the colors of the power cards to a more accessibile color palette.
-    ColorblindName: Enable Colorblind Accessibility Mode
-    ColorblindIssuesMessage: We're always trying to improve our accessibility. Suggest accessibility improvements at <a href="https://gitlab.com/asacolips-projects/foundry-mods/archmage/-/issues/new" target="_blank">our issue tracker</a> and include the <strong>a11y</strong> label.
-    ColorblindOptioncolorBlindBY: Tritanopia (Blue/Yellow)
-    ColorblindOptioncolorBlindRG: Protanopla / Deutanopla (Red/Green)
-    ColorblindOptionDefault: Default Colors
-    extendedStatusEffectsHint: If enabled extends the official status list with a handful of useful token markers.
-    extendedStatusEffectsName: Extended Status Effects List
-    hideExtraRollsHint: If enabled, powers with multiple attack rolls will display at most one attack per targeted token if any is targeted.
-    hideExtraRollsName: Limit extra rolls to targeted tokens
-    initiativeDexTiebreakerHint: If enabled initiative ties will be resolved using the initiative modifier; if not, monsters win by default.
-    initiativeDexTiebreakerName: Initiative Modifier as Tiebreaker
-    initiativeStaticNpcHint: If enabled NPC actors will always 'take 10' on initiative rolls.
-    initiativeStaticNpcName: Static Initiative for NPCs
-    multiTargetAttackRollsHint: Enable this to automatically duplicate inline attack rolls for multi-target powers based on the number of targets.
-    multiTargetAttackRollsName: Multi-Target Attack Rolls
-    nightmodeHint: Reverse the sheet color scheme into a darkened night mode.
-    nightmodeName: Night Mode
-    compactModeHint: Scales down the character sheets to be smaller.
-    compactModeName: Compact Sheet Mode
-    RoundUpDamageApplicationHint: When applying damage (or healing) via the right-click context menu, should it round up (true) or round down (false)? Default is true (round up). This will be applied the same way for both characters and NPCs.
-    RoundUpDamageApplicationName: Round damage/healing up (true) or down (false)
-    allowTargetDamageApplicationHint: Whether or not to allow damage and healing on chat messages to be applied to targeted tokens in addition to selected tokens. Targeting does not require permissions, so this can allow players and GMs to apply damage to ANY token they can see.
-    allowTargetDamageApplicationName: Allow target damage application
-    allowRerollsHint: Whether or not to allow non-GM players to reroll their own dice rolls.
-    allowRerollsName: Allow dice rerolls
-    optionalBaseCritRangeName: Crit 18+
-    optionalBaseCritRangeHint: Optional rule expanding everyone's base crit range to 18+ instead of 20.
-    showDefensesInChatHint: Enable this to display a list of targeted defenses in the attack line of chat power cards.
-    showDefensesInChatName: Show target(s) defense(s) in chat
-    showNaturalRollsHint: Enable this to display natural dice results for d20 rolls in chat power cards.
-    showNaturalRollsName: Show natural d20 rolls in chat
-    showVulnsInChatHint: Detects when an attack target is vulnerable (and to what type of attacks). This will reveal monsters' vulnerabilities to players.
-    showVulnsInChatName: Show target(s) vulnerabilities in chat
-    sheetTooltipsHint: Adds tooltips to sheets containing relevant SRD rules and tips. May be most useful when first learning the system or for the GM who only references player sheets occasionally. Client setting.
-    sheetTooltipsName: Sheet tooltips
-    showPrivateGMAttackRollsHint: Shows 3D dice and their result for item/attack rolls to players when the GM's roll mode it set to "Private GM roll". Only the dice are shown, not the chat cards. Dice rolls may be useful to know for players (in cases such as the Fighter's Counter-Attack).
-    showPrivateGMAttackRollsName: Show 3D dice for private GM rolls
-    UnboundEscDieHint: Enable this setting to let the escalation die go above 6 and below 0 when manually adjusted (still remains limited when counting by the current round).
-    UnboundEscDieName: Unlimited Escalation Die
+    initiativeDexTiebreakerName: 이니셔티브 동점 시 보정치로 판정
+    initiativeDexTiebreakerHint: 이니셔티브가 같으면 이니셔티브 보정치가 높은 쪽이 먼저 행동합니다. 끄면 NPC가 우선합니다.
+    initiativeStaticNpcName: NPC 이니셔티브 고정(10)
+    initiativeStaticNpcHint: NPC(일반인·마술사)는 이니셔티브를 굴리지 않고 10으로 고정합니다.
+    RoundUpDamageApplicationName: 피해·회복 적용 시 올림(끄면 내림)
+    RoundUpDamageApplicationHint: 채팅 우클릭 메뉴로 ¼·½·1.5배 피해/회복을 적용할 때 소수점을 올림합니다. 끄면 내림합니다.
+    allowTargetDamageApplicationName: 대상 지정 토큰에도 피해 적용 허용
+    allowTargetDamageApplicationHint: 피해 적용 메뉴에 '선택 토큰' 외에 '대상 지정 토큰' 옵션을 추가합니다. 대상 지정에는 권한이 필요 없으니 주의하세요.
+    allowRerollsName: 플레이어 재굴림 허용
+    allowRerollsHint: GM이 아닌 플레이어도 채팅 메뉴에서 자신의 굴림을 다시 굴릴 수 있습니다. GM은 항상 가능합니다.
+    gradeCheckDefaultName: 판정 시 영령의 급 기본 적용
+    gradeCheckDefaultHint: 판정 대화상자의 '영령의 급' 수정치를 켠 상태로 시작합니다. 끄면 해제된 상태로 시작하며, 대화상자에서 판정마다 켤 수 있습니다.
+    roundNoticeName: 라운드 시작 알림
+    roundNoticeHint: 전투에서 새 라운드가 시작될 때 라운드·전투 고조 배너를 채팅에 출력합니다.
+    concealAnimationName: 정보 은폐 글자 연출
+    concealAnimationHint: 정보 은폐 효과가 걸린 카드의 글자가 계속 바뀌는 연출을 씁니다. 끄면 정지된 노이즈 글자로 표시합니다(은폐는 그대로 유지). 개인 설정입니다.
+    rollBreakdownExpandedName: 굴림 카드 주사위 상세 기본 펼침
+    rollBreakdownExpandedHint: /r 굴림과 시트 판정 카드의 주사위 상세 내역을 펼친 상태로 표시합니다. 카드를 클릭하면 접을 수 있습니다. 개인 설정입니다.
+    sheetTooltipsName: 시트 툴팁
+    sheetTooltipsHint: 시트 항목에 규칙 설명 툴팁을 표시합니다. 개인 설정입니다.
+    nightmodeName: 시트 야간 모드
+    nightmodeHint: 시트 색상을 어두운 야간 모드로 바꿉니다. 개인 설정입니다.
+    compactModeName: 시트 소형 모드
+    compactModeHint: 캐릭터 시트를 작게 줄여 표시합니다. 개인 설정입니다.
     lifecycleHooks:
       title: Lifecycle Hooks
       hint: <p>These macros will run on this character's owner's client. If that player is not logged in, they will not be executed.</p><p>In the body, available arguments are <code>this</code>, <code>speaker</code>, <code>actor</code>, and <code>archmage</code>.</p>

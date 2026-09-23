@@ -263,7 +263,7 @@ option[selected] {
   }
 
   .natural-rolls {
-    display: none;
+    display: inline-block;
     border: 2px solid #aaa;
     border-radius: 4px;
     line-height: 0;
@@ -279,9 +279,6 @@ option[selected] {
     i {
       font-size: 10px;
     }
-  }
-  &.show-natural-rolls .natural-rolls {
-    display: inline-block;
   }
 }
 

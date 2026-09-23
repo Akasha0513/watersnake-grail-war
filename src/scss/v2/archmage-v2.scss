@@ -66,10 +66,6 @@
   }
 }
 
-#settings-config {
-  @import 'application/settings';
-}
-
 @import 'components/chat/ongoing-effects';
 
 // Global AppV2 styles.
@@ -77,6 +73,5 @@
 
 @import 'layout/container-queries';
 @import 'theme/nightmode';
-@import 'theme/colormodes';
 
 // 한국어 폰트 (마지막에 import해 v2 시트 폰트 적용 순서 보장)

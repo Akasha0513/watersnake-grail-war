@@ -21,9 +21,7 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/watersnake-grail-war/templates/items/_item-effect-part.html",
     "systems/watersnake-grail-war/templates/items/item-feature-sheet.html",
 
-    "systems/watersnake-grail-war/templates/chat/round-notice-card.html",
-
-    "systems/watersnake-grail-war/templates/sidebar/apps/a11y-preview.html"
+    "systems/watersnake-grail-war/templates/chat/round-notice-card.html"
   ];
 
   // Load the template parts
