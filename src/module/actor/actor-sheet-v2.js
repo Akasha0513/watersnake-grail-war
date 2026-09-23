@@ -412,7 +412,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   }
 
   /** feature 아이템을 채팅에 버튼 카드로 출력 (굴림은 채팅 카드에서 수행) */
-  async _postFeature(event, isPrivate = false) {
+  async _postFeature(event) {
     event.preventDefault();
     const id = event.currentTarget.dataset.itemId;
     const item = this.actor.items.get(id);
@@ -439,7 +439,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
         'mrkb-chat-enhancements': { standalone: true },
         'watersnake-grail-war': game.holygrailwar.ArchmageUtility.concealFlags(this.actor)
       }
-    }, isPrivate ? { rollMode: 'gmroll' } : {});
+    }, { rollMode: 'publicroll' });  // 채팅 굴림 모드와 무관하게 항상 공개
   }
 
   /** feature를 roll20식 선언 배너로 전체 공개 출력 ("{이름}의 『{feature}』‼"). desc 카드와 구별되는 자체 서식. */
@@ -464,7 +464,7 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
         // fvtt-chat-enhancements: 앞뒤 어느 쪽과도 병합하지 않는 독립 블록으로 표시
         'mrkb-chat-enhancements': { standalone: true }
       }
-    });
+    }, { rollMode: 'publicroll' });  // 채팅 굴림 모드와 무관하게 항상 공개
   }
 
   /**
