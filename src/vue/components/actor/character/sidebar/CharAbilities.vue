@@ -9,14 +9,14 @@
     </div>
     <ul class="list list--abilities abilities">
       <li v-for="[index, item] in orderedAbilities" :key="concat('system.abilities.', index, '.value')" class="list-item list-item--abilities ability grid grid-4col" :data-key="index" :data-tooltip="tooltip('pcAbility', 'pcAbility'+index, 'pcAbilitySuffix')">
-        <div class="ability-lvl">{{rank(item.value)}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
+        <div class="ability-lvl">{{rank(item.value, baseValue(index))}}<sup v-if="item.rerollPlus" class="reroll-plus">{{ item.rerollPlus > 0 ? '＋'.repeat(item.rerollPlus) : '－'.repeat(-item.rerollPlus) }}</sup></div>
         <div class="ability-score ability-score--display">{{item.value}}</div>
         <a class="ability-name rollable rollable--ability" data-roll-type="ability" :data-roll-opt="index">{{localize(concat('ARCHMAGE.', index, '.label'))}}</a>
         <div class="ability-mod">{{numberFormat(item.nonKey.mod, 0, true)}}</div>
       </li>
       <!-- 보구(서번트) / 예장(마스터) -->
       <li class="list-item list-item--abilities ability grid grid-4col">
-        <div class="ability-lvl">{{rank(npValue)}}</div>
+        <div class="ability-lvl">{{npRank(npValue)}}</div>
         <div class="ability-score ability-score--display">{{npValue}}</div>
         <span class="ability-name">{{actor.type !== 'character' ? '예장' : '보구'}}</span>
         <div class="ability-mod">{{numberFormat(npMod, 0, true)}}</div>
@@ -60,15 +60,27 @@ export default {
     }
   },
   methods: {
-    rank(value) {
+    // 설정 대화상자에서 입력한 기본 수치(상시 보정·효과 제외)
+    baseValue(key) {
+      return Number(this.actor._source?.system?.abilities?.[key]?.value) || 0;
+    },
+    // EX는 기본 수치가 21 이상일 때만 — 보정·효과로 21을 넘긴 경우는 A로 표시
+    rank(value, base = value) {
       const v = Number(value) || 0;
-      if (v >= 21) return 'EX';
+      if (v >= 21) return (Number(base) || 0) >= 21 ? 'EX' : 'A';
       if (v >= 15) return 'A';
       if (v >= 12) return 'B';
       if (v >= 9) return 'C';
       if (v >= 6) return 'D';
       if (v >= 3) return 'E';
       return '-';
+    },
+    // 예장/보구: 3=E, 4=E+, 5=E++, 6=D … 17=A++, 18 이상=EX
+    npRank(value) {
+      const v = Number(value) || 0;
+      if (v >= 18) return 'EX';
+      if (v < 3) return '-';
+      return ['E', 'D', 'C', 'B', 'A'][Math.floor(v / 3) - 1] + '+'.repeat(v % 3);
     }
   },
   watch: {},

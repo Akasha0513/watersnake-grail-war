@@ -392,7 +392,9 @@ export class DiceArchmage {
           bonus: ability?.mod ?? 0,
           rank: (() => {
             const m = Number(ability?.mod) || 0;
-            const base = m >= 7 ? 'EX' : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-';
+            // EX는 기본 수치(상시 보정·효과 제외)가 21 이상일 때만, 아니면 A
+            const srcVal = Number(actor._source?.system?.abilities?.[abilityKey]?.value) || 0;
+            const base = m >= 7 ? (srcVal >= 21 ? 'EX' : 'A') : m >= 5 ? 'A' : m >= 4 ? 'B' : m >= 3 ? 'C' : m >= 2 ? 'D' : m >= 1 ? 'E' : '-';
             const rp = Number(ability?.rerollPlus) || 0;  // 시트에서 정한 ＋/－ 표기
             return base + (rp > 0 ? '＋'.repeat(rp) : rp < 0 ? '－'.repeat(-rp) : '');
           })()
