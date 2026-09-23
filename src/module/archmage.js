@@ -96,6 +96,17 @@ Hooks.once('init', async function() {
   // Assign ItemArchmage class to CONFIG
   CONFIG.Item.documentClass = ItemArchmage;
 
+  // 인자 없이 화자를 구할 때(/r·인라인 굴림·일반 채팅) 선택 토큰보다 사용자 주 캐릭터를 우선.
+  // actor/token을 명시한 호출(시트·카드)은 그대로 통과. 주 캐릭터가 없는 사용자는 코어 규칙.
+  class ChatMessageGrail extends CONFIG.ChatMessage.documentClass {
+    static getSpeaker(options = {}) {
+      const character = game.user?.character;
+      if (character && !options.actor && !options.token) return super.getSpeaker({ ...options, actor: character });
+      return super.getSpeaker(options);
+    }
+  }
+  CONFIG.ChatMessage.documentClass = ChatMessageGrail;
+
   // Override CONFIG
   CONFIG.Item.sheetClass = ItemArchmageSheet;
 
