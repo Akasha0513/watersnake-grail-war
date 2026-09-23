@@ -107,7 +107,6 @@ export class ActorArchmage extends Actor {
     if (!actorData.name) actorData.name = actorData.type;
 
     const data = actorData.system;
-    const flags = actorData.flags;
 
     // Initialize the model for data calculations.
     let model = game.data.model.Actor[actorData.type];
@@ -126,7 +125,7 @@ export class ActorArchmage extends Actor {
     // Prepare Character data
     // npc(일반인·마술사)는 마스터와 동일하게 취급 → 마스터/캐릭터 파생계산 경로 사용.
     if (actorData.type === 'character' || actorData.type === 'master' || actorData.type === 'npc') {
-      this._prepareCharacterData(data, model, flags);
+      this._prepareCharacterData(data);
     }
 
     // Get the escalation die value.
@@ -544,56 +543,12 @@ export class ActorArchmage extends Actor {
    *
    * @return {undefined}
    */
-  _prepareCharacterData(data, model, flags) {
+  _prepareCharacterData(data) {
     // 경험치 최대치(마스터용): 레벨<8 = 레벨, 레벨≥8 = 단리 배화 = 레벨×(레벨-6)
     // (8레벨 8×2=16, 9레벨 9×3=27, 10레벨 10×4=40 …)
     if (data.attributes.xp) {
       const _lvl = Number(data.attributes.level?.value) || 0;
       if (data.attributes.xp.automatic) data.attributes.xp.max = _lvl < 8 ? _lvl : _lvl * (_lvl - 6);
-    }
-
-
-
-    // Handle one unique thing.
-    if (!data.details.out.value && data?.out?.value) {
-      if (data.out.value.length > 0) data.details.out.value = data.out.value;
-
-      delete data.out;
-    }
-
-    // Fallbacks for potentially missing data
-    // Coins
-    if (!data.coins) data.coins = model.coins;
-    // Weapons
-    if (!data.attributes.weapon) data.attributes.weapon = model.attributes.weapon;
-    if (!data.attributes.weapon.jab) data.attributes.weapon.jab = model.attributes.weapon.jab;
-    if (!data.attributes.weapon.punch) data.attributes.weapon.punch = model.attributes.weapon.punch;
-    if (!data.attributes.weapon.kick) data.attributes.weapon.kick = model.attributes.weapon.kick;
-    // Weapon options
-    if (data.attributes.weapon.melee.shield === undefined) data.attributes.weapon.melee.shield = model.attributes.weapon.melee.shield;
-    if (data.attributes.weapon.melee.dualwield === undefined) data.attributes.weapon.melee.dualwield = model.attributes.weapon.melee.dualwield;
-    if (data.attributes.weapon.melee.twohanded === undefined) data.attributes.weapon.melee.twohanded = model.attributes.weapon.melee.twohanded;
-    // Resources
-    if (!data.resources) data.resources = model.resources;
-    if (!data.resources.perCombat) data.resources.perCombat = model.resources.perCombat;
-    if (!data.resources.perCombat.momentum) data.resources.perCombat.momentum = model.resources.perCombat.momentum;
-    if (!data.resources.perCombat.commandPoints) data.resources.perCombat.commandPoints = model.resources.perCombat.commandPoints;
-    if (!data.resources.perCombat.focus) data.resources.perCombat.focus = model.resources.perCombat.focus;
-    if (!data.resources.spendable) data.resources.spendable = model.resources.spendable;
-    if (!data.resources.spendable.ki) data.resources.spendable.ki = model.resources.spendable.ki;
-    for (let idx of ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]) {
-      if (!(data.resources.spendable["custom"+idx])) data.resources.spendable["custom"+idx] = model.resources.spendable["custom"+idx];
-      if (!data.resources.spendable["custom"+idx].rest) data.resources.spendable["custom"+idx].rest = model.resources.spendable["custom"+idx].rest;
-    }
-    // Saves
-    if (!data.attributes.saves) data.attributes.saves = model.attributes.saves;
-    if (!data.attributes.saves.bonus) data.attributes.saves.bonus = model.attributes.saves.bonus;
-    if (!data.attributes.saves.disengageBonus) data.attributes.saves.disengageBonus = model.attributes.saves.disengageBonus;
-    // Incrementals
-    if (!('talent' in data.incrementals)) data.incrementals.talent = model.incrementals.talent;
-    if ('feature' in data.incrementals) {
-      data.incrementals.talent = foundry.utils.duplicate(data.incrementals.feature);
-      delete data.incrementals.feature;
     }
 
     // Ability modifiers
