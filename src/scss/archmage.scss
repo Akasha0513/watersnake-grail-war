@@ -12,21 +12,6 @@
   src: url('../assets/fonts/NodestoCapsCondensed.otf');
 }
 
-// Preload assets.
-.archmage-preload {
-  background: url('../assets/ricepaper2_@2X.webp') -9999px -9999px;
-  pointer-events: none;
-}
-
-
-// Nodesto Font
-
-.nodesto {
-  color: $c-gray;
-  font-family: $font-stack-base;
-  font-size: 18px;
-}
-
 @import 'global/archmage-global';
 @import 'global/tables';
 

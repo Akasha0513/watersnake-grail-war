@@ -56,14 +56,6 @@
     margin: $padding-md 0;
   }
 
-  .unit--command-points {
-    // flex: 0 auto;
-  }
-
-  .unit--ki {
-    // flex: 0 auto;
-  }
-
   .unit--custom {
     // flex: 0 auto;
   }
@@ -74,32 +66,4 @@
     font-size: $font-xxs;
   }
 
-  .unit--rest {
-    // flex: 0 auto;
-
-    button + button {
-      margin-top: $padding-sm;
-    }
-
-    button.rest--quick {
-      background: $c-power-battle;
-      border-color: #dc0000;
-      transition: all ease-in-out 0.25s;
-
-      &:hover,
-      &:focus {
-        background: linear-gradient(22deg, #3c0000, #dc0000, #dc0000);
-      }
-    }
-
-    button.rest--full {
-      background: $c-power-daily;
-      border-color: #ababab;
-
-      &:hover,
-      &:focus {
-        background: linear-gradient(22deg, #01003c, #ababab, #ababab);
-      }
-    }
-  }
 }

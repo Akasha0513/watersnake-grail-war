@@ -1,9 +1,7 @@
 ARCHMAGE:
   abilities: 능력치
-  abilityScore: Ability Score
   action: Action
   activeEffects: Active Effects
-  at-will: At-Will
   attack: Attack
   attributes: Attributes
   avatarAlt: Character profile image
@@ -11,17 +9,12 @@ ARCHMAGE:
   backgrounds: 배경
   bonus: Bonus
   checkBackground: Background Check
-  checkBackgroundFormat: "{name} Background Check"
-  checkSkill: Skill Check
-  checkSkillFormat: "{name} Skill Check"
   combat: Combat
   contextReroll: Reroll
   contextApplyDamage: Apply as Damage
   contextApplyHealing: Apply as Healing
   contextApplyTempHealth: Apply as Temp Health
-  daily: Daily
   defenses: 방어
-  damage: Damage
   description: Description
   details: Details
   effects: Effects
@@ -32,35 +25,20 @@ ARCHMAGE:
   helpDetailed: '<p class="hint">Use <a href="javascript:void(0)" click="preventDefault" role="button" tabindex="-1" class="archmage-rolls-reference">inline rolls</a> such as <strong>[[d20+@str.mod+@std+@atk.a.bonus]] vs AC</strong> to insert dice rolls wherever you need them. Any roll formula will work!</p>'
   hitPoints: HP
   initiative: Initiative
-  level: Level
-  levelFormat: "{level} level"
   melee: Melee
   name: Name
   nastierSpecial: Nastier Special
   newItem: New {item}
   noneOption: "- None -"
-  once-per-battle: Per Battle
-  ongoing: Ongoing
-  other: Other
   ranged: Ranged
-  recharge: Recharge
   recoveries: Recoveries
-  rollAdvantageShort: Adv.
-  rollBonus: Situational Bonus?
-  rollBonusPlaceholder: e.g. +1d4
-  rollDisadvantageShort: Dis.
-  rollFormula: Formula
-  rollMode: Roll Mode
-  rollNormal: Normal
   save: Save
-  sharePlayers: Show Players
   sheetActiveEffect: 13th Age Active Effect Sheet
   sheetCharacter: Character Sheet
   sheetMaster: 마스터 시트
   sheetItem: Item Sheet
   sheetItemV2: Item Sheet V2
   sheetNPC: NPC Sheet
-  terrains: Terrains
   tempHp: 임시 HP
   trait: Trait
   # Settings
@@ -104,9 +82,6 @@ ARCHMAGE:
     showToken: 'Show Token'
     showTokenTitle: 'Token: {name}'
     RESOURCES:
-      commandPoint: Command Point
-      commandPoints: Command Points
-      commandPointsGained: Gained {points} command points.
       custom1: Custom Resource 1
       custom2: Custom Resource 2
       custom3: Custom Resource 3
@@ -117,44 +92,16 @@ ARCHMAGE:
       custom8: Custom Resource 8
       custom9: Custom Resource 9
       custom10: Custom Resource 10
-      focus: Focus
-      ki: Ki
-      momentum: Momentum
-      recoveries: Recoveries
-      recovery: Recovery
-  CHARACTERFLAGS:
-    diceFormulaModeHint: Method used to display inline dice formulas on power previews in the character sheet.
-    diceFormulaModeName: Dice Formula Mode
-    diceFormulaModeOptnumeric: Calculated modifiers (experimental)
-    diceFormulaModeOptlong: Formula (long)
-    diceFormulaModeOptshort: Formula (short)
-    hideCurrencyHint: Hide the currency section in the inventory.
-    hideCurrencyName: Hide Currency
-    hideSettingsTabHint: Hide the sheet settings tab for players.
-    hideSettingsTabName: Hide Settings tab
-    portraitFrameHint: Whether or not the character portrait has a white frame and shadow on the V2 sheet.
-    portraitFrameName: Portrait Frame
-    portraitRoundHint: Whether or not the character portrait is rounded on the V2 sheet.
-    portraitRoundName: Round Portrait
-    showTriggersTabHint: Show the trigger-centric powers tab.
-    showTriggersTabName: Show Triggers tab
   CHARACTERSETTINGS:
     settings: Settings
   DURATION:
     Infinite: Infinite
     Unknown: Unknown
     StartOfNextTurn: Start of Next Turn
-    StartOfNextTurnFull: until the start of the target's next turn
-    StartOfNextTurnFull2: until the start of its next turn
     EndOfNextTurn: End of Next Turn
-    EndOfNextTurnFull: until the end of the target's next turn
-    EndOfNextTurnFull2: until the end of its next turn
     StartOfNextSourceTurn: Start of Next Source Turn
-    StartOfNextSourceTurnFull: until the start of your next turn
     EndOfNextSourceTurn: End of Next Source Turn
-    EndOfNextSourceTurnFull: until the end of your next turn
     EasySaveEnds: Easy Save Ends
-    SaveEnds: Save Ends
     NormalSaveEnds: Normal Save Ends
     HardSaveEnds: Hard Save Ends
     EndOfCombat: End of Battle
@@ -162,11 +109,7 @@ ARCHMAGE:
     StartOfEachTurn: Start of Each Turn
     EndOfRound: End of Current Round
     EndOfRoundWarning: No active combat, cannot determine end of round; assuming first round.
-    NextTurnFilter: until the \w* of \w* next turn
     # 2E
-  COMPENDIUMBROWSER:
-    buttons:
-      baselineMonster: 'Create Baseline Monster'
 # Ability Scores
   str:
     label: 근력
@@ -182,7 +125,6 @@ ARCHMAGE:
     label: 행운
   # Defenses
   ac:
-    key: 방어
     label: 방어도
   pd:
     key: 신방
@@ -198,16 +140,9 @@ ARCHMAGE:
     usesRemaining: Uses Remaining
     usesRemainingHint: Number of remaining uses, usually the same as Max Uses
   CHAT:
-    attack: Attack
-    attackPlaceholder: "[[d20+@str.mod+@std]] vs. AC"
-    attackTitle: Attack formula, such as "[[d20+@str.mod+@std]] vs. AC"
-    attacks: Attacks
     Apply: Apply
     applyAETitle: Apply Active Effect?
     Cancel: Cancel
-    critMod: Critical Range Modifier
-    critModPlaceholder: "+[[@ed]]"
-    critModTitle: Critical hit range modifier, such as "3" or "[[@ed]]"
     Delete: Delete
     DeleteConfirm: Are you sure you want to delete this?
     DeleteConfirmTitle: Confirm deletion
@@ -215,78 +150,10 @@ ARCHMAGE:
     effect: Effect
     group: Group
     groupTitle: Custom group used to organize this on character sheets.
-    hit: Hit
-    hitPlaceholder: "[[@wpn.m.dice+@str.dmg]] damage"
-    hitTitle: Effects on successful hit, for example "[[@wpn.m.dice+@str.dmg]] damage"
-    hit1: Special Roll (1)
-    hit1NamePlaceholder: "Natural even hit"
-    hit1ValuePlaceholder: "The target is also grabbed."
-    hit2: Special Roll (2)
-    hit2NamePlaceholder: "Natural 18+"
-    hit2ValuePlaceholder: "Make a *screeching wail* attack as a free action."
-    hit3: Special Roll (3)
-    hit3NamePlaceholder: "Natural odd miss"
-    hit3ValuePlaceholder: "Deal [[8]] miss damage"
-    hit4: Special Roll (4)
-    hit4NamePlaceholder: "Natural odd miss"
-    hit4ValuePlaceholder: "Deal [[8]] miss damage"
-    hit5: Special Roll (5)
-    hit5NamePlaceholder: "Natural odd miss"
-    hit5ValuePlaceholder: "Deal [[8]] miss damage"
     embeddedMacro: Embedded Macro
     embeddedMacroPermissionError: Cannot execute embedded macro - request permission for this user to your GM!
-    miss: Miss
-    missPlaceholder: Damage equal to your level ([[@lvl]])
-    missTitle: Effects that happen on a miss, such as "Damage equal to your level ([[@lvl]])"
-    modifiers: Modifiers
-    NaturalRoll: 'Natural {naturalRolls}'
-    NoResources: Not enough resources
     numbersOnly: Numbers only, such as '16'
-    resources: Resources
-    sequencer: Sequencer
-    sequencerDesc: Configure a sequencer animation.
-    sequencerTarget: Sequencer File (Target)
-    sequencerRay: Sequencer File (Ray)
-    sequencerSelf: Sequencer File (Self)
-    sequencerReverse: Reverse Sequence
     source: Source
-    special: Special
-    spellLevelTrigger: Level
-    target: Target
-    trigger: Trigger
-    triggerTitle: Trigger for this power, such as 'Natural even miss'
-    triggerVsRegex: "(\\[\\[.+?\\]\\]).*(vs.*)"
-    vulnerable: Vulnerability to {vulns}
-    vulnerableTooltip: The &ldquo;vulnerable&rdquo; condition is present but a type is not specified.
-    vulnerableText1e: "crit range may be expanded"
-  TERRAINS:
-    label: Terrains Present
-    none: None
-    caveDungeonUnderworld: Cave, Dungeon, Underworld
-    forestWoods: Forest, Woods
-    iceTundraDeepSnow: Ice, Tundra, Deep Snow
-    migration: Koru Behemoth
-    mountains: Mountains
-    plainsOverworld: Plains, Overworld
-    ruins: Ruins
-    swampLakeRiver: Swamp, Lake, River
-  TARGETING:
-    '2': two
-    '3': three
-    '4': four
-    '5': five
-    '6': six
-    '7': seven
-    '8': eight
-    '9': nine
-    all: all
-    crescendoSpecial: You can choose more than one target for this spell, but you take a –2 penalty when attacking two targets, a –3 penalty for three targets, and so on.
-    each: each
-    every: every
-    random: random
-  SAVE:
-    failure: 실패
-    success: 성공
   EFFECT:
     AE:
       arcane: Arcane
@@ -295,51 +162,21 @@ ARCHMAGE:
       delete: Delete Effect
       divine: Divine
       edit: Edit Effect
-      negativeRecovery: Negative Recovery Penalty
       new: New Effect
       toggle: Toggle Effect
-    StatusAsleep: Asleep
-    StatusBlessed: Blessed
-    StatusBonusDefenses: Bonus Defenses
-    StatusBuffed: Buffed
-    StatusBlind: Blind
-    StatusCursed: Cursed
     StatusDead: Dead
-    StatusDebuffed: Debuffed
-    StatusEmpowered: Empowered
-    StatusFireShield: Fire Shield
-    StatusFlying: Flying
-    StatusHidden: Hidden
-    StatusHolyShield: Holy Shield
-    StatusIceShield: Ice Shield
-    StatusLastGasps: Last Gasps
-    StatusMageShield: Mage Shield
-    StatusOngoingDamage: Ongoing Damage
-    StatusReducedDefenses: Reduced Defenses
-    StatusRegen: Regeneration
-    StatusSilenced: Silenced
   UI:
     applyChanges: Apply changes
     targeted: Targeted
     selected: Selected
-    errNotTable: 지정한 항목이 롤테이블이 아닙니다.
     errMacroSyntax: There was an error in your macro syntax. See the console (F12) for details.
-    errNotEnoughCP: You don't have enough Command Points to use this command. Use anyway?
-    errNotEnoughKi: You don't have enough Ki to use this power. Use anyway?
-    errNoMomentum: You need Momentum to use this power. Use anyway?
-    errNoFocus: You need Focus to use this power. Use anyway?
-    errNoRecoveries: You don't have any recoveries left. Use anyway?
-    errNoCustomResource: "You don't have enough {res}. Use anyway?"
     errNoInitiativeOutsideCombat: Can't roll initiative without an encounter in the combat tracker.
-    errOnlyTextRolltables: Only text Roll Tables are supported for now.
     warnStatusEffect: Effect data empty, can't apply this effect.
     warnMacroOnlyOwnedItems: You can only create macro buttons for owned Items.
     warnMacroItemNotFound: Could not find item {item}. You may need to delete and recreate this macro.
     warnMacroItemNotOnActor: Your controlled Actor does not have an item named {item}.
     noTarget: No target selected.
     noToken: No token selected.
-    tooManyLevels: Changing a monster by more than 6 levels is not recommended.
-    levelLimits: Level can't increase above 15 or decrease below 0.
   TOOLTIP:
     portrait: Portrait image.<br>Click to edit (may need permissions).
     pcName: 캐릭터 이름
@@ -369,8 +206,6 @@ ARCHMAGE:
       </ul>
     activeEffectsItemHint: |
       Active Effects will not be applied directly to this item's parent actor, but they will show up as draggable effects on power cards in chat messages.
-    actionAttackHint: |
-      For ranged attacks, include either "R:" or "C:" in the action's name, above. For targeting, include possible targets in parentheses at the end of the attack line, such as "[[d20+9]] vs AC ([[d3]] nearby enemies)".
 TYPES:
   Actor:
     character: 서번트

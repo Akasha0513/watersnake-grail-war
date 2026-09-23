@@ -21,10 +21,6 @@
     justify-content: flex-start;
   }
 
-  .unit--icons {
-    grid-column-end: span 1;
-  }
-
   .unit--resources {
     grid-column-end: span 3;
   }
@@ -41,14 +37,6 @@
         flex: 0;
       }
     }
-  }
-
-  .sub-unit--melee,
-  .sub-unit--ranged {
-    border: 2px solid $c-black--50;
-    margin: $padding-md 0;
-    padding: $padding-md;
-    border-radius: 4px;
   }
 
   .unit-subtitle {

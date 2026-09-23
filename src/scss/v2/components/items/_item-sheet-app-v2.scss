@@ -113,41 +113,10 @@
       flex: 0;
     }
 
-    .checkbox-disable {
-      &::before {
-        color: $c-blue;
-        content: '\f00c';
-      }
-      &::after {
-        content: '';
-      }
-
-      &:checked {
-        &::before {
-          content: '';
-        }
-        &::after {
-          color: $c-progress-dire;
-          content: "\f00d\f00d";
-        }
-      }
-    }
   }
 
   .field.flexcol {
     gap: 8px;
-  }
-
-  .power.include-title {
-    .power-summary,
-    .power-header-labels {
-      min-height: 32px;
-      grid-template-columns: 0 auto 0 0 0 0 0 !important;
-    }
-  }
-
-  .power-detail {
-    margin: 6px 0;
   }
 
   .expression {
@@ -224,23 +193,6 @@
     }
   }
 
-  .feat-actions {
-    .operations {
-      display: flex;
-      justify-content: flex-end;
-
-      .feat-action {
-        flex: 0 0 18px;
-        text-align: center;
-      }
-
-      .feat-create {
-        flex: 1;
-        text-align: right;
-      }
-    }
-  }
-
   .item-roll {
     display: flex;
     flex-direction: center;
@@ -252,26 +204,6 @@
 
     i {
       margin: 0;
-    }
-  }
-
-  .fieldset-feats {
-    details[open] {
-      .feat-summary {
-        display: none;
-      }
-    }
-  }
-
-  .fieldset-attack {
-    gap: 4px;
-
-    p {
-      margin: 4px 0;
-    }
-
-    > fieldset {
-      gap: 4px;
     }
   }
 

@@ -37,10 +37,6 @@
 <script setup>
 import { reactive, watch, inject } from 'vue';
 import { localize } from '@/methods/Helpers';
-import {
-	Prosemirror,
-	InfoBubble,
-} from '@/components';
 
 const props = defineProps(['effect', 'context']);
 const { effect } = props;

@@ -44,22 +44,6 @@
     @import 'components/character/effects';
     @import 'components/character/settings';
   }
-
-  &.archmage-dialog {
-    min-width: 960px;
-  }
-
-}
-
-.system-archmage {
-  // Chat messages.
-  .message {
-    @import 'components/message';
-  }
-
-  // @todo replace this when we make the v2 power sheet.
-  .item-sheet {
-  }
 }
 
 @import 'components/chat/ongoing-effects';

@@ -4,39 +4,6 @@
     flex: 0;
   }
 
-  .effects-filters {
-    font-family: $font-stack-label;
-    font-size: $font-tiny;
-    padding: $padding-sm 0 $padding-md;
-    border-bottom: 1px dashed $ct-border;
-
-    > div {
-      flex: 0 auto;
-
-      + div {
-        padding-left: $padding-sm;
-        margin-left: $padding-sm;
-      }
-
-      &.filter-search-effects {
-        flex: 1;
-      }
-    }
-
-    label {
-      display: block;
-      width: 100%;
-      font-weight: bold;
-    }
-
-    input[type="text"] {
-      font-size: $font-tiny;
-      font-family: $font-stack-label;
-      text-align: left;
-      font-weight: normal;
-    }
-  }
-
   .effects-group + .effects-group {
     margin-top: 20px;
   }
@@ -67,15 +34,6 @@
 
   .effects-title {
     margin: 0;
-  }
-
-  .effects-header-labels {
-    text-transform: uppercase;
-    font-size: $font-tiny;
-
-    .effects-name {
-      display: none;
-    }
   }
 
   .effects-item {
@@ -146,10 +104,6 @@
     width: 36px;
   }
 
-  .effect-create {
-    width: 100%;
-  }
-
   .effects-summary {
     color: $c-white;
     text-shadow: 0 0 10px $c-black--50;
@@ -181,16 +135,8 @@
     overflow: hidden;
   }
 
-  .effects-content {
-    overflow: hidden;
-  }
-
   .effects-bonus {
     align-items: stretch;
-  }
-
-  .effects-chakra {
-    text-transform: uppercase;
   }
 
   .bonus {
@@ -210,66 +156,5 @@
 
   .bonus-label {
     margin-right: 2px;
-  }
-}
-
-.effects-content .effects {
-  line-height: 1.3;
-  padding: $padding-md 0;
-
-  .effects-subheader {
-    justify-content: flex-start;
-
-    > * {
-      flex: 0 1 auto;
-      padding-right: 12px;
-      position: relative;
-
-      + * {
-        &::before {
-          display: block;
-          content: '·';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: -8px;
-          margin: auto;
-        }
-      }
-    }
-  }
-
-  .effects-details,
-  .effects-feats {
-    p {
-      margin: 0;
-
-      + p {
-        margin-top: $padding-md;
-      }
-    }
-  }
-
-  .effects-header,
-  .effects-details {
-    margin: $padding-sm $padding-md;
-  }
-
-  .effects-detail-value,
-  .effects-detail-content {
-    > * {
-      padding-left: $padding-md;
-    }
-  }
-
-  .effects-feat {
-    background: $c-feat;
-    margin-bottom: 2px;
-    opacity: 0.25;
-    padding: $padding-sm $padding-md;
-
-    &.active {
-      opacity: 1;
-    }
   }
 }

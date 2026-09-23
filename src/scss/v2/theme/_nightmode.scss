@@ -4,26 +4,18 @@ $c-night: #292929;
 $c-night-darker: #191919;
 $bx-night: inset 0 0 100px 0 $c-night-darker;
 
-.archmage-v2.sheet.nightmode .window-content,
-.archmage-v2.archmage-dialog.nightmode .window-content {
+.archmage-v2.sheet.nightmode .window-content {
   background: $c-night;
   box-shadow: $bx-night;
 
   .archmage-v2-vue {
-    // background-image: url('#{$assets}/paper-v2-nightmode.webp');
     color: $c-white;
 
     .notes {
       color: $c-white--60;
     }
 
-    .slider-base {
-      background-color: #111;
-    }
-
-    select,
-    .multiselect,
-    .multiselect-dropdown {
+    select {
       color: $c-white;
       border-color: $c-black;
       background: #111;
@@ -89,8 +81,6 @@ $bx-night: inset 0 0 100px 0 $c-night-darker;
     }
 
     .unit,
-    .power-filters,
-    .equipment-filters,
     .list-item,
     .section--sidebar {
       border-color: $ct-border-night !important;
@@ -167,31 +157,8 @@ $bx-night: inset 0 0 100px 0 $c-night-darker;
       background-image: url('#{$assets}/svg/border-white.svg') !important;
     }
 
-    .unit--currency-gold {
-      color: #efc44a;
-    }
-
-    .unit--currency-silver {
-      color: #888;
-    }
-
-    .unit--currency-copper {
-      color: #c17a58;
-    }
-
-    .power-trigger-tooltip,
-    .power-trigger-tooltip::before {
-      background: #111 !important;
-      color: $c-white !important;
-      border-color: $ct-border-night !important;
-    }
-
     .expression {
       color: #ff7b7b;
-    }
-
-    .input-edit {
-      background: $c-night-darker;
     }
   }
 }
