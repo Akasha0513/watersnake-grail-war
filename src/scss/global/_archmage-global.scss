@@ -2128,27 +2128,6 @@ option[selected] {
   }
 }
 
-// Scene Terrains
-.archmage-terrains {
-  pointer-events: all;
-  background: var(--background-color);
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
-  box-sizing: content-box;
-  color: var(--color-text-secondary);
-  font-family: $font-stack-secondary;
-  font-size: 14px;
-  line-height: 1.2;
-  text-align: center;
-  width: 200px;
-  padding: 5px;
-  margin-top: 5px;
-
-  &.hide {
-    display: none;
-  }
-}
-
 #chat-form {
   position: relative;
 

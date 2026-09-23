@@ -18,7 +18,6 @@ import { ActorHelpersV2 } from './actor/helpers/actor-helpers-v2.js';
 import { TokenArchmage } from './actor/token.js';
 import {combatRound, combatStart, combatTurn, preDeleteCombat} from "./hooks/combat.mjs";
 import { ArchmageActiveEffectSheetV2 } from './active-effects/effect-sheet-v2.js';
-import { baselineMonsterDialog } from './actor/baseline-monster.js';
 
 Hooks.once('init', async function() {
 
@@ -64,53 +63,6 @@ Hooks.once('init', async function() {
     rollItemMacro,
     ActorHelpersV2,
     isSocketGM: () => game.users.activeGM.id === game.user.id,
-    terrains: [
-      {
-        id: "none",
-        name: "ARCHMAGE.TERRAINS.none",
-        icon: "fa-solid fa-circle-xmark"
-      },
-      {
-        id: "caveDungeonUnderworld",
-        name: "ARCHMAGE.TERRAINS.caveDungeonUnderworld",
-        icon: "fa-solid fa-dungeon"
-      },
-      {
-        id: "forestWoods",
-        name: "ARCHMAGE.TERRAINS.forestWoods",
-        icon: "fa-solid fa-trees"
-      },
-      {
-        id: "iceTundraDeepSnow",
-        name: "ARCHMAGE.TERRAINS.iceTundraDeepSnow",
-        icon: "fa-solid fa-icicles"
-      },
-      {
-        id: "migration",
-        name: "ARCHMAGE.TERRAINS.migration",
-        icon: "fa-solid fa-paw-claws"
-      },
-      {
-        id: "mountains",
-        name: "ARCHMAGE.TERRAINS.mountains",
-        icon: "fa-solid fa-mountains"
-      },
-      {
-        id: "plainsOverworld",
-        name: "ARCHMAGE.TERRAINS.plainsOverworld",
-        icon: "fa-solid fa-staff"
-      },
-      {
-        id: "ruins",
-        name: "ARCHMAGE.TERRAINS.ruins",
-        icon: "fa-solid fa-scroll-old"
-      },
-      {
-        id: "swampLakeRiver",
-        name: "ARCHMAGE.TERRAINS.swampLakeRiver",
-        icon: "fa-solid fa-water"
-      }
-    ]
   };
 
   // Replace sheets.
@@ -353,7 +305,6 @@ async function addEscalationDie() {
 Hooks.once('ready', async () => {
   $(`<div class="archmage-hotbar faded-ui flexcol"></div>`).insertBefore('#players');
   await addEscalationDie();
-  renderSceneTerrains();
 
   CONFIG.HOLYGRAILWAR.ActorTabFocusSheet = ActorTabFocusSheet
 
@@ -376,14 +327,6 @@ Hooks.once('ready', async () => {
     event.dataTransfer.setData("text/plain", JSON.stringify(data));
   });
 
-  // Handle click events for the baseline monster generator.
-  document.addEventListener("click", (event) => {
-    if (event?.target?.classList?.contains('create-baseline-monster')) {
-      event.preventDefault();
-      baselineMonsterDialog();
-    }
-  });
-
   // Wait to register the hotbar macros until ready.
   Hooks.on("hotbarDrop", (bar, data, slot) => {
     if (['Item'].includes(data.type)) {
@@ -392,101 +335,6 @@ Hooks.once('ready', async () => {
     }
   });
 
-});
-
-/* ---------------------------------------------- */
-
-Hooks.on("renderDocumentDirectory", (app, html, options) => {
-  const htmlElement = $(html)[0];
-  if (options.documentCls === 'actor') {
-    htmlElement.querySelector(".directory-footer").insertAdjacentHTML("beforeend", `
-      <div class="flexrow">
-        <button type="button" class="create-baseline-monster" style="flex-grow: 0;"
-          data-tooltip="${game.i18n.localize('ARCHMAGE.COMPENDIUMBROWSER.buttons.baselineMonster')}"
-          data-tooltip-direction="UP">
-          <i class="fas fa-spaghetti-monster-flying"></i>
-        </button>
-      </div>
-    `);
-  }
-});
-
-/* -------------------------------------------- */
-
-function renderSceneTerrains() {
-
-  // Remove any existing element
-  $('.archmage-terrains').remove();
-
-  let scene = game.scenes.viewed;
-  if ( !scene) return;
-  let flag = scene.getFlag('watersnake-grail-war', 'terrains');
-  if ( !flag) return;
-  let terrains = flag.filter(x => x !== 'none');
-  if ( !terrains || (terrains.length === 0) ) return;
-
-  const label = game.i18n.localize('ARCHMAGE.terrains');
-  const isGM = game.user.isGM ? 'gm' : '';
-  const aside = $(`
-    <aside class="archmage-terrains flexcol ${isGM}">
-      <h4 class="archmage-terrains-header">${label}</h4>
-    </aside>
-  `);
-  if ( terrains ) {
-      terrains.forEach(t => {
-        const terrain = game.holygrailwar.terrains.find(x => x.id === t);
-        aside.append(`<div><i class="${terrain.icon}"></i> ${game.i18n.localize(terrain.name)}</div>`);
-      });
-  }
-  // Set height based on number of terrains
-  $('.archmage-hotbar').append(aside);
-}
-
-/* -------------------------------------------- */
-
-Hooks.on('canvasReady', (canvas) => {
-  renderSceneTerrains();
-});
-
-/* -------------------------------------------- */
-
-Hooks.on('renderSceneConfig', (app, html, data) => {
-
-  // Attach a list of Terrains to the scene config as a multi-select
-  const terrainOptions = game.holygrailwar.terrains.map(t => {
-      return {
-          value: t.id,
-          label: game.i18n.localize(t.name)
-      };
-  });
-  const currentTerrains = data.document.getFlag('watersnake-grail-war', 'terrains') || [];
-
-  // Create multiple select dom element
-  const htmlSelect = $(`<select style="height:125px;" multiple="multiple" name="flags.watersnake-grail-war.terrains" data-dtype="String"></select>`);
-  terrainOptions.forEach(o => {
-      const attrs = ["value='"+o.value+"'", currentTerrains.includes(o.value) ? "selected=" : ""];
-      const option = $(`<option ${attrs.join(" ")}>${o.label}</option>`);
-      htmlSelect.append(option);
-  });
-
-  // Wrap the select in a form-group
-  const htmlFormGroup = $(`<div class="form-group"></div>`);
-  htmlFormGroup.append(`<label>${game.i18n.localize("ARCHMAGE.TERRAINS.label")}</label>`);
-  htmlFormGroup.append(htmlSelect);
-
-  // Attach the select after .initial-position
-  html = $(html);
-  const lastControl = html.find('div[data-tab=basics] .form-group').last();
-  lastControl.after(htmlFormGroup);
-
-  // Update the height of the scene config by setting to auto
-  $(app.element).css('height', 'auto');
-});
-
-/* -------------------------------------------- */
-
-Hooks.on("updateScene", (scene, data, options, userId) => {
-  renderSceneTerrains();
 });
 
 /* ---------------------------------------------- */
@@ -690,10 +538,6 @@ async function _applyAEDurationDialog(actor, effectData, duration, source, type 
     }).render(true);
   });
 }
-
-Hooks.on("renderJournalSheet", async (app, html, data) => {
-  app._element[0].classList.add("archmage-v2");
-});
 
 /* ---------------------------------------------- */
 
