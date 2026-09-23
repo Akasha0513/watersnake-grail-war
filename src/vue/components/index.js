@@ -19,7 +19,6 @@ export { default as EffectCheckBonus } from '@/components/effects/EffectCheckBon
 export { default as EffectAbilityBonus } from '@/components/effects/EffectAbilityBonus.vue';
 
 export { default as ActionDetails } from '@/components/item/action/ActionDetails.vue';
-export { default as ActionAttack } from '@/components/item/action/ActionAttack.vue';
 
 export { default as CharHeader } from '@/components/actor/character/top/CharHeader.vue';
 export { default as CharAttributes } from '@/components/actor/character/top/CharAttributes.vue';

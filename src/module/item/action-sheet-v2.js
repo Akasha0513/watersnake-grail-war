@@ -56,8 +56,6 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
       // Add the item document.
       item: this.item.toObject(),
       system: this.item.system,
-      // Sequencer (module) support.
-      sequencerEnabled: game.modules.get("sequencer")?.active && this.item.type === 'action',
       // Force re-renders. Defined in the vue mixin.
       _renderKey: this._renderKey ?? 0,
       // @todo add this after switching to DataModel
@@ -113,32 +111,16 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
       primary: {},
     };
 
-    // Tabs available to all items.
     context.tabs.primary.details = {
       key: 'details',
       label: game.i18n.localize('ARCHMAGE.details'),
-      active: false,
+      active: true,
     };
 
-    // Tabs limited to NPCs.
-    if (this.item.type === 'action') {
-      context.tabs.primary.attack = {
-        key: 'attack',
-        label: 'Attack',
-        active: true,
-      };
-    }
-
-    // More tabs available to all items.
     context.tabs.primary.effects = {
       key: 'effects',
       label: 'Effects',
       active: false,
     };
-
-    // Ensure we have a default tab.
-    if (this.item.type !== 'action') {
-      context.tabs.primary.details.active = true;
-    }
   }
 }

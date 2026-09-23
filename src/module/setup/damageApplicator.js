@@ -1,6 +1,3 @@
-import HitEvaluation from "../rolls/HitEvaluation.mjs";
-import Targeting from '../rolls/Targeting.mjs';
-
 const REGEX_EXPANDED_INLINE_ROLL = /.*=\s(\d+)/gm;
 
 export class DamageApplicator {
@@ -143,17 +140,13 @@ export class DamageApplicator {
     const rollRaw = element.dataset?.roll ?? false;
     // If there's a roll data prop, proceed.
     if (rollRaw) {
-      const inlineroll = html;
       // Build a new copy of the roll.
       const roll = Roll.fromJSON(unescape(rollRaw));
       // Get the actor and message.
       const actorElement = element.closest('[data-actor-uuid]');
       const messageElement = element.closest('[data-message-id]');
       const actor = actorElement?.dataset?.actorUuid ? await fromUuid(actorElement.dataset.actorUuid) : false;
-      const item = actor && actorElement.dataset?.itemId ? actor.items.get(actorElement.dataset.itemId) : false;
       const message = messageElement?.dataset?.messageId ? game.messages.get(messageElement.dataset.messageId) : false;
-      const rowElement = inlineroll.parent('.card-prop');
-      const rowText = rowElement?.text() ?? '';
 
       // Only proceed if those were valid.
       if (actor && message) {
@@ -174,50 +167,6 @@ export class DamageApplicator {
         const rollContent = element.innerHTML.replace(/(<\/i>)(\s*)(\d+)/g, (full, p1, p2, p3) => `${p1}${p2}${newRoll.total}`);
         element.dataset.roll = escape(JSON.stringify(newRoll.toJSON()));
         element.innerHTML = rollContent;
-        // Re-evaluate styling for attack lines.
-        if (rowText.startsWith(`${game.i18n.localize("ARCHMAGE.CHAT.target")}:`)
-          || rowText.startsWith(`${game.i18n.localize("ARCHMAGE.CHAT.attack")}:`)) {
-          // Remove existing crit/fail classes.
-          element.classList.remove('dc-crit');
-          element.classList.remove('dc-fail');
-          element.classList.remove('dc-reroll');
-          // @todo handle actual targets and crit range modifications.
-          const targetOptions = {
-            numTargets: message?.flags?.['watersnake-grail-war']?.numTargets ?? 0,
-            cachedTargets: message?.flags?.['watersnake-grail-war']?.targets ?? [],
-          };
-          const $attackRow = $(element.closest('.card-prop'));
-          const targets = Targeting.getTargetsFromRowText(rowText, $attackRow, targetOptions.numTargets, targetOptions.cachedTargets);
-          // processRowText는 5인자(critMod) — 재굴림 시 크릿 보정 재평가는 미지원이라 0 전달(잉여 6번째 인자 제거).
-          const hitEvaluationResults = HitEvaluation.processRowText(rowText, targets, $attackRow, actor, 0);
-
-          if (hitEvaluationResults.defenses.length > 0) {
-            // @todo Re-evaluate rolls here.
-            const rows = element.closest('.card-row').querySelectorAll('.card-prop');
-            rows.forEach((rowSelf) => {
-              let $rowSelf = $(rowSelf);
-              let rowSelfText = $rowSelf.html();
-              const rowCleanText = $rowSelf.text();
-
-              // Remove existing targets.
-              $rowSelf.find('.dc-target')?.remove();
-
-              // Append hit targets to text
-              if (rowCleanText.startsWith(game.i18n.localize("ARCHMAGE.CHAT.hit") + ':') && hitEvaluationResults.targetsHit.length > 0) {
-                $rowSelf.find('strong').after("<span class='dc-target'> (" + HitEvaluation.getNames(
-                  hitEvaluationResults.targetsHit,
-                  hitEvaluationResults.targetsCrit) + ") </span>")
-              }
-              // Append missed targets to text
-              if (rowCleanText.startsWith(game.i18n.localize("ARCHMAGE.CHAT.miss") + ':') && hitEvaluationResults.targetsMissed.length > 0) {
-                $rowSelf.find('strong').after("<span class='dc-target'> (" + HitEvaluation.getNames(
-                  hitEvaluationResults.targetsMissed,
-                  hitEvaluationResults.targetsFumbled) + ") </span>")
-              }
-
-            });
-          }
-        }
         // Force the context closed since we just manipulated the DOM.
         if (ui.context) {
           ui.context.close();

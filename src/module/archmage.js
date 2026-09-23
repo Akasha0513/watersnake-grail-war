@@ -315,13 +315,6 @@ Hooks.once('init', async function() {
   ArchmageUtility.fixVuePopoutBug();
 });
 
-Hooks.on('ready', () => {
-  // Precompile regexps
-  // Do it after ready to wait for localization to load
-  CONFIG.HOLYGRAILWAR.REGEXP.ONGOING_DAMAGE = new RegExp(`(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\\/i>)*(-?\\d+)(<\\/a>)* ${game.i18n.localize("ARCHMAGE.ongoing")} ([a-zA-Z]*) ?${game.i18n.localize("ARCHMAGE.damage")}(?:\\s*\\((\\w*) ?${game.i18n.localize("ARCHMAGE.DURATION.SaveEnds")}(?:, \\d*\\+)?\\))?`, "ig");
-  // /(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\/i>)*(-?\d+)(<\/a>)* ongoing ([a-zA-Z]*) ?damage(?:\s*\((\w*) ?save ends(?:, \d*\+)?\))?/ig
-});
-
 /* ---------------------------------------------- */
 
 async function addEscalationDie() {
@@ -523,7 +516,7 @@ Hooks.on('diceSoNiceReady', (dice3d) => {
 /* -------------------------------------------- */
 
 Hooks.on('dropActorSheetData', (actor, sheet, data) => {
-  const types = ['effect', 'ActiveEffect', 'condition', 'ongoing-damage'];
+  const types = ['effect', 'ActiveEffect', 'condition'];
   if (types.includes(data.type)) {
     // Render the condition dialog and apply the effect.
     _applyAE(actor, data);
@@ -623,31 +616,6 @@ async function _applyAE(actor, data) {
     let effectData = foundry.utils.duplicate(effect);
     const ends = effectData.flags?.['watersnake-grail-war']?.duration ?? "Unknown";
     return await _applyAEDurationDialog(actor, effectData, ends, sourceDocument?.uuid, data.type);
-  }
-  else if ( data.type == "ongoing-damage" ) {
-
-    // Load the source actor and grab its image if possible
-    let sourceActor = await fromUuid(data.source);
-    // let img = sourceActor?.img ?? "icons/skills/toxins/symbol-poison-drop-skull-green.webp";
-    const img = data.value >= 0 ? "icons/svg/degen.svg" : "icons/svg/regen.svg";
-
-    let effectData = {
-      name: data.name,
-      img: img,
-      origin: data.source,
-      flags: {
-        // 읽는 쪽(effect-sheet.js·renderChatMessageHTML 등)은 전부 'watersnake-grail-war' 네임스페이스 —
-        // 'archmage'로 쓰면 드래그 생성 지속피해 값이 안 읽히던 버그 수정(v0.3.24).
-        'watersnake-grail-war': {
-          ongoingDamage: data.value,
-          ongoingDamageType: data.damageType,
-          ongoingDamageCrit: false,
-          duration: data.ends,
-          tooltip: data.tooltip
-        }
-      }
-    }
-    return await _applyAEDurationDialog(actor, effectData, data.ends, data.source, data.type);
   }
 }
 
@@ -930,8 +898,6 @@ Hooks.once('ready', _bindGrailChatContextMenu);
 Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
   const html = $(rawhtml);
 
-  const triggerTarget = game.i18n.localize("ARCHMAGE.CHAT.target") + ":";
-  const triggerAttack = game.i18n.localize("ARCHMAGE.attack") + ":";
 
   // Override the inline roll click behavior.
   html.find('a.inline-roll').addClass('inline-roll--archmage').removeClass('inline-roll');
@@ -1037,12 +1003,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     const isGrailDamageCard = $el.hasClass('dice-roll--archmage')
       && ['damage', 'misc'].includes($el.closest('.feature-roll-card')[0]?.dataset?.rollType);
     if ($el.hasClass('dice-roll--archmage') && !isGrailDamageCard) return;
-
-    const lineText = $el.parent()[0]?.innerText ?? '';
-    if (lineText.includes(triggerTarget)) return;  // "Target:" 행 제외
-
-    // attack 행은 재굴림만, 그 외는 전체 항목.
-    this.dataset.grailMenu = lineText.includes(triggerAttack) ? 'attack' : 'full';
+    this.dataset.grailMenu = 'full';
   });
   html.find('a.inline-roll--archmage').on('click', async event => {
     event.preventDefault();

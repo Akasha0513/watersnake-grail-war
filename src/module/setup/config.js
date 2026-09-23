@@ -92,10 +92,6 @@ ARCHMAGE.tokenHPColors = {
   negmax: 0x550000
 };
 
-ARCHMAGE.REGEXP = {
-  ONGOING_DAMAGE: /(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\/i>)*(-?\d+)(<\/a>)* ongoing ([a-zA-Z]*) ?damage(?:\s*\((\w*) ?save ends(?:, \d*\+)?\))?/ig,
-}
-
 ARCHMAGE.baselineMonsterStats = {
   // arrays indexed by level, 0 to 14
   attackBonuses: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],

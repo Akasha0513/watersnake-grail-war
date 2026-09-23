@@ -27,11 +27,6 @@
           <ActionDetails :item="context.item" :context="context"/>
         </Tab>
     
-        <!-- Attack fields -->
-        <Tab v-if="context.item.type === 'action'" group="primary" :tab="tabs.primary.attack">
-          <ActionAttack :item="context.item" :context="context"/>
-        </Tab>
-
         <!-- Active Effect Fields -->
         <Tab group="primary" :tab="tabs.primary.effects">
           <fieldset class="section--effects">
@@ -55,7 +50,6 @@ import {
   Tabs,
   Tab,
   ActionDetails,
-  ActionAttack,
   CharEffects,
 } from '@/components';
 import { inject, reactive, toRaw } from 'vue';

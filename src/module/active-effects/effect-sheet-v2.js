@@ -62,8 +62,6 @@ export class ArchmageActiveEffectSheetV2 extends VueRenderingMixin(
       flags: this.document.flags,
       // Adding a pointer to CONFIG.HOLYGRAILWAR
       config: CONFIG.HOLYGRAILWAR,
-      // Sequencer (module) support.
-      sequencerEnabled: game.modules.get('sequencer')?.active,
       // Add tabs:
       tabs: {
         primary: {
