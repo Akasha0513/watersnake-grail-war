@@ -1140,6 +1140,9 @@ export class ActorArchmage extends Actor {
         sight: {enabled: true}
       }});
     }
+    else if (this.type === 'master' || this.type === 'npc') {
+      await this.update({prototypeToken: {actorLink: true}});
+    }
   }
 
   /**

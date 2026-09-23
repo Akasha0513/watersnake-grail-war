@@ -334,6 +334,14 @@ Hooks.once('init', async function() {
   });
 
   // Track whether we overrode DsN's default inline roll parsing
+  // 기존 마스터·NPC 액터/씬 토큰을 액터 데이터 연결로 1회 전환했는지
+  game.settings.register("watersnake-grail-war", "actorLinkMigrated", {
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
   game.settings.register("watersnake-grail-war", "DsNInlineOverride", {
     name: "DsN Override",
     scope: "world",
@@ -520,6 +528,33 @@ Hooks.once('ready', async () => {
     if (!current || current === "core.ActiveEffectConfig") {
       foundry.utils.setProperty(sheetClasses, "ActiveEffect.base", aeSheetId);
       await game.settings.set("core", "sheetClasses", sheetClasses);
+    }
+  }
+
+  // 마스터·NPC가 연결 없이 생성되던 시절의 액터/씬 토큰을 액터 데이터 연결로 1회 전환.
+  // 연결 전 토큰에만 있던 변경분(delta)은 무시되고 사이드바 액터 데이터로 통일된다.
+  if (game.users.activeGM?.isSelf && !game.settings.get("watersnake-grail-war", "actorLinkMigrated")) {
+    try {
+      const linkTypes = ['character', 'master', 'npc'];
+      const actorUpdates = game.actors
+        .filter(a => linkTypes.includes(a.type) && !a.prototypeToken?.actorLink)
+        .map(a => ({ _id: a.id, 'prototypeToken.actorLink': true }));
+      if (actorUpdates.length) await Actor.updateDocuments(actorUpdates);
+      let tokenCount = 0;
+      for (const scene of game.scenes) {
+        const tokenUpdates = scene.tokens
+          .filter(t => !t.actorLink && t.actorId && linkTypes.includes(game.actors.get(t.actorId)?.type))
+          .map(t => ({ _id: t.id, actorLink: true }));
+        if (!tokenUpdates.length) continue;
+        await scene.updateEmbeddedDocuments('Token', tokenUpdates);
+        tokenCount += tokenUpdates.length;
+      }
+      await game.settings.set("watersnake-grail-war", "actorLinkMigrated", true);
+      if (actorUpdates.length || tokenCount) {
+        ui.notifications.info(`토큰 연결 전환: 액터 ${actorUpdates.length}개, 씬 토큰 ${tokenCount}개`);
+      }
+    } catch (err) {
+      console.error('watersnake-grail-war | 토큰 연결 전환 실패 (다음 접속 때 재시도)', err);
     }
   }
 
