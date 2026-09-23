@@ -4,49 +4,6 @@ import Targeting from "../rolls/Targeting.mjs";
 
 export default class preCreateChatMessageHandler {
 
-    static replaceEffectAndConditionReferences(uuid, $rows) {
-        for (const row of $rows) {
-            CONFIG.HOLYGRAILWAR.REGEXP.CONDITIONS.forEach(([condition, regexp], name, map) => {
-                const conditionInstances = Array.from(row.innerHTML.matchAll(regexp));
-                // Order by largest index first, to avoid stepping over our own toes during replacements
-                for (const match of conditionInstances.sort((a,b) => b.index - a.index)) {
-                    const duration = ((val) => {
-                        if (!val) return "Unknown";
-                        switch(val.toLowerCase()){
-                            case game.i18n.localize("ARCHMAGE.DURATION.SaveEnds"):
-                            case game.i18n.localize("ARCHMAGE.DURATION.NormalSaveEnds"):
-                                return "NormalSaveEnds";
-                            case game.i18n.localize("ARCHMAGE.DURATION.HardSaveEnds"):
-                                return "HardSaveEnds";
-                            case game.i18n.localize("ARCHMAGE.DURATION.EasySaveEnds"):
-                                return "EasySaveEnds";
-                            case game.i18n.localize("ARCHMAGE.DURATION.StartOfNextTurnFull"):
-                            case game.i18n.localize("ARCHMAGE.DURATION.StartOfNextTurnFull2"):
-                                return "StartOfNextTurn";
-                            case game.i18n.localize("ARCHMAGE.DURATION.EndOfNextTurnFull"):
-                            case game.i18n.localize("ARCHMAGE.DURATION.EndOfNextTurnFull2"):
-                                return "EndOfNextTurn";
-                            case game.i18n.localize("ARCHMAGE.DURATION.StartOfNextSourceTurnFull"):
-                                return "StartOfNextSourceTurn";
-                            case game.i18n.localize("ARCHMAGE.DURATION.EndOfNextSourceTurnFull"):
-                                return "EndOfNextSourceTurn";
-                            default:
-                                return "Unknown";
-                        }
-                    })(match[2])
-                    const source = uuid;
-                    const conditionLink = `<a class="effect-link" draggable="true" data-type="condition" data-id="${condition.id}" title=""
-                                         data-source="${source}" data-ends="${duration}">
-                                         <img class="effects-icon" src="${condition.icon}" />
-                                         ${match[0].replace(/\*/g,'')}</a>`;
-                    row.innerHTML = row.innerHTML.substring(0, match.index) + conditionLink + row.innerHTML.substring(match.index + match[0].length);
-                }
-            }
-            )
-        }
-    }
-
-
     static replaceActiveEffectLinkReferences(uuid, $content) {
         const elements = $content[0].querySelectorAll('.content-link[data-type="ActiveEffect"]');
         elements.forEach((element) => {
@@ -139,13 +96,11 @@ export default class preCreateChatMessageHandler {
         let $rows = $content.find('.card-prop');  // Updated later
 
         preCreateChatMessageHandler.replaceOngoingEffectReferences(uuid, $rows, options);
-        preCreateChatMessageHandler.replaceEffectAndConditionReferences(uuid, $rows);
         preCreateChatMessageHandler.replaceActiveEffectLinkReferences(uuid, $content);
 
         // Handle conditions in feats as well as traits & nastier specials
         let $otherRows = $content.find('.tag--feat .description, .card-row-description');
         preCreateChatMessageHandler.replaceOngoingEffectReferences(uuid, $otherRows, options);
-        preCreateChatMessageHandler.replaceEffectAndConditionReferences(uuid, $otherRows);
         $content.find('.tag--feat .description, .card-row-description').replaceWith($otherRows);
 
         let sequence = undefined;

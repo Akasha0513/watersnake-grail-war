@@ -21,13 +21,6 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
   /** @override */
   static DEFAULT_OPTIONS = {
     classes: ["archmage-appv2", "item", "dialog-form", "standard-form"],
-    actions: {
-      onEditImage: this._onEditImage,
-      edit: this._viewEffect,
-      create: this._createEffect,
-      delete: this._deleteEffect,
-      toggle: this._toggleEffect
-    },
     position: {
       width: 640,
       height: 800,
@@ -60,18 +53,9 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
     const context = {
       // Validates both permissions and compendium status
       editable: this.isEditable,
-      owner: this.isOwner,
-      limited: this.document.limited,
       // Add the item document.
       item: this.item.toObject(),
-      actor: this.actor?.toObject() ?? false,
-      // Adding system and flags for easier access
       system: this.item.system,
-      flags: this.item.flags,
-      // Rolldata.
-      rollData: this.actor?.getRollData() ?? {},
-      // Adding a pointer to CONFIG.HOLYGRAILWAR
-      config: CONFIG.HOLYGRAILWAR,
       // Sequencer (module) support.
       sequencerEnabled: game.modules.get("sequencer")?.active && this.item.type === 'action',
       // Force re-renders. Defined in the vue mixin.
@@ -104,7 +88,7 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
     // Enrich the description.
     context.editors = {
       'system.description.value': {
-        enriched: await wrapRolls(this.item.system.description.value ?? '', [], 'short', {}, 'description', enrichmentOptions),
+        enriched: await wrapRolls(this.item.system.description.value ?? '', [], enrichmentOptions),
         element: foundry.applications.elements.HTMLProseMirrorElement.create({
           ...editorOptions,
           name: 'system.description.value',
@@ -112,11 +96,6 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
         }),
       },
     };
-
-    // Enrich powers and feats.
-    if (this.item.type === 'action') {
-      await this._enrichActions(context, enrichmentOptions, editorOptions);
-    }
 
     // Make another pass through the editors to fix the element contents.
     for (let [field, editor] of Object.entries(context.editors)) {
@@ -126,39 +105,6 @@ export class ArchmageActionSheetV2 extends VueRenderingMixin(ArchmageBaseItemShe
     }
 
     return context;
-  }
-
-  /**
-   * Enrich values for action fields.
-   * 
-   * @param {object} context 
-   * @param {object} enrichmentOptions 
-   * @param {object} editorOptions 
-   */
-  async _enrichActions(context, enrichmentOptions, editorOptions) {
-    // Enrich other fields.
-    const powerFields = [
-      'attack',
-      'hit',
-      'hit1',
-      'hit2',
-      'hit3',
-      'hit4',
-      'hit5',
-      'miss',
-    ];
-
-    for (let field of powerFields) {
-      context.editors[field] = {
-        // @todo write a power enricher.
-        enriched: await wrapRolls(this.item.system[field].value ?? '', [], 'short', {}, field, enrichmentOptions),
-        element: foundry.applications.elements.HTMLProseMirrorElement.create({
-          ...editorOptions,
-          name: `system.${field}.value`,
-          value: context.system[field]?.value ?? '',
-        }),
-      };
-    }
   }
 
   _prepareTabs(context) {

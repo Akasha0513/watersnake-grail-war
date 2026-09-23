@@ -63,9 +63,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
       options: this.options,
       editable: this.isEditable,
       cssClass: isOwner ? "editable" : "locked",
-      isCharacter: this.actor.type === "character",
-      isNPC: this.actor.type === "npc",
-      config: CONFIG.HOLYGRAILWAR,
       rollData: this.actor.getRollData(this.actor, { skipPrepare: true }),
       _renderKey: this._renderKey,
     };
@@ -88,14 +85,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     context.actor._source = foundry.utils.deepClone(this.actor._source);
     context.actor.overrides = foundry.utils.flattenObject(this.actor.overrides);
     context.actor.dragData = context.dragData;
-
-    // Add token info if needed.
-    if (this.actor?.token?.id) {
-      if (!this.actor.token.actorLink && this.actor?.token?.id) {
-        context.actor.prototypeToken.id = this.actor.prototypeToken.id;
-        context.actor.prototypeToken.sceneId = this.actor.prototypeToken?.parent?.id;
-      }
-    }
 
     // Add pack info if needed.
     if (this.actor?.pack) {
@@ -218,18 +207,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     return result;
   }
 
-  // Update initial content throughout all editors.
-  _updateEditors(html) {
-    for (let [name, editor] of Object.entries(this.editors)) {
-      // const data = this.object instanceof Document ? this.object.data : this.object;
-      const data = this.object;
-      const initialContent = getProperty(data, name);
-      const div = $(this.form).find(`.editor-content[data-edit="${name}"]`)[0];
-      this.editors[name].initial = initialContent;
-      this.editors[name].options.target = div;
-    }
-  }
-
   /* ------------------------------------------------------------------------ */
   /*  Event Listeners ------------------------------------------------------- */
   /* ------------------------------------------------------------------------ */
@@ -299,29 +276,11 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     // Roll listeners.
     html.on('click', '.rollable', (event) => this._onRollable(event));
 
-    // 성배전쟁: 령주(점/±버튼), 배경 추가/삭제
+    // 성배전쟁: 령주(점/±버튼), 배경 설정
     html.on('click', '.command-seal', (event) => this._updateCommandSeals(event));
     html.on('click', '.command-seal-minus', () => this._stepCommandSeals(-1));
     html.on('click', '.command-seal-plus', () => this._stepCommandSeals(1));
-    html.on('click', '.background-add', (event) => this._addBackground(event));
-    html.on('click', '.background-delete', (event) => this._removeBackground(event));
-    html.on('click', '.background-die', (event) => this._rollBackgroundDie(event));
     html.on('click', '.background-config', (event) => this._onBackgroundConfig(event));
-  }
-
-  /** 배경: 1d(배경 수치) 난수 굴림 */
-  async _rollBackgroundDie(event) {
-    event.preventDefault();
-    const key = event.currentTarget.dataset.key;
-    const bg = this.actor.system.backgrounds?.[key];
-    if (!bg) return;
-    const val = Number(bg.bonus?.value) || 0;
-    if (val < 1) { ui.notifications?.warn('배경 수치가 1 이상이어야 합니다.'); return; }
-    const roll = await new Roll(`1d${val}`).roll();
-    await roll.toMessage({
-      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
-      flavor: `${bg.name?.value || '배경'} — 1d${val}`
-    });
   }
 
   /** 령주: 클릭한 점까지 소진/회복 토글 + 채팅 메시지 */
@@ -356,30 +315,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
     await game.holygrailwar.ArchmageUtility.createChatMessage({
       speaker: game.holygrailwar.ArchmageUtility.getSpeaker(this.actor),
       content: content
-    });
-  }
-
-  /** 배경 추가: 첫 비활성 슬롯 활성화 (여러 번 클릭으로 여러 개 추가) */
-  async _addBackground(event) {
-    event.preventDefault();
-    for (let [k, v] of Object.entries(this.actor.system.backgrounds)) {
-      if (!v.isActive?.value) {
-        await this.actor.update({ [`system.backgrounds.${k}.isActive.value`]: true });
-        return;
-      }
-    }
-    ui.notifications?.warn('배경 슬롯을 모두 사용했습니다.');
-  }
-
-  /** 배경 삭제: 해당 슬롯 비활성화 + 값 초기화 */
-  async _removeBackground(event) {
-    event.preventDefault();
-    const key = event.currentTarget.dataset.key;
-    if (!key) return;
-    await this.actor.update({
-      [`system.backgrounds.${key}.isActive.value`]: false,
-      [`system.backgrounds.${key}.name.value`]: '',
-      [`system.backgrounds.${key}.bonus.value`]: 0
     });
   }
 
@@ -762,64 +697,10 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
    * Handle rollable clicks.
    */
   async _onRollable(event) {
-    event.preventDefault;
-    let target = event.currentTarget;
-    let dataset = target.dataset;
-
-    // Get the roll type and roll options.
-    let type = dataset.rollType ?? null;
-    let opt = dataset.rollOpt ?? null;
-    let opt2 = dataset.rollOpt2 ?? null;
-
-    if (type == 'item' && opt) this._onItemRoll(opt);
-    else if (type == 'save') this._onSaveRoll();
-    else if (type == 'disengage') this._onDisengageRoll(opt);
-    else if (type == 'init') this._onInitRoll();
-    else if (type == 'ability') this._onAbilityRoll(opt);
-    else if (type == 'background') this._onBackgroundRoll(opt);
-    else if (type == 'command') this._onCommandRoll(opt);
-
-    // Fallback to a plain formula roll.
-    else if (opt) await this._onFormulaRoll(opt);
-  }
-
-  /**
-   * Perform a basic roll and send it to chat.
-   *
-   * @param {string} formula
-   */
-  async _onFormulaRoll(formula) {
-    let roll = new Roll(formula, this.actor.getRollData());
-    await roll.roll();
-    roll.toMessage();
-  }
-
-  /**
-   * Perform an owned item's roll.
-   *
-   * @param {string} id
-   */
-  _onItemRoll(id) {
-    let item = this.actor.items.get(id);
-    if (item) item.roll();
-  }
-
-  /**
-   * 상태이상 저항 굴림 (1d20 순수 11+).
-   */
-  async _onSaveRoll() {
-    this.actor.rollSave();
-  }
-
-
-  /**
-   * Roll a disengage check for the actor.
-   *
-   * @param {string} difficulty
-   *   The save type, such as 'easy', 'normal', 'hard', 'death', or 'disengage'.
-   */
-  async _onDisengageRoll() {
-    this.actor.rollDisengage();
+    event.preventDefault();
+    const { rollType, rollOpt } = event.currentTarget.dataset;
+    if (rollType === 'init') this._onInitRoll();
+    else if (rollType === 'ability') this._onAbilityRoll(rollOpt);
   }
 
   /**
@@ -894,54 +775,6 @@ export class ActorArchmageSheetV2 extends foundry.appv1.sheets.ActorSheet {
   _onAbilityRoll(ability) {
     DiceArchmage.BackgroundRoll(this.actor, {defaultAbility: ability});
   }
-
-  /**
-   * Roll background check for the actor.
-   */
-   _onBackgroundRoll(background) {
-    DiceArchmage.BackgroundRoll(this.actor, {defaultBackground: background});
-  }
-
-  /**
-   * Roll command points for an actor, and apply them.
-   *
-   * @param {string} dice
-   *   Dice formula to roll.
-   */
-  async _onCommandRoll(dice) {
-    let actor = this.actor;
-    let roll = new Roll(dice, this.actor.getRollData());
-    await roll.roll();
-
-    let pointsOld = actor.system.resources.perCombat.commandPoints.current;
-    let pointsNew = roll.total;
-
-    // Basic template rendering data
-    const template = `systems/watersnake-grail-war/templates/chat/command-card.html`
-    const token = actor.token;
-
-    // Basic chat message data
-    const chatData = {
-      user: game.user.id,
-      roll: roll,  // TODO: fix template to use rolls prop
-      rolls: [roll],
-      speaker: game.holygrailwar.ArchmageUtility.getSpeaker(actor)
-    };
-
-    const templateData = {
-      actor: actor,
-      tokenId: token ? `${token.id}` : null,
-      data: chatData
-    };
-
-    // Render the template
-    chatData["content"] = await foundry.applications.handlebars.renderTemplate(template, templateData);
-
-    await game.holygrailwar.ArchmageUtility.createChatMessage(chatData);
-
-    await actor.update({'system.resources.perCombat.commandPoints.current': Number(pointsOld) + Number(pointsNew)});
-  }
-
 
   /* ------------------------------------------------------------------------ */
   /*  Special Listeners ----------------------------------------------------- */

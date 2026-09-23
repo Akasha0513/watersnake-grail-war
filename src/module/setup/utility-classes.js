@@ -220,23 +220,6 @@ export class ArchmageUtility {
     return actor?.system?.attributes?.concealed ? { concealed: true, actorUuid: actor.uuid } : {};
   }
 
-  /** 굴림 결과를 feature-roll-card로 출력 (공통) */
-  static async _postFeatureRollResult(actor, item, label, rollType, formula) {
-    const roll = await new Roll(formula, actor.getRollData()).roll();
-    const formulaParts = ArchmageUtility.rollFormulaParts(roll);
-    const tokenId = actor.token?.id ?? actor.getActiveTokens?.()?.[0]?.id ?? '';
-    const content = await foundry.applications.handlebars.renderTemplate(
-      'systems/watersnake-grail-war/templates/chat/feature-roll-card.html',
-      { actor, item, formulaParts, total: roll.total, label, rollType, actorId: actor.id, tokenId, ruby: item.system.ruby?.value }
-    );
-    return ArchmageUtility.createChatMessage({
-      speaker: ArchmageUtility.getSpeaker(actor),
-      content: content,
-      rolls: [roll],
-      flags: { 'mrkb-chat-enhancements': { standalone: true }, 'watersnake-grail-war': ArchmageUtility.concealFlags(actor) }
-    });
-  }
-
   /**
    * 수정치 배열 → 공식. 활성 수정치(active !== false)만 baseFormula 뒤에 부호 정규화하여 합성.
    * (통합 RollDialog 설계 §3 — modifier 모델 합성기. RollModifier: {label, value, active?, source?})
@@ -522,29 +505,6 @@ export class ArchmageUtility {
       { item: game.i18n.localize(`ARCHMAGE.${itemType}`) });
   }
 
-  static formatLevel(number) {
-    return game.i18n.format("ARCHMAGE.levelFormat",
-      { level: ArchmageUtility.ordinalSuffix(number) });
-  }
-
-  static ordinalSuffix(number) {
-    if (game.i18n.lang !== "en") {
-      return number;
-    }
-    var last = number % 10,
-        teens = number % 100;
-    if (last == 1 && teens != 11) {
-        return number + "st";
-    }
-    if (last == 2 && teens != 12) {
-        return number + "nd";
-    }
-    if (last == 3 && teens != 13) {
-        return number + "rd";
-    }
-    return number + "th";
-  }
-
   static cleanActiveEffectLabel(label) {
     return label
       .replace("system.overrides.dmg.melee.step", "근접 피해 단계")
@@ -800,68 +760,6 @@ export class MacroUtils {
     }
 
     return data;
-  }
-
-  /**
-   * Select all feats of a specific tier
-   */
-  static getFeatsByTier(item, tier) {
-    let res = [];
-    if (!item.system.feats) return res;
-    for (let feat of Object.values(item.system.feats)) {
-      if (feat.tier.value == tier) res.push(feat);
-    }
-    return res;
-  }
-
-  /**
-   * Select all allies - approximated by all linked actors in combat
-   * If selfUuid is set it excludes the specified actor, otherwise it includes all linked tokens
-   */
-  static getAllies(selfUuid="") {
-    let res = [];
-    if (!game.combat) return res;
-    const combatants = [...game.combat.combatants.values()];
-    combatants.forEach(c => {
-      if ((c.token.isLinked || c.token.disposition == CONST.TOKEN_DISPOSITIONS.FRIENDLY) && c.token.actor.uuid != selfUuid) {
-        res.push(c.token);
-      }
-    });
-    return res;
-  }
-
-  /**
-   * Create one or more AEs on a set of tokens - via a message to the GM's account to bypass
-   * persmissions if needed.
-   */
-  static applyActiveEffectsToTokens(tokens, effects) {
-    if (!game.user.isGM) {
-      game.socket.emit('system.archmage', {
-        type: 'createAEs',
-        actorIds: tokens.map(t => t.actorId),
-        effects: effects
-      });
-    } else {
-      tokens.forEach(t => {
-        t.actor.createEmbeddedDocuments("ActiveEffect", effects);
-      });
-    }
-  }
-
-  /**
-   * Scale dice up one size
-   */
-  static scaleDiceUp(expr) {
-    switch(expr) {
-      case "d4": return "d6";
-      case "d6": return "d8";
-      case "d8": return "d10";
-      case "d10": return "d12";
-      case "d12": return "2d6";
-      case "2d6": return "2d8";
-      case "2d8": return "2d10";
-      default: return expr;
-    }
   }
 }
 

@@ -16,13 +16,6 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
     });
   }
 
-  constructor(item, options) {
-    super(item, options);
-    this.mce = null;
-  }
-
-  /* -------------------------------------------- */
-
   /**
    * Use a type-specific template for each different item type
    */
@@ -42,9 +35,6 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
    */
   async getData(options) {
     const context = super.getData(options);
-
-    // Sequencer support
-    context.sequencerEnabled = game.modules.get("sequencer")?.active;
 
     // Effects.
     function getChanges(effect) {
@@ -93,66 +83,6 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
     return context;
   }
 
-  _getHeaderButtons() {
-    let buttons = super._getHeaderButtons();
-
-    let me = this;
-
-    // Share Entry
-    if (game.user.isGM) {
-      buttons.unshift({
-        label: game.i18n.localize('ARCHMAGE.sharePlayers'),
-        class: "share-image",
-        icon: "fas fa-eye",
-        onclick: () => this.shareItem()
-      });
-    }
-
-    return buttons;
-  }
-
-  shareItem() {
-    game.socket.emit("system.archmage", {
-      type: "shareItem",
-      itemId: this.item.id
-    });
-  }
-
-  /**
-   * Handle a received request to display an item.
-   */
-  static handleShareItem({itemId}={}) {
-    let item = game.items.get(itemId);
-
-    if (item == undefined) {
-      let characters = game.actors.filter(x => x.data.type == "character");
-
-      for (var x = 0; x <= characters.length; x++) {
-        let actor = characters[x];
-        let found = actor.data.items.find(x => x._id == itemId);
-        if (found) {
-          item = actor.items.get(itemId);
-          break;
-        }
-      }
-    }
-
-    // Force permissions to ensure item displays for players
-    let updates = {"ownership.default": CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER};
-    updates[`ownership.${game.userId}`] = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
-    // Cloning without saving ensures this change is ephemeral
-    item = item.clone(updates, {"save": false, "keepId": false});
-
-    let itemSheet = new ItemArchmageSheet(item, {
-      title: item.title,
-      uuid: item.uuid,
-      shareable: false,
-      editable: false
-    });
-
-    return itemSheet.render(true);
-  }
-
   /* -------------------------------------------- */
 
   /**
@@ -162,28 +92,10 @@ export class ItemArchmageSheet extends foundry.appv1.sheets.ItemSheet {
    *
    * @return {undefined}
    */
-  async activateListeners(html) {
+  activateListeners(html) {
     super.activateListeners(html);
-    const context = await this.getData();
 
     if (!this.options.editable) return;
-
-    // If the _CodeMirror module is enabled, use it to create a code editor for
-    // the macro field.
-    if (game.modules.get('_CodeMirror')?.active && typeof CodeMirror != undefined) {
-      const textarea = html.find(".power-macro-editor textarea")[0];
-      if (textarea) {
-        const editor = CodeMirror.fromTextArea(textarea, {
-          mode: "javascript",
-          ...CodeMirror.userSettings,
-          lineNumbers: true,
-          inputStyle: "contenteditable",
-          autofocus: false,
-          theme: game.settings.get("watersnake-grail-war", "nightmode") ? 'monokai' : 'default',
-          readOnly: textarea.hasAttribute('readonly')
-        }).on('change', (instance) => instance.save());
-      }
-    }
 
     // Effects.
     html.on('click', '.effect-control', (event) => this._onManageEffect(event));

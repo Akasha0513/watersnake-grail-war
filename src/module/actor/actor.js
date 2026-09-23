@@ -1,6 +1,4 @@
 import { ArchmageUtility } from '../setup/utility-classes.js';
-import { MacroUtils } from '../setup/utility-classes.js';
-import { DiceArchmage } from './dice.js';
 
 /**
  * Extend the base Actor class to implement additional logic specialized for the system.
@@ -84,7 +82,6 @@ export class ActorArchmage extends Actor {
 
     // Prepare data, items, derived data, and effects.
     this.prepareBaseData();
-    // this.prepareEmbeddedEntities();
 
     // Apply activeEffects in group 1 (most properties).
     this.applyActiveEffects('default');
@@ -444,18 +441,6 @@ export class ActorArchmage extends Actor {
   }
 
   /** @inheritdoc */
-  prepareEmbeddedEntities() {
-    // @todo is this still needed? Causes issues in v10.
-    const embeddedTypes = this.constructor.metadata.embedded || {};
-    for ( let cls of Object.values(embeddedTypes) ) {
-      const collection = cls.metadata.collection;
-      for ( let e of this[collection] ) {
-        e.prepareData();
-      }
-    }
-  }
-
-  /** @inheritdoc */
   prepareDerivedData() {
     // Get the Actor's data object
     const actorData = this;
@@ -680,17 +665,6 @@ export class ActorArchmage extends Actor {
 
   /* -------------------------------------------- */
 
-  /**
-   * Prepare NPC type specific data
-   * @param data
-   *
-   * @return {undefined}
-   */
-  _prepareNPCData(data, model, flags) {
-    // init.mod is used for rolls, while value is used on the sheet.
-    data.attributes.init.mod = data.attributes.init.value;
-  }
-
   /** @inheritdoc */
   getRollData(item, { skipPrepare = false } = {}) {
     // Use the actor by default.
@@ -729,7 +703,6 @@ export class ActorArchmage extends Actor {
 
         case 'level':
           data.lvl = v.value;
-          data.lvldice = CONFIG.HOLYGRAILWAR.numDicePerLevel[v.value];
           break;
 
         case 'grade':
@@ -797,35 +770,9 @@ export class ActorArchmage extends Actor {
       }
     }
 
-    // Animal companion data
-    let anLvl = actor.system.attributes.level.value;
-    data.animalCompanion = {
-      'atk': CONFIG.HOLYGRAILWAR.animalCompanion.attack[anLvl],
-      'dmg': CONFIG.HOLYGRAILWAR.animalCompanion.damage[anLvl]
-    }
-
     // Old syntax shorthand.
     data.attr = data.attributes;
     data.abil = data.abilities;
-
-    // Process resource shorthands and custom resource names (npc도 마스터와 동일 취급)
-    if (this.type === "character" || this.type === "master" || this.type === "npc"){
-      data.rsc = {
-        cps: data.resources.perCombat.commandPoints.current,
-        focus: data.resources.perCombat.focus.current,
-        momentum: data.resources.perCombat.momentum.current,
-        ki: data.resources.spendable.ki.current,
-        kimax: data.resources.spendable.ki.max
-      };
-      for (let [k, v] of Object.entries(data.resources.spendable)) {
-        if (k == "ki") continue;
-        if (v.enabled && v.label) {
-          let label = v.label.toLowerCase().replace(/[^a-zA-z\d]/g, '');
-          data.rsc[label] = v.current;
-          data.rsc[label+"max"] = v.max;
-        }
-      }
-    }
 
     return data;
   }
@@ -938,90 +885,6 @@ export class ActorArchmage extends Actor {
   }
 
 
-  /* -------------------------------------------- */
-
-  /**
-   * Roll a generic ability test or saving throw.
-   * Prompt the user for input on which variety of roll they want to do.
-   * @param abilityId {String}    The ability id (e.g. "str")
-   *
-   * @return {undefined}
-   */
-  rollAbility(abilityId = null, background = null) {
-    DiceArchmage.BackgroundRoll(this, {
-      defaultAbility: abilityId,
-      defaultBackground: background
-    });
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * @deprecated Use DiceArchmage.BackgroundRoll() instead.
-   * Roll an Ability Test
-   * Prompt the user for input regarding Advantage/Disadvantage and any
-   * Situational Bonus
-   * @param abilityId {String}    The ability ID (e.g. "str")
-   *
-   * @return {undefined}
-   */
-  rollAbilityTest(abilityId, background = null) {
-    console.warn('ActorArchmage.rollAbilityTest() is deprecated. Use game.holygrailwar.DiceArchmage.BackgroundRoll(actor, {defaultAbility, defaultBackground}) instead.');
-    let abl = null;
-    let bg = null;
-    let terms = this.type === 'master' ? ['@abil', '@bg'] : ['@abil', '@grade', '@bg'];
-    let flavor = '';
-    let abilityName = '';
-    let backgroundName = '';
-
-    if (abilityId) {
-      abl = this.system.abilities[abilityId] ?? null;
-      abilityName = abl?.label ? game.i18n.localize(`ARCHMAGE.${abilityId}.label`) : '';
-      if (abl) {
-        flavor = game.i18n.format('ARCHMAGE.checkSkillFormat', { name: abilityName });
-      } else {
-        flavor = game.i18n.localize('ARCHMAGE.checkSkill');
-      }
-    }
-
-    if (background !== null) {
-      bg = Object.entries(this.system.backgrounds).find(([k,v]) => {
-        return v.name.value && (v.name.value.safeCSSId() == background.safeCSSId());
-      });
-      if (bg) {
-        flavor = game.i18n.format('ARCHMAGE.checkBackgroundFormat', {name: bg[1].name.value});
-        backgroundName = Number(bg[1].bonus.value) >= 0 ? `+${bg[1].bonus.value} ${bg[1].name.value}` : `${bg[1].bonus.value} ${bg[1].name.value}`;
-      }
-      else {
-        flavor = game.i18n.localize('ARCHMAGE.checkBackground');
-      }
-    }
-
-    // Call the roll helper utility
-    DiceArchmage.d20Roll({
-      event: event,
-      terms: terms,
-      data: {
-        abil: abl ? abl.nonKey.mod + abl.bonus : 0,
-        lvl: this.system.attributes.level.value +
-          (this.system.incrementals?.skills ? 1 : 0),
-        grade: this.system.attributes.grade?.value || 0,
-        bg: bg ? bg[1].bonus.value : 0,
-        abilityName: abilityName,
-        backgroundName: backgroundName,
-        abilityCheck: Boolean(abl),
-        backgroundCheck: Boolean(bg)
-      },
-      abilities: this.system.abilities,
-      backgrounds: this.system.backgrounds,
-      title: flavor,
-      alias: this.name,
-      actor: this,
-      ability: abl,
-      background: bg
-    });
-  }
-
   /**
    * Override default method to avoid clamping when isBar=true and not
    * using the .value property when not.
@@ -1132,58 +995,12 @@ export class ActorArchmage extends Actor {
         }
       });
     }
-    // Update the prototype token size.
-    if (changes.system?.details?.size?.value && this.type == "npc") {
-      let h = 1;
-      let w = 1;
-      let s = 1;
-      switch (data.system.details.size.value) {
-        case "large":
-          h = 2;
-          w = 2;
-          break
-        case "huge":
-          h = 3;
-          w = 3;
-          break
-        case "gargantuan":
-          h = 5;
-          w = 5;
-          break
-        case "small":
-          s = 0.8;
-          break
-        case "tiny":
-          h = 0.5;
-          w = 0.5;
-          break
-        default:
-          break
-      }
-      const tokenData = {
-        height: h,
-        width: w,
-        texture: {
-          scaleX: s,
-          scaleY: s,
-        }};
-
-      // Update tokens.
-      let tokens = this.getActiveTokens();
-      tokens.forEach(token => {
-        const updateData = foundry.utils.duplicate(tokenData);
-        token.document.update(updateData);
-      });
-
-      data.prototypeToken = tokenData;
-    }
 
     if (changes.system === undefined) return; // Nothing more to do
 
     // Deltas, needed for scrolling text later
     let deltaActual = 0;
     let deltaTemp = 0;
-    let deltaRec = 0;
     let maxHp = data.system.attributes?.hp?.max || this.system.attributes.hp.max;
 
     if (changes.system.attributes?.hp?.temp !== undefined) {
@@ -1272,132 +1089,6 @@ export class ActorArchmage extends Actor {
       data.system.attributes.level.value = Math.min(10, Math.max(1, data.system.attributes.level.value));
     }
 
-    if (changes.system.attributes?.recoveries?.value) {
-      // Here we received an update involving the number of remaining recoveries
-      // Make sure we are not exceeding the maximum
-      if (this.system.attributes.recoveries.max) {
-        data.system.attributes.recoveries.value = Math.min(data.system.attributes.recoveries.value, this.system.attributes.recoveries.max);
-      }
-
-      // Record updated recoveries
-      deltaRec = data.system.attributes.recoveries.value-this.system.attributes.recoveries.value;
-
-      // Handle negative recoveries penalties, via AE
-      // Clear previous effect, then recreate it if the at negative recoveries
-      let effectsToDelete = [];
-      const negRecoveryLabel = game.i18n.localize("ARCHMAGE.EFFECT.AE.negativeRecovery");
-      this.effects.forEach(x => {
-        if (x.name == negRecoveryLabel) effectsToDelete.push(x.id);
-      });
-      await this.deleteEmbeddedDocuments("ActiveEffect", effectsToDelete)
-
-      let newRec = data.system.attributes.recoveries.value;
-      if (newRec < 0) {
-        const effectData = {
-          label: negRecoveryLabel,
-          icon: "icons/svg/down.svg",
-          changes: [
-            {key: "system.attributes.ac.value",value: newRec, mode: CONST.ACTIVE_EFFECT_MODES.ADD},
-            {key: "system.attributes.pd.value", value: newRec, mode: CONST.ACTIVE_EFFECT_MODES.ADD},
-            {key: "system.attributes.md.value", value: newRec, mode: CONST.ACTIVE_EFFECT_MODES.ADD},
-            {key: "system.attributes.attackMod.value", value: newRec, mode: CONST.ACTIVE_EFFECT_MODES.ADD}
-          ]
-        };
-        MacroUtils.setDuration(effectData, CONFIG.HOLYGRAILWAR.effectDurationTypes.Infinite)
-        this.createEmbeddedDocuments("ActiveEffect", [effectData]);
-      }
-    }
-    options.fromPreUpdate.rec = deltaRec;
-
-    if (changes.system.attributes?.weapon?.melee?.shield !== undefined
-      || changes.system.attributes?.weapon?.melee?.dualwield !== undefined
-      || changes.system.attributes?.weapon?.melee?.twohanded !== undefined) {
-      // Here we received an update of the melee weapon checkboxes
-
-      // Fallback for sheet closure bug
-      if (typeof this.system.attributes.weapon.melee.dice !== 'string') {
-          this.system.attributes.weapon.melee.dice = "d8";
-      }
-
-      let mWpn = parseInt(this.system.attributes.weapon.melee.dice.substring(1));
-      if (isNaN(mWpn)) mWpn = 8; // Fallback
-      let lvl = this.system.attributes.level.value;
-      data.system.attributes.attackMod = {value: this.system.attributes.attackMod.value};
-      let wpn = {shieldPen: 0, twohandedPen: 0};
-      if (this.system.attributes.weapon.melee.twohanded) {
-        wpn.mWpn2h = mWpn;
-        wpn.mWpn1h = Math.max(mWpn - 2, 4);
-      } else {
-        wpn.mWpn2h = Math.min(mWpn + 2, 12);
-        wpn.mWpn1h = mWpn;
-      }
-
-
-      if (changes.system.attributes.weapon.melee.shield !== undefined) {
-        // Here we received an update of the shield checkbox
-        if (changes.system.attributes.weapon.melee.shield) {
-          // Adding a shield
-          data.system.attributes.ac = {base: this.system.attributes.ac.base + 1};
-          data.system.attributes.attackMod.value += wpn.shieldPen;
-          if (this.system.attributes.weapon.melee.twohanded) {
-            // Can't wield both a two-handed weapon and a shield
-            mWpn = wpn.mWpn1h;
-            data.system.attributes.weapon.melee.twohanded = false;
-            data.system.attributes.attackMod.value -= wpn.twohandedPen;
-          }
-          else if (this.system.attributes.weapon.melee.dualwield) {
-            // Can't dual-wield with a shield
-            data.system.attributes.weapon.melee.dualwield = false;
-          }
-        } else {
-          data.system.attributes.ac = {base: this.system.attributes.ac.base - 1};
-          data.system.attributes.attackMod.value -= wpn.shieldPen;
-        }
-      }
-
-      else if (changes.system.attributes.weapon.melee.dualwield !== undefined) {
-        // Here we received an update of the dual wield checkbox
-        if (changes.system.attributes.weapon.melee.dualwield) {
-          if (this.system.attributes.weapon.melee.twohanded) {
-            // Can't wield two two-handed weapons
-            mWpn = wpn.mWpn1h;
-            data.system.attributes.weapon.melee.twohanded = false;
-            data.system.attributes.attackMod.value -= wpn.twohandedPen;
-          }
-          else if (this.system.attributes.weapon.melee.shield) {
-            // Can't dual-wield with a shield
-            data.system.attributes.ac = {base: this.system.attributes.ac.base - 1};
-            data.system.attributes.weapon.melee.shield = false;
-            data.system.attributes.attackMod.value -= wpn.shieldPen;
-          }
-        }
-      }
-
-      else if (changes.system.attributes.weapon.melee.twohanded !== undefined) {
-        // Here we received an update of the two-handed checkbox
-        if (changes.system.attributes.weapon.melee.twohanded) {
-          mWpn = wpn.mWpn2h;
-          data.system.attributes.attackMod.value += wpn.twohandedPen;
-          if (this.system.attributes.weapon.melee.shield) {
-            // Can't wield both a two-handed weapon and a shield
-            data.system.attributes.ac = {base: this.system.attributes.ac.base - 1};
-            data.system.attributes.weapon.melee.shield = false;
-            data.system.attributes.attackMod.value -= wpn.shieldPen;
-          }
-          else if (this.system.attributes.weapon.melee.dualwield) {
-            // Can't wield two two-handed weapons
-            data.system.attributes.weapon.melee.dualwield = false;
-          }
-        } else {
-          mWpn = wpn.mWpn1h;
-          data.system.attributes.attackMod.value -= wpn.twohandedPen;
-        }
-      }
-
-      data.system.attributes.weapon.melee.dice = `d${mWpn}`;
-    }
-
-
     return data;
   }
 
@@ -1421,140 +1112,5 @@ export class ActorArchmage extends Actor {
         {anchor: CONST.TEXT_ANCHOR_POINTS.CENTER}
       );
     }
-    // Scrolling text for recoveries
-    if (options?.fromPreUpdate?.rec) {
-      this._showScrollingText(
-        options.fromPreUpdate.rec,
-        game.i18n.localize("ARCHMAGE.recoveries"),
-        {anchor: CONST.TEXT_ANCHOR_POINTS.BOTTOM}
-      );
-    }
   }
-
-  /**
-   * Auto levelup monsters
-   * Creates a copy of an NPC actor with the requested delta in levels
-   * @param delta {Integer}    The number of levels to add or remove
-   *
-   * @return mixed
-   *   Actor object if actor was duplicated, false otherwise.
-   */
-
-  async autoLevelActor(delta) {
-    if (!this.type == 'npc' || delta == 0) return false;
-    // Convert delta back to a number, and handle + characters.
-    delta = typeof delta == 'string' ? Number(delta.replace('+', '')) : delta;
-
-    // Warning for out of bounds.
-    if (Math.abs(delta) > 6) ui.notifications.warn(game.i18n.localize("ARCHMAGE.UI.tooManyLevels"));
-
-    // Generate the prefix.
-    let suffix = ` (+${delta})`;
-    if (delta < 0) suffix = ` (${delta})`;
-
-    // Set the level.
-    let lvl = Number(this.system.attributes.level.value || 0) + delta;
-    if (lvl < 0 || lvl > 15) {
-      ui.notifications.warn(game.i18n.localize("ARCHMAGE.UI.levelLimits"));
-      return false;
-    }
-
-    // Set other overrides.
-    let mul = CONFIG.HOLYGRAILWAR.npcLevelupMultipliers[delta.toString()];
-    if (!mul) mul = Math.pow(1.25, delta);
-    let overrideData = {
-      'name': this.name+suffix,
-      'system.attributes.level.value': lvl,
-      'system.attributes.ac.value': Number(this.system.attributes.ac.value || 0) + delta,
-      'system.attributes.pd.value': Number(this.system.attributes.pd.value || 0) + delta,
-      'system.attributes.md.value': Number(this.system.attributes.md.value || 0) + delta,
-      'system.attributes.init.value': Number(this.system.attributes.init.value || 0) + delta,
-      'system.attributes.hp.value': Math.round(this.system.attributes.hp.value * mul),
-      'system.attributes.hp.max': Math.round(this.system.attributes.hp.max * mul),
-    };
-
-    // Create the new actor and save it.
-    let actor = false;
-    // Standalone actors.
-    if (!this.parent && !this.pack) {
-      actor = await this.clone(overrideData, {save: true, keepId: false});
-    }
-    // Unlinked tokens.
-    else {
-      actor = await Actor.create(foundry.utils.mergeObject(this.toObject(false), overrideData));
-    }
-
-    // Fix attack and damage
-    let atkFilter = /\+\s*(\d+)([\S\s]*)/;
-    // let inlineRollFilter = /(\d+)?d?\d+(?!\+)/g;
-    let inlineRollFilter = /\[\[(\d+)?d?\d+(?!\+)\]\]/g;
-    let itemUpdates = [];
-
-    // Iterate over attacks and actions.
-    for (let item of actor.items) {
-      let itemOverrideData = {'_id': item.id};
-      if (item.type == 'action') {
-        // Add delta to attack
-        let parsed = atkFilter.exec(item.system.attack.value);
-        if (!parsed) continue;
-        let newAtk = `[[d20+${parseInt(parsed[1])+delta}`;
-        if (!parsed[2].includes("]]")) newAtk += "]]";
-        itemOverrideData['system.attack.value'] = newAtk + parsed[2];
-      }
-      if (item.type == 'action' || item.type == 'trait' || item.type == 'nastierSpecial') {
-        // Multiply damage
-        for (let key of ["hit", "hit1", "hit2", "hit3", "miss", "description"]) {
-          if (!item.system[key]?.value) continue;
-          let rolls = [...(item.system[key].value.matchAll(inlineRollFilter))]
-          let offset = 0;
-          if (rolls.length > 0) {
-            let newValue = item.system[key].value;
-            rolls.forEach(r => {
-              let orig = r[0].slice(2, -2); // Strip leading and trailing double square brackets
-              let newDmg = orig;
-              let index = r.index + offset;
-              if (orig.includes("d")) newDmg = _scaleDice(orig, mul);
-              else newDmg = Math.round(parseInt(orig)*mul).toString();
-              // Replace first instance at or around index, might be imprecise but good enough
-              newValue = newValue.slice(0, index)+newValue.slice(index).replace(`[[${orig}]]`, `[[${newDmg}]]`);
-              offset -= (newDmg.length - orig.length);
-            });
-            itemOverrideData[`system.${key}.value`] = newValue;
-          }
-        }
-      }
-
-      // Append updates to the item update array for later.
-      itemUpdates.push(itemOverrideData);
-    }
-
-    // Apply all item updates to the new actor.
-    actor.updateEmbeddedDocuments('Item', itemUpdates);
-
-    return actor;
-  }
-
-}
-
-function _scaleDice(exp, mul) {
-  let y = parseInt(exp.split("d")[1])
-  let diceAvg = (y + 1) / 2;
-  let target = Math.max(Math.round(parseInt(exp.split("d")[0]) * diceAvg * mul * 2) / 2, 1);
-  let diceCnt = 0;
-  let correction = "";
-  while (target > diceAvg) {
-    diceCnt += 1;
-    target -= diceAvg;
-  }
-  // Correct remainder with closest die, +/- 0.5 tolerance due to rounding
-  if (target == 1) correction = "1";
-  else if (!((target * 2) % 2) && target > 0) correction = `${target / 2}d3`;
-  else if (target > 1){
-    let corrDie = target * 2 - 1;
-    if (corrDie % 2) corrDie -= 1;
-    correction = `1d${corrDie}`;
-  }
-  if (!diceCnt) return correction;
-  else if (!correction) return `${diceCnt}d${y}`;
-  return `${diceCnt}d${y}+`+correction;
 }

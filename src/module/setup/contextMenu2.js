@@ -199,12 +199,4 @@ export class ContextMenu2 {
       html.css("visibility", "");
       target.addClass("context");
     }
-  
-    /* -------------------------------------------- */
-  
-    static eventListeners() {
-      document.addEventListener("click", ev => {
-        if ( ui.context ) ui.context.close();
-      });
-    };
   }

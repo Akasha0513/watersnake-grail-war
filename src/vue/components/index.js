@@ -1,4 +1,3 @@
-export { default as Rollable } from '@/components/parts/Rollable.vue';
 export { default as Progress } from '@/components/parts/Progress.vue';
 
 export { default as Tabs } from '@/components/parts/Tabs.vue';

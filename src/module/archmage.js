@@ -1,4 +1,4 @@
-import { ARCHMAGE, FLAGS } from './setup/config.js';
+import { ARCHMAGE } from './setup/config.js';
 import { ActorArchmage } from './actor/actor.js';
 import { ActorArchmageNpcSheetV2 } from './actor/actor-npc-sheet-v2.js';
 import { ActorTabFocusSheet } from './actor/actor-tab-focus-sheet.js';
@@ -46,16 +46,6 @@ Hooks.once('init', async function() {
       this.toLowerCase()
     ).replace(/%[0-9A-F]{2}/gi, '-');
   }
-
-  Handlebars.registerHelper('concatenate', function() {
-    var outStr = '';
-    for (var arg in arguments) {
-      if (typeof arguments[arg] != 'object') {
-        outStr += arguments[arg];
-      }
-    }
-    return outStr;
-  });
 
   // Preload template partials.
   preloadHandlebarsTemplates();
@@ -147,22 +137,6 @@ Hooks.once('init', async function() {
 
   CONFIG.statusEffects = foundry.utils.duplicate(ARCHMAGE.statusEffects);
 
-  // 2e 제거 이후 1e 경로 고정: 2e 전용 플래그·피트 티어·상태이상 정리.
-  // Remove Mental Phenomenon flag
-  delete FLAGS.characterFlags.dexToInt;
-  // Remove Grim Determination flag
-  delete FLAGS.characterFlags.grimDetermination;
-  // Remove Blessing of Heaven flag
-  delete FLAGS.characterFlags.dexToCha;
-
-  // Remove 2e hindered from context menu status effects
-  let id = CONFIG.statusEffects.findIndex(e => e.id == "hindered");
-  if (id >= 0) CONFIG.statusEffects.splice(id, 1);
-
-  // Remove 2e charmed from context menu status effects
-  id = CONFIG.statusEffects.findIndex(e => e.id == "charmed");
-  if (id >= 0) CONFIG.statusEffects.splice(id, 1);
-
   // Assign the actor class to the CONFIG
   CONFIG.Actor.documentClass = ActorArchmage;
   CONFIG.Token.objectClass = TokenArchmage;
@@ -198,12 +172,6 @@ Hooks.once('init', async function() {
       makeDefault: true
     });
   });
-
-  /* -------------------------------------------- */
-  CONFIG.Actor.characterFlags = FLAGS.characterFlags;
-  CONFIG.Actor.npcFlags = FLAGS.npcFlags;
-  // Store flags in global config for later manipulation
-  CONFIG.HOLYGRAILWAR.FLAGS = FLAGS;
 
   /**
    * Register Initiative formula setting
@@ -352,94 +320,6 @@ Hooks.on('ready', () => {
   // Do it after ready to wait for localization to load
   CONFIG.HOLYGRAILWAR.REGEXP.ONGOING_DAMAGE = new RegExp(`(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\\/i>)*(-?\\d+)(<\\/a>)* ${game.i18n.localize("ARCHMAGE.ongoing")} ([a-zA-Z]*) ?${game.i18n.localize("ARCHMAGE.damage")}(?:\\s*\\((\\w*) ?${game.i18n.localize("ARCHMAGE.DURATION.SaveEnds")}(?:, \\d*\\+)?\\))?`, "ig");
   // /(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\/i>)*(-?\d+)(<\/a>)* ongoing ([a-zA-Z]*) ?damage(?:\s*\((\w*) ?save ends(?:, \d*\+)?\))?/ig
-  CONFIG.HOLYGRAILWAR.REGEXP.CONDITIONS = new Map(
-      CONFIG.HOLYGRAILWAR.statusEffects.filter(x => x.journal).map( x => {
-          const localizedName = game.i18n.localize(x.name);
-          return [
-              localizedName,
-              [
-                x,
-                new RegExp(`\\*?\\b(${localizedName})\\b\\*?(?:\\s*\\(?(\\w*\\s?${game.i18n.localize("ARCHMAGE.DURATION.SaveEnds")}|${game.i18n.localize("ARCHMAGE.DURATION.NextTurnFilter")})(?:,\\s\\d*\\+)?\\)?)?`, "ig")
-              ]
-          ]
-      })
-  );
-});
-
-Hooks.on('setup', (data, options, id) => {
-  // Configure autocomplete inline properties module.
-  const aip = game.modules.get("autocomplete-inline-properties")?.API;
-  if (aip?.PACKAGE_CONFIG) {
-    // Autocomplete Inline Rolls
-    const aipKeys = [
-      'str',
-      'agi',
-      'end',
-      'mgi',
-      'ins',
-      'lck',
-      'ac',
-      'pd',
-      'md',
-      'hp',
-      'recoveries',
-      'wpn.m',
-      'wpn.r',
-      'wpn.p',
-      'wpn.k',
-      'wpn.j'
-    ];
-    let filteredKeys = [
-      'standardBonuses',
-      'out',
-      'incrementals',
-      'icons',
-      'details',
-      'coins',
-      'backgrounds',
-      'attr',
-      'attributes',
-      'abilities',
-      'abil',
-      'tier',
-      'sheetGrouping',
-      'disengage',
-    ];
-    aipKeys.forEach(k => {
-      filteredKeys.push(`${k}.type`);
-      filteredKeys.push(`${k}.label`);
-    });
-    const AIP = {
-      packageName: 'watersnake-grail-war',
-      sheetClasses: [
-        {
-          name: "ItemArchmageSheet",
-          fieldConfigs: [
-            {
-              selector: '.archmage-aip input[type="text"]',
-              showButton: true,
-              allowHotkey: true,
-              dataMode: aip.CONST.DATA_MODE.OWNING_ACTOR_ROLL_DATA,
-              filteredKeys: filteredKeys
-            }
-          ]
-        },
-        {
-          name: "ActiveEffectConfig",
-          fieldConfigs: [
-            {
-              selector: '.tab[data-tab="effects"] .key input[type="text"]',
-              showButton: true,
-              allowHotkey: true,
-              dataMode: 'owning-actor',
-              defaultPath: 'data'
-            }
-          ]
-        }
-      ]
-    };
-    aip.PACKAGE_CONFIG.push(AIP);
-  }
 });
 
 /* ---------------------------------------------- */
@@ -473,28 +353,6 @@ async function addEscalationDie() {
     const htmlContent = await render();
     $('.archmage-hotbar').find('.archmage-escalation-display').replaceWith(htmlContent);
   });
-
-  // Add click events for effect links
-  $('body').on("click", "a.effect-link", async (event) => {
-    event.preventDefault();
-    const a = event.currentTarget;
-    let doc = null;
-    let id = a.dataset.id;
-
-    switch (a.dataset.type) {
-      case "condition":
-        const journalId = CONFIG.HOLYGRAILWAR.statusEffects.find(x => x.id === id)?.journal;
-        // conditions 팩은 13th Age 콘텐츠 정리 때 삭제됨 → 없으면 크래시 대신 무시(옵셔널 체이닝).
-        doc = journalId ? await game.packs.get("watersnake-grail-war.conditions")?.getDocument(journalId) : false;
-        break;
-      case "effect":
-        console.warn("Effects not currently supported");
-        break;
-    }
-    if (!doc) return;
-
-    return doc.sheet.render(true);
-  });
 }
 
 /* -------------------------------------------- */
@@ -502,28 +360,7 @@ async function addEscalationDie() {
 Hooks.once('ready', async () => {
   $(`<div class="archmage-hotbar faded-ui flexcol"></div>`).insertBefore('#players');
   await addEscalationDie();
-  $('body').append('<div class="archmage-preload"></div>');
   renderSceneTerrains();
-
-  // Localize actor flags
-  console.log(CONFIG.HOLYGRAILWAR.FLAGS);  // Throws an error is object isn't accessed before loop
-  [
-    "characterFlags",
-    "npcFlags"
-  ].forEach(s => {
-    for (const k of Object.keys(CONFIG.HOLYGRAILWAR.FLAGS[s])) {
-      CONFIG.HOLYGRAILWAR.FLAGS[s][k].name = game.i18n.localize(CONFIG.HOLYGRAILWAR.FLAGS[s][k].name);
-      CONFIG.HOLYGRAILWAR.FLAGS[s][k].hint = game.i18n.localize(CONFIG.HOLYGRAILWAR.FLAGS[s][k].hint);
-      if (CONFIG.HOLYGRAILWAR.FLAGS[s][k].options) {
-        for (const k_opt of Object.keys(CONFIG.HOLYGRAILWAR.FLAGS[s][k].options)) {
-          CONFIG.HOLYGRAILWAR.FLAGS[s][k].options[k_opt] = game.i18n.localize(CONFIG.HOLYGRAILWAR.FLAGS[s][k].options[k_opt]);
-        }
-      }
-    }
-  });
-  // Override character flags now that we have them translated
-  CONFIG.Actor.characterFlags = CONFIG.HOLYGRAILWAR.FLAGS.characterFlags;
-  CONFIG.Actor.npcFlags = CONFIG.HOLYGRAILWAR.FLAGS.npcFlags;
 
   CONFIG.HOLYGRAILWAR.ActorTabFocusSheet = ActorTabFocusSheet
 
@@ -681,26 +518,6 @@ Hooks.on('diceSoNiceReady', (dice3d) => {
         default: true
       });
     });
-});
-
-/* ---------------------------------------------- */
-Hooks.on('preCreateToken', async (scene, data, options, id) => {
-  let actorId = data.actorId;
-  // Attempt to get the actor.
-  let actor = game.actors.get(actorId);
-
-  // If there's an actor, set the token size.
-  if (actor) {
-    let size = actor.system.details.size?.value;
-    if (size == 'large' && data.height == 1 && data.width == 1) {
-      data.height = 2;
-      data.width = 2;
-    }
-    if (size == 'huge' && data.height == 1 && data.width == 1) {
-      data.height = 3;
-      data.width = 3;
-    }
-  }
 });
 
 /* -------------------------------------------- */
@@ -1271,103 +1088,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml, options) => {
     }
 
   });
-
-  // Hook up Effect buttons
-  html.find(".effect-control").on("click", async (event) => {
-    const action = event.currentTarget.dataset.action;
-    event.currentTarget.classList.add("grayed-out");
-    // Get parent
-    const parent = event.currentTarget.closest(".effect");
-    const uuid = parent.dataset.uuid;
-    const actor = await fromUuid(uuid);
-    const effectId = parent.dataset.effectId;
-    const effect = actor.effects.get(effectId);
-    switch (action) {
-      case "apply":
-        const value = parent.dataset.value;
-        // Healing always starts from 0 HP
-        const base = value >= 0 ? actor.system.attributes.hp.value : Math.max(actor.system.attributes.hp.value, 0);
-        await actor.update({ "system.attributes.hp.value": base - value });
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectApplied.${effectId}`, true);
-        else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectApplied.${effectId}`});
-        // Unset crit flag on ongoing damage if needed.
-        if (effect?.flags?.['watersnake-grail-war']?.ongoingDamageCrit === true) {
-          await effect.update({'flags.watersnake-grail-war.ongoingDamageCrit': false});
-        }
-        break;
-      case "save":
-        // 상태이상 저항(순수 11+) 단일화 — 구 13th Age 난이도 구분 제거.
-        await actor.rollSave();
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectSaved.${effectId}`, true);
-        else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectSaved.${effectId}`});
-        break;
-      case "d20":
-        new Roll("d20").toMessage()
-        if (chatMessage.isAuthor || game.user.isGM) await chatMessage.setFlag('watersnake-grail-war', `effectRolled.${effectId}`, true);
-        else game.socket.emit('system.archmage', {type: 'condButton', msg: chatMessage.id, flg: `effectRolled.${effectId}`});
-        break;
-      case "remove":
-        await actor.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
-        if (chatMessage.isAuthor || game.user.isGM) {
-          await chatMessage.setFlag('watersnake-grail-war', `effectRemoved.${effectId}`, true);
-          // Replace grayed-out with disabled
-          event.currentTarget.classList.remove("grayed-out");
-          event.currentTarget.classList.add("disabled");
-          event.currentTarget.setAttribute('disabled', true);
-        } else {
-          game.socket.emit('system.archmage', {
-            type: 'condButton',
-            msg: chatMessage.id,
-            flg: `effectRolled.${effectId}`,
-            disable: event.currentTarget});
-        }
-        break;
-    }
-    chatMessage.render();
-  });
-
-  // Gray out and disable the effect buttons if the effect has already been applied, saved, or removed
-  html.find(".effect-control").each((i, el) => {
-    if (!chatMessage?.flags?.['watersnake-grail-war']) return;
-    const flags = chatMessage.flags['watersnake-grail-war'];
-    const parent = el.closest('.effect');
-    const effectId = parent.dataset.effectId;
-
-    if (el.dataset.action === "apply" && flags?.effectApplied?.[effectId] == true) {
-      el.classList.add("grayed-out");
-    } else if (el.dataset.action === "save" && flags?.effectSaved?.[effectId] == true) {
-      el.classList.add("grayed-out");
-    } else if (el.dataset.action === "d20" && flags?.effectRolled?.[effectId] == true) {
-      el.classList.add("grayed-out");
-    } else if (el.dataset.action === "remove" && flags?.effectRemoved?.[effectId] == true) {
-      el.classList.add("disabled");
-      el.setAttribute('disabled', true);
-    }
-  });
 });
-
-function _handleCondButtonMsg(msg) {
-  if (!game.holygrailwar.isSocketGM) return;
-  const chatMessage = game.messages.get(msg.msg);
-  if (chatMessage) {
-    if (msg.disable) {
-      // Replace grayed-out with disabled
-      msg.disable.classList.remove("grayed-out");
-      msg.disable.classList.add("disabled");
-      msg.disable.setAttribute('disabled', true);
-    } else {
-      chatMessage.setFlag('watersnake-grail-war', msg.flg, true);
-    }
-  }
-}
-
-function _handlecreateAEsMsg(msg) {
-  if (!game.holygrailwar.isSocketGM()) return;
-  msg.actorIds.forEach(id => {
-    const actor = game.actors.get(id);
-    actor.createEmbeddedDocuments("ActiveEffect", msg.effects);
-  });
-}
 
 /**
  * Handle damage/healing application emitted via sockets.
@@ -1436,15 +1157,6 @@ function _handleActorLifecycleHook({actorId, hookName}) {
 Hooks.once('ready', async function () {
   game.socket.on("system.archmage", (data) => {
     switch (data.type) {
-      case 'shareItem':
-        ItemArchmageSheet.handleShareItem(data);
-        break;
-      case 'condButton':
-        _handleCondButtonMsg(data);
-        break;
-      case 'createAEs':
-        _handlecreateAEsMsg(data);
-        break;
       case 'applyDamageHealing':
         _handleApplyDamageHealing(data);
         break;
@@ -1508,36 +1220,10 @@ Hooks.on('preDeleteCombat', preDeleteCombat);
 
 /* ---------------------------------------------- */
 
-// Update escalation die values on scene change.
-Hooks.on('renderCombatTracker', (async () => {
-  // Handle non-gm users.
-  let combat = game.combat;
-  let escalation = 0;
-  let $escalationDiv = $('.archmage-escalation');
-
-  // Restore the escalation die.
-  if (combat !== null) {
-    escalation = ArchmageUtility.getEscalation(combat);
-    $escalationDiv.removeClass('hide');
-  }
-  // Hide the escalation die.
-  else {
-    $escalationDiv.addClass('hide');
-  }
-  // Update the value of the tracker.
-  $escalationDiv.attr('data-value', escalation);
-  $escalationDiv.find('.ed-number').text(escalation);
-}));
-
-/* ---------------------------------------------- */
-
 Hooks.on('deleteCombat', (combat) => {
-  // Clear the escalation die.
-  $('.archmage-escalation').addClass('hide');
-
   if (!game.user.isGM) return;
 
-  // Clear out death saves, per combat resources and temp HP.
+  // Clear temp HP.
   let combatants = combat.combatants;
   if (combatants) {
     // Retrieve the character actors.
@@ -1558,94 +1244,6 @@ Hooks.on('deleteCombat', (combat) => {
         }
       }
     });
-  }
-});
-
-Hooks.on('createCombatant', (document, data, options, id) => {
-  if (!game.user.isGM) return;
-  let actor = document.actor;
-  // Add command points at start of combat.
-  if (actor && actor.type == 'character') {
-    let updates = {};
-    let hasStrategist = actor.items.find(i => i.system.name.label.safeCSSId().includes('strategist'));
-    let basePoints = hasStrategist ? 2 : 1;
-    // TODO: Add support for Forceful Command.
-    updates['system.resources.perCombat.commandPoints.current'] = basePoints;
-    actor.update(updates);
-  }
-});
-
-/* ---------------------------------------------- */
-
-Hooks.on('dcCalcWhitelist', (whitelist, actor) => {
-  // Add whitelist support for the calculator.
-  whitelist.archmage = {
-    flags: {
-      adv: true
-    },
-    abilities: [
-      'str',
-      'agi',
-      'end',
-      'mgi',
-      'ins',
-      'lck'
-    ],
-    attributes: [
-      'init',
-      'level',
-      'standardBonuses'
-    ],
-    custom: {
-      abilities: {},
-      attributes: {
-        levelHalf: {
-          label: 'level_half',
-          name: '1/2 Level',
-          formula: actor.system.attributes.level !== undefined ? Math.floor(actor.system.attributes.level.value / 2) : 0
-        },
-        escalation: {
-          label: 'escalation',
-          name: 'Esc. Die',
-          formula: '@attr.escalation.value'
-        },
-        melee: {
-          label: 'melee',
-          name: 'W [Melee]',
-          formula: '@attr.weapon.melee.value'
-        },
-        ranged: {
-          label: 'ranged',
-          name: 'W [Ranged]',
-          formula: '@attr.weapon.ranged.value'
-        },
-        standardBonus: {
-          label: 'standard_bonuses',
-          name: 'Standard Bonuses',
-          formula: '@attr.standardBonuses.value'
-        }
-      },
-      custom: {}
-    }
-  };
-
-  // Replace the ability attributes in the calculator with custom formulas.
-  let levelMultiplier = 1;
-  if (actor.system.attributes.level.value >= 5) {
-    levelMultiplier = 2;
-  }
-  if (actor.system.attributes.level.value >= 8) {
-    levelMultiplier = 3;
-  }
-
-  if (levelMultiplier > 1) {
-    for (let prop of whitelist.archmage.abilities) {
-      whitelist.archmage.custom.custom[prop] = {
-        label: prop,
-        name: `${levelMultiplier}${prop}`,
-        formula: `@abil.${prop}.dmg`
-      };
-    }
   }
 });
 

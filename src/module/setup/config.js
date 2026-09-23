@@ -1,5 +1,4 @@
 export const ARCHMAGE = {};
-export const FLAGS = {};
 
 ARCHMAGE.statusEffects = [
   { id: "dead", name: "ARCHMAGE.EFFECT.StatusDead", icon: "icons/svg/skull.svg" },
@@ -59,12 +58,6 @@ ARCHMAGE.numDicePerLevel = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // Goes to 15th to support monsters
 ARCHMAGE.tierMultPerLevel = [0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 4];
 
-// Animal companion data
-ARCHMAGE.animalCompanion = {
-  attack: [5, 6, 7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20],
-  damage: ["2d8", "3d8", "4d6", " 4d8", "4d10", "6d10", "40", "50", "66", "80", "100", "130", "160"]
-};
-
 ARCHMAGE.effectDurationTypes = {
   'Unknown': 'ARCHMAGE.DURATION.Unknown',
   'Infinite': 'ARCHMAGE.DURATION.Infinite',
@@ -84,27 +77,10 @@ ARCHMAGE.effectDurationTypes = {
 ARCHMAGE.defaultTokens = {
   'character': 'icons/svg/mystery-man.svg',
   'npc': 'icons/svg/eye.svg',
-  'item': 'icons/svg/item-bag.svg',
   'feature': 'icons/svg/book.svg',
   'trait': 'icons/svg/regen.svg',
   'action': 'icons/svg/target.svg',
   'nastierSpecial': 'icons/svg/poison.svg'
-};
-
-// Explicit multipliers from 13TW
-ARCHMAGE.npcLevelupMultipliers = {
-  '1': 1.25,
-  '2': 1.6,
-  '3': 2.0,
-  '4': 2.5,
-  '5': 3.2,
-  '6': 4.0,
-  '-1': 1/1.25,
-  '-2': 1/1.6,
-  '-3': 1/2.0,
-  '-4': 1/2.5,
-  '-5': 1/3.2,
-  '-6': 1/4.0,
 };
 
 // Colors used to display HP in token health bars
@@ -118,7 +94,6 @@ ARCHMAGE.tokenHPColors = {
 
 ARCHMAGE.REGEXP = {
   ONGOING_DAMAGE: /(<a (?:(?!<a ).)*?><i class="fas fa-dice-d20"><\/i>)*(-?\d+)(<\/a>)* ongoing ([a-zA-Z]*) ?damage(?:\s*\((\w*) ?save ends(?:, \d*\+)?\))?/ig,
-  CONDITIONS: new Map(), // Actually populated in ready hook, after localization has been loaded
 }
 
 ARCHMAGE.baselineMonsterStats = {
@@ -156,62 +131,3 @@ ARCHMAGE.baselineMonsterStats = {
     }
   }
 }
-
-FLAGS.characterFlags = {
-  "portraitRound": {
-    name: "ARCHMAGE.CHARACTERFLAGS.portraitRoundName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.portraitRoundHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "portraitFrame": {
-    name: "ARCHMAGE.CHARACTERFLAGS.portraitFrameName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.portraitFrameHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "hideCurrency": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideCurrencyName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideCurrencyHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "showTriggersTab": {
-    name: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.showTriggersTabHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "hideSettingsTab": {
-    name: "ARCHMAGE.CHARACTERFLAGS.hideSettingsTabName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.hideSettingsTabHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "diceFormulaMode": {
-    name: "ARCHMAGE.CHARACTERFLAGS.diceFormulaModeName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.diceFormulaModeHint",
-    section: "Sheet",
-    type: String,
-    options: {
-      'short': 'ARCHMAGE.CHARACTERFLAGS.diceFormulaModeOptshort',
-      'long': 'ARCHMAGE.CHARACTERFLAGS.diceFormulaModeOptlong',
-      'numeric': 'ARCHMAGE.CHARACTERFLAGS.diceFormulaModeOptnumeric'
-    }
-  }
-};
-
-FLAGS.npcFlags = {
-  "portraitRound": {
-    name: "ARCHMAGE.CHARACTERFLAGS.portraitRoundName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.portraitRoundHint",
-    section: "Sheet",
-    type: Boolean
-  },
-  "portraitFrame": {
-    name: "ARCHMAGE.CHARACTERFLAGS.portraitFrameName",
-    hint: "ARCHMAGE.CHARACTERFLAGS.portraitFrameHint",
-    section: "Sheet",
-    type: Boolean
-  }
-};
