@@ -333,23 +333,6 @@ Hooks.once('init', async function() {
     requiresReload: true
   });
 
-  // Track whether we overrode DsN's default inline roll parsing
-  // 기존 마스터·NPC 액터/씬 토큰을 액터 데이터 연결로 1회 전환했는지
-  game.settings.register("watersnake-grail-war", "actorLinkMigrated", {
-    scope: "world",
-    config: false,
-    type: Boolean,
-    default: false
-  });
-
-  game.settings.register("watersnake-grail-war", "DsNInlineOverride", {
-    name: "DsN Override",
-    scope: "world",
-    config: false,
-    type: Boolean,
-    default: false
-  });
-
   /**
    * Override the default Initiative formula to customize special behaviors of the system.
    * Apply advantage, proficiency, or bonuses where appropriate
@@ -517,47 +500,6 @@ async function addEscalationDie() {
 /* -------------------------------------------- */
 
 Hooks.once('ready', async () => {
-  // 범용 이펙트가 코어 기본 시트로 열리는 문제 수정.
-  // registerSheet의 makeDefault:true는 월드에 이미 저장된 core.sheetClasses 기본값을
-  // 덮어쓰지 못함 → ActiveEffect 기본이 코어(또는 미설정)면 우리 시트로 마이그레이션.
-  // (의도적으로 다른 시트를 고른 경우는 건드리지 않음.)
-  if (game.user.isGM) {
-    const aeSheetId = "watersnake-grail-war.ArchmageActiveEffectSheetV2";
-    const sheetClasses = foundry.utils.deepClone(game.settings.get("core", "sheetClasses") ?? {});
-    const current = foundry.utils.getProperty(sheetClasses, "ActiveEffect.base");
-    if (!current || current === "core.ActiveEffectConfig") {
-      foundry.utils.setProperty(sheetClasses, "ActiveEffect.base", aeSheetId);
-      await game.settings.set("core", "sheetClasses", sheetClasses);
-    }
-  }
-
-  // 마스터·NPC가 연결 없이 생성되던 시절의 액터/씬 토큰을 액터 데이터 연결로 1회 전환.
-  // 연결 전 토큰에만 있던 변경분(delta)은 무시되고 사이드바 액터 데이터로 통일된다.
-  if (game.users.activeGM?.isSelf && !game.settings.get("watersnake-grail-war", "actorLinkMigrated")) {
-    try {
-      const linkTypes = ['character', 'master', 'npc'];
-      const actorUpdates = game.actors
-        .filter(a => linkTypes.includes(a.type) && !a.prototypeToken?.actorLink)
-        .map(a => ({ _id: a.id, 'prototypeToken.actorLink': true }));
-      if (actorUpdates.length) await Actor.updateDocuments(actorUpdates);
-      let tokenCount = 0;
-      for (const scene of game.scenes) {
-        const tokenUpdates = scene.tokens
-          .filter(t => !t.actorLink && t.actorId && linkTypes.includes(game.actors.get(t.actorId)?.type))
-          .map(t => ({ _id: t.id, actorLink: true }));
-        if (!tokenUpdates.length) continue;
-        await scene.updateEmbeddedDocuments('Token', tokenUpdates);
-        tokenCount += tokenUpdates.length;
-      }
-      await game.settings.set("watersnake-grail-war", "actorLinkMigrated", true);
-      if (actorUpdates.length || tokenCount) {
-        ui.notifications.info(`토큰 연결 전환: 액터 ${actorUpdates.length}개, 씬 토큰 ${tokenCount}개`);
-      }
-    } catch (err) {
-      console.error('watersnake-grail-war | 토큰 연결 전환 실패 (다음 접속 때 재시도)', err);
-    }
-  }
-
   $(`<div class="archmage-hotbar faded-ui flexcol"></div>`).insertBefore('#players');
   await addEscalationDie();
   $('body').append('<div class="archmage-preload"></div>');
@@ -721,13 +663,6 @@ Hooks.on("updateScene", (scene, data, options, userId) => {
 
 Hooks.on('diceSoNiceReady', (dice3d) => {
   dice3d.addSystem({ id: "archmage", name: "Archmage" }, false);
-
-  // Disable DsN's automatic parsing of inline rolls - let users enable it
-  if (foundry.utils.isNewerVersion(game.modules.get('dice-so-nice')?.version, "4.1.1")
-    && !game.settings.get("watersnake-grail-war", "DsNInlineOverride")) {
-    game.settings.set("dice-so-nice", "animateInlineRoll", false);
-    game.settings.set("watersnake-grail-war", "DsNInlineOverride", true);
-  }
 
   dice3d.addTexture("archmagered", {
     name: "Archmage Red",
