@@ -145,7 +145,7 @@ export class ActorArchmage extends Actor {
     switch (weight) {
       // Handle ability scores and base attributes.
       case 'pre':
-        relevant = (c => {return c.key.match(/system\.(abilities\..*\.value|attributes\..*\.base|attributes\.grade\.value|attributes.recoveries.dice|attributes\.hp\.extra)/g);});
+        relevant = (c => {return c.key.match(/system\.(abilities\..*\.value|attributes\..*\.base|attributes\.grade\.value|attributes\.hp\.extra)/g);});
         break;
       // Handle the non-special active effects.
       case 'default':
@@ -550,8 +550,6 @@ export class ActorArchmage extends Actor {
       divine: { bonus: data.attributes.attack?.divine?.bonus ?? 0 },
       arcane: { bonus: data.attributes.attack?.arcane?.bonus ?? 0 }
     };
-    data.attributes.saves.bonus = 0;
-    data.attributes.saves.disengageBonus = 0;
     for (const k of ['str', 'agi', 'end', 'mgi', 'ins', 'lck']) data.abilities[k].bonus = 0;
 
     // 성배전쟁 방어 (신방=pd, 정방=md). 능력치 매핑: 근력str/내구con/민첩dex/마력int/행운cha/통찰wis
@@ -712,19 +710,16 @@ export class ActorArchmage extends Actor {
         case 'weapon':
           if (actor.type != 'character' && actor.type != 'master') continue;
           // Weapon dice
-          for (let wpn of ["melee", "ranged", "jab", "punch", "kick"]) {
+          for (let wpn of ["melee", "ranged"]) {
             data.attributes.weapon[wpn].value = `${CONFIG.HOLYGRAILWAR.numDicePerLevel[data.attributes.level.value]}${data.attributes.weapon[wpn].dice}`;
           }
           data.wpn = {
             m: v?.melee ?? model.melee,
-            r: v?.ranged ?? model.ranged,
-            j: v?.jab ?? model.jab,
-            p: v?.punch ?? model.punch,
-            k: v?.kick ?? model.kick
+            r: v?.ranged ?? model.ranged
           };
 
           // Clean up weapon properties.
-          let wpnTypes = ['m', 'r', 'j', 'p', 'k'];
+          let wpnTypes = ['m', 'r'];
           wpnTypes.forEach(wpn => {
             if (data.wpn[wpn].dice) {
               data.wpn[wpn].die = data.wpn[wpn].dice;
@@ -758,10 +753,6 @@ export class ActorArchmage extends Actor {
 
         case 'standardBonuses':
           data.std = v.value;
-          break;
-
-        case 'saves':
-          if (!(k in data)) data[k] = v;
           break;
 
         default:

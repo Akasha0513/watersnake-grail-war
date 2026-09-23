@@ -32,9 +32,6 @@ export async function wrapRolls(text, replacements = [], enrichmentOptions = {})
     ['@atk.mod', 'ATK'],
     ['@wpn.m.dice', 'WPN'],
     ['@wpn.r.dice', 'WPN'],
-    ['@wpn.j.dice', 'JAB'],
-    ['@wpn.p.dice', 'PUNCH'],
-    ['@wpn.k.dice', 'KICK'],
     ['@atk.m.bonus', 'ITM'], //ITM_MLE
     ['@atk.r.bonus', 'ITM'], //ITM_RNG
     ['@atk.a.bonus', 'ITM'], //ITM_ARC

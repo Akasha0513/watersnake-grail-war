@@ -16,18 +16,6 @@
     }
   }
 
-  &[data-resource-count="2"],
-  &[data-resource-count="3"],
-  &[data-resource-count="4"] {
-    .unit:nth-child(6n) {
-      border-left: none;
-    }
-
-    .unit--custom {
-      // max-width: 33%;
-    }
-  }
-
   &[data-custom-count="2"],
   &[data-custom-count="3"] {
     .unit:nth-child(5n) {

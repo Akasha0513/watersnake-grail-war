@@ -98,16 +98,7 @@ Actor:
           temp: 0
           automatic: true
           formula: auto
-        disengage: 6
-        disengageBonus: 0
-        luckRerollUsed: 0
-        saves:
-          bonus: 0
-          disengageBonus: 0
       details:
-        alignment:
-          type: String
-          label: Alignment
         biography:
           type: String
           label: Biography
@@ -132,9 +123,6 @@ Actor:
           label: Command Seals
           value: 3
           min: 0
-        magicSystem:
-          type: String
-          label: Magic/Martial System
         contractor:
           type: String
           label: Contractor
@@ -148,72 +136,60 @@ Actor:
           label: Grade Name
           value: ''
       resources:
-        perCombat: {}
         spendable:
           custom1:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom2:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom3:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom4:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom5:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom6:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom7:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom8:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom9:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
           custom10:
             label: ""
             current: 0
             max: 0
             enabled: false
-            rest: "none"
   character:
     templates:
       - standard
-      - resources
     abilities:
       str:
         type: Number
@@ -222,7 +198,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       agi:
         type: Number
@@ -231,7 +206,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       end:
         type: Number
@@ -240,7 +214,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       mgi:
         type: Number
@@ -249,7 +222,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       ins:
         type: Number
@@ -258,7 +230,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       lck:
         type: Number
@@ -267,45 +238,18 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
     attributes:
-      recoveries:
-        type: Number
-        label: Recoveries
-        value: 8
-        max: 8
-        dice: d8
-        base: 8
-        automatic: true
       weapon:
         melee:
           type: String
           label: Melee weapon dice
           dice: d8
-          shield: false
-          dualwield: false
-          twohanded: false
         ranged:
           type: String
           label: Ranged weapon dice
           dice: d8
-        jab:
-          type: String
-          label: JAB dice
-          dice: d6
-        punch:
-          type: String
-          label: PUNCH dice
-          dice: d8
-        kick:
-          type: String
-          label: KICK dice
-          dice: d10
     details:
-      alignment:
-        type: String
-        label: Alignment
       class:
         type: String
         label: Class
@@ -313,10 +257,6 @@ Actor:
       race:
         type: String
         label: Race
-        value: ''
-      out:
-        label: One Unique Thing
-        type: String
         value: ''
     backgrounds:
       bg1:
@@ -420,59 +360,18 @@ Actor:
           type: Boolean
           value: false
     resources:
-      perCombat:
-        momentum:
-          enabled: false
-          current: false
-        commandPoints:
-          enabled: false
-          current: 0
-        focus:
-          enabled: false
-          current: false
       spendable:
-        ki:
-          enabled: false
-          current: 0
-          max: 0
         custom1:
           label: ""
           current: 0
           max: 0
           enabled: false
-          rest: "none"
-        rerolls:
-          enabled: false
-          AC:
-            current: 0
-            max: 0
-          save:
-            current: 0
-            max: 0
-    incrementals:
-      abilityScoreBonus: false
-      extraMagicItem: false
-      feat: false
-      talent: false
-      hp: false
-      iconRelationshipPoint: false
-      powerSpell1: false
-      powerSpell2: false
-      powerSpell3: false
-      powerSpell4: false
-      skills: false
-    coins:
-      platinum: 0
-      gold: 0
-      silver: 0
-      copper: 0
     lifecycleHooks:
       startOfTurn: ''
       endOfTurn: ''
   master:
     templates:
       - standard
-      - resources
     abilities:
       str:
         type: Number
@@ -481,7 +380,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       agi:
         type: Number
@@ -490,7 +388,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       end:
         type: Number
@@ -499,7 +396,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       mgi:
         type: Number
@@ -508,7 +404,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       ins:
         type: Number
@@ -517,7 +412,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       lck:
         type: Number
@@ -526,45 +420,18 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
     attributes:
-      recoveries:
-        type: Number
-        label: Recoveries
-        value: 8
-        max: 8
-        dice: d8
-        base: 8
-        automatic: true
       weapon:
         melee:
           type: String
           label: Melee weapon dice
           dice: d8
-          shield: false
-          dualwield: false
-          twohanded: false
         ranged:
           type: String
           label: Ranged weapon dice
           dice: d8
-        jab:
-          type: String
-          label: JAB dice
-          dice: d6
-        punch:
-          type: String
-          label: PUNCH dice
-          dice: d8
-        kick:
-          type: String
-          label: KICK dice
-          dice: d10
     details:
-      alignment:
-        type: String
-        label: Alignment
       class:
         type: String
         label: Class
@@ -572,10 +439,6 @@ Actor:
       race:
         type: String
         label: Race
-        value: ''
-      out:
-        label: One Unique Thing
-        type: String
         value: ''
     backgrounds:
       bg1:
@@ -679,59 +542,18 @@ Actor:
           type: Boolean
           value: false
     resources:
-      perCombat:
-        momentum:
-          enabled: false
-          current: false
-        commandPoints:
-          enabled: false
-          current: 0
-        focus:
-          enabled: false
-          current: false
       spendable:
-        ki:
-          enabled: false
-          current: 0
-          max: 0
         custom1:
           label: ""
           current: 0
           max: 0
           enabled: false
-          rest: "none"
-        rerolls:
-          enabled: false
-          AC:
-            current: 0
-            max: 0
-          save:
-            current: 0
-            max: 0
-    incrementals:
-      abilityScoreBonus: false
-      extraMagicItem: false
-      feat: false
-      talent: false
-      hp: false
-      iconRelationshipPoint: false
-      powerSpell1: false
-      powerSpell2: false
-      powerSpell3: false
-      powerSpell4: false
-      skills: false
-    coins:
-      platinum: 0
-      gold: 0
-      silver: 0
-      copper: 0
     lifecycleHooks:
       startOfTurn: ''
       endOfTurn: ''
   npc:
     templates:
       - standard
-      - resources
     abilities:
       str:
         type: Number
@@ -740,7 +562,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       agi:
         type: Number
@@ -749,7 +570,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       end:
         type: Number
@@ -758,7 +578,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       mgi:
         type: Number
@@ -767,7 +586,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       ins:
         type: Number
@@ -776,7 +594,6 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
       lck:
         type: Number
@@ -785,45 +602,18 @@ Actor:
         min: 3
         mod: 0
         rerollPlus: 0
-        rerollUsed: 0
         flatBonus: 0
     attributes:
-      recoveries:
-        type: Number
-        label: Recoveries
-        value: 8
-        max: 8
-        dice: d8
-        base: 8
-        automatic: true
       weapon:
         melee:
           type: String
           label: Melee weapon dice
           dice: d8
-          shield: false
-          dualwield: false
-          twohanded: false
         ranged:
           type: String
           label: Ranged weapon dice
           dice: d8
-        jab:
-          type: String
-          label: JAB dice
-          dice: d6
-        punch:
-          type: String
-          label: PUNCH dice
-          dice: d8
-        kick:
-          type: String
-          label: KICK dice
-          dice: d10
     details:
-      alignment:
-        type: String
-        label: Alignment
       class:
         type: String
         label: Class
@@ -831,10 +621,6 @@ Actor:
       race:
         type: String
         label: Race
-        value: ''
-      out:
-        label: One Unique Thing
-        type: String
         value: ''
     backgrounds:
       bg1:
@@ -938,52 +724,12 @@ Actor:
           type: Boolean
           value: false
     resources:
-      perCombat:
-        momentum:
-          enabled: false
-          current: false
-        commandPoints:
-          enabled: false
-          current: 0
-        focus:
-          enabled: false
-          current: false
       spendable:
-        ki:
-          enabled: false
-          current: 0
-          max: 0
         custom1:
           label: ""
           current: 0
           max: 0
           enabled: false
-          rest: "none"
-        rerolls:
-          enabled: false
-          AC:
-            current: 0
-            max: 0
-          save:
-            current: 0
-            max: 0
-    incrementals:
-      abilityScoreBonus: false
-      extraMagicItem: false
-      feat: false
-      talent: false
-      hp: false
-      iconRelationshipPoint: false
-      powerSpell1: false
-      powerSpell2: false
-      powerSpell3: false
-      powerSpell4: false
-      skills: false
-    coins:
-      platinum: 0
-      gold: 0
-      silver: 0
-      copper: 0
     lifecycleHooks:
       startOfTurn: ''
       endOfTurn: ''
@@ -1007,12 +753,6 @@ Item:
         type: String
         label: Embedded Macro
         value: ''
-    supportsSequencer:
-      sequencer:
-        ray: ''
-        self: ''
-        target: ''
-        reversed: false
   feature:
     templates:
       - standard
@@ -1068,38 +808,10 @@ Item:
     templates:
       - standard
       - supportsMacro
-      - supportsSequencer
     group:
       type: String
       label: Group
       value: ''
-    attack:
-      type: String
-      label: Attack Roll
-    critMod:
-      type: String
-      value: ''
-    hit:
-      type: String
-      label: Hit
-    hit1:
-      type: String
-      label: Hit
-    hit2:
-      type: String
-      label: Hit
-    hit3:
-      type: String
-      label: Hit
-    hit4:
-      type: String
-      label: Hit
-    hit5:
-      type: String
-      label: Hit
-    miss:
-      type: String
-      label: Miss
   nastierSpecial:
     templates:
       - standard
