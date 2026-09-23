@@ -97,7 +97,7 @@ Actor:
           max: 0
           temp: 0
           automatic: true
-          formula: strdex
+          formula: auto
         disengage: 6
         disengageBonus: 0
         luckRerollUsed: 0

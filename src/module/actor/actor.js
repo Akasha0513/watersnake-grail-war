@@ -648,12 +648,12 @@ export class ActorArchmage extends Actor {
       pdAblMod = Math.min(pdAblMod, 1);
     }
 
-    // 신방 (자동 시): 서번트/마스터영령취급 = (삼기사14/사술사12) + 급 + (내구·민첩) / 일반 마스터 = 10 + (내구·민첩)
+    // 신방 (자동 시): 서번트/마스터영령취급 = (삼기사14/사술사12) + 급 + (내구·민첩) / 일반 마스터 = 10 + 급 + (내구·민첩)
     if (data.attributes.pd.automatic ?? true) {
       let pdBase;
       let pdGrade = 0;   // 급은 기반과 별개 — pd.base override 시에도 유지·가산돼야 함(기반 대체 후 강화 누적)
       if (masterAsServant) { pdBase = (masterServant === 'three' ? 14 : 12); pdGrade = grade; }
-      else if (isMaster) pdBase = 10;
+      else if (isMaster) { pdBase = 10; pdGrade = grade; }
       else { pdBase = (defCategory === 'three' ? 14 : 12); pdGrade = grade; }
       const pdBaseOv = this._effectOverride('pd.base'); if (pdBaseOv !== null) pdBase = pdBaseOv;   // 순수 기반(10/12/14)만 대체
       let pdMod = pdAblMod;
@@ -708,6 +708,9 @@ export class ActorArchmage extends Actor {
       const spStr = sv('str'), spDex = sv('agi'), spCon = sv('end'), spMag = sv('mgi');
       let spVal;
       switch (data.attributes.sp.formula) {
+        case 'auto': spVal = Math.max((spStr + spDex) / 2, spCon); break;   // 비마술: 큰 값
+        case 'automag': spVal = Math.max((spStr + spDex) / 2, spCon, (spMag + spDex) / 2,
+                                         (spStr + spMag) / 2, (spMag + spCon) / 2); break;   // 마술: 마력 대체 포함 큰 값
         case 'con': spVal = spCon; break;            // 내구 (=(내구+내구)÷2)
         case 'magdex': spVal = (spMag + spDex) / 2; break; // 마술: (마력+민첩)÷2
         case 'strmag': spVal = (spStr + spMag) / 2; break; // 마술: (근력+마력)÷2

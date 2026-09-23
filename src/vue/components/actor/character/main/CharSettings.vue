@@ -161,6 +161,8 @@ export default {
         { value: 'agi', label: '민첩' },
       ],
       spFormulas: [
+        { value: 'auto', label: '자동: 비마술 (큰 값)' },
+        { value: 'automag', label: '자동: 마술 (큰 값)' },
         { value: 'strdex', label: '(근력+민첩)÷2' },
         { value: 'con', label: '내구' },
         { value: 'magdex', label: '마술: (마력+민첩)÷2' },
