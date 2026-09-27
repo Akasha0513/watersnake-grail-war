@@ -1369,6 +1369,11 @@ a.effect-link,
   animation: grail-glitch 0.5s steps(2) infinite;
   font-variant-numeric: tabular-nums;
 }
+// 채팅 ||내용|| 구간을 작성자·GM이 볼 때: 원문 + 은폐 구간 표시(점선 밑줄)
+.grail-redacted-visible {
+  text-decoration: underline dashed rgba(128, 128, 128, 0.7);
+  text-underline-offset: 3px;
+}
 @keyframes grail-glitch {
   0%   { text-shadow: 1px 0 rgba(0, 255, 255, 0.55), -1px 0 rgba(255, 0, 128, 0.55); opacity: 1; }
   50%  { text-shadow: -1px 0 rgba(0, 255, 255, 0.55), 1px 0 rgba(255, 0, 128, 0.55); opacity: 0.85; }
