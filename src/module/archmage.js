@@ -557,14 +557,6 @@ Hooks.on('preCreateChatMessage', (doc) => {
   if (doc.rolls?.length && !doc.getFlag('mrkb-chat-enhancements', 'standalone')) {
     doc.updateSource({ 'flags.mrkb-chat-enhancements.standalone': true });
   }
-  // ||내용|| → 정보말소 구간. 태그 밖 텍스트에서만 치환(속성값 등은 건드리지 않음).
-  const content = doc.content ?? '';
-  if (content.includes('||')) {
-    const next = content.split(/(<[^>]*>)/).map(seg =>
-      seg.startsWith('<') ? seg : seg.replace(/\|\|([^|]+?)\|\|/g, '<span class="grail-redacted">$1</span>')
-    ).join('');
-    if (next !== content) doc.updateSource({ content: next });
-  }
 });
 
 // 정보 은폐(정보말소/영등롱) 연출: 텍스트 노드를 같은 길이의 무작위 글리프로 치환.
@@ -633,10 +625,13 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
       });
     }
   }
-  // 채팅 ||내용|| 구간: 작성자·GM 외 뷰어에게는 스크램블
-  const redacted = rawhtml.querySelectorAll('.grail-redacted');
+  // 채팅 ||내용|| 구간(채팅 모듈 마크다운이 span.mrkb-redacted로 치환):
+  // GM·화자 액터 소유자 외 뷰어에게는 스크램블. 화자 액터가 없으면 작성자 기준.
+  const redacted = rawhtml.querySelectorAll('.mrkb-redacted');
   if (redacted.length) {
-    if (game.user.isGM || chatMessage.isAuthor) {
+    const speakerActor = ChatMessage.getSpeakerActor(chatMessage.speaker);
+    const canSee = game.user.isGM || (speakerActor ? speakerActor.isOwner : chatMessage.isAuthor);
+    if (canSee) {
       redacted.forEach(el => el.classList.add('grail-redacted-visible'));
     } else {
       const animate = game.settings.get('watersnake-grail-war', 'concealAnimation');
