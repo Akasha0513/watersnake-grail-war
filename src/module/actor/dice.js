@@ -43,12 +43,9 @@ export class DiceArchmage {
     extraMods = []
   }) {
     // 수정치 배열로 조립 (통합 RollDialog 모델 §3). base = d20(유리/불리 단계), 나머지는 modifier.
-    let base
-    if (selection === 'adv2') base = '3d20kh'                                       // 유리 2
-    else if (selection === 'adv1') base = '2d20kh'                                  // 유리 1
-    else if (selection === 'dis2') base = '3d20kl'                                  // 불리 2
-    else if (selection === 'dis1') base = '2d20kl'                                  // 불리 1
-    else base = '1d20'                                                              // 일반
+    // 유리/불리 n단계 = d20을 n개 추가로 굴려 높은/낮은 1개 채택 (adv4 = 5d20kh, EX랭크 판정용)
+    const step = /^(adv|dis)(\d)$/.exec(selection ?? '')
+    const base = step ? `${Number(step[2]) + 1}d20${step[1] === 'adv' ? 'kh' : 'kl'}` : '1d20'
 
     const mods = []
     // feature '판정 직접'(rollCustom) 고정 보정. '0'(시트 순수값 판정 진입점)은 노이즈라 행 생략.
