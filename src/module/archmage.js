@@ -636,6 +636,14 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
   // 채팅 ||내용|| 구간: GM·화자 액터 소유자 외 뷰어에게는 스크램블. 화자 액터가 없으면 작성자 기준.
   const redacted = rawhtml.querySelectorAll('.grail-redacted');
   if (redacted.length) {
+    // 본문이 flex 컨테이너(예: 묘사 메시지)면 텍스트·span이 각각 flex 항목이 돼 경계 공백이 사라진다 → 한 덩어리로 묶음
+    const body = rawhtml.querySelector('.message-content');
+    if (body && !body.querySelector(':scope > .grail-redacted-run')) {
+      const run = document.createElement('div');
+      run.className = 'grail-redacted-run';
+      run.append(...body.childNodes);
+      body.append(run);
+    }
     const speakerActor = ChatMessage.getSpeakerActor(chatMessage.speaker);
     const canSee = game.user.isGM || (speakerActor ? speakerActor.isOwner : chatMessage.isAuthor);
     if (canSee) {
