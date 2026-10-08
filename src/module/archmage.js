@@ -639,7 +639,7 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
     // 본문이 flex 컨테이너(예: 묘사 메시지)면 텍스트·span이 각각 flex 항목이 돼 경계 공백이 사라진다 → 한 덩어리로 묶음
     const body = rawhtml.querySelector('.message-content');
     if (body && !body.querySelector(':scope > .grail-redacted-run')) {
-      const run = document.createElement('div');
+      const run = document.createElement('span');
       run.className = 'grail-redacted-run';
       run.append(...body.childNodes);
       body.append(run);
