@@ -633,6 +633,20 @@ Hooks.on('renderChatMessageHTML', (chatMessage, rawhtml) => {
       });
     }
   }
+  // 비공개 굴림 모드 배지: 볼 수 있는 사람(GM·작성자 등)에게 공개 굴림과 구분되게 표시
+  if (chatMessage.isRoll && (chatMessage.blind || chatMessage.whisper?.length)) {
+    const whisper = chatMessage.whisper ?? [];
+    const [icon, label] = chatMessage.blind ? ['fa-eye-slash', '블라인드']
+      : (whisper.length === 1 && whisper[0] === chatMessage.author?.id) ? ['fa-user-lock', '나만 보기']
+      : whisper.every(id => game.users.get(id)?.isGM) ? ['fa-lock', 'GM 굴림']
+      : ['fa-lock', '비공개'];
+    const badge = document.createElement('span');
+    badge.className = 'grail-rollmode-badge';
+    badge.innerHTML = `<i class="fa-solid ${icon}"></i> ${label}`;
+    const meta = rawhtml.querySelector('.message-header .message-metadata');
+    if (meta) meta.before(badge);
+    else rawhtml.querySelector('.message-content')?.prepend(badge);
+  }
   // 채팅 ||내용|| 구간: GM·화자 액터 소유자 외 뷰어에게는 스크램블. 화자 액터가 없으면 작성자 기준.
   const redacted = rawhtml.querySelectorAll('.grail-redacted');
   if (redacted.length) {

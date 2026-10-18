@@ -1369,6 +1369,20 @@ a.effect-link,
   animation: grail-glitch 0.5s steps(2) infinite;
   font-variant-numeric: tabular-nums;
 }
+// 비공개 굴림 모드 배지 (GM 굴림 / 블라인드 / 나만 보기)
+.grail-rollmode-badge {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.75em;
+  line-height: 1.6;
+  white-space: nowrap;
+  opacity: 0.8;
+}
 // 채팅 ||내용|| 구간을 GM·화자 액터 소유자가 볼 때: 원문 + 은폐 구간 표시(점선 밑줄)
 .grail-redacted-visible {
   text-decoration: underline dashed rgba(128, 128, 128, 0.7);
