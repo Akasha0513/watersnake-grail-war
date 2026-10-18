@@ -31,12 +31,20 @@ async function handleRoundNotice(combat, override = null) {
     if (last != null && round <= last) return;
 
     const escalation = override ? override.escalation : Util.getEscalation(combat);
+    // 메시지를 먼저 생성(턴 알림보다 앞서도록), 그 다음 플래그 저장.
+    await postRoundNotice(round, escalation);
+    await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
+}
+
+/**
+ * "라운드 N / 전투고조 N" 배너 메시지 생성.
+ * roundNotice 플래그 → 렌더 훅에서 헤더/포트레이트 숨김.
+ */
+export async function postRoundNotice(round, escalation) {
     const content = await foundry.applications.handlebars.renderTemplate(
         'systems/watersnake-grail-war/templates/chat/round-notice-card.html',
         { round, escalation }
     );
-    // 메시지를 먼저 생성(턴 알림보다 앞서도록), 그 다음 플래그 저장.
-    // roundNotice 플래그 → 렌더 훅에서 헤더/포트레이트 숨김.
     await ChatMessage.create({
         content,
         flags: {
@@ -45,7 +53,17 @@ async function handleRoundNotice(combat, override = null) {
             'mrkb-chat-enhancements': { standalone: true }
         }
     });
-    await combat.setFlag('watersnake-grail-war', 'lastRoundNotice', round);
+}
+
+/**
+ * /round 명령: 현재 전투의 라운드 배너를 다시 출력. lastRoundNotice는 건드리지 않음(자동 알림 불변).
+ */
+export async function postCurrentRound() {
+    const combat = game.combat;
+    const Util = game.holygrailwar?.ArchmageUtility;
+    const round = (combat && Util) ? Util.getGameRound(combat) : 0;
+    if (round < 1) return ui.notifications.warn("진행 중인 전투가 없습니다.");
+    await postRoundNotice(round, Util.getEscalation(combat));
 }
 
 export async function combatTurn(combat, context, options) {

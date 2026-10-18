@@ -16,7 +16,7 @@ import { DiceArchmage } from './actor/dice.js';
 import { preloadHandlebarsTemplates } from "./setup/templates.js";
 import { ActorHelpersV2 } from './actor/helpers/actor-helpers-v2.js';
 import { TokenArchmage } from './actor/token.js';
-import {combatRound, combatStart, combatTurn, preDeleteCombat} from "./hooks/combat.mjs";
+import {combatRound, combatStart, combatTurn, preDeleteCombat, postCurrentRound} from "./hooks/combat.mjs";
 import { ArchmageActiveEffectSheetV2 } from './active-effects/effect-sheet-v2.js';
 
 Hooks.once('init', async function() {
@@ -551,6 +551,14 @@ async function _applyAEDurationDialog(actor, effectData, duration, source, type 
 }
 
 /* ---------------------------------------------- */
+
+// /round: 현재 라운드 배너 출력 (GM 전용). 코어의 "알 수 없는 명령" 에러 전에 가로챔.
+Hooks.on('chatMessage', (chatLog, message) => {
+  if (!/^\/round\s*$/i.test(message.trim())) return;
+  if (!game.user.isGM) ui.notifications.warn("권한이 없습니다.");
+  else postCurrentRound();
+  return false;
+});
 
 // 롤이 포함된 메시지(코어 /r 등)를 독립 블록으로 출력
 Hooks.on('preCreateChatMessage', (doc) => {
